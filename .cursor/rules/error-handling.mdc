@@ -1,0 +1,82 @@
+---
+description: Error handling patterns for services, hooks, and components
+globs: '**/{services,features,hooks}/**/*.ts'
+alwaysApply: false
+---
+
+# Error Handling Standards
+
+## Services Always Throw
+
+Services must throw errors — never return them or swallow them silently:
+
+```typescript
+const result: ApiResponse<Feature[]> = await res.json();
+if (!result.success) throw new Error(result.error ?? 'Failed to load features');
+return result.data ?? [];
+```
+
+## HTTP Response Validation
+
+Check `response.ok` before parsing for errors outside the `ApiResponse` envelope:
+
+```typescript
+const res = await fetch(url, options);
+if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+const result: ApiResponse<T> = await res.json();
+```
+
+## React Query `onError` Handler
+
+Handle errors in `useMutation`'s `onError` callback. Always narrow the error type before accessing `.message`.
+
+```typescript
+onError: (error) => {
+  const message = error instanceof Error ? error.message : 'Something went wrong';
+  // Web:   toast.error(message)
+  // Mobile: Alert.alert('Error', message)
+},
+```
+
+## Never Silently Fail
+
+❌ **BAD:**
+
+```typescript
+try {
+  await featureService.delete(token, id);
+} catch {
+  // silently ignored — user has no idea what happened
+}
+```
+
+✅ **GOOD — React Query's `onError` handles it automatically; no manual try/catch needed in components:**
+
+```typescript
+const { mutate: deleteFeature } = useMutation({
+  mutationFn: async (id: string) => featureService.delete(token, id),
+  onError: (error) => { /* show user feedback */ },
+});
+```
+
+## Error Boundaries (Web)
+
+Wrap feature pages in an error boundary to prevent full-app crashes on unexpected render errors. Use `react-error-boundary` with a fallback UI:
+
+```typescript
+import { ErrorBoundary } from 'react-error-boundary';
+
+<ErrorBoundary fallback={<div>Something went wrong. Please refresh.</div>}>
+  <FeaturePage />
+</ErrorBoundary>
+```
+
+## Error Shape
+
+API errors always follow `ApiResponse<T>`:
+
+```typescript
+{ success: false, error: "Human-readable message" }
+```
+
+The `error` field value is shown directly to users. Keep messages clear and actionable.

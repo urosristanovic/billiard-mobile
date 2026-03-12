@@ -1,0 +1,56 @@
+{
+  "appName": "Billiard App",
+  "loading": "Učitavanje...",
+  "error": "Nešto je pošlo po krivu",
+  "retry": "Pokušaj ponovo",
+  "save": "Sačuvaj",
+  "cancel": "Otkaži",
+  "confirm": "Potvrdi",
+  "delete": "Obriši",
+  "edit": "Uredi",
+  "create": "Kreiraj",
+  "search": "Pretraži",
+  "filter": "Filter",
+  "close": "Zatvori",
+  "back": "Nazad",
+  "next": "Dalje",
+  "submit": "Pošalji",
+  "noResults": "Nema rezultata",
+  "emptyState": "Još uvek nema ništa ovde",
+  "disciplines": {
+    "8ball": "8-Ball",
+    "9ball": "9-Ball",
+    "10ball": "10-Ball",
+    "straightPool": "Straight Pool",
+    "snooker": "Snuker"
+  },
+  "matchStatus": {
+    "pendingConfirmation": "Čeka potvrdu",
+    "confirmed": "Potvrđeno",
+    "disputed": "Sporno",
+    "cancelled": "Otkazano"
+  },
+  "rating": {
+    "provisional": "Privremeni",
+    "established": "Etabliran",
+    "ratingDeviation": "Devijacija rejtinga",
+    "volatility": "Volatilnost"
+  },
+  "nav": {
+    "home": "Početna",
+    "leaderboard": "Rang lista",
+    "matches": "Mečevi",
+    "profile": "Profil",
+    "rules": "Pravila"
+  },
+  "you": "Vi",
+  "unrated": "Nerangirano",
+  "errorTitle": "Greška",
+  "closeA11y": "Zatvori",
+  "errors": {
+    "unauthorized": "Morate biti prijavljeni da biste to uradili",
+    "forbidden": "Nemate dozvolu za ovu akciju",
+    "notFound": "Nije pronađeno",
+    "serverError": "Došlo je do greške na serveru. Molimo pokušajte ponovo."
+  }
+}

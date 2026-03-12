@@ -1,0 +1,104 @@
+---
+description: API service layer patterns and conventions
+globs: '**/services/**/*.ts'
+alwaysApply: false
+---
+
+# API Service Standards
+
+## Requirements
+
+All services must:
+
+1. Use `ApiResponse<T>` from `types/api.ts`
+2. Use `API_ENDPOINTS` from `config/api.ts` — never hardcode URLs
+3. Export a named service object with CRUD methods
+4. **Throw errors** — never return them or swallow them silently
+
+## Endpoint Definition (`config/api.ts`)
+
+Use nested objects for endpoint groups. Web services use relative paths; mobile prepends `API_CONFIG.baseURL`.
+
+```typescript
+// config/api.ts
+export const API_ENDPOINTS = {
+  feature: {
+    list:   '/api/feature',
+    create: '/api/feature',
+    get:    (id: string) => `/api/feature/${id}`,
+    update: (id: string) => `/api/feature/${id}`,
+    delete: (id: string) => `/api/feature/${id}`,
+  },
+};
+
+// Mobile only — baseURL from environment variable
+export const API_CONFIG = {
+  baseURL: process.env.EXPO_PUBLIC_API_URL || '',
+};
+// Mobile usage: `${API_CONFIG.baseURL}${API_ENDPOINTS.feature.list}`
+```
+
+## Service Pattern
+
+```typescript
+import { ApiResponse } from '@/types/api';
+import { Feature, FeatureInput } from '@/types/feature';
+import { API_ENDPOINTS } from '@/config/api';
+
+export const featureService = {
+  async getAll(token: string): Promise<Feature[]> {
+    const res = await fetch(API_ENDPOINTS.feature.list, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const result: ApiResponse<Feature[]> = await res.json();
+    if (!result.success) throw new Error(result.error ?? 'Failed to load');
+    return result.data ?? [];
+  },
+
+  async create(token: string, data: FeatureInput): Promise<Feature> {
+    const res = await fetch(API_ENDPOINTS.feature.create, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(data),
+    });
+    const result: ApiResponse<Feature> = await res.json();
+    if (!result.success) throw new Error(result.error ?? 'Failed to create');
+    return result.data!;
+  },
+
+  async update(token: string, id: string, data: FeatureInput): Promise<Feature> {
+    const res = await fetch(API_ENDPOINTS.feature.update(id), {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(data),
+    });
+    const result: ApiResponse<Feature> = await res.json();
+    if (!result.success) throw new Error(result.error ?? 'Failed to update');
+    return result.data!;
+  },
+
+  async delete(token: string, id: string): Promise<void> {
+    const res = await fetch(API_ENDPOINTS.feature.delete(id), {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const result: ApiResponse<void> = await res.json();
+    if (!result.success) throw new Error(result.error ?? 'Failed to delete');
+  },
+};
+```
+
+## Services Are Only Called From React Query Hooks
+
+```
+Component → useFeatureData (useQuery) → featureService.getAll(token)
+Component → useFeatureMutations (useMutation) → featureService.create(token, data)
+```
+
+❌ Never call a service directly in a component or page:
+
+```typescript
+// NEVER in a component
+const token = await user.getIdToken();
+const items = await featureService.getAll(token);
+```

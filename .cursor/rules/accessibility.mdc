@@ -1,0 +1,114 @@
+---
+description: Accessibility standards for web and mobile components
+globs: '**/*.tsx'
+alwaysApply: false
+---
+
+# Accessibility Standards
+
+## Web (ARIA + Semantic HTML)
+
+### Use semantic elements first — ARIA only when no semantic element exists
+
+✅ **GOOD:**
+
+```typescript
+<button onClick={handleDelete}>Delete</button>
+<nav>...</nav>
+<main>...</main>
+<header>...</header>
+```
+
+❌ **BAD — div/span acting as interactive elements:**
+
+```typescript
+<div onClick={handleDelete}>Delete</div>  // not keyboard accessible
+<span onClick={openMenu}>Menu</span>
+```
+
+### Icon-only buttons must have a label
+
+```typescript
+// ✅ GOOD
+<button aria-label="Delete item" onClick={handleDelete}>
+  <TrashIcon />
+</button>
+
+// ❌ BAD — screen reader announces nothing useful
+<button onClick={handleDelete}><TrashIcon /></button>
+```
+
+### Images
+
+```typescript
+<img src={photo} alt="User profile photo" />   // descriptive
+<img src={decorativeBg} alt="" />              // empty alt for decorative images
+```
+
+### Form fields must have labels
+
+```typescript
+// ✅ GOOD — label associated via htmlFor
+<label htmlFor="title">Title</label>
+<input id="title" value={form.title} onChange={...} />
+
+// ✅ GOOD — aria-label when no visible label
+<input aria-label="Search" placeholder="Search..." />
+
+// ❌ BAD — placeholder is not a label
+<input placeholder="Title" />
+```
+
+### Focus management
+
+- Modals must trap focus while open and restore focus to the trigger on close
+- Use `autoFocus` on the first interactive element inside a modal
+
+## Mobile (React Native)
+
+### All touchable elements need an accessibility label
+
+```typescript
+// ✅ GOOD
+<TouchableOpacity
+  accessibilityLabel="Delete item"
+  accessibilityRole="button"
+  onPress={handleDelete}
+>
+  <Ionicons name="trash" />
+</TouchableOpacity>
+
+// ✅ GOOD — text content auto-announces, but role still needed for icons
+<TouchableOpacity accessibilityRole="button" onPress={handleEdit}>
+  <Text>Edit</Text>
+</TouchableOpacity>
+```
+
+### Common accessibilityRole values
+
+| Element | Role |
+|---------|------|
+| Buttons | `"button"` |
+| Links | `"link"` |
+| Text inputs | `"none"` (TextInput handles it) |
+| Images | `"image"` |
+| Toggle/switch | `"switch"` |
+| Tab bar item | `"tab"` |
+
+### Loading and state announcements
+
+```typescript
+<ActivityIndicator accessibilityLabel="Loading items" />
+
+// For dynamic content updates
+<View accessibilityLiveRegion="polite">
+  {statusMessage && <Text>{statusMessage}</Text>}
+</View>
+```
+
+## Both Platforms — Key Rules
+
+1. Every interactive element without visible text needs a label (`aria-label` / `accessibilityLabel`)
+2. Color alone must never be the only way to convey information — pair with text or icon
+3. Minimum touch target size on mobile: **44×44pt**
+4. Test with VoiceOver (iOS) or TalkBack (Android) for mobile; keyboard navigation + screen reader for web

@@ -1,0 +1,80 @@
+---
+description: Translation and i18n standards using react-i18next
+alwaysApply: true
+---
+
+# Translation Standards (Mobile — react-i18next)
+
+## Core Rule
+
+**NEVER hardcode user-facing strings in JSX.** All visible text must come from translation keys.
+
+## Usage
+
+```typescript
+import { useTranslations } from '../../hooks';
+
+const FeatureScreen = () => {
+  const t = useTranslations('feature');
+  const tc = useTranslations('common');
+
+  return (
+    <ScreenLayout title={t('title')} description={t('description')}>
+      <PrimaryButton text={t('addButton')} />
+      <EmptyState message={t('emptyStateNoItems')} isDark={isDark} />
+      <SecondaryButton text={tc('cancel')} />
+    </ScreenLayout>
+  );
+};
+```
+
+## Namespace Files
+
+Per-feature namespace files, one per locale: `i18n/locales/<locale>/<namespace>.json`
+
+Register each namespace in `i18n/index.ts` — add to `resources.en`, `resources.sr`, `resources.es`, and the `ns` array.
+
+## Key Naming
+
+- camelCase: `addButton`, `emptyStateNoItems`
+- Nested for groups: `form.titleLabel`
+- **Keys must mirror the web app's `messages/en.json`** exactly for shared features
+
+```json
+{
+  "title": "Feature",
+  "addButton": "+ Add Item",
+  "emptyStateNoItems": "No items yet.",
+  "form": {
+    "titleLabel": "Title",
+    "descriptionLabel": "Description"
+  }
+}
+```
+
+## Interpolation
+
+Use `{{variable}}` syntax — double braces (differs from web's single braces):
+
+```json
+{ "deleteMessage": "Delete \"{{title}}\"?" }
+```
+
+```typescript
+t('deleteMessage', { title: item.title });
+```
+
+## Critical: Add Keys to All Locales Simultaneously
+
+Every new key must go into `en`, `sr`, AND `es` locale files at the same time. Missing keys fall back to English silently.
+
+## New Feature Checklist
+
+1. Create `i18n/locales/en/<feature>.json`, `sr/<feature>.json`, `es/<feature>.json`
+2. Register namespace in `i18n/index.ts`
+3. Include at minimum: `title`, `description`, `addButton`, `emptyStateNoItems`
+4. Put form labels under a `form` nested object
+
+## Incremental Adoption
+
+When you **touch a file**, convert its hardcoded strings to translation keys at the same time. New code must use `useTranslations` from day one.

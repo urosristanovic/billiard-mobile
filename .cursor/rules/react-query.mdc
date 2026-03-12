@@ -1,0 +1,98 @@
+---
+description: TanStack React Query patterns for data fetching and mutations
+globs: '**/features/**/*.ts'
+alwaysApply: false
+---
+
+# React Query Standards
+
+## Query Keys
+
+Define as SCREAMING_SNAKE_CASE constants in `config/queryKeys.ts` — never use inline strings.
+
+```typescript
+// config/queryKeys.ts
+export const GET_FEATURE_KEY = 'get_feature_key';
+```
+
+✅ `queryKey: [GET_FEATURE_KEY, user?.uid]`
+❌ `queryKey: ['feature', user.uid]`
+
+`invalidateQueries({ queryKey: [GET_FEATURE_KEY] })` uses prefix matching — invalidates all queries whose key starts with that value, including `[GET_FEATURE_KEY, user.uid]`.
+
+## Data Fetching Hook (`useFeatureData.ts`)
+
+```typescript
+export const useFeatureData = () => {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: [GET_FEATURE_KEY, user?.uid],
+    queryFn: async () => {
+      const token = await user!.getIdToken();
+      return featureService.getAll(token);
+    },
+    enabled: !!user,
+  });
+};
+```
+
+Usage: `const { data: items = [], isLoading } = useFeatureData();`
+
+## Mutations Hook (`useFeatureMutations.ts`)
+
+```typescript
+export const useFeatureMutations = () => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const invalidate = () =>
+    queryClient.invalidateQueries({ queryKey: [GET_FEATURE_KEY] });
+
+  const { mutate: createFeature, isPending: isCreating } = useMutation({
+    mutationFn: async (data: FeatureInput) => {
+      const token = await user!.getIdToken();
+      return featureService.create(token, data);
+    },
+    onSuccess: () => {
+      invalidate();
+      // Web: toast.success('Created!') | Mobile: Alert.alert('Success', 'Created!')
+    },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : 'Failed';
+      // Web: toast.error(message) | Mobile: Alert.alert('Error', message)
+    },
+  });
+
+  return { createFeature, isSubmitting: isCreating };
+};
+```
+
+## Optimistic Delete (Recommended for Mobile)
+
+Remove items instantly on delete — no full-screen loading state:
+
+```typescript
+onMutate: async (id) => {
+  await queryClient.cancelQueries({ queryKey: [GET_FEATURE_KEY] });
+  const previous = queryClient.getQueryData<Feature[]>([GET_FEATURE_KEY, user?.uid]);
+  queryClient.setQueryData<Feature[]>([GET_FEATURE_KEY, user?.uid], old =>
+    old ? old.filter(item => item.id !== id) : []
+  );
+  return { previous };
+},
+onError: (_err, _id, context) => {
+  queryClient.setQueryData([GET_FEATURE_KEY, user?.uid], context?.previous);
+},
+onSettled: () => invalidate(),
+```
+
+No `onSuccess` alert for delete — the item disappearing is feedback enough.
+
+## Key Rules
+
+1. `enabled: !!user` — always guard queries that require auth
+2. Always invalidate after mutations — never manually patch state
+3. Destructure with fallback: `const { data: items = [] } = useFeatureData()`
+4. Form state uses plain `useState` — never React Query
+5. Never pass `refetch` to components — invalidation handles updates
+6. No global `staleTime` — configure per-query when data changes rarely

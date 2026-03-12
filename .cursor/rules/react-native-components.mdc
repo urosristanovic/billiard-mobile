@@ -1,0 +1,95 @@
+---
+description: React Native component patterns and best practices
+globs: '**/*.tsx'
+alwaysApply: false
+---
+
+# React Native Component Standards
+
+## Directory Structure
+
+```
+screens/[Feature]Screen/
+├── index.tsx              # Main screen (≤100 lines)
+├── styles.ts              # StyleSheet for this screen
+├── hooks/
+│   ├── use[Feature]Data.ts
+│   ├── use[Feature]Mutations.ts
+│   └── use[Feature]Form.ts
+└── components/
+    ├── [Feature]Card.tsx
+    ├── [Feature]Form.tsx
+    ├── [Feature]List.tsx
+    └── index.ts
+
+stores/                    # Zustand stores (complex shared client state only)
+└── use[Feature]Store.ts
+```
+
+## Screen Pattern
+
+✅ **GOOD — Clean, composed screen:**
+
+```typescript
+const FeatureScreen = ({ onBack }: FeatureScreenProps) => {
+  const { theme: currentTheme } = useTheme();
+  const isDark = currentTheme === 'dark';
+  const t = useTranslations('feature');
+
+  const { data: items = [], isLoading } = useFeatureData();
+  const { createItem } = useFeatureMutations();
+
+  return (
+    <ScreenLayout
+      title={t('title')}
+      gradientColors={{ light: gradients.light.feature, dark: gradients.dark.feature }}
+    >
+      {isLoading ? (
+        <LoadingState isDark={isDark} />
+      ) : items.length === 0 ? (
+        <EmptyState message={t('emptyStateNoItems')} isDark={isDark} />
+      ) : (
+        <FeatureList items={items} isDark={isDark} />
+      )}
+    </ScreenLayout>
+  );
+};
+export default FeatureScreen;
+```
+
+❌ **BAD — Monolithic screen:**
+
+```typescript
+export default function FeatureScreen() {
+  // 500+ lines: inline fetch, useEffect for data, hardcoded hex colors
+  const [data, setData] = useState([]);
+  useEffect(() => { fetch('http://hardcoded-url/feature').then(...) }, []);
+  return <View style={{ backgroundColor: '#FFFFFF' }}>...</View>;
+}
+```
+
+## Component Extraction
+
+When a component exceeds 100 lines:
+
+1. Extract data/mutation logic → `hooks/use[Feature]Data.ts`, `use[Feature]Mutations.ts`
+2. Extract form logic → `hooks/use[Feature]Form.ts`
+3. Extract UI sections → sub-components in `components/`
+4. Move API calls → `services/[feature].ts`
+
+## Styles
+
+Keep all styles in a separate `styles.ts` file. Never use inline style objects in JSX.
+
+```typescript
+// styles.ts
+import { StyleSheet } from 'react-native';
+export const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16 },
+  card: { borderRadius: 12, padding: 16, marginBottom: 12 },
+});
+```
+
+## Theme Usage
+
+See `theme-system.mdc` — ALL colors must come from `constants/theme.ts`. Never hardcode hex values.

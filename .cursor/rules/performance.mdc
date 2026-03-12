@@ -1,0 +1,83 @@
+---
+description: Performance optimization patterns
+globs: '**/*.{ts,tsx}'
+alwaysApply: false
+---
+
+# Performance Standards
+
+## Memoization — Only When Measured
+
+Premature memoization adds complexity without benefit. Only memoize when you have a measured performance problem.
+
+**Do memoize:**
+
+```typescript
+// Expensive sort/filter on a large list
+const sorted = useMemo(
+  () => [...items].sort((a, b) => b.createdAt - a.createdAt),
+  [items]
+);
+
+// Stable callback passed to a React.memo child
+const handleDelete = useCallback((id: string) => deleteItem(id), [deleteItem]);
+```
+
+**Do NOT memoize:**
+
+- Simple value reads, string formatting, or boolean expressions
+- Components that receive frequently-changing props anyway
+- Functions that are not passed as props to children
+
+## Long Lists
+
+Use virtualization for lists with more than ~50 items:
+
+- **Web**: `@tanstack/react-virtual` or native CSS `content-visibility: auto`
+- **Mobile**: Use `FlatList` — never `ScrollView` wrapping a `map()` for dynamic data
+
+```typescript
+// Mobile — always FlatList for dynamic lists
+<FlatList
+  data={items}
+  keyExtractor={item => item.id}
+  renderItem={({ item }) => <FeatureCard item={item} />}
+/>
+```
+
+## Code Splitting (Web)
+
+Lazy-load heavy feature components that aren't on the initial route:
+
+```typescript
+import dynamic from 'next/dynamic';
+
+const HeavyChart = dynamic(() => import('@/components/features/HeavyChart'), {
+  loading: () => <LoadingState />,
+  ssr: false,
+});
+```
+
+## React Query Caching
+
+- Do not set a global `staleTime` — configure per query when data changes rarely
+- Do not call `refetch` manually — rely on cache invalidation after mutations
+- Avoid `suspense: true` in queries unless the whole page is wrapped in a `Suspense` boundary
+
+## State Subscription Performance
+
+Context re-renders every consumer whenever any value in the context changes. For state that updates frequently, use Zustand with targeted selectors:
+
+```typescript
+// BAD — Context causes all consumers to re-render on any state change
+const { notifications, filters, cart } = useAppContext();
+
+// GOOD — Zustand selector: component only re-renders when notifications changes
+const notifications = useNotificationStore((s) => s.notifications);
+```
+
+Each `useStore(selector)` call creates an independent subscription. Components subscribing to different slices are completely isolated from each other's updates.
+
+## Image Optimization (Web)
+
+Use Next.js `<Image>` instead of `<img>` for automatic resizing, lazy loading, and format optimization.

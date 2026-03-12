@@ -1,0 +1,66 @@
+---
+description: Centralized theme system - color usage and styling standards
+globs: '**/*.{ts,tsx}'
+alwaysApply: true
+---
+
+# Theme System — Mobile Styling Standards
+
+## Rule: No Hardcoded Hex Colors
+
+**NEVER** use hardcoded hex values in component code. ALL colors must come from `constants/theme.ts`.
+
+❌ **FORBIDDEN:**
+
+```typescript
+backgroundColor: '#FFFFFF'
+color: '#4F46E5'
+<ActivityIndicator color="#4F46E5" />
+placeholderTextColor="#A1A1AA"
+```
+
+✅ **REQUIRED:**
+
+```typescript
+import { colors, theme, gradients } from '../../constants/theme';
+
+backgroundColor: colors.white
+color: colors.primary[600]
+<ActivityIndicator color={isDark ? colors.purple[500] : colors.primary[600]} />
+placeholderTextColor={isDark ? colors.zinc[400] : colors.zinc[500]}
+```
+
+## Color Categories
+
+| Category | Usage |
+|----------|-------|
+| `colors.primary[*]` | Brand (Indigo) |
+| `colors.purple[*]` | Accent |
+| `colors.zinc[*]` | Neutral / gray scale |
+| `colors.success.*` | Success states (DEFAULT, light, dark, bg.light, bg.dark) |
+| `colors.error.*` | Error states |
+| `colors.warning.*` | Warning states |
+| `gradients.light/dark.[feature]` | Screen header gradients |
+
+## Theme-Aware Colors
+
+```typescript
+const isDark = currentTheme === 'dark';
+const bgColor = theme[currentTheme].background.primary;
+const textColor = theme[currentTheme].text.primary;
+const borderColor = theme[currentTheme].border.light;
+```
+
+## Gradients
+
+```typescript
+<LinearGradient colors={isDark ? gradients.dark.feature : gradients.light.feature}>
+  {children}
+</LinearGradient>
+```
+
+## Styles Location
+
+Keep styles in a dedicated `styles.ts` file per screen/component using `StyleSheet.create`. Never use inline style objects in JSX.
+
+The only file permitted to contain hex color values is `constants/theme.ts`.

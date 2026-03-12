@@ -1,0 +1,82 @@
+---
+description: TypeScript types and interfaces patterns
+globs: '**/types/**/*.ts'
+alwaysApply: false
+---
+
+# TypeScript Types Standards
+
+## Organization
+
+- `types/api.ts` — shared base types (`BaseEntity`, `ApiResponse<T>`)
+- `types/[feature].ts` — feature-specific interfaces
+- `types/index.ts` — centralized re-exports
+
+## Base Types (`types/api.ts`)
+
+```typescript
+export interface BaseEntity {
+  id: string;
+  userId: string;
+  createdAt: number;
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+}
+```
+
+## Feature Types Pattern
+
+```typescript
+// types/feature.ts
+import { BaseEntity } from './api';
+
+export interface Feature extends BaseEntity {
+  title: string;
+  description: string;
+}
+
+export interface FeatureInput {
+  title: string;
+  description: string;
+}
+
+export interface FeatureFormData {
+  title: string;
+  description: string;
+}
+```
+
+- `Feature` — full entity returned by the API (extends `BaseEntity`)
+- `FeatureInput` — shape sent to the API on create/update
+- `FeatureFormData` — local form state (may differ from `FeatureInput`)
+
+## API Response Usage
+
+Always type responses with `ApiResponse<T>`:
+
+✅ **GOOD:**
+
+```typescript
+const result: ApiResponse<Feature[]> = await response.json();
+if (!result.success) throw new Error(result.error);
+return result.data ?? [];
+```
+
+❌ **BAD — never define custom response shapes inline:**
+
+```typescript
+const data = await response.json(); // untyped
+interface MyResponse { success: boolean; data: Feature[]; } // duplicate
+```
+
+## Centralized Exports
+
+```typescript
+// types/index.ts
+export type { ApiResponse, BaseEntity } from './api';
+export type { Feature, FeatureInput, FeatureFormData } from './feature';
+```

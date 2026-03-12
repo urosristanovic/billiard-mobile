@@ -1,0 +1,12 @@
+---
+description: Core billiard domain constraints for ratings and tournaments
+alwaysApply: true
+---
+
+# Billiard Domain Rules
+
+- Use standard Glicko-2 outcome scoring: win/loss only (no score-margin weighting like 10:1 vs 10:9).
+- Team matches (`2v2`, `3v3`) must always be unrated and never modify Glicko-2 values.
+- Tournament participants must have registered accounts; no guest/anonymous tournament players.
+- Rated results must update both players in 1v1 matches, including provisional players.
+- UI must clearly label team matches as `Unrated Team Match`.

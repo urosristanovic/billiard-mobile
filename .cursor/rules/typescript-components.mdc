@@ -1,0 +1,98 @@
+---
+description: TypeScript conventions for React components
+alwaysApply: true
+---
+
+# TypeScript Component Conventions
+
+## No React.FC — Use Direct Prop Typing
+
+❌ **BAD:**
+
+```typescript
+export const Component: React.FC<Props> = ({ prop }) => <div>{prop}</div>;
+```
+
+✅ **GOOD:**
+
+```typescript
+export const Component = ({ prop }: Props) => <div>{prop}</div>;
+```
+
+## Arrow Functions Only
+
+❌ **BAD:**
+
+```typescript
+export function Component({ prop }: Props) { return <div>{prop}</div>; }
+export default function Page() { return <div />; }
+```
+
+✅ **GOOD:**
+
+```typescript
+export const Component = ({ prop }: Props) => <div>{prop}</div>;
+
+// Pages/Screens — define then export default
+const Page = () => <div />;
+export default Page;
+```
+
+## Export Patterns
+
+- **Default exports** — Pages (web) / Screens (mobile), entry points (`App.tsx`)
+- **Named exports** — Reusable components, hooks, utilities, everything else
+
+```typescript
+// Page/Screen — default export
+const FeaturePage = () => { /* ... */ };
+export default FeaturePage;
+
+// Reusable component — named export
+export const FeatureCard = ({ item }: FeatureCardProps) => { /* ... */ };
+```
+
+## Explicit Children
+
+Always declare `children` explicitly in props — never rely on implicit children:
+
+```typescript
+interface CardProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+export const Card = ({ children, className }: CardProps) => (
+  <div className={className}>{children}</div>
+);
+```
+
+## No Unnecessary Arrow Wrappers
+
+Never wrap a stable function reference in an inline arrow function.
+
+❌ **BAD:**
+
+```typescript
+onSubmit={() => handleSubmit()}
+onPress={() => onBack()}
+onClose={() => closeModal()}
+```
+
+✅ **GOOD:**
+
+```typescript
+onSubmit={handleSubmit}
+onPress={onBack}
+onClose={closeModal}
+
+// Exception — when arguments must be passed that the event doesn't supply:
+onDelete={() => deleteItem(item.id)}
+onPress={() => navigate('Profile')}
+```
+
+## Return Types
+
+Let TypeScript infer return types. Only annotate explicitly for:
+- Components with complex conditional returns (`JSX.Element | null`)
+- Public API / library components

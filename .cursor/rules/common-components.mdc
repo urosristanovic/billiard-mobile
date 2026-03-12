@@ -1,0 +1,44 @@
+---
+description: Import conventions and usage rules for common components
+globs: 'screens/**/*.tsx'
+alwaysApply: true
+---
+
+# Common Components (Mobile)
+
+**Always check `components/common/` first** before creating any new UI element.
+
+## Import Paths
+
+Always import from the specific sub-path — never from `components/common` directly (except `commonStyles`):
+
+| Category | Import path |
+|----------|-------------|
+| Buttons | `components/common/buttons` |
+| Forms | `components/common/forms` |
+| States | `components/common/states` |
+| Cards | `components/common/cards` |
+| Filters | `components/common/filters` |
+| Styles / misc | `components/common` |
+
+```typescript
+// ✅ GOOD — import from specific sub-path
+import { PrimaryButton, SecondaryButton, DangerButton } from '../../../components/common/buttons';
+import { FormField, FormButtons, FormModal } from '../../../components/common/forms';
+import { LoadingState, EmptyState } from '../../../components/common/states';
+import { CardMenu } from '../../../components/common/cards';
+import { DropdownFilter, FilterOption } from '../../../components/common/filters';
+import { commonStyles } from '../../../components/common';
+
+// ❌ BAD — flat import from components/common
+import { PrimaryButton, FormField, LoadingState } from '../../../components/common';
+```
+
+## Key Rules
+
+1. ALL forms must use `FormButtons` and `FormField` — no inline implementations
+2. Submit/Primary on **LEFT**, Cancel/Secondary on **RIGHT**
+3. Always pass `isDark` prop for theme support
+4. Use `DangerButton` for destructive actions (delete, remove)
+
+For full component props reference, see `common-components-api.mdc`.

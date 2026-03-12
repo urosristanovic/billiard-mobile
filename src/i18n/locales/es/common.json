@@ -1,0 +1,56 @@
+{
+  "appName": "Billiard App",
+  "loading": "Cargando...",
+  "error": "Algo salió mal",
+  "retry": "Intentar de nuevo",
+  "save": "Guardar",
+  "cancel": "Cancelar",
+  "confirm": "Confirmar",
+  "delete": "Eliminar",
+  "edit": "Editar",
+  "create": "Crear",
+  "search": "Buscar",
+  "filter": "Filtrar",
+  "close": "Cerrar",
+  "back": "Atrás",
+  "next": "Siguiente",
+  "submit": "Enviar",
+  "noResults": "No se encontraron resultados",
+  "emptyState": "Todavía no hay nada aquí",
+  "disciplines": {
+    "8ball": "8-Bolas",
+    "9ball": "9-Bolas",
+    "10ball": "10-Bolas",
+    "straightPool": "Pool Directo",
+    "snooker": "Snooker"
+  },
+  "matchStatus": {
+    "pendingConfirmation": "Pendiente de confirmación",
+    "confirmed": "Confirmado",
+    "disputed": "En disputa",
+    "cancelled": "Cancelado"
+  },
+  "rating": {
+    "provisional": "Provisional",
+    "established": "Establecido",
+    "ratingDeviation": "Desviación de clasificación",
+    "volatility": "Volatilidad"
+  },
+  "nav": {
+    "home": "Inicio",
+    "leaderboard": "Clasificación",
+    "matches": "Partidas",
+    "profile": "Perfil",
+    "rules": "Reglas"
+  },
+  "you": "Tú",
+  "unrated": "No clasificatoria",
+  "errorTitle": "Error",
+  "closeA11y": "Cerrar",
+  "errors": {
+    "unauthorized": "Debes iniciar sesión para hacer esto",
+    "forbidden": "No tienes permiso para hacer esto",
+    "notFound": "No encontrado",
+    "serverError": "Ocurrió un error en el servidor. Por favor, inténtalo de nuevo."
+  }
+}

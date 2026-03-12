@@ -1,0 +1,96 @@
+---
+description: Props reference for common components
+globs: 'screens/**/*.tsx'
+alwaysApply: false
+---
+
+# Common Components API Reference
+
+## Buttons (`components/common/buttons`)
+
+```typescript
+<PrimaryButton
+  text="+ Add"
+  onPress={fn}
+  isDark={isDark}
+  compact           // smaller padding
+  variant="success" // 'default' | 'success' | 'danger'
+  disabled={false}
+/>
+<SecondaryButton text="Cancel" onPress={fn} isDark={isDark} disabled={false} style={...} />
+<DangerButton text="Delete" onPress={fn} disabled={!isConfirmed} />
+```
+
+## Forms (`components/common/forms`)
+
+Submit on **LEFT**, Cancel on **RIGHT**:
+
+```typescript
+<FormField
+  label="Title"
+  value={value}
+  onChangeText={fn}
+  isDark={isDark}
+  required
+  multiline
+  placeholder="..."
+  keyboardType="default"
+  editable={!isSubmitting}
+/>
+
+<FormButtons
+  onSubmit={fn}
+  onCancel={fn}
+  submitText="Save"
+  cancelText="Cancel"
+  isSubmitting={false}
+  isDark={isDark}
+  submitVariant="success"
+/>
+
+<FormModal visible={isVisible} isDark={isDark}>
+  {/* form content */}
+</FormModal>
+```
+
+## States (`components/common/states`)
+
+```typescript
+{isLoading && <LoadingState text="Loading..." isDark={isDark} color={colors.purple[500]} />}
+{items.length === 0 && <EmptyState message="No items yet." isDark={isDark} />}
+```
+
+## Cards (`components/common/cards`)
+
+```typescript
+// Card container must have position: 'relative'; CardMenu is the first child
+<CardMenu
+  isDark={isDark}
+  canEdit={canEdit}
+  onEdit={fn}
+  onDelete={fn}
+  disabled={false}
+/>
+```
+
+## Filters (`components/common/filters`)
+
+```typescript
+const options: FilterOption<string>[] = [
+  { value: 'all', label: 'All' },
+  { value: 'typeA', label: 'Type A' },
+];
+<DropdownFilter
+  options={options}
+  selectedValue={activeFilter}
+  onValueChange={setActiveFilter}
+  isDark={isDark}
+/>
+```
+
+## Common Styles (`components/common`)
+
+```typescript
+import { commonStyles } from '../../../components/common';
+export const styles = StyleSheet.create({ ...commonStyles, myStyle: { ... } });
+```

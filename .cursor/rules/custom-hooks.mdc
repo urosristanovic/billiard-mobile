@@ -1,0 +1,94 @@
+---
+description: Custom hooks patterns for data fetching and state management
+globs: '**/hooks/**/*.ts'
+alwaysApply: false
+---
+
+# Custom Hooks Standards
+
+## Three Hook Types, Three Responsibilities
+
+| Hook | File | Tech | Purpose |
+|------|------|------|---------|
+| Data | `useFeatureData.ts` | React Query `useQuery` | Fetch and cache |
+| Mutations | `useFeatureMutations.ts` | React Query `useMutation` | Create, update, delete |
+| Form | `useFeatureForm.ts` | plain `useState` | Form state and validation |
+
+See `react-query.mdc` for full `useFeatureData` and `useFeatureMutations` patterns.
+
+## Form Hook Pattern
+
+```typescript
+const INITIAL: FeatureFormData = { title: '', description: '' };
+
+export const useFeatureForm = () => {
+  const [form, setForm] = useState<FeatureFormData>(INITIAL);
+
+  const updateField = <K extends keyof FeatureFormData>(
+    field: K,
+    value: FeatureFormData[K]
+  ) => setForm(prev => ({ ...prev, [field]: value }));
+
+  const resetForm = () => setForm(INITIAL);
+
+  const loadForEdit = (item: Feature) =>
+    setForm({ title: item.title, description: item.description });
+
+  const isValid = form.title.trim().length > 0;
+
+  return { form, updateField, resetForm, loadForEdit, isValid };
+};
+```
+
+`loadForEdit` pre-fills the form when editing an existing item. `resetForm` returns to `INITIAL` state on cancel/submit.
+
+## Common Reusable Hooks
+
+Check `hooks/` before creating a new hook:
+
+- `useForm` — generic form state management
+- `useAuthGuard` — redirect unauthenticated users (web)
+- `useModal` — modal open/close with optional typed payload
+- `useDebounce` — debounced value
+- `usePagination` — pagination state
+
+### useModal Destructuring
+
+Always destructure `useModal` — never access via dot notation:
+
+✅ **GOOD:**
+
+```typescript
+const {
+  isOpen: isDeleteOpen,
+  open: openDelete,
+  close: closeDelete,
+  payload: deleteId,
+} = useModal<string>();
+
+openDelete(item.id);
+```
+
+❌ **BAD:**
+
+```typescript
+const deleteModal = useModal<string>();
+deleteModal.open(item.id); // never dot-access
+```
+
+## Manual useState vs React Query vs Zustand
+
+- Data fetching and mutations → always React Query
+- Form field state → always plain `useState`
+- UI toggle state (modal open, filter selection) → plain `useState` or `useModal`
+- State shared across many unrelated components with complex logic → Zustand store in `stores/`
+
+Zustand stores live in `stores/`, not `hooks/`. Do not create a custom hook with Context lifting when Zustand is the right tool.
+
+❌ Never use `useState` + `useEffect` for data fetching:
+
+```typescript
+// BAD
+const [data, setData] = useState([]);
+useEffect(() => { fetchData().then(setData); }, [user]);
+```

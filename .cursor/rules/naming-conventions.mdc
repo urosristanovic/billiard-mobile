@@ -1,0 +1,59 @@
+---
+description: File and folder naming conventions
+alwaysApply: true
+---
+
+# Naming Conventions
+
+## Files
+
+| Type | Convention | Example |
+|------|-----------|---------|
+| React Components | PascalCase | `FeatureCard.tsx`, `FormField.tsx` |
+| Hooks | camelCase + `use` prefix | `useFeature.ts`, `useForm.ts` |
+| Stores | camelCase + `use` prefix | `useNotificationStore.ts`, `useCartStore.ts` |
+| Services | camelCase | `feature.ts`, `auth.ts` |
+| Types | camelCase | `feature.ts`, `api.ts` |
+| Utils | camelCase | `formatters.ts`, `cn.ts` |
+| Config | camelCase | `api.ts`, `queryKeys.ts` |
+
+## Folders
+
+| Type | Convention | Example |
+|------|-----------|---------|
+| Screens (mobile) | PascalCase | `FeatureScreen/`, `AuthForm/` |
+| Pages (web, Next.js) | camelCase | `feature/`, `settings/` |
+| Shared folders | camelCase | `hooks/`, `services/`, `utils/` |
+| Stores | camelCase | `stores/` |
+| Config / constants | camelCase | `config/`, `constants/` |
+
+## No Redundant Suffixes
+
+The folder provides context — drop suffixes that repeat it:
+
+✅ `services/feature.ts` — folder says it's a service
+❌ `services/featureService.ts` — redundant
+
+✅ `hooks/useForm.ts` — file name says it's a hook
+❌ `hooks/useFormHook.ts` — redundant
+
+## Index Files
+
+Always use `index.ts` for directory exports:
+
+```typescript
+// components/features/feature/index.ts
+export { FeatureCard } from './FeatureCard';
+export { FeatureList } from './FeatureList';
+export { FeatureForm } from './FeatureForm';
+```
+
+## Type Naming
+
+| Kind | Pattern | Example |
+|------|---------|---------|
+| Entity | PascalCase | `Feature`, `User` |
+| Props | Component + `Props` | `FeatureCardProps` |
+| Form state | Feature + `FormData` | `FeatureFormData` |
+| API input | Feature + `Input` | `FeatureInput` |
+| API response | `ApiResponse<T>` | `ApiResponse<Feature[]>` |

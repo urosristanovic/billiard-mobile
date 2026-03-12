@@ -1,0 +1,74 @@
+---
+description: Core architecture, data flow, and project structure standards
+alwaysApply: true
+---
+
+# Project Architecture Standards
+
+## Data Flow (Non-Negotiable)
+
+**Component → Hook (React Query) → Service → fetch**
+
+Components never call `fetch`, handle auth tokens, or call services directly.
+
+✅ **GOOD — Correct layering:**
+
+```typescript
+// Component
+const { data: items = [], isLoading } = useFeatureData();
+const { createItem } = useFeatureMutations();
+
+// Feature hook (React Query)
+queryFn: async () => {
+  const token = await user!.getIdToken();
+  return featureService.getAll(token); // service handles fetch
+}
+
+// Service (only place fetch lives)
+async getAll(token: string) {
+  return fetch(API_ENDPOINTS.feature.list, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+```
+
+❌ **BAD — fetch leaking into components or hooks:**
+
+```typescript
+// NEVER in a component or page
+const res = await fetch('/api/feature');
+const items = await featureService.getAll(token);
+```
+
+## Code Organization Principles
+
+- **Single Responsibility** — each file has one clear purpose
+- **Max 100 lines** — page/screen components must stay under 100 lines; extract hooks and sub-components when exceeded
+- **No Hardcoded Values** — use constants from centralized config
+- **No Hardcoded Colors** — use the theme system (see platform `theme-system.mdc`)
+- **No Hardcoded Strings** — use translation keys (see platform `translations.mdc`)
+
+## Centralized Resources
+
+Always use these instead of ad-hoc values:
+
+| Resource | Location |
+|----------|----------|
+| API endpoints | `config/api.ts` |
+| Query key constants | `config/queryKeys.ts` |
+| Types | `types/[feature].ts` + `types/index.ts` |
+| Utils | `utils/formatters.ts` |
+| Zustand stores | `stores/use<Feature>Store.ts` |
+| Theme / styles | Platform-specific — see `theme-system.mdc` |
+| Translations | Platform-specific — see `translations.mdc` |
+
+## Adding New Features
+
+1. Add types → `types/[feature].ts`
+2. Add endpoint constants → `config/api.ts`
+3. Add query key constant → `config/queryKeys.ts`
+4. Create service → `services/[feature].ts`
+5. Create feature hooks — see platform-specific component rules for directory structure
+6. If the feature has complex shared client state, create a Zustand store → `stores/use<Feature>Store.ts`
+7. Create components — see platform-specific component rules
+8. Create page/screen — thin wrapper, ≤100 lines

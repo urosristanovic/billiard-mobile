@@ -1,0 +1,77 @@
+---
+description: Unit testing patterns for hooks, services, and components
+globs: '**/*.{test,spec}.{ts,tsx}'
+alwaysApply: false
+---
+
+# Testing Standards
+
+## What to Test
+
+| Layer | What to test |
+|-------|-------------|
+| Services | Correct fetch call, error throwing on non-success response, response parsing |
+| Feature hooks | Correct query key used, service called with the right token and args |
+| Form hooks | Field update, validation, reset, `loadForEdit` pre-fill |
+| Components | Renders correctly, user interactions, loading/empty state display |
+
+## File Co-location
+
+Place test files next to the file under test:
+
+```
+useFeatureData.ts
+useFeatureData.test.ts
+feature.ts          ← service
+feature.test.ts
+FeatureCard.tsx
+FeatureCard.test.tsx
+```
+
+## Mocking Services
+
+Mock the service module — not `fetch` directly:
+
+```typescript
+import { featureService } from '@/services/feature';
+vi.mock('@/services/feature');
+
+const mockGetAll = vi.mocked(featureService.getAll).mockResolvedValue([mockFeature]);
+```
+
+## Mocking Auth
+
+```typescript
+vi.mock('@/contexts/AuthContext', () => ({
+  useAuth: () => ({
+    user: { uid: 'user-1', getIdToken: () => Promise.resolve('mock-token') },
+  }),
+}));
+```
+
+## React Query Test Wrapper
+
+Always wrap hook tests in a `QueryClientProvider` with `retry: false`:
+
+```typescript
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <QueryClientProvider
+    client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}
+  >
+    {children}
+  </QueryClientProvider>
+);
+
+const { result } = renderHook(() => useFeatureData(), { wrapper });
+await waitFor(() => expect(result.current.isSuccess).toBe(true));
+expect(mockGetAll).toHaveBeenCalledWith('mock-token');
+```
+
+## Mutation Testing
+
+```typescript
+const { result } = renderHook(() => useFeatureMutations(), { wrapper });
+act(() => result.current.createFeature({ title: 'Test', description: '' }));
+await waitFor(() => expect(result.current.isSubmitting).toBe(false));
+expect(mockCreate).toHaveBeenCalledWith('mock-token', { title: 'Test', description: '' });
+```

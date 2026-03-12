@@ -1,0 +1,238 @@
+---
+description: State management hierarchy — when to use React Query, Zustand, Context, or useState
+alwaysApply: true
+---
+
+# State Management Standards
+
+## The Hierarchy
+
+| State type | Solution | Examples |
+|------------|----------|---------|
+| Server / async data | React Query (`useQuery`, `useMutation`) | Feature lists, user profile fetched from API |
+| Complex global client state | Zustand (`stores/use<Feature>Store.ts`) | Notification queue, multi-step wizard, shopping cart |
+| Simple global state | React Context | Auth user, theme, language, navigation state |
+| Local UI state | `useState` / `useReducer` | Modal open, active filter, form fields |
+
+## React Query — Server State
+
+Any data that comes from an API belongs in React Query, not Zustand, Context, or useState.
+
+❌ **BAD — server data in Zustand or Context:**
+
+```typescript
+const [items, setItems] = useState<Feature[]>([]);
+useEffect(() => { fetchItems().then(setItems); }, [user]);
+// or
+useFeatureStore.setState({ items: await fetchItems() });
+```
+
+✅ **GOOD — server data in React Query:**
+
+```typescript
+const { data: items = [], isLoading } = useFeatureData();
+```
+
+## Zustand — Complex Global Client State
+
+Use Zustand when client state is:
+- Shared across many unrelated components
+- Updated frequently (where Context causes excess re-renders)
+- Complex enough to warrant multiple actions or derived values
+- What you'd reach for Context + useReducer for, but it's getting unwieldy
+
+### Store Structure
+
+One file per store in `stores/`. State and actions co-located in a single `create` call.
+
+```typescript
+// stores/useNotificationStore.ts
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+
+interface Notification {
+  id: string;
+  message: string;
+  type: 'success' | 'error' | 'info';
+}
+
+interface NotificationStore {
+  notifications: Notification[];
+  add: (notification: Omit<Notification, 'id'>) => void;
+  remove: (id: string) => void;
+  clear: () => void;
+}
+
+export const useNotificationStore = create<NotificationStore>()(
+  devtools(
+    (set) => ({
+      notifications: [],
+      add: (notification) =>
+        set((state) => ({
+          notifications: [
+            ...state.notifications,
+            { ...notification, id: crypto.randomUUID() },
+          ],
+        })),
+      remove: (id) =>
+        set((state) => ({
+          notifications: state.notifications.filter((n) => n.id !== id),
+        })),
+      clear: () => set({ notifications: [] }),
+    }),
+    { name: 'NotificationStore' }
+  )
+);
+```
+
+### Selectors — Always Subscribe to Specific Slices
+
+Never destructure the whole store. Always use a selector so the component only re-renders when the specific value it uses changes.
+
+❌ **BAD — subscribes to entire store:**
+
+```typescript
+const store = useNotificationStore();
+const { notifications, add } = store; // re-renders on ANY store change
+```
+
+✅ **GOOD — targeted selectors:**
+
+```typescript
+const notifications = useNotificationStore((s) => s.notifications);
+const add = useNotificationStore((s) => s.add);
+```
+
+### Slice Pattern for Large Stores
+
+If a store grows beyond ~60 lines, split it into slices:
+
+```typescript
+// stores/slices/cartItemsSlice.ts
+export interface CartItemsSlice {
+  items: CartItem[];
+  addItem: (item: CartItem) => void;
+  removeItem: (id: string) => void;
+}
+
+export const createCartItemsSlice = (set: SetState): CartItemsSlice => ({
+  items: [],
+  addItem: (item) => set((state) => ({ items: [...state.items, item] })),
+  removeItem: (id) =>
+    set((state) => ({ items: state.items.filter((i) => i.id !== id) })),
+});
+
+// stores/useCartStore.ts
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+import { createCartItemsSlice, CartItemsSlice } from './slices/cartItemsSlice';
+import { createCartTotalsSlice, CartTotalsSlice } from './slices/cartTotalsSlice';
+
+type CartStore = CartItemsSlice & CartTotalsSlice;
+
+export const useCartStore = create<CartStore>()(
+  devtools(
+    (...args) => ({
+      ...createCartItemsSlice(...args),
+      ...createCartTotalsSlice(...args),
+    }),
+    { name: 'CartStore' }
+  )
+);
+```
+
+### Devtools Middleware
+
+Always include `devtools` — it wraps the store for Redux DevTools inspection. Pass a `name` matching the store export.
+
+```typescript
+export const useFeatureStore = create<FeatureStore>()(
+  devtools((set) => ({ /* ... */ }), { name: 'FeatureStore' })
+);
+```
+
+### Anti-Patterns
+
+❌ **Server data in Zustand** — use React Query instead:
+
+```typescript
+// BAD — Zustand as a cache for API responses
+useFeatureStore.setState({ items: await featureService.getAll(token) });
+```
+
+❌ **Single-component state in Zustand** — use `useState` instead:
+
+```typescript
+// BAD — state only used by one component
+export const useModalStore = create(() => ({ isOpen: false }));
+```
+
+❌ **Actions outside the store** — keep actions co-located:
+
+```typescript
+// BAD — mutations defined outside create()
+const store = useFeatureStore;
+store.setState((s) => ({ count: s.count + 1 })); // scattered logic
+```
+
+## React Context — Simple Global State Only
+
+Use Context for state that is:
+- Truly global (needed by many unrelated components)
+- Not server data, not complex client logic
+- Changes infrequently (rare updates)
+
+✅ **Appropriate for Context:**
+
+```typescript
+AuthContext      // current user, sign in/out
+ThemeContext     // light/dark preference
+LanguageContext  // active locale, changeLanguage()
+NavigationContext // active screen/tab (mobile custom navigation)
+OnboardingContext // onboarding completion state
+```
+
+❌ **Use Zustand instead of Context for:**
+
+```typescript
+// Frequently updating state — causes excess re-renders in Context
+const NotificationContext = createContext<Notification[]>([]);
+
+// Complex state with many actions — use Zustand
+const CartContext = createContext<CartState>({});
+
+// State shared across many unrelated components with derived values
+const FilterContext = createContext<FilterState>({});
+```
+
+## useState — Local UI State
+
+Default choice for anything scoped to a single component and its direct children.
+
+```typescript
+const [isFormOpen, setIsFormOpen] = useState(false);
+const [activeFilter, setActiveFilter] = useState('all');
+```
+
+Use `useModal` from `hooks/` for modal open/close + optional payload:
+
+```typescript
+const { isOpen, open, close, payload } = useModal<string>();
+```
+
+## Decision Flowchart
+
+```
+Does it come from an API?
+  → Yes: React Query
+
+Is it needed by many unrelated components across the app?
+  → No: useState in the component (or pass as props)
+  → Yes:
+      Is it simple, changes infrequently, no complex actions? (theme, locale, auth)
+        → Yes: Context
+        → No (frequent updates, multiple actions, derived values): Zustand
+```
+
+If you're reaching for Context for something complex or frequently updating, use Zustand.
+If you're creating a store for state only one component uses, use `useState`.

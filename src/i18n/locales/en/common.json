@@ -1,0 +1,56 @@
+{
+  "appName": "Billiard App",
+  "loading": "Loading...",
+  "error": "Something went wrong",
+  "retry": "Try again",
+  "save": "Save",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "delete": "Delete",
+  "edit": "Edit",
+  "create": "Create",
+  "search": "Search",
+  "filter": "Filter",
+  "close": "Close",
+  "back": "Back",
+  "next": "Next",
+  "submit": "Submit",
+  "noResults": "No results found",
+  "emptyState": "Nothing here yet",
+  "disciplines": {
+    "8ball": "8-Ball",
+    "9ball": "9-Ball",
+    "10ball": "10-Ball",
+    "straightPool": "Straight Pool",
+    "snooker": "Snooker"
+  },
+  "matchStatus": {
+    "pendingConfirmation": "Pending Confirmation",
+    "confirmed": "Confirmed",
+    "disputed": "Disputed",
+    "cancelled": "Cancelled"
+  },
+  "rating": {
+    "provisional": "Provisional",
+    "established": "Established",
+    "ratingDeviation": "Rating Deviation",
+    "volatility": "Volatility"
+  },
+  "nav": {
+    "home": "Home",
+    "leaderboard": "Leaderboard",
+    "matches": "Matches",
+    "profile": "Profile",
+    "rules": "Rules"
+  },
+  "you": "You",
+  "unrated": "Unrated",
+  "errorTitle": "Error",
+  "closeA11y": "Close",
+  "errors": {
+    "unauthorized": "You must be logged in to do this",
+    "forbidden": "You don't have permission to do this",
+    "notFound": "Not found",
+    "serverError": "A server error occurred. Please try again."
+  }
+}
