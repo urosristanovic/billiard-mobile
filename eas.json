@@ -13,12 +13,12 @@
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://billiar-web-preview.vercel.app"
+        "EXPO_PUBLIC_API_URL": "https://billiard-web-preview.vercel.app"
       }
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://billiar-web.vercel.app"
+        "EXPO_PUBLIC_API_URL": "https://billiard-web.vercel.app"
       }
     }
   },

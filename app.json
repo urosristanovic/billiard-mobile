@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Billiard App",
-    "slug": "billiar-mobile",
+    "slug": "billiard-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
