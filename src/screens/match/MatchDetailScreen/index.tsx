@@ -8,19 +8,15 @@ import { useAuth } from '@/features/auth/useAuth';
 import { useConfirmDialog } from '@/components/common/dialog';
 import { ScreenLayout } from '@/components/common/layout';
 import { LoadingState, EmptyState } from '@/components/common/states';
-import {
-  DangerButton,
-  PrimaryButton,
-  SecondaryButton,
-} from '@/components/common/buttons';
 import { useTheme } from '@/hooks/useTheme';
 import { DISCIPLINE_LABELS } from '@/types/match';
 import {
   ScoreBoard,
-  ConfirmationBanner,
   DisputeForm,
   DisputeResolution,
-  DisputeHistory,
+  MatchTimeline,
+  MatchActions,
+  CancellationForm,
 } from './components';
 import { styles } from './styles';
 import type { MatchesStackParamList } from '@/navigation/AppNavigator';
@@ -34,17 +30,25 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
   const { isDark, tk } = useTheme();
   const { confirm } = useConfirmDialog();
   const { user } = useAuth();
-  const [isDisputeFormVisible, setIsDisputeFormVisible] = useState(false);
+  const [activeForm, setActiveForm] = useState<
+    'none' | 'dispute' | 'counterDispute' | 'cancel'
+  >('none');
   const [disputeReason, setDisputeReason] = useState('');
   const [proposedMyScore, setProposedMyScore] = useState('');
   const [proposedOpponentScore, setProposedOpponentScore] = useState('');
+  const [cancellationReason, setCancellationReason] = useState('');
   const [disputeValidationError, setDisputeValidationError] = useState<
     string | null
   >(null);
 
   const { data: match, isLoading, error } = useMatchDetail(matchId);
-  const { confirmMatch, disputeMatch, cancelMatch, acceptDispute } =
-    useMatchMutations();
+  const {
+    confirmMatch,
+    disputeMatch,
+    cancelMatch,
+    acceptDispute,
+    counterDispute,
+  } = useMatchMutations();
 
   if (isLoading) {
     return (
@@ -63,18 +67,10 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
 
   const me = match.players.find(p => p.userId === user?.id);
   const opponent = match.players.find(p => p.userId !== user?.id);
-  const isPending = match.status === 'pending_confirmation';
-  const isConfirmed = match.status === 'confirmed';
   const isDisputed = match.status === 'disputed';
-  const iNeedToConfirm = isPending && me && !me.confirmed;
-  const canRequestCancel =
-    (isPending || isDisputed) && !!me && !me.cancelRequested;
-  const opponentRequestedCancel = !!opponent?.cancelRequested;
   const openDispute = match.dispute?.status === 'open' ? match.dispute : null;
   const iAmDisputer = openDispute?.disputedBy === user?.id;
   const canResolveDispute = isDisputed && !!openDispute && !iAmDisputer;
-  const myConfirmedAt = me?.confirmedAt ?? null;
-  const opponentConfirmedAt = opponent?.confirmedAt ?? null;
   const rawOpenDisputeMyScore = me
     ? openDispute?.proposedScores[me.userId]
     : undefined;
@@ -113,21 +109,46 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
         }),
     });
 
-  const handleDispute = () => {
-    setProposedMyScore(me?.score?.toString() ?? '');
-    setProposedOpponentScore(opponent?.score?.toString() ?? '');
+  const openDisputeForm = (mode: 'dispute' | 'counterDispute') => {
+    const prefilledMyScore =
+      mode === 'counterDispute' && openDisputeMyScore !== null
+        ? openDisputeMyScore
+        : me?.score;
+    const prefilledOpponentScore =
+      mode === 'counterDispute' && openDisputeOpponentScore !== null
+        ? openDisputeOpponentScore
+        : opponent?.score;
+
+    setProposedMyScore(
+      typeof prefilledMyScore === 'number' ? prefilledMyScore.toString() : '',
+    );
+    setProposedOpponentScore(
+      typeof prefilledOpponentScore === 'number'
+        ? prefilledOpponentScore.toString()
+        : '',
+    );
     setDisputeValidationError(null);
-    setIsDisputeFormVisible(true);
+    setDisputeReason('');
+    setActiveForm(mode);
   };
 
-  const handleCancelRequest = () =>
+  const handleSubmitCancel = () =>
     confirm({
-      title: t('detail.cancelTitle'),
-      message: t('detail.cancelMessage'),
+      title: t('detail.cancelWithReasonButton'),
+      message: t('detail.acceptCancelMessage'),
       cancelLabel: tCommon('cancel'),
-      confirmLabel: t('detail.requestShortButton'),
+      confirmLabel: tCommon('submit'),
       variant: 'destructive',
-      onConfirm: () => cancelMatch.mutate(match.id),
+      onConfirm: () =>
+        cancelMatch.mutate(
+          { matchId: match.id, reason: cancellationReason.trim() || undefined },
+          {
+            onSuccess: () => {
+              setActiveForm('none');
+              setCancellationReason('');
+            },
+          },
+        ),
     });
 
   const handleAcceptCancel = () =>
@@ -137,7 +158,7 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
       cancelLabel: tCommon('cancel'),
       confirmLabel: t('detail.acceptCorrectionShortButton'),
       variant: 'destructive',
-      onConfirm: () => cancelMatch.mutate(match.id),
+      onConfirm: () => cancelMatch.mutate({ matchId: match.id }),
     });
 
   const handleSubmitDispute = () => {
@@ -160,20 +181,24 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
     }
 
     setDisputeValidationError(null);
-    disputeMatch.mutate(
+    const input = {
+      reason: disputeReason.trim() || undefined,
+      proposedScores: {
+        [me.userId]: myScore,
+        [opponent.userId]: oppScore,
+      },
+    };
+
+    const mutateDispute =
+      activeForm === 'counterDispute' ? counterDispute : disputeMatch;
+    mutateDispute.mutate(
       {
         matchId: match.id,
-        input: {
-          reason: disputeReason.trim() || undefined,
-          proposedScores: {
-            [me.userId]: myScore,
-            [opponent.userId]: oppScore,
-          },
-        },
+        input,
       },
       {
         onSuccess: () => {
-          setIsDisputeFormVisible(false);
+          setActiveForm('none');
           setDisputeReason('');
         },
       },
@@ -188,6 +213,10 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
       confirmLabel: t('detail.acceptCorrectionShortButton'),
       onConfirm: () => acceptDispute.mutate(match.id),
     });
+
+  const isDisputeFormVisible =
+    activeForm === 'dispute' || activeForm === 'counterDispute';
+  const isCancelFormVisible = activeForm === 'cancel';
 
   return (
     <ScreenLayout isDark={isDark}>
@@ -234,31 +263,63 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
 
         <ScoreBoard match={match} myUserId={user?.id ?? ''} isDark={isDark} />
 
-        {isPending && (
-          <ConfirmationBanner
-            iConfirmed={!!me?.confirmed}
-            autoConfirmAt={match.autoConfirmAt}
+        {!isDisputeFormVisible && !isCancelFormVisible && (
+          <MatchActions
+            match={match}
+            me={me ?? null}
+            opponent={opponent ?? null}
+            myUserId={user?.id ?? ''}
             isDark={isDark}
+            isConfirming={confirmMatch.isPending}
+            isDisputing={disputeMatch.isPending}
+            isCancelling={cancelMatch.isPending}
+            onConfirm={handleConfirm}
+            onOpenDispute={() => openDisputeForm('dispute')}
+            onOpenCancel={() => {
+              setCancellationReason('');
+              setActiveForm('cancel');
+            }}
+            onAcceptCancel={handleAcceptCancel}
           />
         )}
 
+        <CancellationForm
+          isVisible={isCancelFormVisible}
+          reason={cancellationReason}
+          isSubmitting={cancelMatch.isPending}
+          isDark={isDark}
+          onReasonChange={setCancellationReason}
+          onSubmit={handleSubmitCancel}
+          onCancel={() => setActiveForm('none')}
+        />
+
         <DisputeForm
           isVisible={isDisputeFormVisible}
+          title={
+            activeForm === 'counterDispute'
+              ? t('detail.counterDisputeButton')
+              : undefined
+          }
+          submitLabel={
+            activeForm === 'counterDispute'
+              ? t('detail.counterDisputeButton')
+              : undefined
+          }
           reason={disputeReason}
           myScore={proposedMyScore}
           opponentScore={proposedOpponentScore}
           opponentName={opponent?.profile.displayName ?? t('detail.opponent')}
           validationError={disputeValidationError}
-          isSubmitting={disputeMatch.isPending}
+          isSubmitting={disputeMatch.isPending || counterDispute.isPending}
           isDark={isDark}
           onReasonChange={setDisputeReason}
           onMyScoreChange={setProposedMyScore}
           onOpponentScoreChange={setProposedOpponentScore}
           onSubmit={handleSubmitDispute}
-          onCancel={() => setIsDisputeFormVisible(false)}
+          onCancel={() => setActiveForm('none')}
         />
 
-        {isDisputed && me && opponent && openDispute && (
+        {isDisputed && me && opponent && openDispute && !isDisputeFormVisible && (
           <DisputeResolution
             reason={openDispute.reason}
             proposedMyScore={openDisputeMyScore}
@@ -268,159 +329,18 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
             opponentName={opponent.profile.displayName}
             canResolve={canResolveDispute}
             isAccepting={acceptDispute.isPending}
+            isCountering={counterDispute.isPending}
             isDark={isDark}
             onAccept={handleAcceptDispute}
+            onCounter={() => openDisputeForm('counterDispute')}
           />
         )}
 
-        {isConfirmed && me && opponent && (
-          <View
-            style={[
-              styles.confirmationTimeline,
-              {
-                backgroundColor: tk.surface.raised,
-                borderColor: tk.border.default,
-              },
-            ]}
-          >
-            <Text
-              style={[styles.confirmationTitle, { color: tk.text.primary }]}
-            >
-              {t('detail.confirmationTimeline')}
-            </Text>
-            <Text
-              style={[styles.confirmationLine, { color: tk.text.secondary }]}
-            >
-              {t('detail.youConfirmedAt', {
-                dateTime: myConfirmedAt
-                  ? new Date(myConfirmedAt).toLocaleString()
-                  : t('detail.confirmationTimeUnavailable'),
-              })}
-            </Text>
-            <Text
-              style={[styles.confirmationLine, { color: tk.text.secondary }]}
-            >
-              {t('detail.opponentConfirmedAt', {
-                name: opponent.profile.displayName,
-                dateTime: opponentConfirmedAt
-                  ? new Date(opponentConfirmedAt).toLocaleString()
-                  : t('detail.confirmationTimeUnavailable'),
-              })}
-            </Text>
-          </View>
-        )}
-
-        {isConfirmed && match.disputes.length > 0 && (
-          <DisputeHistory
-            disputes={match.disputes}
-            players={match.players}
-            myUserId={user?.id ?? ''}
-            isDark={isDark}
-          />
-        )}
-
-        {iNeedToConfirm && !isDisputeFormVisible && (
-          <View style={styles.actions}>
-            <PrimaryButton
-              label={t('detail.confirmButton')}
-              onPress={handleConfirm}
-              loading={confirmMatch.isPending}
-              isDark={isDark}
-            />
-            <DangerButton
-              label={t('detail.disputeButton')}
-              onPress={handleDispute}
-              loading={disputeMatch.isPending}
-              isDark={isDark}
-            />
-            <SecondaryButton
-              label={
-                me?.cancelRequested
-                  ? t('detail.cancelAlreadyRequestedButton')
-                  : opponentRequestedCancel
-                    ? t('detail.acceptCancelButton')
-                    : t('detail.requestCancelButton')
-              }
-              onPress={
-                opponentRequestedCancel && !me?.cancelRequested
-                  ? handleAcceptCancel
-                  : handleCancelRequest
-              }
-              loading={cancelMatch.isPending}
-              disabled={!canRequestCancel}
-              isDark={isDark}
-            />
-          </View>
-        )}
-
-        {!iNeedToConfirm &&
-          !isDisputeFormVisible &&
-          (isPending || isDisputed) && (
-            <View style={styles.actions}>
-              {opponentRequestedCancel && !me?.cancelRequested && isPending && (
-                <DangerButton
-                  label={t('detail.disputeButton')}
-                  onPress={handleDispute}
-                  loading={disputeMatch.isPending}
-                  isDark={isDark}
-                />
-              )}
-              <SecondaryButton
-                label={
-                  me?.cancelRequested
-                    ? t('detail.cancelAlreadyRequestedButton')
-                    : opponentRequestedCancel
-                      ? t('detail.acceptCancelButton')
-                      : t('detail.requestCancelButton')
-                }
-                onPress={
-                  opponentRequestedCancel && !me?.cancelRequested
-                    ? handleAcceptCancel
-                    : handleCancelRequest
-                }
-                loading={cancelMatch.isPending}
-                disabled={!canRequestCancel}
-                isDark={isDark}
-              />
-            </View>
-          )}
-
-        {isPending && opponent && (
-          <View style={styles.opponentStatus}>
-            <Text style={[styles.opponentStatusText, { color: tk.text.muted }]}>
-              {t('detail.yourConfirmationState', {
-                status: me?.confirmed
-                  ? t('detail.confirmedState')
-                  : t('detail.awaitingState'),
-              })}
-            </Text>
-            <Text style={[styles.opponentStatusText, { color: tk.text.muted }]}>
-              {t('detail.opponentConfirmationState', {
-                status: opponent.confirmed
-                  ? t('detail.confirmedState')
-                  : t('detail.awaitingState'),
-              })}
-            </Text>
-            {me?.cancelRequested && (
-              <Text
-                style={[styles.opponentStatusText, { color: tk.text.muted }]}
-              >
-                {t('detail.yourCancellationState', {
-                  status: t('detail.cancelRequestedState'),
-                })}
-              </Text>
-            )}
-            {opponent.cancelRequested && (
-              <Text
-                style={[styles.opponentStatusText, { color: tk.text.muted }]}
-              >
-                {t('detail.opponentCancellationState', {
-                  status: t('detail.cancelRequestedState'),
-                })}
-              </Text>
-            )}
-          </View>
-        )}
+        <MatchTimeline
+          match={match}
+          myUserId={user?.id ?? ''}
+          isDark={isDark}
+        />
       </ScrollView>
     </ScreenLayout>
   );

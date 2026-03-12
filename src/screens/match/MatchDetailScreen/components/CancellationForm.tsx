@@ -4,42 +4,27 @@ import { FormField } from '@/components/common/forms/FormField';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 
-interface DisputeFormProps {
+interface CancellationFormProps {
   isVisible: boolean;
-  title?: string;
-  submitLabel?: string;
   reason: string;
-  myScore: string;
-  opponentScore: string;
-  opponentName: string;
-  validationError: string | null;
   isSubmitting: boolean;
   isDark: boolean;
   onReasonChange: (value: string) => void;
-  onMyScoreChange: (value: string) => void;
-  onOpponentScoreChange: (value: string) => void;
   onSubmit: () => void;
   onCancel: () => void;
 }
 
-export const DisputeForm = ({
+export const CancellationForm = ({
   isVisible,
-  title,
-  submitLabel,
   reason,
-  myScore,
-  opponentScore,
-  opponentName,
-  validationError,
   isSubmitting,
   isDark,
   onReasonChange,
-  onMyScoreChange,
-  onOpponentScoreChange,
   onSubmit,
   onCancel,
-}: DisputeFormProps) => {
+}: CancellationFormProps) => {
   const { t } = useTranslation('matches');
+  const { t: tCommon } = useTranslation('common');
   const tk = isDark ? theme.dark : theme.light;
 
   if (!isVisible) return null;
@@ -52,48 +37,26 @@ export const DisputeForm = ({
       ]}
     >
       <Text style={[styles.title, { color: tk.error.text }]}>
-        {title ?? t('detail.disputeFormTitle')}
+        {t('detail.cancelWithReasonButton')}
       </Text>
 
       <FormField
         label={t('detail.disputeReasonLabel')}
         value={reason}
         onChangeText={onReasonChange}
-        placeholder={t('detail.disputeReasonPlaceholder')}
+        placeholder={t('detail.cancellationReasonPlaceholder')}
         isDark={isDark}
       />
-
-      <FormField
-        label={t('detail.disputeYourScore')}
-        value={myScore}
-        onChangeText={onMyScoreChange}
-        keyboardType='numeric'
-        isDark={isDark}
-      />
-
-      <FormField
-        label={t('detail.disputeOpponentScore', { name: opponentName })}
-        value={opponentScore}
-        onChangeText={onOpponentScoreChange}
-        keyboardType='numeric'
-        isDark={isDark}
-      />
-
-      {validationError ? (
-        <Text style={[styles.error, { color: tk.error.text }]}>
-          {validationError}
-        </Text>
-      ) : null}
 
       <View style={styles.actions}>
         <PrimaryButton
-          label={submitLabel ?? t('detail.submitDisputeButton')}
+          label={tCommon('submit')}
           onPress={onSubmit}
           loading={isSubmitting}
           isDark={isDark}
         />
         <SecondaryButton
-          label={t('detail.closeDisputeFormButton')}
+          label={tCommon('close')}
           onPress={onCancel}
           isDark={isDark}
         />
@@ -115,10 +78,6 @@ const styles = StyleSheet.create({
     fontWeight: typography.weight.semibold,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
-  },
-  error: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.bodyMedium,
   },
   actions: {
     gap: spacing[2],

@@ -1,9 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import {
-  PrimaryButton,
-  SecondaryButton,
-} from '@/components/common/buttons';
+import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 
 interface DisputeResolutionProps {
@@ -15,8 +12,10 @@ interface DisputeResolutionProps {
   opponentName: string;
   canResolve: boolean;
   isAccepting: boolean;
+  isCountering: boolean;
   isDark: boolean;
   onAccept: () => void;
+  onCounter: () => void;
 }
 
 export const DisputeResolution = ({
@@ -28,8 +27,10 @@ export const DisputeResolution = ({
   opponentName,
   canResolve,
   isAccepting,
+  isCountering,
   isDark,
   onAccept,
+  onCounter,
 }: DisputeResolutionProps) => {
   const { t } = useTranslation('matches');
   const tk = isDark ? theme.dark : theme.light;
@@ -80,6 +81,12 @@ export const DisputeResolution = ({
             label={t('detail.acceptCorrectionButton')}
             onPress={onAccept}
             loading={isAccepting}
+            isDark={isDark}
+          />
+          <SecondaryButton
+            label={t('detail.counterDisputeButton')}
+            onPress={onCounter}
+            loading={isCountering}
             isDark={isDark}
           />
         </View>

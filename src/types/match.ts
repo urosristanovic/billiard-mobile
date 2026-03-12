@@ -27,6 +27,7 @@ export interface MatchPlayer {
   confirmed: boolean;
   confirmedAt?: string | null;
   cancelRequested: boolean;
+  cancelRequestedAt?: string | null;
   profile: MatchPlayerProfile;
 }
 
@@ -49,10 +50,14 @@ export interface Match {
   discipline: Discipline;
   isRated: boolean;
   isTournament: boolean;
+  createdBy: string | null;
   status: MatchStatus;
   winnerId: string | null;
   autoConfirmAt: string | null;
   confirmedAt: string | null;
+  cancelledAt: string | null;
+  cancelledBy: string | null;
+  cancellationReason: string | null;
   playedAt: string;
   createdAt: string;
   updatedAt: string;

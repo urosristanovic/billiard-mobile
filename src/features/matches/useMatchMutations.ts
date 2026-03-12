@@ -100,10 +100,16 @@ export const useMatchMutations = () => {
   });
 
   const cancelMatch = useMutation({
-    mutationFn: async (matchId: string) => {
+    mutationFn: async ({
+      matchId,
+      reason,
+    }: {
+      matchId: string;
+      reason?: string;
+    }) => {
       if (!user) throw new Error('Not authenticated');
       const token = await getAccessToken();
-      return matchService.cancel(token, matchId);
+      return matchService.cancel(token, matchId, reason);
     },
     onSuccess: match => {
       queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
@@ -137,11 +143,17 @@ export const useMatchMutations = () => {
       }),
   });
 
-  const rejectDispute = useMutation({
-    mutationFn: async (matchId: string) => {
+  const counterDispute = useMutation({
+    mutationFn: async ({
+      matchId,
+      input,
+    }: {
+      matchId: string;
+      input: DisputeMatchInput;
+    }) => {
       if (!user) throw new Error('Not authenticated');
       const token = await getAccessToken();
-      return matchService.rejectDispute(token, matchId);
+      return matchService.counterDispute(token, matchId, input);
     },
     onSuccess: match => {
       queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
@@ -162,6 +174,6 @@ export const useMatchMutations = () => {
     disputeMatch,
     cancelMatch,
     acceptDispute,
-    rejectDispute,
+    counterDispute,
   };
 };

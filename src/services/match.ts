@@ -123,11 +123,16 @@ export const matchService = {
     return parseResponse<Match>(res);
   },
 
-  cancel: async (token: string, matchId: string): Promise<Match> => {
-    const headers = buildHeaders(token);
+  cancel: async (
+    token: string,
+    matchId: string,
+    reason?: string,
+  ): Promise<Match> => {
+    const headers = buildHeaders(token, true);
     const res = await fetchWithTimeout(API_ENDPOINTS.matches.cancel(matchId), {
       method: 'POST',
       headers,
+      body: JSON.stringify({ reason }),
     });
     return parseResponse<Match>(res);
   },
@@ -144,13 +149,18 @@ export const matchService = {
     return parseResponse<Match>(res);
   },
 
-  rejectDispute: async (token: string, matchId: string): Promise<Match> => {
-    const headers = buildHeaders(token);
+  counterDispute: async (
+    token: string,
+    matchId: string,
+    input: DisputeMatchInput,
+  ): Promise<Match> => {
+    const headers = buildHeaders(token, true);
     const res = await fetchWithTimeout(
       API_ENDPOINTS.matches.disputeReject(matchId),
       {
         method: 'POST',
         headers,
+        body: JSON.stringify(input),
       },
     );
     return parseResponse<Match>(res);
