@@ -15,6 +15,15 @@ import ProfileScreen from '@/screens/user/ProfileScreen';
 import ProfileSetupScreen from '@/screens/user/ProfileSetupScreen';
 import type { UserSearchResult } from '@/services/user';
 
+import {
+  TournamentsHomeScreen,
+  CreateTournamentScreen,
+  BrowseTournamentsScreen,
+  TournamentDetailScreen,
+  InvitationDetailScreen,
+  InviteParticipantsScreen,
+} from '@/screens/tournament';
+
 // ─── Stack param lists ────────────────────────────────────────────────────────
 
 export type MatchesStackParamList = {
@@ -27,6 +36,15 @@ export type MatchesStackParamList = {
 export type CreateMatchStackParamList = {
   CreateMatch: { selectedOpponent?: UserSearchResult };
   UserSearch: { excludeId?: string };
+};
+
+export type TournamentsStackParamList = {
+  TournamentsHome: undefined;
+  CreateTournament: undefined;
+  BrowseTournaments: undefined;
+  TournamentDetail: { tournamentId: string };
+  InvitationDetail: { requestId: string };
+  InviteParticipants: { tournamentId: string };
 };
 
 // ─── Stacks ───────────────────────────────────────────────────────────────────
@@ -53,6 +71,36 @@ const CreateMatchNavigator = () => (
   </CreateStack.Navigator>
 );
 
+const TournamentsStack = createNativeStackNavigator<TournamentsStackParamList>();
+const TournamentsNavigator = () => (
+  <TournamentsStack.Navigator screenOptions={{ headerShown: false }}>
+    <TournamentsStack.Screen
+      name='TournamentsHome'
+      component={TournamentsHomeScreen}
+    />
+    <TournamentsStack.Screen
+      name='CreateTournament'
+      component={CreateTournamentScreen}
+    />
+    <TournamentsStack.Screen
+      name='BrowseTournaments'
+      component={BrowseTournamentsScreen}
+    />
+    <TournamentsStack.Screen
+      name='TournamentDetail'
+      component={TournamentDetailScreen}
+    />
+    <TournamentsStack.Screen
+      name='InvitationDetail'
+      component={InvitationDetailScreen}
+    />
+    <TournamentsStack.Screen
+      name='InviteParticipants'
+      component={InviteParticipantsScreen}
+    />
+  </TournamentsStack.Navigator>
+);
+
 const LeaderboardScreen = () => {
   const { isDark } = useTheme();
   const { t } = useTranslation('matches');
@@ -73,6 +121,7 @@ const LeaderboardScreen = () => {
 export type AppTabParamList = {
   Matches: undefined;
   NewMatch: undefined;
+  Tournaments: undefined;
   Leaderboard: undefined;
 };
 
@@ -80,6 +129,7 @@ const Tab = createBottomTabNavigator<AppTabParamList>();
 
 export const AppNavigator = () => {
   const { t } = useTranslation('matches');
+  const { t: tT } = useTranslation('tournaments');
   const { tk } = useTheme();
 
   return (
@@ -135,6 +185,24 @@ export const AppNavigator = () => {
               }}
             >
               +
+            </Text>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name='Tournaments'
+        component={TournamentsNavigator}
+        options={{
+          tabBarLabel: tT('tab'),
+          tabBarIcon: ({ color }) => (
+            <Text
+              style={{
+                fontSize: 14,
+                color,
+                fontFamily: typography.family.display,
+              }}
+            >
+              TR
             </Text>
           ),
         }}

@@ -1,0 +1,160 @@
+{
+  "tab": "Tournaments",
+  "home": {
+    "title": "Tournaments",
+    "createButton": "Create Tournament",
+    "joinButton": "Join Tournament",
+    "stats": {
+      "active": "Active",
+      "won": "Won"
+    },
+    "pending": {
+      "title": "Pending",
+      "invitation": "Invitation",
+      "request": "Join Request",
+      "empty": "No pending requests"
+    },
+    "active": {
+      "title": "Active Tournaments",
+      "empty": "No active tournaments",
+      "emptyDesc": "Create or join a tournament to get started"
+    },
+    "past": {
+      "title": "Past Tournaments",
+      "empty": "No past tournaments"
+    },
+    "nextMatch": "Next: You vs {{opponent}}",
+    "noNextMatch": "No match scheduled"
+  },
+  "create": {
+    "title": "Create Tournament",
+    "name": "Tournament Name",
+    "namePlaceholder": "Enter tournament name",
+    "description": "Description",
+    "descriptionPlaceholder": "Optional description",
+    "discipline": "Discipline",
+    "format": "Format",
+    "visibility": "Visibility",
+    "maxParticipants": "Max Players",
+    "maxParticipantsPlaceholder": "2–128",
+    "scheduledAt": "Date & Time",
+    "scheduledAtPlaceholder": "YYYY-MM-DD HH:MM",
+    "location": "Location",
+    "locationPlaceholder": "Venue name or address (optional)",
+    "submitButton": "Create Tournament",
+    "createSuccess": "Tournament created successfully",
+    "nameRequired": "Name is required",
+    "disciplineRequired": "Select a discipline",
+    "formatRequired": "Select a format",
+    "visibilityRequired": "Select visibility",
+    "maxParticipantsInvalid": "Must be between 2 and 128",
+    "scheduledAtRequired": "Schedule date is required"
+  },
+  "browse": {
+    "title": "Find Tournament",
+    "searchPlaceholder": "Search by name or location...",
+    "empty": "No tournaments found",
+    "emptyDesc": "Try a different search term",
+    "emptyInitial": "Search for public tournaments",
+    "emptyInitialDesc": "Only tournaments open for registration are shown",
+    "requestButton": "Request Spot",
+    "requestSent": "Request Sent",
+    "requestAgain": "Request Again",
+    "joined": "Joined",
+    "organizer": "Your Tournament",
+    "full": "Full"
+  },
+  "detail": {
+    "title": "Tournament",
+    "organizer": "Organizer",
+    "format": "Format",
+    "discipline": "Discipline",
+    "status": "Status",
+    "scheduled": "Scheduled",
+    "location": "Location",
+    "participants": "Participants",
+    "participantCount": "{{count}} / {{max}}",
+    "bracket": "Bracket",
+    "standings": "Standings",
+    "noBracket": "Bracket will appear once the tournament starts",
+    "requests": {
+      "title": "Pending Requests",
+      "empty": "No pending requests",
+      "joinRequest": "Join Request",
+      "invitation": "Invitation sent",
+      "accept": "Accept",
+      "reject": "Reject"
+    },
+    "actions": {
+      "publish": "Publish",
+      "start": "Start",
+      "complete": "Mark Complete",
+      "cancel": "Cancel",
+      "invite": "Invite Player",
+      "addParticipants": "Add"
+    },
+    "invitedBadge": "Invited",
+    "confirmPublish": "Publish this tournament?",
+    "confirmPublishMessage": "It will become searchable and open for registration.",
+    "confirmStart": "Start the tournament?",
+    "confirmStartMessage": "Bracket will be generated and registration will close.",
+    "confirmComplete": "Mark tournament as complete?",
+    "confirmCompleteMessage": "This action cannot be undone.",
+    "confirmCancel": "Cancel this tournament?",
+    "confirmCancelMessage": "All participants will be notified.",
+    "startRequiresFullRoster": "{{count}} / {{max}} players — need full roster to start"
+  },
+  "invitation": {
+    "title": "Invitation",
+    "requestTitle": "Join Request",
+    "invitedTo": "You have been invited to",
+    "requestedFor": "Your request for",
+    "tournamentDetails": "Tournament Details",
+    "acceptButton": "Accept",
+    "rejectButton": "Decline",
+    "cancelButton": "Cancel Request",
+    "reasonLabel": "Reason (optional)",
+    "reasonPlaceholder": "Add a reason...",
+    "confirmAcceptTitle": "Accept invitation?",
+    "confirmAcceptMessage": "You will be added as a participant in this tournament.",
+    "confirmDeclineTitle": "Decline invitation?",
+    "confirmDeclineMessage": "You can optionally leave a reason for the organizer.",
+    "confirmCancelTitle": "Cancel your request?",
+    "confirmCancelMessage": "Your join request will be withdrawn.",
+    "status": {
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Declined",
+      "cancelled": "Cancelled"
+    }
+  },
+  "formats": {
+    "single_elimination": "Single Elimination",
+    "double_elimination": "Double Elimination",
+    "round_robin": "Round Robin"
+  },
+  "visibility": {
+    "public": "Public",
+    "invite_only": "Invite Only"
+  },
+  "status": {
+    "draft": "Draft",
+    "registration": "Registration",
+    "in_progress": "In Progress",
+    "pending_review": "Pending Review",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  },
+  "inviteParticipants": {
+    "title": "Add Participants",
+    "searchPlaceholder": "Search players...",
+    "searchHint": "Type to search for players",
+    "empty": "No players found",
+    "invite": "Invite",
+    "invited": "Invited",
+    "joined": "Joined"
+  },
+  "loading": "Loading tournaments...",
+  "loadFailed": "Failed to load tournaments",
+  "notFound": "Tournament not found"
+}

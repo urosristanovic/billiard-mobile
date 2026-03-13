@@ -1,0 +1,160 @@
+{
+  "tab": "Turniri",
+  "home": {
+    "title": "Turniri",
+    "createButton": "Kreiraj turnir",
+    "joinButton": "Pridruži se turniru",
+    "stats": {
+      "active": "Aktivni",
+      "won": "Pobede"
+    },
+    "pending": {
+      "title": "Na čekanju",
+      "invitation": "Pozivnica",
+      "request": "Zahtev za učešće",
+      "empty": "Nema zahteva na čekanju"
+    },
+    "active": {
+      "title": "Aktivni turniri",
+      "empty": "Nema aktivnih turnira",
+      "emptyDesc": "Kreiraj ili se pridruži turniru da počneš"
+    },
+    "past": {
+      "title": "Prošli turniri",
+      "empty": "Nema prošlih turnira"
+    },
+    "nextMatch": "Sledeći: Ti vs {{opponent}}",
+    "noNextMatch": "Nema zakazanog meča"
+  },
+  "create": {
+    "title": "Kreiraj turnir",
+    "name": "Naziv turnira",
+    "namePlaceholder": "Unesite naziv turnira",
+    "description": "Opis",
+    "descriptionPlaceholder": "Opcioni opis",
+    "discipline": "Disciplina",
+    "format": "Format",
+    "visibility": "Vidljivost",
+    "maxParticipants": "Maks. igrači",
+    "maxParticipantsPlaceholder": "2–128",
+    "scheduledAt": "Datum i vreme",
+    "scheduledAtPlaceholder": "GGGG-MM-DD HH:MM",
+    "location": "Lokacija",
+    "locationPlaceholder": "Naziv mesta ili adresa (opciono)",
+    "submitButton": "Kreiraj turnir",
+    "createSuccess": "Turnir je uspešno kreiran",
+    "nameRequired": "Naziv je obavezan",
+    "disciplineRequired": "Izaberite disciplinu",
+    "formatRequired": "Izaberite format",
+    "visibilityRequired": "Izaberite vidljivost",
+    "maxParticipantsInvalid": "Mora biti između 2 i 128",
+    "scheduledAtRequired": "Datum zakazivanja je obavezan"
+  },
+  "browse": {
+    "title": "Pronađi turnir",
+    "searchPlaceholder": "Pretraga po nazivu ili lokaciji...",
+    "empty": "Nema pronađenih turnira",
+    "emptyDesc": "Pokušajte drugačiji pojam za pretragu",
+    "emptyInitial": "Pretražite javne turnire",
+    "emptyInitialDesc": "Prikazuju se samo turniri otvoreni za registraciju",
+    "requestButton": "Zatraži mesto",
+    "requestSent": "Zahtev poslat",
+    "requestAgain": "Zatraži ponovo",
+    "joined": "Pridružen",
+    "organizer": "Vaš turnir",
+    "full": "Popunjeno"
+  },
+  "detail": {
+    "title": "Turnir",
+    "organizer": "Organizator",
+    "format": "Format",
+    "discipline": "Disciplina",
+    "status": "Status",
+    "scheduled": "Zakazano",
+    "location": "Lokacija",
+    "participants": "Učesnici",
+    "participantCount": "{{count}} / {{max}}",
+    "bracket": "Raspored",
+    "standings": "Tabela",
+    "noBracket": "Raspored će se prikazati kada turnir počne",
+    "requests": {
+      "title": "Zahtevi na čekanju",
+      "empty": "Nema zahteva",
+      "joinRequest": "Zahtev za pridruživanje",
+      "invitation": "Pozivnica poslata",
+      "accept": "Prihvati",
+      "reject": "Odbij"
+    },
+    "actions": {
+      "publish": "Objavi",
+      "start": "Pokreni",
+      "complete": "Označi kao završen",
+      "cancel": "Otkaži",
+      "invite": "Pozovi igrača",
+      "addParticipants": "Dodaj"
+    },
+    "invitedBadge": "Pozvano",
+    "confirmPublish": "Objavi ovaj turnir?",
+    "confirmPublishMessage": "Biće pretraživač i otvoren za registraciju.",
+    "confirmStart": "Pokreni turnir?",
+    "confirmStartMessage": "Raspored će biti generisan i registracija će biti zatvorena.",
+    "confirmComplete": "Označi turnir kao završen?",
+    "confirmCompleteMessage": "Ova akcija se ne može poništiti.",
+    "confirmCancel": "Otkaži ovaj turnir?",
+    "confirmCancelMessage": "Svi učesnici će biti obavešteni.",
+    "startRequiresFullRoster": "{{count}} / {{max}} igrača — potreban je pun roster da bi se startovalo"
+  },
+  "invitation": {
+    "title": "Pozivnica",
+    "requestTitle": "Zahtev za pridruživanje",
+    "invitedTo": "Pozvani ste da se pridružite",
+    "requestedFor": "Vaš zahtev za",
+    "tournamentDetails": "Detalji turnira",
+    "acceptButton": "Prihvati",
+    "rejectButton": "Odbij",
+    "cancelButton": "Otkaži zahtev",
+    "reasonLabel": "Razlog (opciono)",
+    "reasonPlaceholder": "Dodajte razlog...",
+    "confirmAcceptTitle": "Prihvati pozivnicu?",
+    "confirmAcceptMessage": "Bićete dodati kao učesnik ovog turnira.",
+    "confirmDeclineTitle": "Odbij pozivnicu?",
+    "confirmDeclineMessage": "Možete opciono ostaviti razlog za organizatora.",
+    "confirmCancelTitle": "Otkaži zahtev?",
+    "confirmCancelMessage": "Vaš zahtev za pridruživanje će biti povučen.",
+    "status": {
+      "pending": "Na čekanju",
+      "accepted": "Prihvaćeno",
+      "rejected": "Odbijeno",
+      "cancelled": "Otkazano"
+    }
+  },
+  "formats": {
+    "single_elimination": "Jednostruko eliminisanje",
+    "double_elimination": "Dvostruko eliminisanje",
+    "round_robin": "Svako sa svakim"
+  },
+  "visibility": {
+    "public": "Javno",
+    "invite_only": "Samo na poziv"
+  },
+  "status": {
+    "draft": "Nacrt",
+    "registration": "Registracija",
+    "in_progress": "U toku",
+    "pending_review": "Pregled na čekanju",
+    "completed": "Završeno",
+    "cancelled": "Otkazano"
+  },
+  "inviteParticipants": {
+    "title": "Dodaj učesnike",
+    "searchPlaceholder": "Pretraži igrače...",
+    "searchHint": "Unesite tekst za pretragu igrača",
+    "empty": "Nema pronađenih igrača",
+    "invite": "Pozovi",
+    "invited": "Pozvano",
+    "joined": "Učestvuje"
+  },
+  "loading": "Učitavanje turnira...",
+  "loadFailed": "Greška pri učitavanju turnira",
+  "notFound": "Turnir nije pronađen"
+}

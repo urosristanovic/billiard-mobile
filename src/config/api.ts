@@ -55,4 +55,24 @@ export const API_ENDPOINTS = {
     list: api('/api/rules'),
     byDiscipline: (discipline: string) => api(`/api/rules/${discipline}`),
   },
+
+  // Tournaments
+  tournaments: {
+    list: api('/api/tournaments'),
+    create: api('/api/tournaments'),
+    my: api('/api/tournaments/my'),
+    myPending: api('/api/tournaments/my/pending'),
+    search: api('/api/tournaments/search'),
+    detail: (id: string) => api(`/api/tournaments/${id}`),
+    update: (id: string) => api(`/api/tournaments/${id}`),
+    publish: (id: string) => api(`/api/tournaments/${id}/publish`),
+    start: (id: string) => api(`/api/tournaments/${id}/start`),
+    complete: (id: string) => api(`/api/tournaments/${id}/complete`),
+    cancel: (id: string) => api(`/api/tournaments/${id}/cancel`),
+    invite: (id: string) => api(`/api/tournaments/${id}/invite`),
+    request: (id: string) => api(`/api/tournaments/${id}/request`),
+    requests: (id: string) => api(`/api/tournaments/${id}/requests`),
+    respondToRequest: (id: string, requestId: string) =>
+      api(`/api/tournaments/${id}/requests/${requestId}`),
+  },
 } as const;

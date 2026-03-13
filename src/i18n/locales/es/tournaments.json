@@ -1,0 +1,160 @@
+{
+  "tab": "Torneos",
+  "home": {
+    "title": "Torneos",
+    "createButton": "Crear torneo",
+    "joinButton": "Unirse a torneo",
+    "stats": {
+      "active": "Activos",
+      "won": "Ganados"
+    },
+    "pending": {
+      "title": "Pendientes",
+      "invitation": "Invitación",
+      "request": "Solicitud de unión",
+      "empty": "Sin solicitudes pendientes"
+    },
+    "active": {
+      "title": "Torneos activos",
+      "empty": "Sin torneos activos",
+      "emptyDesc": "Crea o únete a un torneo para empezar"
+    },
+    "past": {
+      "title": "Torneos pasados",
+      "empty": "Sin torneos pasados"
+    },
+    "nextMatch": "Próximo: Tú vs {{opponent}}",
+    "noNextMatch": "Sin partido programado"
+  },
+  "create": {
+    "title": "Crear torneo",
+    "name": "Nombre del torneo",
+    "namePlaceholder": "Ingresa el nombre del torneo",
+    "description": "Descripción",
+    "descriptionPlaceholder": "Descripción opcional",
+    "discipline": "Disciplina",
+    "format": "Formato",
+    "visibility": "Visibilidad",
+    "maxParticipants": "Máx. jugadores",
+    "maxParticipantsPlaceholder": "2–128",
+    "scheduledAt": "Fecha y hora",
+    "scheduledAtPlaceholder": "AAAA-MM-DD HH:MM",
+    "location": "Ubicación",
+    "locationPlaceholder": "Nombre del lugar o dirección (opcional)",
+    "submitButton": "Crear torneo",
+    "createSuccess": "Torneo creado exitosamente",
+    "nameRequired": "El nombre es obligatorio",
+    "disciplineRequired": "Selecciona una disciplina",
+    "formatRequired": "Selecciona un formato",
+    "visibilityRequired": "Selecciona la visibilidad",
+    "maxParticipantsInvalid": "Debe estar entre 2 y 128",
+    "scheduledAtRequired": "La fecha es obligatoria"
+  },
+  "browse": {
+    "title": "Buscar torneo",
+    "searchPlaceholder": "Buscar por nombre o ubicación...",
+    "empty": "No se encontraron torneos",
+    "emptyDesc": "Prueba con otro término de búsqueda",
+    "emptyInitial": "Busca torneos públicos",
+    "emptyInitialDesc": "Solo se muestran torneos abiertos para registro",
+    "requestButton": "Solicitar lugar",
+    "requestSent": "Solicitud enviada",
+    "requestAgain": "Solicitar de nuevo",
+    "joined": "Inscrito",
+    "organizer": "Tu torneo",
+    "full": "Completo"
+  },
+  "detail": {
+    "title": "Torneo",
+    "organizer": "Organizador",
+    "format": "Formato",
+    "discipline": "Disciplina",
+    "status": "Estado",
+    "scheduled": "Programado",
+    "location": "Ubicación",
+    "participants": "Participantes",
+    "participantCount": "{{count}} / {{max}}",
+    "bracket": "Cuadro",
+    "standings": "Clasificación",
+    "noBracket": "El cuadro aparecerá cuando comience el torneo",
+    "requests": {
+      "title": "Solicitudes pendientes",
+      "empty": "Sin solicitudes pendientes",
+      "joinRequest": "Solicitud de unión",
+      "invitation": "Invitación enviada",
+      "accept": "Aceptar",
+      "reject": "Rechazar"
+    },
+    "actions": {
+      "publish": "Publicar",
+      "start": "Iniciar",
+      "complete": "Marcar como completado",
+      "cancel": "Cancelar",
+      "invite": "Invitar jugador",
+      "addParticipants": "Agregar"
+    },
+    "invitedBadge": "Invitado",
+    "confirmPublish": "¿Publicar este torneo?",
+    "confirmPublishMessage": "Será buscable y abierto para registro.",
+    "confirmStart": "¿Iniciar el torneo?",
+    "confirmStartMessage": "Se generará el cuadro y se cerrará el registro.",
+    "confirmComplete": "¿Marcar el torneo como completado?",
+    "confirmCompleteMessage": "Esta acción no se puede deshacer.",
+    "confirmCancel": "¿Cancelar este torneo?",
+    "confirmCancelMessage": "Todos los participantes serán notificados.",
+    "startRequiresFullRoster": "{{count}} / {{max}} jugadores — se necesita el grupo completo para iniciar"
+  },
+  "invitation": {
+    "title": "Invitación",
+    "requestTitle": "Solicitud de unión",
+    "invitedTo": "Has sido invitado a",
+    "requestedFor": "Tu solicitud para",
+    "tournamentDetails": "Detalles del torneo",
+    "acceptButton": "Aceptar",
+    "rejectButton": "Rechazar",
+    "cancelButton": "Cancelar solicitud",
+    "reasonLabel": "Razón (opcional)",
+    "reasonPlaceholder": "Añade una razón...",
+    "confirmAcceptTitle": "¿Aceptar invitación?",
+    "confirmAcceptMessage": "Serás añadido como participante en este torneo.",
+    "confirmDeclineTitle": "¿Rechazar invitación?",
+    "confirmDeclineMessage": "Puedes dejar opcionalmente una razón para el organizador.",
+    "confirmCancelTitle": "¿Cancelar tu solicitud?",
+    "confirmCancelMessage": "Tu solicitud de unión será retirada.",
+    "status": {
+      "pending": "Pendiente",
+      "accepted": "Aceptado",
+      "rejected": "Rechazado",
+      "cancelled": "Cancelado"
+    }
+  },
+  "formats": {
+    "single_elimination": "Eliminación simple",
+    "double_elimination": "Eliminación doble",
+    "round_robin": "Todos contra todos"
+  },
+  "visibility": {
+    "public": "Público",
+    "invite_only": "Solo por invitación"
+  },
+  "status": {
+    "draft": "Borrador",
+    "registration": "Registro",
+    "in_progress": "En progreso",
+    "pending_review": "Revisión pendiente",
+    "completed": "Completado",
+    "cancelled": "Cancelado"
+  },
+  "inviteParticipants": {
+    "title": "Agregar participantes",
+    "searchPlaceholder": "Buscar jugadores...",
+    "searchHint": "Escribe para buscar jugadores",
+    "empty": "No se encontraron jugadores",
+    "invite": "Invitar",
+    "invited": "Invitado",
+    "joined": "Unido"
+  },
+  "loading": "Cargando torneos...",
+  "loadFailed": "Error al cargar torneos",
+  "notFound": "Torneo no encontrado"
+}

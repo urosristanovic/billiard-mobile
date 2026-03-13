@@ -1,0 +1,366 @@
+import {
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from 'react-native';
+import { useState } from 'react';
+import DateTimePicker, {
+  type DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
+import { useTranslation } from 'react-i18next';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTheme } from '@/hooks/useTheme';
+import { ScreenLayout } from '@/components/common/layout';
+import { PrimaryButton } from '@/components/common/buttons';
+import { FormField } from '@/components/common/forms';
+import { DropdownFilter } from '@/components/common/filters';
+import { useCreateTournamentForm } from '@/features/tournaments/useCreateTournamentForm';
+import { useTournamentMutations } from '@/features/tournaments/useTournamentMutations';
+import { FormatPicker, VisibilityPicker } from './components';
+import { DISCIPLINES, DISCIPLINE_LABELS, type Discipline } from '@/types/match';
+import { typography, spacing, radius } from '@/constants/theme';
+import type { TournamentsStackParamList } from '@/navigation/AppNavigator';
+
+type Props = NativeStackScreenProps<
+  TournamentsStackParamList,
+  'CreateTournament'
+>;
+
+const formatDateTime = (date: Date): string => {
+  const dateStr = date.toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+  const timeStr = date.toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  return `${dateStr}  ${timeStr}`;
+};
+
+const CreateTournamentScreen = ({ navigation }: Props) => {
+  const { t } = useTranslation('tournaments');
+  const { isDark, tk } = useTheme();
+  const { form, errors, setField, validate, buildInput, reset } =
+    useCreateTournamentForm();
+  const { createTournament } = useTournamentMutations();
+
+  const [pickerDate, setPickerDate] = useState<Date>(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    d.setMinutes(0, 0, 0);
+    return d;
+  });
+  const [showPicker, setShowPicker] = useState(false);
+  const [androidStep, setAndroidStep] = useState<'date' | 'time'>('date');
+
+  const openPicker = () => {
+    if (showPicker && Platform.OS === 'ios') {
+      setShowPicker(false);
+      return;
+    }
+    if (Platform.OS === 'android') {
+      setAndroidStep('date');
+    }
+    setShowPicker(true);
+  };
+
+  const handlePickerChange = (event: DateTimePickerEvent, selected?: Date) => {
+    if (Platform.OS === 'android') {
+      setShowPicker(false);
+      if (event.type === 'dismissed') return;
+      const date = selected ?? pickerDate;
+      if (androidStep === 'date') {
+        setPickerDate(date);
+        setAndroidStep('time');
+        setShowPicker(true);
+      } else {
+        const finalDate = new Date(pickerDate);
+        finalDate.setHours(date.getHours(), date.getMinutes(), 0, 0);
+        setPickerDate(finalDate);
+        setField('scheduledAt', finalDate.toISOString());
+      }
+    } else {
+      if (selected) {
+        setPickerDate(selected);
+        setField('scheduledAt', selected.toISOString());
+      }
+    }
+  };
+
+  const disciplineOptions = DISCIPLINES.map(d => ({
+    value: d,
+    label: DISCIPLINE_LABELS[d],
+  }));
+
+  const handleSubmit = async () => {
+    if (!validate()) return;
+    const input = buildInput();
+    createTournament.mutate(input, {
+      onSuccess: () => {
+        reset();
+        navigation.goBack();
+      },
+    });
+  };
+
+  return (
+    <ScreenLayout isDark={isDark}>
+      <View style={[styles.header, { borderBottomColor: tk.border.subtle }]}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          accessibilityRole='button'
+        >
+          <Text style={[styles.back, { color: tk.primary[400] }]}>←</Text>
+        </TouchableOpacity>
+        <Text style={[styles.title, { color: tk.text.primary }]}>
+          {t('create.title')}
+        </Text>
+        <View style={styles.backPlaceholder} />
+      </View>
+
+      <ScrollView
+        contentContainerStyle={styles.form}
+        keyboardShouldPersistTaps='handled'
+        showsVerticalScrollIndicator={false}
+      >
+        <FormField
+          label={t('create.name')}
+          placeholder={t('create.namePlaceholder')}
+          value={form.name}
+          onChangeText={v => setField('name', v)}
+          error={errors.name}
+          required
+          isDark={isDark}
+          maxLength={100}
+        />
+
+        <FormField
+          label={t('create.description')}
+          placeholder={t('create.descriptionPlaceholder')}
+          value={form.description}
+          onChangeText={v => setField('description', v)}
+          isDark={isDark}
+          multiline
+          numberOfLines={3}
+          style={{ minHeight: 80, textAlignVertical: 'top' }}
+        />
+
+        {/* Discipline */}
+        <View style={styles.fieldGroup}>
+          <Text style={[styles.fieldLabel, { color: tk.text.primary }]}>
+            {t('create.discipline')}{' '}
+            <Text style={{ color: tk.error.default }}>*</Text>
+          </Text>
+          <DropdownFilter
+            options={disciplineOptions}
+            value={form.discipline}
+            onSelect={v => setField('discipline', v as Discipline)}
+            isDark={isDark}
+          />
+          {errors.discipline && (
+            <Text style={[styles.errorText, { color: tk.error.default }]}>
+              {errors.discipline}
+            </Text>
+          )}
+        </View>
+
+        <FormatPicker
+          value={form.format}
+          onChange={v => setField('format', v)}
+          isDark={isDark}
+        />
+        {errors.format && (
+          <Text style={[styles.errorText, { color: tk.error.default }]}>
+            {errors.format}
+          </Text>
+        )}
+
+        <VisibilityPicker
+          value={form.visibility}
+          onChange={v => setField('visibility', v)}
+          isDark={isDark}
+        />
+
+        <FormField
+          label={t('create.maxParticipants')}
+          placeholder={t('create.maxParticipantsPlaceholder')}
+          value={form.maxParticipants}
+          onChangeText={v => setField('maxParticipants', v)}
+          error={errors.maxParticipants}
+          required
+          isDark={isDark}
+          keyboardType='number-pad'
+        />
+
+        {/* Date & Time picker */}
+        <View style={styles.fieldGroup}>
+          <Text style={[styles.fieldLabel, { color: tk.text.primary }]}>
+            {t('create.scheduledAt')}{' '}
+            <Text style={{ color: tk.error.default }}>*</Text>
+          </Text>
+          <TouchableOpacity
+            onPress={openPicker}
+            style={[
+              styles.dateButton,
+              {
+                backgroundColor: tk.surface.raised,
+                borderColor: errors.scheduledAt
+                  ? tk.error.default
+                  : tk.border.default,
+              },
+            ]}
+            accessibilityRole='button'
+          >
+            <Text
+              style={[
+                styles.dateButtonText,
+                {
+                  color: form.scheduledAt ? tk.text.primary : tk.text.muted,
+                },
+              ]}
+            >
+              {form.scheduledAt
+                ? formatDateTime(pickerDate)
+                : t('create.scheduledAtPlaceholder')}
+            </Text>
+            <Text style={[styles.dateIcon, { color: tk.text.muted }]}>📅</Text>
+          </TouchableOpacity>
+          {errors.scheduledAt && (
+            <Text style={[styles.errorText, { color: tk.error.default }]}>
+              {errors.scheduledAt}
+            </Text>
+          )}
+          {showPicker &&
+            (Platform.OS === 'ios' ? (
+              <View
+                style={[
+                  styles.pickerContainer,
+                  { borderColor: tk.border.subtle },
+                ]}
+              >
+                <DateTimePicker
+                  value={pickerDate}
+                  mode='datetime'
+                  display='spinner'
+                  minimumDate={new Date()}
+                  onChange={handlePickerChange}
+                  textColor={tk.primary[700]}
+                  accentColor={tk.primary[400]}
+                  style={styles.picker}
+                />
+              </View>
+            ) : (
+              <DateTimePicker
+                value={pickerDate}
+                mode={androidStep}
+                display='default'
+                minimumDate={new Date()}
+                onChange={handlePickerChange}
+              />
+            ))}
+        </View>
+
+        <FormField
+          label={t('create.location')}
+          placeholder={t('create.locationPlaceholder')}
+          value={form.location}
+          onChangeText={v => setField('location', v)}
+          isDark={isDark}
+        />
+
+        <PrimaryButton
+          label={t('create.submitButton')}
+          onPress={handleSubmit}
+          loading={createTournament.isPending}
+          isDark={isDark}
+          style={styles.submitButton}
+        />
+      </ScrollView>
+    </ScreenLayout>
+  );
+};
+
+const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing[4],
+    paddingTop: spacing[8],
+    paddingBottom: spacing[3],
+    borderBottomWidth: 1,
+  },
+  back: {
+    fontSize: 22,
+    fontFamily: typography.family.display,
+    width: 32,
+  },
+  backPlaceholder: {
+    width: 32,
+  },
+  title: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: typography.size.lg,
+    fontFamily: typography.family.display,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  form: {
+    padding: spacing[4],
+    gap: spacing[5],
+    paddingBottom: spacing[12],
+  },
+  fieldGroup: {
+    gap: spacing[1] + 2,
+  },
+  fieldLabel: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.bodySemibold,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  errorText: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.bodyMedium,
+    marginTop: 2,
+  },
+  dateButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    minHeight: 44,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    paddingHorizontal: spacing[3],
+    paddingVertical: spacing[2],
+  },
+  dateButtonText: {
+    fontSize: typography.size.base,
+    fontFamily: typography.family.body,
+    flex: 1,
+  },
+  dateIcon: {
+    fontSize: 16,
+    marginLeft: spacing[2],
+  },
+  pickerContainer: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    overflow: 'hidden',
+    marginTop: spacing[2],
+  },
+  picker: {
+    width: '100%',
+  },
+  submitButton: {
+    marginTop: spacing[2],
+  },
+});
+
+export default CreateTournamentScreen;
