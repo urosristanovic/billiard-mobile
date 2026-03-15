@@ -26,6 +26,11 @@
     "nextMatch": "Next: You vs {{opponent}}",
     "noNextMatch": "No match scheduled"
   },
+  "edit": {
+    "title": "Edit Tournament",
+    "submitButton": "Save Changes",
+    "updateSuccess": "Tournament updated successfully"
+  },
   "create": {
     "title": "Create Tournament",
     "name": "Tournament Name",
@@ -90,6 +95,7 @@
       "start": "Start",
       "complete": "Mark Complete",
       "cancel": "Cancel",
+      "edit": "Edit",
       "invite": "Invite Player",
       "addParticipants": "Add"
     },

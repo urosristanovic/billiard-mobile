@@ -26,6 +26,11 @@
     "nextMatch": "Sledeći: Ti vs {{opponent}}",
     "noNextMatch": "Nema zakazanog meča"
   },
+  "edit": {
+    "title": "Uredi turnir",
+    "submitButton": "Sačuvaj izmene",
+    "updateSuccess": "Turnir je uspešno ažuriran"
+  },
   "create": {
     "title": "Kreiraj turnir",
     "name": "Naziv turnira",
@@ -90,6 +95,7 @@
       "start": "Pokreni",
       "complete": "Označi kao završen",
       "cancel": "Otkaži",
+      "edit": "Uredi",
       "invite": "Pozovi igrača",
       "addParticipants": "Dodaj"
     },

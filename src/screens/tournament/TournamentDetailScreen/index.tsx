@@ -44,7 +44,9 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
   const { user } = useAuth();
   const { confirm } = useConfirmDialog();
   const [activeTab, setActiveTab] = useState<ActiveTab>('participants');
-  const [respondingTo, setRespondingTo] = useState<Record<string, 'accepted' | 'rejected'>>({});
+  const [respondingTo, setRespondingTo] = useState<
+    Record<string, 'accepted' | 'rejected'>
+  >({});
 
   const {
     data: tournament,
@@ -206,175 +208,236 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
 
         {/* Organizer actions */}
         {isOrganizer && (
-          <View style={styles.actions}>
-            {/* Primary action */}
-            {tournament.status === 'draft' && (
-              <TouchableOpacity
-                onPress={() =>
-                  confirm({
-                    title: t('detail.confirmPublish'),
-                    message: t('detail.confirmPublishMessage'),
-                    confirmLabel: t('detail.actions.publish'),
-                    cancelLabel: tCommon('cancel'),
-                    onConfirm: () => publishTournament.mutate(tournament.id),
-                  })
-                }
-                disabled={publishTournament.isPending}
-                style={[
-                  styles.actionBtn,
-                  styles.actionBtnPrimary,
-                  {
-                    backgroundColor: tk.primary[500],
-                    borderColor: tk.primary[700],
-                  },
-                ]}
-              >
-                {publishTournament.isPending ? (
-                  <ActivityIndicator size='small' color={tk.text.onPrimary} />
-                ) : (
-                  <Text
-                    style={[styles.actionBtnText, { color: tk.text.onPrimary }]}
+          <View style={styles.actionsWrapper}>
+            <View style={styles.actions}>
+              {/* Primary action */}
+              {tournament.status === 'draft' && (
+                <>
+                  <TouchableOpacity
+                    onPress={() =>
+                      confirm({
+                        title: t('detail.confirmPublish'),
+                        message: t('detail.confirmPublishMessage'),
+                        confirmLabel: t('detail.actions.publish'),
+                        cancelLabel: tCommon('cancel'),
+                        onConfirm: () =>
+                          publishTournament.mutate(tournament.id),
+                      })
+                    }
+                    disabled={publishTournament.isPending}
+                    style={[
+                      styles.actionBtn,
+                      styles.actionBtnPrimary,
+                      {
+                        backgroundColor: tk.primary[500],
+                        borderColor: tk.primary[700],
+                      },
+                    ]}
                   >
-                    {t('detail.actions.publish')}
-                  </Text>
-                )}
-              </TouchableOpacity>
-            )}
-            {tournament.status === 'registration' && (
-              <View style={styles.startBtnWrapper}>
+                    {publishTournament.isPending ? (
+                      <ActivityIndicator
+                        size='small'
+                        color={tk.text.onPrimary}
+                      />
+                    ) : (
+                      <Text
+                        style={[
+                          styles.actionBtnText,
+                          { color: tk.text.onPrimary },
+                        ]}
+                      >
+                        {t('detail.actions.publish')}
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('CreateTournament', {
+                        tournament,
+                      })
+                    }
+                    style={[
+                      styles.actionBtn,
+                      {
+                        borderColor: tk.primary[600],
+                        backgroundColor: tk.surface.overlay,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[styles.actionBtnText, { color: tk.primary[400] }]}
+                    >
+                      {t('detail.actions.edit')}
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              )}
+              {tournament.status === 'registration' && (
+                <>
+                  <TouchableOpacity
+                    onPress={() =>
+                      confirm({
+                        title: t('detail.confirmStart'),
+                        message: t('detail.confirmStartMessage'),
+                        confirmLabel: t('detail.actions.start'),
+                        cancelLabel: tCommon('cancel'),
+                        onConfirm: () => startTournament.mutate(tournament.id),
+                      })
+                    }
+                    disabled={startTournament.isPending || !canStartTournament}
+                    style={[
+                      styles.actionBtn,
+                      styles.actionBtnPrimary,
+                      {
+                        backgroundColor: canStartTournament
+                          ? tk.primary[500]
+                          : tk.surface.overlay,
+                        borderColor: canStartTournament
+                          ? tk.primary[700]
+                          : tk.border.default,
+                      },
+                    ]}
+                  >
+                    {startTournament.isPending ? (
+                      <ActivityIndicator
+                        size='small'
+                        color={tk.text.onPrimary}
+                      />
+                    ) : (
+                      <Text
+                        style={[
+                          styles.actionBtnText,
+                          {
+                            color: canStartTournament
+                              ? tk.text.onPrimary
+                              : tk.text.muted,
+                          },
+                        ]}
+                      >
+                        {t('detail.actions.start')}
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('CreateTournament', {
+                        tournament,
+                      })
+                    }
+                    style={[
+                      styles.actionBtn,
+                      {
+                        borderColor: tk.primary[600],
+                        backgroundColor: tk.surface.overlay,
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[styles.actionBtnText, { color: tk.primary[400] }]}
+                    >
+                      {t('detail.actions.edit')}
+                    </Text>
+                  </TouchableOpacity>
+                </>
+              )}
+              {['in_progress', 'pending_review'].includes(
+                tournament.status,
+              ) && (
                 <TouchableOpacity
                   onPress={() =>
                     confirm({
-                      title: t('detail.confirmStart'),
-                      message: t('detail.confirmStartMessage'),
-                      confirmLabel: t('detail.actions.start'),
-                      cancelLabel: tCommon('cancel'),
-                      onConfirm: () => startTournament.mutate(tournament.id),
+                      title: t('detail.confirmComplete'),
+                      message: t('detail.confirmCompleteMessage'),
+                      confirmLabel: 'Complete',
+                      cancelLabel: tCommon('close'),
+                      onConfirm: () => completeTournament.mutate(tournament.id),
                     })
                   }
-                  disabled={startTournament.isPending || !canStartTournament}
+                  disabled={completeTournament.isPending}
                   style={[
                     styles.actionBtn,
                     styles.actionBtnPrimary,
                     {
-                      backgroundColor: canStartTournament
-                        ? tk.primary[500]
-                        : tk.surface.overlay,
-                      borderColor: canStartTournament
-                        ? tk.primary[700]
-                        : tk.border.default,
+                      backgroundColor: tk.primary[500],
+                      borderColor: tk.primary[700],
                     },
                   ]}
                 >
-                  {startTournament.isPending ? (
+                  {completeTournament.isPending ? (
                     <ActivityIndicator size='small' color={tk.text.onPrimary} />
                   ) : (
                     <Text
                       style={[
                         styles.actionBtnText,
-                        {
-                          color: canStartTournament
-                            ? tk.text.onPrimary
-                            : tk.text.muted,
-                        },
+                        { color: tk.text.onPrimary },
                       ]}
                     >
-                      {t('detail.actions.start')}
+                      {t('detail.actions.complete')}
                     </Text>
                   )}
                 </TouchableOpacity>
-                {!canStartTournament && (
-                  <Text style={[styles.startHint, { color: tk.text.muted }]}>
-                    {t('detail.startRequiresFullRoster', {
-                      count: tournament.participants.length,
-                      max: tournament.maxParticipants,
-                    })}
-                  </Text>
-                )}
-              </View>
-            )}
-            {['in_progress', 'pending_review'].includes(tournament.status) && (
-              <TouchableOpacity
-                onPress={() =>
-                  confirm({
-                    title: t('detail.confirmComplete'),
-                    message: t('detail.confirmCompleteMessage'),
-                    confirmLabel: 'Complete',
-                    cancelLabel: tCommon('close'),
-                    onConfirm: () => completeTournament.mutate(tournament.id),
-                  })
-                }
-                disabled={completeTournament.isPending}
-                style={[
-                  styles.actionBtn,
-                  styles.actionBtnPrimary,
-                  {
-                    backgroundColor: tk.primary[500],
-                    borderColor: tk.primary[700],
-                  },
-                ]}
-              >
-                {completeTournament.isPending ? (
-                  <ActivityIndicator size='small' color={tk.text.onPrimary} />
-                ) : (
-                  <Text
-                    style={[styles.actionBtnText, { color: tk.text.onPrimary }]}
-                  >
-                    {t('detail.actions.complete')}
-                  </Text>
-                )}
-              </TouchableOpacity>
-            )}
+              )}
 
-            {/* Cancel */}
-            {!['completed', 'cancelled'].includes(tournament.status) && (
-              <TouchableOpacity
-                onPress={() =>
-                  confirm({
-                    title: t('detail.confirmCancel'),
-                    message: t('detail.confirmCancelMessage'),
-                    confirmLabel: t('detail.actions.cancel'),
-                    cancelLabel: tCommon('close'),
-                    variant: 'destructive',
-                    onConfirm: () => cancelTournament.mutate(tournament.id),
-                  })
-                }
-                style={[
-                  styles.actionBtn,
-                  {
-                    borderColor: tk.error.border,
-                    backgroundColor: tk.error.dark,
-                  },
-                ]}
-              >
-                <Text style={[styles.actionBtnText, { color: tk.error.text }]}>
-                  {t('detail.actions.cancel')}
-                </Text>
-              </TouchableOpacity>
-            )}
-
-            {/* Add participants */}
-            {['draft', 'registration'].includes(tournament.status) && (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('InviteParticipants', {
-                    tournamentId: tournament.id,
-                  })
-                }
-                style={[
-                  styles.actionBtn,
-                  {
-                    borderColor: tk.primary[600],
-                    backgroundColor: tk.surface.overlay,
-                  },
-                ]}
-              >
-                <Text
-                  style={[styles.actionBtnText, { color: tk.primary[400] }]}
+              {/* Cancel */}
+              {!['completed', 'cancelled'].includes(tournament.status) && (
+                <TouchableOpacity
+                  onPress={() =>
+                    confirm({
+                      title: t('detail.confirmCancel'),
+                      message: t('detail.confirmCancelMessage'),
+                      confirmLabel: t('detail.actions.cancel'),
+                      cancelLabel: tCommon('close'),
+                      variant: 'destructive',
+                      onConfirm: () => cancelTournament.mutate(tournament.id),
+                    })
+                  }
+                  style={[
+                    styles.actionBtn,
+                    {
+                      borderColor: tk.error.border,
+                      backgroundColor: tk.error.dark,
+                    },
+                  ]}
                 >
-                  {t('detail.actions.addParticipants')}
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={[styles.actionBtnText, { color: tk.error.text }]}
+                  >
+                    {t('detail.actions.cancel')}
+                  </Text>
+                </TouchableOpacity>
+              )}
+
+              {/* Add participants */}
+              {['draft', 'registration'].includes(tournament.status) && (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('InviteParticipants', {
+                      tournamentId: tournament.id,
+                    })
+                  }
+                  style={[
+                    styles.actionBtn,
+                    {
+                      borderColor: tk.primary[600],
+                      backgroundColor: tk.surface.overlay,
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[styles.actionBtnText, { color: tk.primary[400] }]}
+                  >
+                    {t('detail.actions.addParticipants')}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            {tournament.status === 'registration' && !canStartTournament && (
+              <Text style={[styles.startHint, { color: tk.text.muted }]}>
+                {t('detail.startRequiresFullRoster', {
+                  count: tournament.participants.length,
+                  max: tournament.maxParticipants,
+                })}
+              </Text>
             )}
           </View>
         )}
@@ -565,7 +628,10 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                                 <>
                                   <TouchableOpacity
                                     onPress={() => {
-                                      setRespondingTo(prev => ({ ...prev, [req.id]: 'accepted' }));
+                                      setRespondingTo(prev => ({
+                                        ...prev,
+                                        [req.id]: 'accepted',
+                                      }));
                                       respondToRequest.mutate(
                                         {
                                           tournamentId,
@@ -598,7 +664,10 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                                   </TouchableOpacity>
                                   <TouchableOpacity
                                     onPress={() => {
-                                      setRespondingTo(prev => ({ ...prev, [req.id]: 'rejected' }));
+                                      setRespondingTo(prev => ({
+                                        ...prev,
+                                        [req.id]: 'rejected',
+                                      }));
                                       respondToRequest.mutate(
                                         {
                                           tournamentId,
@@ -727,10 +796,13 @@ const styles = StyleSheet.create({
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
   },
+  actionsWrapper: {
+    paddingBottom: spacing[1],
+    gap: spacing[2],
+  },
   actions: {
     flexDirection: 'row',
     paddingHorizontal: spacing[4],
-    paddingBottom: spacing[4],
     gap: spacing[2],
   },
   actionBtn: {
@@ -854,14 +926,11 @@ const styles = StyleSheet.create({
   reqLoadingIndicator: {
     paddingHorizontal: spacing[4],
   },
-  startBtnWrapper: {
-    flex: 1,
-    gap: spacing[1],
-  },
   startHint: {
     fontSize: typography.size.xs,
     fontFamily: typography.family.body,
     textAlign: 'center',
+    paddingHorizontal: spacing[4],
   },
 });
 

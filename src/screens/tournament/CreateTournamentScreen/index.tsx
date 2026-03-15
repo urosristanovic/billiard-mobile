@@ -19,6 +19,7 @@ import { FormField } from '@/components/common/forms';
 import { DropdownFilter } from '@/components/common/filters';
 import { useCreateTournamentForm } from '@/features/tournaments/useCreateTournamentForm';
 import { useTournamentMutations } from '@/features/tournaments/useTournamentMutations';
+import type { UpdateTournamentInput } from '@/types/tournament';
 import { FormatPicker, VisibilityPicker } from './components';
 import { DISCIPLINES, DISCIPLINE_LABELS, type Discipline } from '@/types/match';
 import { typography, spacing, radius } from '@/constants/theme';
@@ -42,14 +43,33 @@ const formatDateTime = (date: Date): string => {
   return `${dateStr}  ${timeStr}`;
 };
 
-const CreateTournamentScreen = ({ navigation }: Props) => {
+const CreateTournamentScreen = ({ navigation, route }: Props) => {
+  const editTournament = route.params?.tournament;
+  const isEditMode = Boolean(editTournament);
+
   const { t } = useTranslation('tournaments');
   const { isDark, tk } = useTheme();
   const { form, errors, setField, validate, buildInput, reset } =
-    useCreateTournamentForm();
-  const { createTournament } = useTournamentMutations();
+    useCreateTournamentForm(
+      editTournament
+        ? {
+            name: editTournament.name,
+            description: editTournament.description ?? undefined,
+            discipline: editTournament.discipline,
+            format: editTournament.format,
+            visibility: editTournament.visibility,
+            maxParticipants: editTournament.maxParticipants,
+            scheduledAt: editTournament.scheduledAt,
+            location: editTournament.location ?? undefined,
+          }
+        : undefined,
+    );
+  const { createTournament, updateTournament } = useTournamentMutations();
 
   const [pickerDate, setPickerDate] = useState<Date>(() => {
+    if (editTournament?.scheduledAt) {
+      return new Date(editTournament.scheduledAt);
+    }
     const d = new Date();
     d.setDate(d.getDate() + 1);
     d.setMinutes(0, 0, 0);
@@ -97,15 +117,33 @@ const CreateTournamentScreen = ({ navigation }: Props) => {
     label: DISCIPLINE_LABELS[d],
   }));
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!validate()) return;
     const input = buildInput();
-    createTournament.mutate(input, {
-      onSuccess: () => {
-        reset();
-        navigation.goBack();
-      },
-    });
+
+    if (isEditMode && editTournament) {
+      const updateInput: UpdateTournamentInput = {
+        name: input.name,
+        description: input.description,
+        discipline: input.discipline,
+        format: input.format,
+        visibility: input.visibility,
+        maxParticipants: input.maxParticipants,
+        scheduledAt: input.scheduledAt,
+        location: input.location,
+      };
+      updateTournament.mutate(
+        { id: editTournament.id, input: updateInput },
+        { onSuccess: () => navigation.goBack() },
+      );
+    } else {
+      createTournament.mutate(input, {
+        onSuccess: () => {
+          reset();
+          navigation.goBack();
+        },
+      });
+    }
   };
 
   return (
@@ -119,7 +157,7 @@ const CreateTournamentScreen = ({ navigation }: Props) => {
           <Text style={[styles.back, { color: tk.primary[400] }]}>←</Text>
         </TouchableOpacity>
         <Text style={[styles.title, { color: tk.text.primary }]}>
-          {t('create.title')}
+          {isEditMode ? t('edit.title') : t('create.title')}
         </Text>
         <View style={styles.backPlaceholder} />
       </View>
@@ -275,9 +313,9 @@ const CreateTournamentScreen = ({ navigation }: Props) => {
         />
 
         <PrimaryButton
-          label={t('create.submitButton')}
+          label={isEditMode ? t('edit.submitButton') : t('create.submitButton')}
           onPress={handleSubmit}
-          loading={createTournament.isPending}
+          loading={isEditMode ? updateTournament.isPending : createTournament.isPending}
           isDark={isDark}
           style={styles.submitButton}
         />

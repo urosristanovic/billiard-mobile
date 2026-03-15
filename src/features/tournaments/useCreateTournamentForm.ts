@@ -26,6 +26,17 @@ export interface CreateTournamentFormErrors {
   scheduledAt?: string;
 }
 
+export interface CreateTournamentFormInitialValues {
+  name?: string;
+  description?: string;
+  discipline?: Discipline;
+  format?: TournamentFormat;
+  visibility?: TournamentVisibility;
+  maxParticipants?: number;
+  scheduledAt?: string;
+  location?: string;
+}
+
 const DEFAULT_STATE: CreateTournamentFormState = {
   name: '',
   description: '',
@@ -37,8 +48,31 @@ const DEFAULT_STATE: CreateTournamentFormState = {
   location: '',
 };
 
-export const useCreateTournamentForm = () => {
-  const [form, setForm] = useState<CreateTournamentFormState>(DEFAULT_STATE);
+function buildInitialState(
+  initial?: CreateTournamentFormInitialValues,
+): CreateTournamentFormState {
+  if (!initial) return DEFAULT_STATE;
+  return {
+    name: initial.name ?? DEFAULT_STATE.name,
+    description: initial.description ?? DEFAULT_STATE.description,
+    discipline: initial.discipline ?? DEFAULT_STATE.discipline,
+    format: initial.format ?? DEFAULT_STATE.format,
+    visibility: initial.visibility ?? DEFAULT_STATE.visibility,
+    maxParticipants:
+      initial.maxParticipants !== undefined
+        ? String(initial.maxParticipants)
+        : DEFAULT_STATE.maxParticipants,
+    scheduledAt: initial.scheduledAt ?? DEFAULT_STATE.scheduledAt,
+    location: initial.location ?? DEFAULT_STATE.location,
+  };
+}
+
+export const useCreateTournamentForm = (
+  initialValues?: CreateTournamentFormInitialValues,
+) => {
+  const [form, setForm] = useState<CreateTournamentFormState>(() =>
+    buildInitialState(initialValues),
+  );
   const [errors, setErrors] = useState<CreateTournamentFormErrors>({});
 
   const setField = <K extends keyof CreateTournamentFormState>(

@@ -14,6 +14,7 @@ import UserSearchScreen from '@/screens/match/UserSearchScreen';
 import ProfileScreen from '@/screens/user/ProfileScreen';
 import ProfileSetupScreen from '@/screens/user/ProfileSetupScreen';
 import type { UserSearchResult } from '@/services/user';
+import type { Tournament } from '@/types/tournament';
 
 import {
   TournamentsHomeScreen,
@@ -40,7 +41,7 @@ export type CreateMatchStackParamList = {
 
 export type TournamentsStackParamList = {
   TournamentsHome: undefined;
-  CreateTournament: undefined;
+  CreateTournament: { tournament?: Tournament } | undefined;
   BrowseTournaments: undefined;
   TournamentDetail: { tournamentId: string };
   InvitationDetail: { requestId: string };

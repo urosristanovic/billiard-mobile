@@ -7,6 +7,7 @@ import { useAuth } from '@/features/auth/useAuth';
 import { QUERY_KEYS } from '@/config/queryKeys';
 import type {
   CreateTournamentInput,
+  UpdateTournamentInput,
   RespondToRequestInput,
 } from '@/types/tournament';
 
@@ -36,6 +37,38 @@ export const useTournamentMutations = () => {
         type: 'success',
         title: t('successTitle'),
         message: tT('create.createSuccess'),
+      });
+    },
+    onError: error =>
+      showToast({
+        type: 'error',
+        title: t('errorTitle'),
+        message: getErrorMessage(error),
+      }),
+  });
+
+  const updateTournament = useMutation({
+    mutationFn: async ({
+      id,
+      input,
+    }: {
+      id: string;
+      input: UpdateTournamentInput;
+    }) => {
+      if (!user) throw new Error('Not authenticated');
+      const token = await getAccessToken();
+      return tournamentService.update(token, id, input);
+    },
+    onSuccess: tournament => {
+      queryClient.setQueryData(
+        QUERY_KEYS.TOURNAMENT_DETAIL(tournament.id),
+        tournament,
+      );
+      invalidateTournaments();
+      showToast({
+        type: 'success',
+        title: t('successTitle'),
+        message: tT('edit.updateSuccess'),
       });
     },
     onError: error =>
@@ -212,6 +245,7 @@ export const useTournamentMutations = () => {
 
   return {
     createTournament,
+    updateTournament,
     publishTournament,
     startTournament,
     completeTournament,

@@ -26,6 +26,11 @@
     "nextMatch": "Próximo: Tú vs {{opponent}}",
     "noNextMatch": "Sin partido programado"
   },
+  "edit": {
+    "title": "Editar torneo",
+    "submitButton": "Guardar cambios",
+    "updateSuccess": "Torneo actualizado exitosamente"
+  },
   "create": {
     "title": "Crear torneo",
     "name": "Nombre del torneo",
@@ -90,6 +95,7 @@
       "start": "Iniciar",
       "complete": "Marcar como completado",
       "cancel": "Cancelar",
+      "edit": "Editar",
       "invite": "Invitar jugador",
       "addParticipants": "Agregar"
     },
