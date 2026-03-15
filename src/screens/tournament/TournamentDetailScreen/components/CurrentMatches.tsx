@@ -1,4 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import type { TournamentMatch } from '@/types/tournament';
 
@@ -9,6 +15,7 @@ interface CurrentMatchesProps {
   emptyLabel: string;
   recordResultLabel: string;
   onRecordResult: (match: TournamentMatch) => void;
+  canRecord?: boolean;
 }
 
 export const CurrentMatches = ({
@@ -18,6 +25,7 @@ export const CurrentMatches = ({
   emptyLabel,
   recordResultLabel,
   onRecordResult,
+  canRecord = false,
 }: CurrentMatchesProps) => {
   const tk = isDark ? theme.dark : theme.light;
   const playableMatches = matches.filter(
@@ -40,12 +48,20 @@ export const CurrentMatches = ({
           {emptyLabel}
         </Text>
       ) : (
-        <View style={styles.list}>
+        <ScrollView
+          contentContainerStyle={styles.listContent}
+          nestedScrollEnabled
+          showsVerticalScrollIndicator={false}
+        >
           {playableMatches.map(match => {
             const homeName =
-              match.homeProfile?.displayName || match.homeProfile?.username || 'TBD';
+              match.homeProfile?.displayName ||
+              match.homeProfile?.username ||
+              'TBD';
             const awayName =
-              match.awayProfile?.displayName || match.awayProfile?.username || 'TBD';
+              match.awayProfile?.displayName ||
+              match.awayProfile?.username ||
+              'TBD';
 
             return (
               <View
@@ -61,24 +77,28 @@ export const CurrentMatches = ({
                 <Text style={[styles.players, { color: tk.text.primary }]}>
                   {homeName} vs {awayName}
                 </Text>
-                <TouchableOpacity
-                  onPress={() => onRecordResult(match)}
-                  style={[
-                    styles.button,
-                    {
-                      borderColor: tk.primary[700],
-                      backgroundColor: tk.primary[500],
-                    },
-                  ]}
-                >
-                  <Text style={[styles.buttonLabel, { color: tk.text.onPrimary }]}>
-                    {recordResultLabel}
-                  </Text>
-                </TouchableOpacity>
+                {canRecord && (
+                  <TouchableOpacity
+                    onPress={() => onRecordResult(match)}
+                    style={[
+                      styles.button,
+                      {
+                        borderColor: tk.primary[700],
+                        backgroundColor: tk.primary[500],
+                      },
+                    ]}
+                  >
+                    <Text
+                      style={[styles.buttonLabel, { color: tk.text.onPrimary }]}
+                    >
+                      {recordResultLabel}
+                    </Text>
+                  </TouchableOpacity>
+                )}
               </View>
             );
           })}
-        </View>
+        </ScrollView>
       )}
     </View>
   );
@@ -86,9 +106,6 @@ export const CurrentMatches = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: spacing[4],
-    marginTop: spacing[2],
-    marginBottom: spacing[3],
     borderWidth: 1,
     borderRadius: radius.lg,
     padding: spacing[3],
@@ -104,7 +121,7 @@ const styles = StyleSheet.create({
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
   },
-  list: {
+  listContent: {
     gap: spacing[2],
   },
   row: {

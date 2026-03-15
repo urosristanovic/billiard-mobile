@@ -41,7 +41,7 @@ type Props = NativeStackScreenProps<
   'TournamentDetail'
 >;
 
-type ActiveTab = 'bracket' | 'standings' | 'participants';
+type ActiveTab = 'matches' | 'bracket' | 'standings' | 'participants';
 
 const TournamentDetailScreen = ({ navigation, route }: Props) => {
   const { tournamentId } = route.params;
@@ -50,7 +50,7 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
   const { isDark, tk } = useTheme();
   const { user } = useAuth();
   const { confirm } = useConfirmDialog();
-  const [activeTab, setActiveTab] = useState<ActiveTab>('participants');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('matches');
   const [selectedMatch, setSelectedMatch] = useState<TournamentMatch | null>(
     null,
   );
@@ -76,7 +76,8 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
 
   // Derive organizer/status flags safely before the tournament is loaded
   const isOrganizer = user?.id === tournament?.organizerId;
-  const canManageRequests = isOrganizer && tournament?.status === 'registration';
+  const canManageRequests =
+    isOrganizer && tournament?.status === 'registration';
 
   // ALL hooks must be called before any conditional return
   const {
@@ -149,21 +150,30 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
   const hasStarted = ['in_progress', 'pending_review', 'completed'].includes(
     tournament.status,
   );
+  const isActive = ['in_progress', 'pending_review'].includes(tournament.status);
   const showBracket = hasStarted && tournament.rounds.length > 0;
   const isRoundRobin = tournament.format === 'round_robin';
   const canStartTournament =
     tournament.participants.length === tournament.maxParticipants;
 
   const tabs: { key: ActiveTab; label: string }[] = [
+    ...(isActive
+      ? [{ key: 'matches' as ActiveTab, label: t('detail.matches') }]
+      : []),
     { key: 'participants', label: t('detail.participants') },
-    {
-      key: 'bracket',
-      label: isRoundRobin ? t('detail.standings') : t('detail.bracket'),
-    },
-    ...(!isRoundRobin
+    ...(hasStarted
+      ? [{ key: 'bracket' as ActiveTab, label: t('detail.bracket') }]
+      : []),
+    ...(hasStarted && isRoundRobin
       ? [{ key: 'standings' as ActiveTab, label: t('detail.standings') }]
       : []),
   ];
+
+  // Fall back to the first available tab when the active tab isn't in the list
+  // (e.g. 'matches' before the tournament starts).
+  const effectiveTab = tabs.some(tab => tab.key === activeTab)
+    ? activeTab
+    : tabs[0]?.key ?? 'participants';
 
   return (
     <ScreenLayout isDark={isDark}>
@@ -473,9 +483,10 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                   style={[
                     styles.actionBtn,
                     {
-                      borderColor: tournament.status === 'draft'
-                        ? tk.border.default
-                        : tk.primary[600],
+                      borderColor:
+                        tournament.status === 'draft'
+                          ? tk.border.default
+                          : tk.primary[600],
                       backgroundColor: tk.surface.overlay,
                     },
                   ]}
@@ -484,9 +495,10 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                     style={[
                       styles.actionBtnText,
                       {
-                        color: tournament.status === 'draft'
-                          ? tk.text.muted
-                          : tk.primary[400],
+                        color:
+                          tournament.status === 'draft'
+                            ? tk.text.muted
+                            : tk.primary[400],
                       },
                     ]}
                   >
@@ -511,17 +523,6 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
           </View>
         )}
 
-        {tournament.status === 'in_progress' && isOrganizer && (
-          <CurrentMatches
-            matches={tournament.matches}
-            isDark={isDark}
-            title={t('detail.currentMatches.title')}
-            emptyLabel={t('detail.currentMatches.empty')}
-            recordResultLabel={t('detail.currentMatches.recordResult')}
-            onRecordResult={setSelectedMatch}
-          />
-        )}
-
         {/* Tab bar */}
         <View style={[styles.tabs, { borderBottomColor: tk.border.default }]}>
           {tabs.map(tab => (
@@ -530,7 +531,7 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
               onPress={() => setActiveTab(tab.key)}
               style={[
                 styles.tab,
-                activeTab === tab.key && {
+                effectiveTab === tab.key && {
                   borderBottomColor: tk.primary[500],
                   borderBottomWidth: 2,
                 },
@@ -541,7 +542,7 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                   styles.tabText,
                   {
                     color:
-                      activeTab === tab.key ? tk.primary[400] : tk.text.muted,
+                      effectiveTab === tab.key ? tk.primary[400] : tk.text.muted,
                   },
                 ]}
               >
@@ -575,32 +576,38 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
           </View>
         )}
         <View style={styles.tabContent}>
-          {activeTab === 'bracket' &&
+          {effectiveTab === 'matches' && hasStarted && (
+            <CurrentMatches
+              matches={tournament.matches}
+              isDark={isDark}
+              title={t('detail.currentMatches.title')}
+              emptyLabel={t('detail.currentMatches.empty')}
+              recordResultLabel={t('detail.currentMatches.recordResult')}
+              onRecordResult={setSelectedMatch}
+              canRecord={isOrganizer && tournament.status === 'in_progress'}
+            />
+          )}
+
+          {effectiveTab === 'bracket' &&
             (showBracket ? (
-              isRoundRobin ? (
-                <StandingsTable
-                  matches={tournament.matches}
-                  participants={tournament.participants}
-                  isDark={isDark}
-                />
-              ) : (
-                <BracketViewer
-                  rounds={tournament.rounds}
-                  matches={tournament.matches}
-                  isDark={isDark}
-                  onMatchPress={setSelectedMatch}
-                  canInteract={match => canRecordMatch(match) || canEditMatch(match)}
-                  recordResultLabel={t('detail.actions.recordResult')}
-                  editResultLabel={t('detail.actions.editResult')}
-                />
-              )
+              <BracketViewer
+                rounds={tournament.rounds}
+                matches={tournament.matches}
+                isDark={isDark}
+                onMatchPress={setSelectedMatch}
+                canInteract={match =>
+                  canRecordMatch(match) || canEditMatch(match)
+                }
+                recordResultLabel={t('detail.actions.recordResult')}
+                editResultLabel={t('detail.actions.editResult')}
+              />
             ) : (
               <Text style={[styles.noBracket, { color: tk.text.muted }]}>
                 {t('detail.noBracket')}
               </Text>
             ))}
 
-          {activeTab === 'standings' && !isRoundRobin && (
+          {effectiveTab === 'standings' && isRoundRobin && (
             <StandingsTable
               matches={tournament.matches}
               participants={tournament.participants}
@@ -608,7 +615,7 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
             />
           )}
 
-          {activeTab === 'participants' && (
+          {effectiveTab === 'participants' && (
             <View style={styles.participantsTab}>
               {/* Pending requests — organizer only */}
               {canManageRequests &&

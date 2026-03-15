@@ -84,6 +84,7 @@
     "participantCount": "{{count}} / {{max}}",
     "bracket": "Raspored",
     "standings": "Tabela",
+    "matches": "Mečevi",
     "noBracket": "Raspored će se prikazati kada turnir počne",
     "requests": {
       "title": "Zahtevi na čekanju",

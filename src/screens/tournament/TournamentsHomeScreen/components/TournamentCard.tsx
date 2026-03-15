@@ -48,7 +48,13 @@ export const TournamentCard = ({
         <Text
           style={[
             styles.status,
-            { color: isWinnerCard ? tk.primary[300] : tk.primary[400] },
+            {
+              color: isWinnerCard
+                ? tk.primary[300]
+                : tournament.status === 'cancelled'
+                  ? tk.error.text
+                  : tk.primary[400],
+            },
           ]}
         >
           {isWinnerCard

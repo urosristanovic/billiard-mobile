@@ -84,6 +84,7 @@
     "participantCount": "{{count}} / {{max}}",
     "bracket": "Bracket",
     "standings": "Standings",
+    "matches": "Matches",
     "noBracket": "Bracket will appear once the tournament starts",
     "requests": {
       "title": "Pending Requests",

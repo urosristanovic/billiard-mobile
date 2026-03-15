@@ -84,6 +84,7 @@
     "participantCount": "{{count}} / {{max}}",
     "bracket": "Cuadro",
     "standings": "Clasificación",
+    "matches": "Partidos",
     "noBracket": "El cuadro aparecerá cuando comience el torneo",
     "requests": {
       "title": "Solicitudes pendientes",
