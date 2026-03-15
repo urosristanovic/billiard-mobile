@@ -23,6 +23,7 @@ export const TournamentCard = ({
   const opponentName =
     nextMatch?.opponentProfile?.displayName ||
     nextMatch?.opponentProfile?.username;
+  const isWinnerCard = tournament.status === 'completed' && tournament.didWin;
 
   return (
     <TouchableOpacity
@@ -33,7 +34,7 @@ export const TournamentCard = ({
         styles.card,
         {
           backgroundColor: tk.surface.raised,
-          borderColor: tk.border.default,
+          borderColor: isWinnerCard ? tk.primary[600] : tk.border.default,
         },
       ]}
     >
@@ -47,10 +48,12 @@ export const TournamentCard = ({
         <Text
           style={[
             styles.status,
-            { color: tk.primary[400] },
+            { color: isWinnerCard ? tk.primary[300] : tk.primary[400] },
           ]}
         >
-          {TOURNAMENT_STATUS_LABELS[tournament.status]}
+          {isWinnerCard
+            ? `🏆 ${t('home.past.winnerBadge')}`
+            : TOURNAMENT_STATUS_LABELS[tournament.status]}
         </Text>
       </View>
 
@@ -73,7 +76,9 @@ export const TournamentCard = ({
           style={[styles.nextMatch, { color: tk.primary[300] }]}
           numberOfLines={1}
         >
-          {opponentName
+          {nextMatch?.state === 'waiting_opponent'
+            ? t('home.waitingOpponent')
+            : opponentName
             ? t('home.nextMatch', { opponent: opponentName })
             : t('home.noNextMatch')}
         </Text>

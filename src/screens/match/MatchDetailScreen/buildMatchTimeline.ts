@@ -15,6 +15,8 @@ export interface TimelineEvent {
   type: TimelineEventType;
   at: string;
   actorName: string;
+  isTournament?: boolean;
+  tournamentName?: string | null;
   reason?: string | null;
   myScore?: number | null;
   opponentScore?: number | null;
@@ -38,9 +40,12 @@ function getDisplayName(
 
 function getCreator(match: Match): MatchPlayer | null {
   if (match.createdBy) {
-    return (
-      match.players.find(player => player.userId === match.createdBy) ?? null
+    const creator = match.players.find(
+      player => player.userId === match.createdBy,
     );
+    // creator found — return it; if not (e.g. tournament organizer is not a
+    // match_player), fall through to the confirmed-player heuristic below
+    if (creator) return creator;
   }
 
   const [earliestConfirmed] = [...match.players]
@@ -119,16 +124,19 @@ export function buildMatchTimeline(
       type: 'matchCreated',
       at: match.createdAt,
       actorName: creatorName,
+      isTournament: match.isTournament,
+      tournamentName: match.tournamentName ?? null,
     });
   }
 
-  const acceptor =
-    match.players.find(
-      player =>
-        player.userId !== creator?.userId &&
-        isValidTimestamp(player.confirmedAt) &&
-        player.confirmed,
-    ) ?? null;
+  const acceptor = match.isTournament
+    ? null
+    : (match.players.find(
+        player =>
+          player.userId !== creator?.userId &&
+          isValidTimestamp(player.confirmedAt) &&
+          player.confirmed,
+      ) ?? null);
   if (acceptor?.confirmedAt) {
     events.push({
       id: `accepted-${acceptor.userId}`,

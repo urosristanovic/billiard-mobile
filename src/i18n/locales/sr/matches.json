@@ -62,6 +62,8 @@
     "empty": "Još nema događaja",
     "reason": "Razlog: {{reason}}",
     "matchCreated": "Meč je kreirao/la {{name}}",
+    "matchCreatedTournament": "Rezultat turnirskog meča je zabeležen",
+    "matchCreatedTournamentNamed": "Rezultat turnirskog meča je zabeležen · {{name}}",
     "resultAccepted": "Rezultat je prihvatio/la {{name}}",
     "cancellationRequested": "Otkazivanje je zatražio/la {{name}}",
     "cancellationAccepted": "Otkazivanje je prihvatio/la {{name}}",

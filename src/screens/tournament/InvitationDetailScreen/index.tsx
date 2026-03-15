@@ -175,6 +175,11 @@ const InvitationDetailScreen = ({ navigation, route }: Props) => {
                 minute: '2-digit',
               })}
             </Text>
+            {tournament.description ? (
+              <Text style={[styles.tournamentDescription, { color: tk.text.secondary }]}>
+                {tournament.description}
+              </Text>
+            ) : null}
           </View>
         )}
 
@@ -378,6 +383,12 @@ const styles = StyleSheet.create({
   tournamentMeta: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
+  },
+  tournamentDescription: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.body,
+    lineHeight: typography.size.sm * 1.55,
+    marginTop: spacing[1],
   },
   actionsRow: {
     flexDirection: 'row',

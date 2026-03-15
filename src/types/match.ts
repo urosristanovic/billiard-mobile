@@ -50,6 +50,7 @@ export interface Match {
   discipline: Discipline;
   isRated: boolean;
   isTournament: boolean;
+  tournamentName: string | null;
   createdBy: string | null;
   status: MatchStatus;
   winnerId: string | null;

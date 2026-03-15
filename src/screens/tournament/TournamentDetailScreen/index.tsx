@@ -23,9 +23,16 @@ import { useAuth } from '@/features/auth/useAuth';
 import {
   TOURNAMENT_FORMAT_LABELS,
   TOURNAMENT_STATUS_LABELS,
+  type TournamentMatch,
 } from '@/types/tournament';
 import { DISCIPLINE_LABELS } from '@/types/match';
-import { ParticipantList, BracketViewer, StandingsTable } from './components';
+import {
+  ParticipantList,
+  BracketViewer,
+  StandingsTable,
+  CurrentMatches,
+  RecordScoreModal,
+} from './components';
 import { typography, spacing, radius } from '@/constants/theme';
 import type { TournamentsStackParamList } from '@/navigation/AppNavigator';
 
@@ -44,6 +51,9 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
   const { user } = useAuth();
   const { confirm } = useConfirmDialog();
   const [activeTab, setActiveTab] = useState<ActiveTab>('participants');
+  const [selectedMatch, setSelectedMatch] = useState<TournamentMatch | null>(
+    null,
+  );
   const [respondingTo, setRespondingTo] = useState<
     Record<string, 'accepted' | 'rejected'>
   >({});
@@ -60,12 +70,13 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
     completeTournament,
     cancelTournament,
     respondToRequest,
+    reportResult,
+    editResult,
   } = useTournamentMutations();
 
   // Derive organizer/status flags safely before the tournament is loaded
   const isOrganizer = user?.id === tournament?.organizerId;
-  const canManageRequests =
-    isOrganizer && ['draft', 'registration'].includes(tournament?.status ?? '');
+  const canManageRequests = isOrganizer && tournament?.status === 'registration';
 
   // ALL hooks must be called before any conditional return
   const {
@@ -80,6 +91,43 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
   const handleRefresh = () => {
     refetch();
     if (canManageRequests) refetchRequests();
+  };
+
+  const canRecordMatch = (match: TournamentMatch) =>
+    Boolean(
+      isOrganizer && match.homeUserId && match.awayUserId && !match.winnerId,
+    );
+
+  const canEditMatch = (match: TournamentMatch) => {
+    if (!isOrganizer || !match.winnerId) return false;
+    if (!['in_progress', 'pending_review'].includes(tournament?.status ?? ''))
+      return false;
+    // Final match (no next match) is always editable while tournament isn't completed
+    if (!match.nextMatchId) return true;
+    // Otherwise allow editing only if the downstream match hasn't been played yet
+    const nextMatch = tournament?.matches.find(m => m.id === match.nextMatchId);
+    return !nextMatch?.winnerId;
+  };
+
+  const isEditingMatch = Boolean(selectedMatch?.winnerId);
+
+  const handleRecordScore = (input: {
+    homeScore: number;
+    awayScore: number;
+  }) => {
+    if (!selectedMatch) return;
+
+    if (isEditingMatch) {
+      editResult.mutate(
+        { tournamentId, matchId: selectedMatch.id, input },
+        { onSuccess: () => setSelectedMatch(null) },
+      );
+    } else {
+      reportResult.mutate(
+        { tournamentId, matchId: selectedMatch.id, input },
+        { onSuccess: () => setSelectedMatch(null) },
+      );
+    }
   };
 
   if (isLoading) {
@@ -204,6 +252,12 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
               </Text>
             </View>
           </View>
+
+          {tournament.description ? (
+            <Text style={[styles.description, { color: tk.text.secondary }]}>
+              {tournament.description}
+            </Text>
+          ) : null}
         </View>
 
         {/* Organizer actions */}
@@ -415,16 +469,26 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                       tournamentId: tournament.id,
                     })
                   }
+                  disabled={tournament.status === 'draft'}
                   style={[
                     styles.actionBtn,
                     {
-                      borderColor: tk.primary[600],
+                      borderColor: tournament.status === 'draft'
+                        ? tk.border.default
+                        : tk.primary[600],
                       backgroundColor: tk.surface.overlay,
                     },
                   ]}
                 >
                   <Text
-                    style={[styles.actionBtnText, { color: tk.primary[400] }]}
+                    style={[
+                      styles.actionBtnText,
+                      {
+                        color: tournament.status === 'draft'
+                          ? tk.text.muted
+                          : tk.primary[400],
+                      },
+                    ]}
                   >
                     {t('detail.actions.addParticipants')}
                   </Text>
@@ -439,7 +503,23 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                 })}
               </Text>
             )}
+            {tournament.status === 'draft' && (
+              <Text style={[styles.startHint, { color: tk.text.muted }]}>
+                {t('detail.publishToAddParticipants')}
+              </Text>
+            )}
           </View>
+        )}
+
+        {tournament.status === 'in_progress' && isOrganizer && (
+          <CurrentMatches
+            matches={tournament.matches}
+            isDark={isDark}
+            title={t('detail.currentMatches.title')}
+            emptyLabel={t('detail.currentMatches.empty')}
+            recordResultLabel={t('detail.currentMatches.recordResult')}
+            onRecordResult={setSelectedMatch}
+          />
         )}
 
         {/* Tab bar */}
@@ -508,6 +588,10 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                   rounds={tournament.rounds}
                   matches={tournament.matches}
                   isDark={isDark}
+                  onMatchPress={setSelectedMatch}
+                  canInteract={match => canRecordMatch(match) || canEditMatch(match)}
+                  recordResultLabel={t('detail.actions.recordResult')}
+                  editResultLabel={t('detail.actions.editResult')}
                 />
               )
             ) : (
@@ -719,6 +803,21 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
           )}
         </View>
       </ScrollView>
+      <RecordScoreModal
+        visible={Boolean(selectedMatch)}
+        match={selectedMatch}
+        isDark={isDark}
+        title={
+          isEditingMatch
+            ? t('detail.recordScore.editTitle')
+            : t('detail.recordScore.title')
+        }
+        confirmLabel={t('detail.recordScore.confirm')}
+        cancelLabel={tCommon('cancel')}
+        loading={isEditingMatch ? editResult.isPending : reportResult.isPending}
+        onClose={() => setSelectedMatch(null)}
+        onConfirm={handleRecordScore}
+      />
     </ScreenLayout>
   );
 };
@@ -795,6 +894,12 @@ const styles = StyleSheet.create({
   metaDetailLabel: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
+  },
+  description: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.body,
+    lineHeight: typography.size.sm * 1.55,
+    marginTop: spacing[1],
   },
   actionsWrapper: {
     paddingBottom: spacing[1],

@@ -10,6 +10,7 @@ import type {
   TournamentListParams,
   TournamentStats,
   RespondToRequestInput,
+  ReportResultInput,
 } from '@/types/tournament';
 
 function buildHeaders(
@@ -198,5 +199,39 @@ export const tournamentService = {
       },
     );
     return parseResponse<TournamentRequest>(res);
+  },
+
+  reportResult: async (
+    token: string,
+    tournamentId: string,
+    matchId: string,
+    input: ReportResultInput,
+  ): Promise<Tournament> => {
+    const res = await fetchWithTimeout(
+      API_ENDPOINTS.tournaments.reportResult(tournamentId, matchId),
+      {
+        method: 'POST',
+        headers: buildHeaders(token, true),
+        body: JSON.stringify(input),
+      },
+    );
+    return parseResponse<Tournament>(res);
+  },
+
+  editResult: async (
+    token: string,
+    tournamentId: string,
+    matchId: string,
+    input: ReportResultInput,
+  ): Promise<Tournament> => {
+    const res = await fetchWithTimeout(
+      API_ENDPOINTS.tournaments.reportResult(tournamentId, matchId),
+      {
+        method: 'PUT',
+        headers: buildHeaders(token, true),
+        body: JSON.stringify(input),
+      },
+    );
+    return parseResponse<Tournament>(res);
   },
 };

@@ -21,10 +21,13 @@
     },
     "past": {
       "title": "Prošli turniri",
-      "empty": "Nema prošlih turnira"
+      "empty": "Nema prošlih turnira",
+      "winnerBadge": "Pobednik",
+      "winnerDetail": "Pobedio si na ovom turniru"
     },
     "nextMatch": "Sledeći: Ti vs {{opponent}}",
-    "noNextMatch": "Nema zakazanog meča"
+    "noNextMatch": "Nema zakazanog meča",
+    "waitingOpponent": "Čeka se protivnik"
   },
   "edit": {
     "title": "Uredi turnir",
@@ -96,8 +99,23 @@
       "complete": "Označi kao završen",
       "cancel": "Otkaži",
       "edit": "Uredi",
+      "recordResult": "Upiši rezultat",
+      "editResult": "Izmeni rezultat",
       "invite": "Pozovi igrača",
       "addParticipants": "Dodaj"
+    },
+    "currentMatches": {
+      "title": "Trenutni mečevi",
+      "empty": "Svi mečevi su odigrani",
+      "recordResult": "Upiši rezultat"
+    },
+    "recordScore": {
+      "title": "Unesi rezultat",
+      "editTitle": "Izmeni rezultat",
+      "confirm": "Potvrdi",
+      "success": "Rezultat je upisan",
+      "editSuccess": "Rezultat je izmenjen",
+      "tieError": "Rezultati ne mogu biti isti"
     },
     "invitedBadge": "Pozvano",
     "confirmPublish": "Objavi ovaj turnir?",
@@ -108,7 +126,8 @@
     "confirmCompleteMessage": "Ova akcija se ne može poništiti.",
     "confirmCancel": "Otkaži ovaj turnir?",
     "confirmCancelMessage": "Svi učesnici će biti obavešteni.",
-    "startRequiresFullRoster": "{{count}} / {{max}} igrača — potreban je pun roster da bi se startovalo"
+    "startRequiresFullRoster": "{{count}} / {{max}} igrača — potreban je pun roster da bi se startovalo",
+    "publishToAddParticipants": "Objavi turnir da bi dodao učesnike"
   },
   "invitation": {
     "title": "Pozivnica",

@@ -71,6 +71,8 @@ export const API_ENDPOINTS = {
     cancel: (id: string) => api(`/api/tournaments/${id}/cancel`),
     invite: (id: string) => api(`/api/tournaments/${id}/invite`),
     request: (id: string) => api(`/api/tournaments/${id}/request`),
+    reportResult: (id: string, matchId: string) =>
+      api(`/api/tournaments/${id}/matches/${matchId}/result`),
     requests: (id: string) => api(`/api/tournaments/${id}/requests`),
     respondToRequest: (id: string, requestId: string) =>
       api(`/api/tournaments/${id}/requests/${requestId}`),

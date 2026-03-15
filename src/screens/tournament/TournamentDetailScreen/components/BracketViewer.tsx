@@ -1,13 +1,24 @@
-import { ScrollView, Text, View, StyleSheet } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import type { TournamentMatch, TournamentRound } from '@/types/tournament';
 
 interface BracketMatchCardProps {
   match: TournamentMatch;
   isDark: boolean;
+  interactive?: boolean;
+  recordResultLabel?: string;
+  editResultLabel?: string;
+  onPress?: () => void;
 }
 
-const BracketMatchCard = ({ match, isDark }: BracketMatchCardProps) => {
+const BracketMatchCard = ({
+  match,
+  isDark,
+  interactive = false,
+  recordResultLabel,
+  editResultLabel,
+  onPress,
+}: BracketMatchCardProps) => {
   const tk = isDark ? theme.dark : theme.light;
 
   const homeName =
@@ -18,11 +29,15 @@ const BracketMatchCard = ({ match, isDark }: BracketMatchCardProps) => {
   const homeWon = match.winnerId === match.homeUserId;
   const awayWon = match.winnerId === match.awayUserId;
 
-  return (
+  const card = (
     <View
       style={[
         styles.matchCard,
         { backgroundColor: tk.surface.raised, borderColor: tk.border.default },
+        interactive && {
+          borderColor: tk.primary[500],
+          borderWidth: 2,
+        },
       ]}
     >
       <View
@@ -46,6 +61,11 @@ const BracketMatchCard = ({ match, isDark }: BracketMatchCardProps) => {
         >
           {homeName}
         </Text>
+        {match.homeScore !== null && (
+          <Text style={[styles.scoreText, { color: tk.text.primary }]}>
+            {match.homeScore}
+          </Text>
+        )}
         {homeWon && <Text style={[styles.trophy, { color: tk.primary[400] }]}>★</Text>}
       </View>
       <View style={[styles.divider, { backgroundColor: tk.border.subtle }]} />
@@ -70,22 +90,53 @@ const BracketMatchCard = ({ match, isDark }: BracketMatchCardProps) => {
         >
           {awayName}
         </Text>
+        {match.awayScore !== null && (
+          <Text style={[styles.scoreText, { color: tk.text.primary }]}>
+            {match.awayScore}
+          </Text>
+        )}
         {awayWon && <Text style={[styles.trophy, { color: tk.primary[400] }]}>★</Text>}
       </View>
+      {interactive ? (
+        <>
+          <View style={[styles.divider, { backgroundColor: tk.border.subtle }]} />
+          <Text style={[styles.interactionHint, { color: tk.primary[300] }]}>
+            {match.winnerId && editResultLabel ? editResultLabel : recordResultLabel}
+          </Text>
+        </>
+      ) : null}
     </View>
   );
+
+  if (interactive && onPress) {
+    return (
+      <TouchableOpacity onPress={onPress} activeOpacity={0.85}>
+        {card}
+      </TouchableOpacity>
+    );
+  }
+
+  return card;
 };
 
 interface BracketViewerProps {
   rounds: TournamentRound[];
   matches: TournamentMatch[];
   isDark?: boolean;
+  onMatchPress?: (match: TournamentMatch) => void;
+  canInteract?: (match: TournamentMatch) => boolean;
+  recordResultLabel?: string;
+  editResultLabel?: string;
 }
 
 export const BracketViewer = ({
   rounds,
   matches,
   isDark = false,
+  onMatchPress,
+  canInteract,
+  recordResultLabel,
+  editResultLabel,
 }: BracketViewerProps) => {
   const tk = isDark ? theme.dark : theme.light;
 
@@ -123,6 +174,10 @@ export const BracketViewer = ({
                     key={match.id}
                     match={match}
                     isDark={isDark}
+                    interactive={canInteract?.(match) ?? false}
+                    onPress={onMatchPress ? () => onMatchPress(match) : undefined}
+                    recordResultLabel={recordResultLabel}
+                    editResultLabel={editResultLabel}
                   />
                 ))}
               </View>
@@ -176,7 +231,20 @@ const styles = StyleSheet.create({
   trophy: {
     fontSize: 10,
   },
+  scoreText: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.heading,
+    minWidth: 12,
+    textAlign: 'right',
+  },
   divider: {
     height: 1,
+  },
+  interactionHint: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.body,
+    textAlign: 'center',
+    paddingVertical: spacing[1],
+    textTransform: 'uppercase',
   },
 });

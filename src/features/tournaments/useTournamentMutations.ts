@@ -7,6 +7,7 @@ import { useAuth } from '@/features/auth/useAuth';
 import { QUERY_KEYS } from '@/config/queryKeys';
 import type {
   CreateTournamentInput,
+  ReportResultInput,
   UpdateTournamentInput,
   RespondToRequestInput,
 } from '@/types/tournament';
@@ -243,6 +244,74 @@ export const useTournamentMutations = () => {
       }),
   });
 
+  const reportResult = useMutation({
+    mutationFn: async ({
+      tournamentId,
+      matchId,
+      input,
+    }: {
+      tournamentId: string;
+      matchId: string;
+      input: ReportResultInput;
+    }) => {
+      if (!user) throw new Error('Not authenticated');
+      const token = await getAccessToken();
+      return tournamentService.reportResult(token, tournamentId, matchId, input);
+    },
+    onSuccess: tournament => {
+      queryClient.setQueryData(
+        QUERY_KEYS.TOURNAMENT_DETAIL(tournament.id),
+        tournament,
+      );
+      invalidateTournaments();
+      showToast({
+        type: 'success',
+        title: t('successTitle'),
+        message: tT('detail.recordScore.success'),
+      });
+    },
+    onError: error =>
+      showToast({
+        type: 'error',
+        title: t('errorTitle'),
+        message: getErrorMessage(error),
+      }),
+  });
+
+  const editResult = useMutation({
+    mutationFn: async ({
+      tournamentId,
+      matchId,
+      input,
+    }: {
+      tournamentId: string;
+      matchId: string;
+      input: ReportResultInput;
+    }) => {
+      if (!user) throw new Error('Not authenticated');
+      const token = await getAccessToken();
+      return tournamentService.editResult(token, tournamentId, matchId, input);
+    },
+    onSuccess: tournament => {
+      queryClient.setQueryData(
+        QUERY_KEYS.TOURNAMENT_DETAIL(tournament.id),
+        tournament,
+      );
+      invalidateTournaments();
+      showToast({
+        type: 'success',
+        title: t('successTitle'),
+        message: tT('detail.recordScore.editSuccess'),
+      });
+    },
+    onError: error =>
+      showToast({
+        type: 'error',
+        title: t('errorTitle'),
+        message: getErrorMessage(error),
+      }),
+  });
+
   return {
     createTournament,
     updateTournament,
@@ -253,5 +322,7 @@ export const useTournamentMutations = () => {
     invitePlayer,
     requestSpot,
     respondToRequest,
+    reportResult,
+    editResult,
   };
 };

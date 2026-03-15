@@ -62,6 +62,8 @@ export interface TournamentMatch {
   matchId: string | null;
   homeUserId: string | null;
   awayUserId: string | null;
+  homeScore: number | null;
+  awayScore: number | null;
   winnerId: string | null;
   position: number;
   nextMatchId: string | null;
@@ -75,6 +77,7 @@ export interface NextMatchInfo {
   opponentId: string | null;
   opponentProfile: TournamentParticipantProfile | null;
   scheduledAt: string | null;
+  state: 'scheduled' | 'waiting_opponent' | 'eliminated' | 'none';
 }
 
 export interface TournamentRequest {
@@ -107,6 +110,7 @@ export interface TournamentSummary {
   createdAt: string;
   updatedAt: string;
   nextMatchInfo?: NextMatchInfo | null;
+  didWin?: boolean;
 }
 
 export interface Tournament extends TournamentSummary {
@@ -153,6 +157,11 @@ export interface TournamentListParams {
 export interface RespondToRequestInput {
   status: 'accepted' | 'rejected' | 'cancelled';
   reason?: string;
+}
+
+export interface ReportResultInput {
+  homeScore: number;
+  awayScore: number;
 }
 
 export const TOURNAMENT_FORMAT_LABELS: Record<TournamentFormat, string> = {

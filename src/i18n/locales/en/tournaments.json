@@ -21,10 +21,13 @@
     },
     "past": {
       "title": "Past Tournaments",
-      "empty": "No past tournaments"
+      "empty": "No past tournaments",
+      "winnerBadge": "Winner",
+      "winnerDetail": "You won this tournament"
     },
     "nextMatch": "Next: You vs {{opponent}}",
-    "noNextMatch": "No match scheduled"
+    "noNextMatch": "No match scheduled",
+    "waitingOpponent": "Waiting for opponent"
   },
   "edit": {
     "title": "Edit Tournament",
@@ -96,8 +99,23 @@
       "complete": "Mark Complete",
       "cancel": "Cancel",
       "edit": "Edit",
+      "recordResult": "Record Result",
+      "editResult": "Edit Result",
       "invite": "Invite Player",
       "addParticipants": "Add"
+    },
+    "currentMatches": {
+      "title": "Current Matches",
+      "empty": "All matches have been played",
+      "recordResult": "Record Result"
+    },
+    "recordScore": {
+      "title": "Record Score",
+      "editTitle": "Edit Score",
+      "confirm": "Confirm",
+      "success": "Score recorded",
+      "editSuccess": "Result updated",
+      "tieError": "Scores cannot be equal"
     },
     "invitedBadge": "Invited",
     "confirmPublish": "Publish this tournament?",
@@ -108,7 +126,8 @@
     "confirmCompleteMessage": "This action cannot be undone.",
     "confirmCancel": "Cancel this tournament?",
     "confirmCancelMessage": "All participants will be notified.",
-    "startRequiresFullRoster": "{{count}} / {{max}} players — need full roster to start"
+    "startRequiresFullRoster": "{{count}} / {{max}} players — need full roster to start",
+    "publishToAddParticipants": "Publish tournament to add participants"
   },
   "invitation": {
     "title": "Invitation",

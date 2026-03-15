@@ -62,6 +62,8 @@
     "empty": "No events yet",
     "reason": "Reason: {{reason}}",
     "matchCreated": "Match created by {{name}}",
+    "matchCreatedTournament": "Tournament result recorded",
+    "matchCreatedTournamentNamed": "Tournament result recorded · {{name}}",
     "resultAccepted": "Result accepted by {{name}}",
     "cancellationRequested": "Cancellation requested by {{name}}",
     "cancellationAccepted": "Cancellation accepted by {{name}}",

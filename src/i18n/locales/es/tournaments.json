@@ -21,10 +21,13 @@
     },
     "past": {
       "title": "Torneos pasados",
-      "empty": "Sin torneos pasados"
+      "empty": "Sin torneos pasados",
+      "winnerBadge": "Ganador",
+      "winnerDetail": "Ganaste este torneo"
     },
     "nextMatch": "Próximo: Tú vs {{opponent}}",
-    "noNextMatch": "Sin partido programado"
+    "noNextMatch": "Sin partido programado",
+    "waitingOpponent": "Esperando oponente"
   },
   "edit": {
     "title": "Editar torneo",
@@ -96,8 +99,23 @@
       "complete": "Marcar como completado",
       "cancel": "Cancelar",
       "edit": "Editar",
+      "recordResult": "Registrar resultado",
+      "editResult": "Editar resultado",
       "invite": "Invitar jugador",
       "addParticipants": "Agregar"
+    },
+    "currentMatches": {
+      "title": "Partidos actuales",
+      "empty": "Todos los partidos han sido jugados",
+      "recordResult": "Registrar resultado"
+    },
+    "recordScore": {
+      "title": "Registrar marcador",
+      "editTitle": "Editar marcador",
+      "confirm": "Confirmar",
+      "success": "Marcador registrado",
+      "editSuccess": "Resultado actualizado",
+      "tieError": "Los marcadores no pueden ser iguales"
     },
     "invitedBadge": "Invitado",
     "confirmPublish": "¿Publicar este torneo?",
@@ -108,7 +126,8 @@
     "confirmCompleteMessage": "Esta acción no se puede deshacer.",
     "confirmCancel": "¿Cancelar este torneo?",
     "confirmCancelMessage": "Todos los participantes serán notificados.",
-    "startRequiresFullRoster": "{{count}} / {{max}} jugadores — se necesita el grupo completo para iniciar"
+    "startRequiresFullRoster": "{{count}} / {{max}} jugadores — se necesita el grupo completo para iniciar",
+    "publishToAddParticipants": "Publica el torneo para agregar participantes"
   },
   "invitation": {
     "title": "Invitación",

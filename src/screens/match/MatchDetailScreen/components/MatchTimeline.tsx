@@ -20,6 +20,13 @@ function eventLabel(
 ) {
   switch (event.type) {
     case 'matchCreated':
+      if (event.isTournament) {
+        return event.tournamentName
+          ? t('timeline.matchCreatedTournamentNamed', {
+              name: event.tournamentName,
+            })
+          : t('timeline.matchCreatedTournament');
+      }
       return t('timeline.matchCreated', { name: event.actorName });
     case 'resultAccepted':
       return t('timeline.resultAccepted', { name: event.actorName });
