@@ -1,6 +1,4 @@
 import { Text, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
-import { SecondaryButton } from '@/components/common/buttons';
 import { useTheme } from '@/hooks/useTheme';
 import type { User } from '@/types/user';
 import { styles } from '../styles';
@@ -8,15 +6,11 @@ import { styles } from '../styles';
 interface ProfileHeroProps {
   user: User;
   isDark: boolean;
-  onEditPress: () => void;
 }
 
 export const ProfileHero = ({
   user,
-  isDark,
-  onEditPress,
 }: ProfileHeroProps) => {
-  const { t: tAuth } = useTranslation('auth');
   const { tk } = useTheme();
 
   return (
@@ -53,9 +47,9 @@ export const ProfileHero = ({
       <Text style={[styles.username, { color: tk.text.muted }]}>
         @{user.username}
       </Text>
-      {user.location && (
+      {user.countryName && (
         <Text style={[styles.location, { color: tk.text.secondary }]}>
-          📍 {user.location}
+          📍 {[user.cityName, user.countryName].filter(Boolean).join(', ')}
         </Text>
       )}
       {user.bio && (
@@ -63,11 +57,6 @@ export const ProfileHero = ({
           {user.bio}
         </Text>
       )}
-      <SecondaryButton
-        label={tAuth('profile.editButton')}
-        onPress={onEditPress}
-        isDark={isDark}
-      />
     </View>
   );
 };

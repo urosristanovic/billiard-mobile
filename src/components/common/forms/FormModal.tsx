@@ -17,6 +17,7 @@ interface FormModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  footer?: React.ReactNode;
   isDark?: boolean;
 }
 
@@ -25,11 +26,13 @@ export const FormModal = ({
   onClose,
   title,
   children,
+  footer,
   isDark = false,
 }: FormModalProps) => {
   const { t } = useTranslation('common');
   const insets = useSafeAreaInsets();
   const tk = isDark ? theme.dark : theme.light;
+  const safeBottom = Math.max(insets.bottom, spacing[4]);
 
   return (
     <Modal
@@ -52,7 +55,7 @@ export const FormModal = ({
               {
                 backgroundColor: tk.surface.default,
                 borderTopColor: tk.primary[700],
-                paddingBottom: Math.max(insets.bottom, spacing[4]),
+                paddingBottom: footer ? 0 : safeBottom,
               },
               shadows.lg,
             ]}
@@ -76,17 +79,24 @@ export const FormModal = ({
             </View>
             <ScrollView
               style={styles.body}
-              contentContainerStyle={[
-                styles.bodyContent,
-                {
-                  paddingBottom:
-                    spacing[8] + Math.max(insets.bottom, spacing[3]),
-                },
-              ]}
+              contentContainerStyle={styles.bodyContent}
               keyboardShouldPersistTaps='handled'
             >
               {children}
             </ScrollView>
+            {footer && (
+              <View
+                style={[
+                  styles.footer,
+                  {
+                    borderTopColor: tk.border.default,
+                    paddingBottom: safeBottom,
+                  },
+                ]}
+              >
+                {footer}
+              </View>
+            )}
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -133,5 +143,11 @@ const styles = StyleSheet.create({
   bodyContent: {
     padding: spacing[6],
     gap: spacing[4],
+    paddingBottom: spacing[8],
+  },
+  footer: {
+    borderTopWidth: 1,
+    paddingHorizontal: spacing[4],
+    paddingTop: spacing[4],
   },
 });

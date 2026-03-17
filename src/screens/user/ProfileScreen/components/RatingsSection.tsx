@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { ActivityIndicator, View, Text, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import { typography, spacing, radius } from '@/constants/theme';
@@ -7,6 +7,7 @@ import type { PlayerRating } from '@/types/rating';
 interface RatingsSectionProps {
   ratings: PlayerRating[];
   isDark: boolean;
+  isLoading?: boolean;
 }
 
 interface RatingCardProps {
@@ -83,7 +84,7 @@ const RatingCard = ({ rating, isDark: _isDark }: RatingCardProps) => {
   );
 };
 
-export const RatingsSection = ({ ratings, isDark }: RatingsSectionProps) => {
+export const RatingsSection = ({ ratings, isDark, isLoading }: RatingsSectionProps) => {
   const { t } = useTranslation('ratings');
   const { tk } = useTheme();
 
@@ -92,7 +93,11 @@ export const RatingsSection = ({ ratings, isDark }: RatingsSectionProps) => {
       <Text style={[styles.sectionTitle, { color: tk.text.secondary }]}>
         {t('title').toUpperCase()}
       </Text>
-      {ratings.length === 0 ? (
+      {isLoading ? (
+        <View style={styles.loadingWrapper}>
+          <ActivityIndicator size='large' color={tk.primary[400]} />
+        </View>
+      ) : ratings.length === 0 ? (
         <View
           style={[
             styles.emptyCard,
@@ -119,11 +124,17 @@ export const RatingsSection = ({ ratings, isDark }: RatingsSectionProps) => {
       )}
     </View>
   );
+
 };
 
 const styles = StyleSheet.create({
   section: {
     gap: spacing[3],
+  },
+  loadingWrapper: {
+    paddingVertical: spacing[8],
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   sectionTitle: {
     fontSize: typography.size.xs,

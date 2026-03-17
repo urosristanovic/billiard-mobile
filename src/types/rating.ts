@@ -36,6 +36,7 @@ export interface LeaderboardEntry {
   wins: number;
   losses: number;
   isProvisional: boolean;
+  ratingChange: number | null;
 }
 
 export interface LeaderboardParams {

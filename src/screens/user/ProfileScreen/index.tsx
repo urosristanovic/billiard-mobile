@@ -1,17 +1,19 @@
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ScreenLayout } from '@/components/common/layout';
 import { LoadingState } from '@/components/common/states';
 import { FormField, FormModal, FormButtons } from '@/components/common/forms';
-import { DangerButton } from '@/components/common/buttons';
+import { DangerButton, SecondaryButton } from '@/components/common/buttons';
 import { useConfirmDialog } from '@/components/common/dialog';
 import { useAuth } from '@/features/auth/useAuth';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useProfileForm } from '@/features/auth/useProfileForm';
+import { useCountries, useCities } from '@/features/locations/useLocations';
 import { usePlayerRatings } from '@/features/ratings/useRatings';
 import { useTheme } from '@/hooks/useTheme';
 import { setStoredLanguage, type SupportedLanguage } from '@/i18n';
 import { useState } from 'react';
+import { typography, spacing, radius } from '@/constants/theme';
 import { ProfileHero, RatingsSection } from './components';
 import { styles } from './styles';
 
@@ -34,6 +36,7 @@ const LANGUAGE_OPTIONS: Array<{
 const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
   const { t } = useTranslation('common');
   const { t: tAuth, i18n } = useTranslation('auth');
+  const { t: tGroups } = useTranslation('groups');
   const { isDark: systemDark, tk } = useTheme();
   const { confirm } = useConfirmDialog();
   const isDark = isDarkProp ?? systemDark;
@@ -41,19 +44,28 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
   const { logout, updateProfile } = useAuthMutations();
   const { form, errors, updateField, loadForEdit, validate } = useProfileForm();
   const [editModalVisible, setEditModalVisible] = useState(false);
+  const [selectedCountryId, setSelectedCountryId] = useState<string>('');
+  const [selectedCityId, setSelectedCityId] = useState<string>('');
+  const [countryListOpen, setCountryListOpen] = useState(false);
+  const [cityListOpen, setCityListOpen] = useState(false);
   const currentLanguage = (i18n.resolvedLanguage ?? i18n.language).split(
     '-',
   )[0] as SupportedLanguage;
   const [pendingLanguage, setPendingLanguage] =
     useState<SupportedLanguage>(currentLanguage);
 
-  const { data: ratings = [] } = usePlayerRatings(user?.id);
+  const { data: countries = [], isLoading: countriesLoading } = useCountries();
+  const { data: cities = [], isLoading: citiesLoading } = useCities(selectedCountryId || undefined);
+
+  const { data: ratings = [], isLoading: ratingsLoading, refetch: refetchRatings, isRefetching: ratingsRefetching } = usePlayerRatings(user?.id);
 
   if (!user) return <LoadingState isDark={isDark} />;
 
   const handleOpenEdit = () => {
     loadForEdit(user);
     setPendingLanguage(currentLanguage);
+    setSelectedCountryId(user.countryId ?? '');
+    setSelectedCityId(user.cityId ?? '');
     setEditModalVisible(true);
   };
   const handleSaveProfile = () => {
@@ -62,8 +74,9 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
     updateProfile.mutate(
       {
         displayName: form.displayName,
-        location: form.location || null,
         bio: form.bio || null,
+        countryId: selectedCountryId || null,
+        cityId: selectedCityId || null,
       },
       {
         onSuccess: () => {
@@ -88,17 +101,34 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
   };
   return (
     <ScreenLayout isDark={isDark}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <ProfileHero user={user} isDark={isDark} onEditPress={handleOpenEdit} />
-        <RatingsSection ratings={ratings} isDark={isDark} />
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={ratingsRefetching && !ratingsLoading}
+            onRefresh={() => void refetchRatings()}
+            tintColor={tk.primary[400]}
+          />
+        }
+      >
+        <ProfileHero user={user} isDark={isDark} />
+        <RatingsSection ratings={ratings} isLoading={ratingsLoading} isDark={isDark} />
+      </ScrollView>
+      <View style={[styles.bottomBar, { borderTopColor: tk.border.default, backgroundColor: tk.surface.default }]}>
         <DangerButton
           label={tAuth('logout.button')}
           onPress={handleLogout}
           loading={logout.isPending}
           isDark={isDark}
-          style={styles.logoutSection}
+          style={styles.bottomBarButton}
         />
-      </ScrollView>
+        <SecondaryButton
+          label={tAuth('profile.editButton')}
+          onPress={handleOpenEdit}
+          isDark={isDark}
+          style={styles.bottomBarButton}
+        />
+      </View>
 
       <FormModal
         visible={editModalVisible}
@@ -108,6 +138,19 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
         }}
         title={tAuth('profile.editTitle')}
         isDark={isDark}
+        footer={
+          <FormButtons
+            submitLabel={t('save')}
+            cancelLabel={t('cancel')}
+            onSubmit={handleSaveProfile}
+            onCancel={() => {
+              setEditModalVisible(false);
+              setPendingLanguage(currentLanguage);
+            }}
+            submitLoading={updateProfile.isPending}
+            isDark={isDark}
+          />
+        }
       >
         <FormField
           label={tAuth('fields.displayName')}
@@ -118,13 +161,6 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
           required
         />
         <FormField
-          label={tAuth('fields.location')}
-          value={form.location}
-          onChangeText={v => updateField('location', v)}
-          placeholder={tAuth('fields.locationPlaceholder')}
-          isDark={isDark}
-        />
-        <FormField
           label={tAuth('fields.bio')}
           value={form.bio}
           onChangeText={v => updateField('bio', v)}
@@ -133,6 +169,98 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
           numberOfLines={3}
           isDark={isDark}
         />
+
+        {/* Country picker */}
+        <View>
+          <Text style={[pickerStyles.label, { color: tk.text.secondary }]}>
+            {tGroups('location.countryLabel')}
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setCountryListOpen(v => !v);
+              setCityListOpen(false);
+            }}
+            style={[pickerStyles.selectButton, { backgroundColor: tk.surface.raised, borderColor: countryListOpen ? tk.primary[500] : tk.primary[700] }]}
+          >
+            <Text style={[pickerStyles.selectButtonText, { color: selectedCountryId ? tk.text.primary : tk.text.muted }]}>
+              {selectedCountryId ? (countries.find(c => c.id === selectedCountryId)?.name ?? tGroups('location.countryPlaceholder')) : tGroups('location.countryPlaceholder')}
+            </Text>
+            {countriesLoading
+              ? <ActivityIndicator size='small' color={tk.primary[400]} />
+              : <Text style={{ color: tk.text.muted }}>{countryListOpen ? '▴' : '▾'}</Text>
+            }
+          </TouchableOpacity>
+          {countryListOpen && !countriesLoading && (
+            <ScrollView
+              style={[pickerStyles.inlineList, { borderColor: tk.primary[700], backgroundColor: tk.surface.raised }]}
+              nestedScrollEnabled
+            >
+              {countries.map(c => (
+                <TouchableOpacity
+                  key={c.id}
+                  onPress={() => {
+                    setSelectedCountryId(c.id);
+                    setSelectedCityId('');
+                    setCountryListOpen(false);
+                  }}
+                  style={[pickerStyles.inlineOption, { borderBottomColor: tk.primary[900] }, selectedCountryId === c.id && { backgroundColor: tk.primary[900] }]}
+                >
+                  <Text style={[pickerStyles.inlineOptionText, { color: tk.text.primary }]}>{c.name}</Text>
+                  <Text style={[pickerStyles.inlineOptionCode, { color: tk.text.muted }]}>{c.code}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
+        </View>
+
+        {/* City picker */}
+        {selectedCountryId ? (
+          <View>
+            <Text style={[pickerStyles.label, { color: tk.text.secondary }]}>
+              {tGroups('location.cityLabel')}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                if (!citiesLoading) {
+                  setCityListOpen(v => !v);
+                  setCountryListOpen(false);
+                }
+              }}
+              style={[pickerStyles.selectButton, { backgroundColor: tk.surface.raised, borderColor: cityListOpen ? tk.primary[500] : tk.primary[700] }]}
+            >
+              <Text style={[pickerStyles.selectButtonText, { color: selectedCityId ? tk.text.primary : tk.text.muted }]}>
+                {selectedCityId ? (cities.find(c => c.id === selectedCityId)?.name ?? tGroups('location.cityPlaceholder')) : tGroups('location.cityPlaceholder')}
+              </Text>
+              {citiesLoading
+                ? <ActivityIndicator size='small' color={tk.primary[400]} />
+                : <Text style={{ color: tk.text.muted }}>{cityListOpen ? '▴' : '▾'}</Text>
+              }
+            </TouchableOpacity>
+            {cityListOpen && !citiesLoading && (
+              <ScrollView
+                style={[pickerStyles.inlineList, { borderColor: tk.primary[700], backgroundColor: tk.surface.raised }]}
+                nestedScrollEnabled
+              >
+                <TouchableOpacity
+                  onPress={() => { setSelectedCityId(''); setCityListOpen(false); }}
+                  style={[pickerStyles.inlineOption, { borderBottomColor: tk.primary[900] }]}
+                >
+                  <Text style={[pickerStyles.inlineOptionText, { color: tk.text.muted }]}>{tGroups('location.cityPlaceholder')}</Text>
+                </TouchableOpacity>
+                {cities.map(c => (
+                  <TouchableOpacity
+                    key={c.id}
+                    onPress={() => { setSelectedCityId(c.id); setCityListOpen(false); }}
+                    style={[pickerStyles.inlineOption, { borderBottomColor: tk.primary[900] }, selectedCityId === c.id && { backgroundColor: tk.primary[900] }]}
+                  >
+                    <Text style={[pickerStyles.inlineOptionText, { color: tk.text.primary }]}>{c.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            )}
+          </View>
+        ) : null}
+
         <View style={styles.languageSection}>
           <Text style={[styles.languageLabel, { color: tk.text.primary }]}>
             {tAuth('profile.language')}
@@ -173,20 +301,59 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
             })}
           </View>
         </View>
-        <FormButtons
-          submitLabel={t('save')}
-          cancelLabel={t('cancel')}
-          onSubmit={handleSaveProfile}
-          onCancel={() => {
-            setEditModalVisible(false);
-            setPendingLanguage(currentLanguage);
-          }}
-          submitLoading={updateProfile.isPending}
-          isDark={isDark}
-        />
       </FormModal>
+
     </ScreenLayout>
   );
 };
+
+const pickerStyles = StyleSheet.create({
+  label: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.heading,
+    fontWeight: typography.weight.semibold,
+    marginBottom: spacing[2],
+  },
+  selectButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[3],
+    minHeight: 48,
+  },
+  selectButtonText: {
+    fontSize: typography.size.base,
+    fontFamily: typography.family.body,
+    flex: 1,
+  },
+  inlineList: {
+    borderWidth: 1,
+    borderTopWidth: 0,
+    borderBottomLeftRadius: radius.md,
+    borderBottomRightRadius: radius.md,
+    maxHeight: 200,
+  },
+  inlineOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[3],
+    borderBottomWidth: 1,
+    minHeight: 44,
+  },
+  inlineOptionText: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.body,
+    flex: 1,
+  },
+  inlineOptionCode: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.body,
+  },
+});
 
 export default ProfileScreen;

@@ -60,9 +60,15 @@ export const styles = StyleSheet.create({
     borderRadius: radius.sm,
     borderWidth: 1,
   },
-  logoutSection: {
-    paddingTop: spacing[2],
-    marginTop: 'auto',
+  bottomBar: {
+    flexDirection: 'row',
+    gap: spacing[3],
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[4],
+    borderTopWidth: 1,
+  },
+  bottomBarButton: {
+    flex: 1,
   },
   modalForm: {
     gap: spacing[4],

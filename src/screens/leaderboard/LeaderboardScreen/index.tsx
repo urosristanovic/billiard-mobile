@@ -37,7 +37,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   const [discipline, setDiscipline] = useState<Discipline>('8ball');
   const [selectedGroupId, setSelectedGroupId] = useState<string | undefined>();
   const [selectedLeaderboardId, setSelectedLeaderboardId] = useState<string | undefined>();
-  const [includeProvisional, setIncludeProvisional] = useState(false);
+  const [includeProvisional, setIncludeProvisional] = useState(true);
 
   const { data: myGroups = [] } = useMyGroups();
   const { data: myLeaderboards = [] } = useMyCustomLeaderboards();
@@ -86,9 +86,19 @@ const LeaderboardScreen = ({ navigation }: Props) => {
         </Text>
       </View>
       <View style={styles.entryStats}>
-        <Text style={[styles.entryRating, { color: tk.text.primary }]}>
-          {Math.round(item.rating)}
-        </Text>
+        <View style={styles.entryRatingRow}>
+          {item.ratingChange != null && item.ratingChange !== 0 && (
+            <Text style={[
+              styles.entryRatingChange,
+              { color: item.ratingChange > 0 ? '#4ade80' : '#f87171' },
+            ]}>
+              {item.ratingChange > 0 ? `+${item.ratingChange}` : item.ratingChange}
+            </Text>
+          )}
+          <Text style={[styles.entryRating, { color: tk.text.primary }]}>
+            {Math.round(item.rating)}
+          </Text>
+        </View>
         <Text style={[styles.entryWL, { color: tk.text.muted }]}>
           {item.wins}W {item.losses}L
         </Text>
@@ -425,10 +435,20 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     gap: 2,
   },
+  entryRatingRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: spacing[1],
+  },
   entryRating: {
     fontSize: typography.size.lg,
     fontWeight: typography.weight.bold,
     fontFamily: typography.family.display,
+  },
+  entryRatingChange: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.display,
+    fontWeight: typography.weight.semibold,
   },
   entryWL: {
     fontSize: typography.size.xs,
