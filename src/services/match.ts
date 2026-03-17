@@ -100,6 +100,24 @@ export const matchService = {
     return parseResponse<Match>(res);
   },
 
+  createChallenge: async (
+    token: string,
+    input: {
+      opponentId: string;
+      discipline: CreateMatchInput['discipline'];
+      bestOf?: number;
+      message?: string;
+    },
+  ): Promise<Match> => {
+    const headers = buildHeaders(token, true);
+    const res = await fetchWithTimeout(API_ENDPOINTS.matches.createChallenge, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(input),
+    });
+    return parseResponse<Match>(res);
+  },
+
   confirm: async (token: string, matchId: string): Promise<Match> => {
     const headers = buildHeaders(token);
     const res = await fetchWithTimeout(API_ENDPOINTS.matches.confirm(matchId), {
@@ -107,6 +125,58 @@ export const matchService = {
       headers,
     });
     return parseResponse<Match>(res);
+  },
+
+  record: async (
+    token: string,
+    matchId: string,
+    input: { myScore: number; opponentScore: number },
+  ): Promise<Match> => {
+    const headers = buildHeaders(token, true);
+    const res = await fetchWithTimeout(API_ENDPOINTS.matches.record(matchId), {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(input),
+    });
+    return parseResponse<Match>(res);
+  },
+
+  acceptChallenge: async (token: string, matchId: string): Promise<Match> => {
+    const headers = buildHeaders(token);
+    const res = await fetchWithTimeout(
+      API_ENDPOINTS.matches.challengeAccept(matchId),
+      {
+        method: 'POST',
+        headers,
+      },
+    );
+    return parseResponse<Match>(res);
+  },
+
+  declineChallenge: async (
+    token: string,
+    matchId: string,
+    reason?: string,
+  ): Promise<Match> => {
+    const headers = buildHeaders(token, true);
+    const res = await fetchWithTimeout(
+      API_ENDPOINTS.matches.challengeDecline(matchId),
+      {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ reason }),
+      },
+    );
+    return parseResponse<Match>(res);
+  },
+
+  cancelChallengeRequest: async (token: string, matchId: string): Promise<void> => {
+    const headers = buildHeaders(token);
+    const res = await fetchWithTimeout(API_ENDPOINTS.matches.challengeCancel(matchId), {
+      method: 'POST',
+      headers,
+    });
+    await parseResponse<null>(res);
   },
 
   dispute: async (

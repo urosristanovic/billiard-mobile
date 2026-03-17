@@ -38,11 +38,50 @@ export const useMatchMutations = () => {
     );
   };
 
+  const removeMatchFromCachedLists = (matchId: string) => {
+    queryClient.setQueriesData(
+      { queryKey: QUERY_KEYS.MATCHES_LIST_BASE },
+      (oldData: InfiniteData<PaginatedResponse<Match>, number> | undefined) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map(page => ({
+            ...page,
+            data: page.data.filter(match => match.id !== matchId),
+            total: Math.max(0, page.total - (page.data.some(m => m.id === matchId) ? 1 : 0)),
+          })),
+        };
+      },
+    );
+  };
+
   const createMatch = useMutation({
     mutationFn: async (input: CreateMatchInput) => {
       if (!user) throw new Error('Not authenticated');
       const token = await getAccessToken();
       return matchService.create(token, input);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
+    },
+    onError: error =>
+      showToast({
+        type: 'error',
+        title: t('errorTitle'),
+        message: getErrorMessage(error),
+      }),
+  });
+
+  const createChallenge = useMutation({
+    mutationFn: async (input: {
+      opponentId: string;
+      discipline: CreateMatchInput['discipline'];
+      bestOf?: number;
+      message?: string;
+    }) => {
+      if (!user) throw new Error('Not authenticated');
+      const token = await getAccessToken();
+      return matchService.createChallenge(token, input);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
@@ -168,12 +207,102 @@ export const useMatchMutations = () => {
       }),
   });
 
+  const acceptChallenge = useMutation({
+    mutationFn: async (matchId: string) => {
+      if (!user) throw new Error('Not authenticated');
+      const token = await getAccessToken();
+      return matchService.acceptChallenge(token, matchId);
+    },
+    onSuccess: match => {
+      queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
+      updateMatchInCachedLists(match);
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
+    },
+    onError: error =>
+      showToast({
+        type: 'error',
+        title: t('errorTitle'),
+        message: getErrorMessage(error),
+      }),
+  });
+
+  const declineChallenge = useMutation({
+    mutationFn: async ({ matchId, reason }: { matchId: string; reason?: string }) => {
+      if (!user) throw new Error('Not authenticated');
+      const token = await getAccessToken();
+      return matchService.declineChallenge(token, matchId, reason);
+    },
+    onSuccess: match => {
+      queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
+      updateMatchInCachedLists(match);
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
+    },
+    onError: error =>
+      showToast({
+        type: 'error',
+        title: t('errorTitle'),
+        message: getErrorMessage(error),
+      }),
+  });
+
+  const cancelChallengeRequest = useMutation({
+    mutationFn: async (matchId: string) => {
+      if (!user) throw new Error('Not authenticated');
+      const token = await getAccessToken();
+      await matchService.cancelChallengeRequest(token, matchId);
+      return matchId;
+    },
+    onSuccess: matchId => {
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.MATCH_DETAIL(matchId) });
+      removeMatchFromCachedLists(matchId);
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
+    },
+    onError: error =>
+      showToast({
+        type: 'error',
+        title: t('errorTitle'),
+        message: getErrorMessage(error),
+      }),
+  });
+
+  const recordChallenge = useMutation({
+    mutationFn: async ({
+      matchId,
+      myScore,
+      opponentScore,
+    }: {
+      matchId: string;
+      myScore: number;
+      opponentScore: number;
+    }) => {
+      if (!user) throw new Error('Not authenticated');
+      const token = await getAccessToken();
+      return matchService.record(token, matchId, { myScore, opponentScore });
+    },
+    onSuccess: match => {
+      queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
+      updateMatchInCachedLists(match);
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
+    },
+    onError: error =>
+      showToast({
+        type: 'error',
+        title: t('errorTitle'),
+        message: getErrorMessage(error),
+      }),
+  });
+
   return {
     createMatch,
+    createChallenge,
     confirmMatch,
     disputeMatch,
     cancelMatch,
     acceptDispute,
     counterDispute,
+    acceptChallenge,
+    declineChallenge,
+    cancelChallengeRequest,
+    recordChallenge,
   };
 };

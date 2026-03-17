@@ -32,6 +32,9 @@ export const QUERY_KEYS = {
   CUSTOM_LEADERBOARD_MEMBERS: (id: string) =>
     ['custom-leaderboards', id, 'members'] as const,
 
+  CHALLENGES: ['challenges'] as const,
+  CHALLENGE_DETAIL: (id: string) => ['challenges', id] as const,
+
   RULES: ['rules'] as const,
   RULES_DISCIPLINE: (discipline: string) => ['rules', discipline] as const,
 

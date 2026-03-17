@@ -29,12 +29,17 @@ export const API_ENDPOINTS = {
   matches: {
     list: api('/api/matches'),
     create: api('/api/matches'),
+    createChallenge: api('/api/matches/challenge'),
     stats: api('/api/matches/stats'),
     opponents: api('/api/matches/opponents'),
     detail: (id: string) => api(`/api/matches/${id}`),
     confirm: (id: string) => api(`/api/matches/${id}/confirm`),
+    record: (id: string) => api(`/api/matches/${id}/record`),
     dispute: (id: string) => api(`/api/matches/${id}/dispute`),
     cancel: (id: string) => api(`/api/matches/${id}/cancel`),
+    challengeAccept: (id: string) => api(`/api/matches/${id}/challenge/accept`),
+    challengeDecline: (id: string) => api(`/api/matches/${id}/challenge/decline`),
+    challengeCancel: (id: string) => api(`/api/matches/${id}/challenge/cancel`),
     disputeAccept: (id: string) => api(`/api/matches/${id}/dispute/accept`),
     disputeReject: (id: string) => api(`/api/matches/${id}/dispute/reject`),
   },
@@ -79,6 +84,16 @@ export const API_ENDPOINTS = {
     members: (id: string) => api(`/api/custom-leaderboards/${id}/members`),
     addMember: (id: string) => api(`/api/custom-leaderboards/${id}/members`),
     removeMember: (id: string, userId: string) => api(`/api/custom-leaderboards/${id}/members/${userId}`),
+  },
+
+  // Challenges
+  challenges: {
+    list: api('/api/challenges'),
+    create: api('/api/challenges'),
+    detail: (id: string) => api(`/api/challenges/${id}`),
+    accept: (id: string) => api(`/api/challenges/${id}/accept`),
+    decline: (id: string) => api(`/api/challenges/${id}/decline`),
+    cancel: (id: string) => api(`/api/challenges/${id}/cancel`),
   },
 
   // Rules

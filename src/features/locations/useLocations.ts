@@ -4,13 +4,14 @@ import { getAccessToken } from '@/features/auth/getAccessToken';
 import { QUERY_KEYS } from '@/config/queryKeys';
 import type { SuggestCityInput } from '@/types/location';
 
-export const useCountries = () => {
+export const useCountries = (enabled = true) => {
   return useQuery({
     queryKey: QUERY_KEYS.COUNTRIES,
     queryFn: async () => {
       const token = await getAccessToken();
       return locationService.getCountries(token);
     },
+    enabled,
     staleTime: 24 * 60 * 60 * 1000, // countries rarely change
   });
 };

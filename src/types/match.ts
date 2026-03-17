@@ -6,6 +6,8 @@ export type Discipline =
   | 'snooker';
 
 export type MatchStatus =
+  | 'challenge_requested'
+  | 'challenge'
   | 'pending_confirmation'
   | 'confirmed'
   | 'disputed'
@@ -123,6 +125,8 @@ export const DISCIPLINES: Discipline[] = [
 ];
 
 export const MATCH_STATUS_LABELS: Record<MatchStatus, string> = {
+  challenge_requested: 'Challenge Requested',
+  challenge: 'Challenge',
   pending_confirmation: 'Pending',
   confirmed: 'Confirmed',
   disputed: 'Disputed',

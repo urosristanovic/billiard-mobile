@@ -6,6 +6,11 @@ import { useMatchDetail } from '@/features/matches/useMatchDetail';
 import { useMatchMutations } from '@/features/matches/useMatchMutations';
 import { useAuth } from '@/features/auth/useAuth';
 import { useConfirmDialog } from '@/components/common/dialog';
+import {
+  DangerButton,
+  PrimaryButton,
+  SecondaryButton,
+} from '@/components/common/buttons';
 import { ScreenLayout } from '@/components/common/layout';
 import { LoadingState, EmptyState } from '@/components/common/states';
 import { useTheme } from '@/hooks/useTheme';
@@ -31,7 +36,7 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
   const { confirm } = useConfirmDialog();
   const { user } = useAuth();
   const [activeForm, setActiveForm] = useState<
-    'none' | 'dispute' | 'counterDispute' | 'cancel'
+    'none' | 'dispute' | 'counterDispute' | 'cancel' | 'declineChallenge'
   >('none');
   const [disputeReason, setDisputeReason] = useState('');
   const [proposedMyScore, setProposedMyScore] = useState('');
@@ -40,6 +45,8 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
   const [disputeValidationError, setDisputeValidationError] = useState<
     string | null
   >(null);
+  const [challengeMyScore, setChallengeMyScore] = useState(0);
+  const [challengeOpponentScore, setChallengeOpponentScore] = useState(0);
 
   const { data: match, isLoading, error } = useMatchDetail(matchId);
   const {
@@ -48,6 +55,10 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
     cancelMatch,
     acceptDispute,
     counterDispute,
+    acceptChallenge,
+    declineChallenge,
+    cancelChallengeRequest,
+    recordChallenge,
   } = useMatchMutations();
 
   if (isLoading) {
@@ -68,6 +79,8 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
   const me = match.players.find(p => p.userId === user?.id);
   const opponent = match.players.find(p => p.userId !== user?.id);
   const isDisputed = match.status === 'disputed';
+  const isChallengeRequested = match.status === 'challenge_requested';
+  const isChallenge = match.status === 'challenge';
   const openDispute = match.dispute?.status === 'open' ? match.dispute : null;
   const iAmDisputer = openDispute?.disputedBy === user?.id;
   const canResolveDispute = isDisputed && !!openDispute && !iAmDisputer;
@@ -85,12 +98,16 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
       : null;
 
   const statusColor: Record<string, string> = {
+    challenge_requested: tk.info.default,
+    challenge: tk.primary[400],
     pending_confirmation: tk.warning.default,
     confirmed: tk.success.default,
     disputed: tk.error.default,
     cancelled: tk.text.muted,
   };
   const statusBg: Record<string, string> = {
+    challenge_requested: tk.info.light,
+    challenge: tk.primary[900],
     pending_confirmation: tk.warning.light,
     confirmed: tk.success.light,
     disputed: tk.error.light,
@@ -150,6 +167,38 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
           },
         ),
     });
+
+  const handleAcceptChallenge = () => {
+    acceptChallenge.mutate(match.id);
+  };
+
+  const handleCancelChallengeRequest = () =>
+    confirm({
+      title: t('detail.cancelChallengeRequestTitle'),
+      message: t('detail.cancelChallengeRequestMessage'),
+      cancelLabel: tCommon('close'),
+      confirmLabel: tCommon('cancel'),
+      variant: 'destructive',
+      onConfirm: () =>
+        cancelChallengeRequest.mutate(match.id, {
+          onSuccess: () => navigation.goBack(),
+        }),
+    });
+
+  const handleSubmitChallengeDecline = () => {
+    declineChallenge.mutate(
+      {
+        matchId: match.id,
+        reason: cancellationReason.trim() || undefined,
+      },
+      {
+        onSuccess: () => {
+          setActiveForm('none');
+          setCancellationReason('');
+        },
+      },
+    );
+  };
 
   const handleAcceptCancel = () =>
     confirm({
@@ -214,9 +263,22 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
       onConfirm: () => acceptDispute.mutate(match.id),
     });
 
+  const handleRecordChallenge = () => {
+    if (challengeMyScore < 0 || challengeOpponentScore < 0) return;
+    if (challengeMyScore === challengeOpponentScore) {
+      return;
+    }
+    recordChallenge.mutate({
+      matchId: match.id,
+      myScore: challengeMyScore,
+      opponentScore: challengeOpponentScore,
+    });
+  };
+
   const isDisputeFormVisible =
     activeForm === 'dispute' || activeForm === 'counterDispute';
-  const isCancelFormVisible = activeForm === 'cancel';
+  const isCancelFormVisible =
+    activeForm === 'cancel' || activeForm === 'declineChallenge';
 
   return (
     <ScreenLayout isDark={isDark}>
@@ -263,6 +325,103 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
 
         <ScoreBoard match={match} myUserId={user?.id ?? ''} isDark={isDark} />
 
+        {!isDisputeFormVisible && !isCancelFormVisible && isChallengeRequested && (
+          <View style={styles.actions}>
+            {match.createdBy === user?.id ? (
+              <SecondaryButton
+                label={t('detail.cancelChallengeRequestButton')}
+                onPress={handleCancelChallengeRequest}
+                loading={cancelChallengeRequest.isPending}
+                isDark={isDark}
+              />
+            ) : (
+              <>
+                <PrimaryButton
+                  label={t('detail.acceptChallengeButton')}
+                  onPress={handleAcceptChallenge}
+                  loading={acceptChallenge.isPending}
+                  isDark={isDark}
+                />
+                <DangerButton
+                  label={t('detail.declineChallengeButton')}
+                  onPress={() => {
+                    setCancellationReason('');
+                    setActiveForm('declineChallenge');
+                  }}
+                  loading={declineChallenge.isPending}
+                  isDark={isDark}
+                />
+              </>
+            )}
+          </View>
+        )}
+
+        {!isDisputeFormVisible && !isCancelFormVisible && isChallenge && (
+          <View
+            style={[
+              styles.challengeScoreCard,
+              { backgroundColor: tk.surface.raised, borderColor: tk.primary[700] },
+            ]}
+          >
+            <Text style={[styles.challengeScoreTitle, { color: tk.text.secondary }]}>
+              {t('detail.recordChallengeScoreTitle')}
+            </Text>
+            <View style={styles.challengeScoreRow}>
+              <Text style={[styles.challengeScoreLabel, { color: tk.text.primary }]}>
+                {t('you')}
+              </Text>
+              <View style={styles.challengeScoreControls}>
+                <SecondaryButton
+                  label='-'
+                  compact
+                  onPress={() => setChallengeMyScore(prev => Math.max(0, prev - 1))}
+                  isDark={isDark}
+                />
+                <Text style={[styles.challengeScoreValue, { color: tk.text.primary }]}>
+                  {challengeMyScore}
+                </Text>
+                <SecondaryButton
+                  label='+'
+                  compact
+                  onPress={() => setChallengeMyScore(prev => prev + 1)}
+                  isDark={isDark}
+                />
+              </View>
+            </View>
+            <View style={styles.challengeScoreRow}>
+              <Text style={[styles.challengeScoreLabel, { color: tk.text.primary }]}>
+                {opponent?.profile.displayName ?? t('detail.opponent')}
+              </Text>
+              <View style={styles.challengeScoreControls}>
+                <SecondaryButton
+                  label='-'
+                  compact
+                  onPress={() =>
+                    setChallengeOpponentScore(prev => Math.max(0, prev - 1))
+                  }
+                  isDark={isDark}
+                />
+                <Text style={[styles.challengeScoreValue, { color: tk.text.primary }]}>
+                  {challengeOpponentScore}
+                </Text>
+                <SecondaryButton
+                  label='+'
+                  compact
+                  onPress={() => setChallengeOpponentScore(prev => prev + 1)}
+                  isDark={isDark}
+                />
+              </View>
+            </View>
+            <PrimaryButton
+              label={t('detail.recordMatchButton')}
+              onPress={handleRecordChallenge}
+              loading={recordChallenge.isPending}
+              disabled={challengeMyScore === challengeOpponentScore}
+              isDark={isDark}
+            />
+          </View>
+        )}
+
         {!isDisputeFormVisible && !isCancelFormVisible && (
           <MatchActions
             match={match}
@@ -286,11 +445,25 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
         <CancellationForm
           isVisible={isCancelFormVisible}
           reason={cancellationReason}
-          isSubmitting={cancelMatch.isPending}
+          isSubmitting={cancelMatch.isPending || declineChallenge.isPending}
           isDark={isDark}
           onReasonChange={setCancellationReason}
-          onSubmit={handleSubmitCancel}
+          onSubmit={
+            activeForm === 'declineChallenge'
+              ? handleSubmitChallengeDecline
+              : handleSubmitCancel
+          }
           onCancel={() => setActiveForm('none')}
+          title={
+            activeForm === 'declineChallenge'
+              ? t('detail.declineChallengeButton')
+              : undefined
+          }
+          submitLabel={
+            activeForm === 'declineChallenge'
+              ? t('detail.declineChallengeButton')
+              : undefined
+          }
         />
 
         <DisputeForm

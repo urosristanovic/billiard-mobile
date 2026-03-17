@@ -9,6 +9,9 @@ interface CancellationFormProps {
   reason: string;
   isSubmitting: boolean;
   isDark: boolean;
+  title?: string;
+  submitLabel?: string;
+  placeholder?: string;
   onReasonChange: (value: string) => void;
   onSubmit: () => void;
   onCancel: () => void;
@@ -19,6 +22,9 @@ export const CancellationForm = ({
   reason,
   isSubmitting,
   isDark,
+  title,
+  submitLabel,
+  placeholder,
   onReasonChange,
   onSubmit,
   onCancel,
@@ -37,20 +43,20 @@ export const CancellationForm = ({
       ]}
     >
       <Text style={[styles.title, { color: tk.error.text }]}>
-        {t('detail.cancelWithReasonButton')}
+        {title ?? t('detail.cancelWithReasonButton')}
       </Text>
 
       <FormField
         label={t('detail.disputeReasonLabel')}
         value={reason}
         onChangeText={onReasonChange}
-        placeholder={t('detail.cancellationReasonPlaceholder')}
+        placeholder={placeholder ?? t('detail.cancellationReasonPlaceholder')}
         isDark={isDark}
       />
 
       <View style={styles.actions}>
         <PrimaryButton
-          label={tCommon('submit')}
+          label={submitLabel ?? tCommon('submit')}
           onPress={onSubmit}
           loading={isSubmitting}
           isDark={isDark}

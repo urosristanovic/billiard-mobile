@@ -27,13 +27,19 @@ export const MatchCard = ({
     me?.score != null && opponent?.score != null && me.score === opponent.score;
 
   const statusColor: Record<string, string> = {
+    challenge_requested: tk.info.default,
+    challenge: tk.primary[300],
     pending_confirmation: tk.primary[400],
     confirmed: tk.success.default,
     disputed: tk.error.default,
     cancelled: tk.text.muted,
   };
   const cardAccent =
-    match.status === 'cancelled'
+    match.status === 'challenge_requested'
+      ? { borderColor: tk.info.border, borderLeftColor: tk.info.default }
+      : match.status === 'challenge'
+        ? { borderColor: tk.primary[700], borderLeftColor: tk.primary[300] }
+      : match.status === 'cancelled'
       ? { borderColor: tk.text.muted, borderLeftColor: tk.text.muted }
       : match.status === 'pending_confirmation' || match.status === 'disputed'
         ? { borderColor: tk.primary[700], borderLeftColor: tk.primary[400] }

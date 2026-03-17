@@ -5,3 +5,4 @@ export * from './tournament';
 export * from './rating';
 export * from './location';
 export * from './group';
+export * from './challenge';

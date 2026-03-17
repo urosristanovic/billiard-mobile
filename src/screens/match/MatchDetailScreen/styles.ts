@@ -38,6 +38,42 @@ export const styles = StyleSheet.create({
   actions: {
     gap: spacing[3],
   },
+  challengeScoreCard: {
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    padding: spacing[4],
+    gap: spacing[3],
+  },
+  challengeScoreTitle: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.heading,
+    fontWeight: typography.weight.semibold,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  challengeScoreRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing[3],
+  },
+  challengeScoreLabel: {
+    flex: 1,
+    fontSize: typography.size.base,
+    fontFamily: typography.family.bodySemibold,
+  },
+  challengeScoreControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[2],
+  },
+  challengeScoreValue: {
+    minWidth: 28,
+    textAlign: 'center',
+    fontSize: typography.size.xl,
+    fontFamily: typography.family.display,
+    fontWeight: typography.weight.bold,
+  },
   confirmationTimeline: {
     borderRadius: radius.lg,
     borderWidth: 1,

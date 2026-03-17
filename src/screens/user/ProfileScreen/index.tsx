@@ -1,4 +1,4 @@
-import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ScreenLayout } from '@/components/common/layout';
 import { LoadingState } from '@/components/common/states';
@@ -9,12 +9,11 @@ import { useAuth } from '@/features/auth/useAuth';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useProfileForm } from '@/features/auth/useProfileForm';
 import { useCountries, useCities } from '@/features/locations/useLocations';
-import { usePlayerRatings } from '@/features/ratings/useRatings';
 import { useTheme } from '@/hooks/useTheme';
 import { setStoredLanguage, type SupportedLanguage } from '@/i18n';
 import { useState } from 'react';
 import { typography, spacing, radius } from '@/constants/theme';
-import { ProfileHero, RatingsSection } from './components';
+import { ProfileHero } from './components';
 import { styles } from './styles';
 
 interface ProfileScreenProps {
@@ -54,10 +53,10 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
   const [pendingLanguage, setPendingLanguage] =
     useState<SupportedLanguage>(currentLanguage);
 
-  const { data: countries = [], isLoading: countriesLoading } = useCountries();
-  const { data: cities = [], isLoading: citiesLoading } = useCities(selectedCountryId || undefined);
-
-  const { data: ratings = [], isLoading: ratingsLoading, refetch: refetchRatings, isRefetching: ratingsRefetching } = usePlayerRatings(user?.id);
+  const { data: countries = [], isLoading: countriesLoading } = useCountries(editModalVisible);
+  const { data: cities = [], isLoading: citiesLoading } = useCities(
+    editModalVisible ? selectedCountryId || undefined : undefined,
+  );
 
   if (!user) return <LoadingState isDark={isDark} />;
 
@@ -101,18 +100,8 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
   };
   return (
     <ScreenLayout isDark={isDark}>
-      <ScrollView
-        contentContainerStyle={styles.container}
-        refreshControl={
-          <RefreshControl
-            refreshing={ratingsRefetching && !ratingsLoading}
-            onRefresh={() => void refetchRatings()}
-            tintColor={tk.primary[400]}
-          />
-        }
-      >
+      <ScrollView contentContainerStyle={styles.container}>
         <ProfileHero user={user} isDark={isDark} />
-        <RatingsSection ratings={ratings} isLoading={ratingsLoading} isDark={isDark} />
       </ScrollView>
       <View style={[styles.bottomBar, { borderTopColor: tk.border.default, backgroundColor: tk.surface.default }]}>
         <DangerButton
@@ -301,6 +290,16 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
             })}
           </View>
         </View>
+
+        <View style={deleteAccountStyles.container}>
+          <DangerButton
+            label={tAuth('profile.deleteAccount')}
+            onPress={() => {
+              // Placeholder — not implemented yet
+            }}
+            isDark={isDark}
+          />
+        </View>
       </FormModal>
 
     </ScreenLayout>
@@ -353,6 +352,15 @@ const pickerStyles = StyleSheet.create({
   inlineOptionCode: {
     fontSize: typography.size.xs,
     fontFamily: typography.family.body,
+  },
+});
+
+const deleteAccountStyles = StyleSheet.create({
+  container: {
+    marginTop: spacing[6],
+    paddingTop: spacing[4],
+    borderTopWidth: 1,
+    borderTopColor: '#333333',
   },
 });
 

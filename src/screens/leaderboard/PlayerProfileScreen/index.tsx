@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -5,6 +6,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout } from '@/components/common/layout';
 import { LoadingState, EmptyState } from '@/components/common/states';
 import { PrimaryButton } from '@/components/common/buttons';
+import { ChallengeModal } from '@/components/common/ChallengeModal';
 import { usePlayerRatings } from '@/features/ratings/useRatings';
 import { useQuery } from '@tanstack/react-query';
 import { getAccessToken } from '@/features/auth/getAccessToken';
@@ -21,6 +23,7 @@ const PlayerProfileScreen = ({ route, navigation }: Props) => {
   const { userId } = route.params;
   const { t } = useTranslation('leaderboard');
   const { isDark, tk } = useTheme();
+  const [challengeModalVisible, setChallengeModalVisible] = useState(false);
 
   const { data: ratings = [], isLoading: ratingsLoading } = usePlayerRatings(userId);
 
@@ -166,24 +169,38 @@ const PlayerProfileScreen = ({ route, navigation }: Props) => {
           </View>
         )}
 
-        {/* Challenge button */}
-        <View style={styles.challengeContainer}>
-          <PrimaryButton
-            label={t('playerProfile.challengeButton')}
-            onPress={() => {
-              // Feature 3 hook-in point
-            }}
-            isDark={isDark}
-          />
-        </View>
       </ScrollView>
+
+      <View
+        style={[
+          styles.bottomBar,
+          {
+            borderTopColor: tk.border.default,
+            backgroundColor: tk.surface.default,
+          },
+        ]}
+      >
+        <PrimaryButton
+          label={t('playerProfile.challengeButton')}
+          onPress={() => setChallengeModalVisible(true)}
+          isDark={isDark}
+          style={styles.bottomBarButton}
+        />
+      </View>
+
+      <ChallengeModal
+        visible={challengeModalVisible}
+        onClose={() => setChallengeModalVisible(false)}
+        opponentId={userId}
+        opponentName={profile?.displayName ?? profile?.username ?? userId}
+      />
     </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: spacing[8],
+    paddingBottom: spacing[20],
   },
   headerRow: {
     paddingHorizontal: spacing[4],
@@ -318,9 +335,14 @@ const styles = StyleSheet.create({
     fontSize: typography.size.xs,
     fontFamily: typography.family.body,
   },
-  challengeContainer: {
-    marginHorizontal: spacing[4],
-    marginTop: spacing[6],
+  bottomBar: {
+    borderTopWidth: 1,
+    paddingHorizontal: spacing[4],
+    paddingTop: spacing[3],
+    paddingBottom: spacing[4],
+  },
+  bottomBarButton: {
+    width: '100%',
   },
 });
 
