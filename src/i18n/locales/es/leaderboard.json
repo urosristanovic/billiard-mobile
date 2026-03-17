@@ -1,0 +1,52 @@
+{
+  "title": "Clasificación",
+  "scopes": {
+    "global": "Global",
+    "country": "País",
+    "city": "Ciudad",
+    "groups": "Grupos",
+    "custom": "Personalizado"
+  },
+  "disciplines": {
+    "label": "Disciplina"
+  },
+  "filters": {
+    "includeProvisional": "Incluir provisionales",
+    "selectGroup": "Seleccionar grupo",
+    "selectLeaderboard": "Seleccionar tabla"
+  },
+  "entry": {
+    "provisional": "P",
+    "provisionalLabel": "Provisional",
+    "wins": "V",
+    "losses": "D",
+    "rating": "Puntuación",
+    "rank": "#{{rank}}"
+  },
+  "blocked": {
+    "noCountry": "Configura tu país en el perfil para ver el ranking por país",
+    "noCity": "Configura tu ciudad en el perfil para ver el ranking por ciudad",
+    "noGroups": "Crea o únete a un grupo para ver el ranking grupal",
+    "noCustomLeaderboards": "Crea una clasificación personalizada para verla aquí"
+  },
+  "empty": "Sin jugadores aún",
+  "emptyDesc": "Sé el primero en completar una partida puntuada en este ámbito",
+  "loadMore": "Cargar más",
+  "loading": "Cargando clasificación...",
+  "loadFailed": "Error al cargar la clasificación",
+  "searchFab": "Buscar jugador",
+  "playerProfile": {
+    "title": "Perfil del jugador",
+    "ratingsSection": "Puntuaciones",
+    "statsSection": "Estadísticas",
+    "totalMatches": "Partidas totales",
+    "winRate": "Tasa de victorias",
+    "challengeButton": "Desafiar"
+  },
+  "userSearch": {
+    "title": "Buscar jugador",
+    "placeholder": "Buscar por nombre de usuario...",
+    "empty": "No se encontraron jugadores",
+    "emptyDesc": "Prueba con otro nombre de usuario"
+  }
+}

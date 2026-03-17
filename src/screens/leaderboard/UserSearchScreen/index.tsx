@@ -1,0 +1,171 @@
+import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useUserSearch } from '@/features/matches/useUserSearch';
+import { ScreenLayout } from '@/components/common/layout';
+import { EmptyState } from '@/components/common/states';
+import { useTheme } from '@/hooks/useTheme';
+import { typography, spacing, radius, minTouchTarget } from '@/constants/theme';
+import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
+import type { UserSearchResult } from '@/services/user';
+
+type Props = NativeStackScreenProps<LeaderboardStackParamList, 'UserSearch'>;
+
+const UserSearchScreen = ({ navigation, route }: Props) => {
+  const { t } = useTranslation('leaderboard');
+  const { isDark, tk } = useTheme();
+  const { query, setQuery, results, isFetching, isSearchMode } = useUserSearch();
+
+  const handleSelect = (user: UserSearchResult) => {
+    navigation.push('PlayerProfile', { userId: user.id });
+  };
+
+  return (
+    <ScreenLayout isDark={isDark}>
+      <View style={styles.header}>
+        <View style={styles.headerRow}>
+          <Text
+            onPress={() => navigation.goBack()}
+            style={[styles.backButton, { color: tk.primary[400] }]}
+          >
+            ← Back
+          </Text>
+          <Text style={[styles.title, { color: tk.text.primary }]}>
+            {t('userSearch.title')}
+          </Text>
+        </View>
+        <TextInput
+          style={[
+            styles.searchInput,
+            {
+              backgroundColor: tk.surface.raised,
+              borderColor: tk.primary[700],
+              color: tk.text.primary,
+            },
+          ]}
+          placeholder={t('userSearch.placeholder')}
+          placeholderTextColor={tk.text.muted}
+          value={query}
+          onChangeText={setQuery}
+          autoCapitalize='none'
+          autoCorrect={false}
+          autoFocus
+        />
+      </View>
+
+      {isFetching ? (
+        <ActivityIndicator style={styles.loader} color={tk.primary[600]} size='large' />
+      ) : results.length === 0 && isSearchMode ? (
+        <EmptyState
+          title={t('userSearch.empty')}
+          description={t('userSearch.emptyDesc')}
+          isDark={isDark}
+        />
+      ) : (
+        <FlatList
+          data={results}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.list}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => handleSelect(item)}
+              style={[styles.resultRow, { borderBottomColor: tk.primary[900] }]}
+              activeOpacity={0.7}
+            >
+              <View style={[styles.avatar, { backgroundColor: tk.primary[900], borderColor: tk.primary[700] }]}>
+                <Text style={[styles.avatarText, { color: tk.primary[300] }]}>
+                  {item.displayName.slice(0, 2).toUpperCase()}
+                </Text>
+              </View>
+              <View style={styles.resultInfo}>
+                <Text style={[styles.resultName, { color: tk.text.primary }]}>
+                  {item.displayName}
+                </Text>
+                <Text style={[styles.resultUsername, { color: tk.text.muted }]}>
+                  @{item.username}
+                  {item.location ? ` · ${item.location}` : ''}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+      )}
+    </ScreenLayout>
+  );
+};
+
+const styles = StyleSheet.create({
+  header: {
+    paddingHorizontal: spacing[4],
+    paddingTop: spacing[8],
+    paddingBottom: spacing[3],
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[3],
+    marginBottom: spacing[3],
+  },
+  backButton: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.display,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  title: {
+    fontSize: typography.size.xl,
+    fontWeight: typography.weight.bold,
+    fontFamily: typography.family.display,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderRadius: radius.md,
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[3],
+    fontSize: typography.size.base,
+    fontFamily: typography.family.body,
+    minHeight: minTouchTarget,
+  },
+  loader: {
+    marginTop: spacing[8],
+  },
+  list: {
+    paddingHorizontal: spacing[4],
+  },
+  resultRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing[3],
+    borderBottomWidth: 1,
+    gap: spacing[3],
+    minHeight: minTouchTarget,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: {
+    fontSize: typography.size.sm,
+    fontWeight: typography.weight.bold,
+    fontFamily: typography.family.display,
+  },
+  resultInfo: { flex: 1 },
+  resultName: {
+    fontSize: typography.size.base,
+    fontWeight: typography.weight.semibold,
+    fontFamily: typography.family.heading,
+  },
+  resultUsername: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.body,
+    marginTop: 2,
+  },
+});
+
+export default UserSearchScreen;

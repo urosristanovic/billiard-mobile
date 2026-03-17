@@ -20,6 +20,18 @@ export const QUERY_KEYS = {
   LEADERBOARD: (params: Record<string, unknown>) =>
     ['leaderboard', params] as const,
 
+  COUNTRIES: ['countries'] as const,
+  CITIES: (countryId: string) => ['cities', countryId] as const,
+
+  GROUPS: ['groups'] as const,
+  GROUP_DETAIL: (id: string) => ['groups', id] as const,
+  GROUP_MEMBERS: (id: string) => ['groups', id, 'members'] as const,
+
+  CUSTOM_LEADERBOARDS: ['custom-leaderboards'] as const,
+  CUSTOM_LEADERBOARD_DETAIL: (id: string) => ['custom-leaderboards', id] as const,
+  CUSTOM_LEADERBOARD_MEMBERS: (id: string) =>
+    ['custom-leaderboards', id, 'members'] as const,
+
   RULES: ['rules'] as const,
   RULES_DISCIPLINE: (discipline: string) => ['rules', discipline] as const,
 

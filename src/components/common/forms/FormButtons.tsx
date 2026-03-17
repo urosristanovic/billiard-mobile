@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing[3],
-    marginTop: spacing[2],
+    marginTop: spacing[4],
+    paddingHorizontal: spacing[4],
   },
   submit: {
     flex: 1,

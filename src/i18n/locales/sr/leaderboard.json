@@ -1,0 +1,52 @@
+{
+  "title": "Rang lista",
+  "scopes": {
+    "global": "Globalno",
+    "country": "Zemlja",
+    "city": "Grad",
+    "groups": "Grupe",
+    "custom": "Prilagođeno"
+  },
+  "disciplines": {
+    "label": "Disciplina"
+  },
+  "filters": {
+    "includeProvisional": "Uključi privremene",
+    "selectGroup": "Izaberi grupu",
+    "selectLeaderboard": "Izaberi listu"
+  },
+  "entry": {
+    "provisional": "P",
+    "provisionalLabel": "Privremeni",
+    "wins": "P",
+    "losses": "G",
+    "rating": "Rejting",
+    "rank": "#{{rank}}"
+  },
+  "blocked": {
+    "noCountry": "Postavite zemlju u podešavanjima profila za rang listu po zemlji",
+    "noCity": "Postavite grad u podešavanjima profila za rang listu po gradu",
+    "noGroups": "Kreirajte ili pridružite se grupi za grupnu rang listu",
+    "noCustomLeaderboards": "Kreirajte prilagođenu rang listu"
+  },
+  "empty": "Još nema igrača",
+  "emptyDesc": "Budite prvi koji završi ocenjeni meč u ovom opsegu",
+  "loadMore": "Učitaj više",
+  "loading": "Učitavanje rang liste...",
+  "loadFailed": "Greška pri učitavanju rang liste",
+  "searchFab": "Pronađi igrača",
+  "playerProfile": {
+    "title": "Profil igrača",
+    "ratingsSection": "Rejtinzi",
+    "statsSection": "Statistike",
+    "totalMatches": "Ukupno mečeva",
+    "winRate": "Procenat pobeda",
+    "challengeButton": "Izazovi"
+  },
+  "userSearch": {
+    "title": "Pronađi igrača",
+    "placeholder": "Pretraži po korisničkom imenu...",
+    "empty": "Nema pronađenih igrača",
+    "emptyDesc": "Pokušajte sa drugim korisničkim imenom"
+  }
+}

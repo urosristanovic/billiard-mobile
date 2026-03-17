@@ -4,8 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import { typography } from '@/constants/theme';
-import { ScreenLayout } from '@/components/common/layout';
-import { EmptyState } from '@/components/common/states';
 
 import MatchHistoryScreen from '@/screens/match/MatchHistoryScreen';
 import MatchDetailScreen from '@/screens/match/MatchDetailScreen';
@@ -25,7 +23,25 @@ import {
   InviteParticipantsScreen,
 } from '@/screens/tournament';
 
+import LeaderboardMainScreen from '@/screens/leaderboard/LeaderboardScreen';
+import PlayerProfileScreen from '@/screens/leaderboard/PlayerProfileScreen';
+import LeaderboardUserSearchScreen from '@/screens/leaderboard/UserSearchScreen';
+import CreateGroupScreen from '@/screens/leaderboard/CreateGroupScreen';
+import GroupDetailScreen from '@/screens/leaderboard/GroupDetailScreen';
+import CreateCustomLeaderboardScreen from '@/screens/leaderboard/CreateCustomLeaderboardScreen';
+import CustomLeaderboardDetailScreen from '@/screens/leaderboard/CustomLeaderboardDetailScreen';
+
 // ─── Stack param lists ────────────────────────────────────────────────────────
+
+export type LeaderboardStackParamList = {
+  LeaderboardMain: undefined;
+  PlayerProfile: { userId: string };
+  UserSearch: undefined;
+  GroupDetail: { groupId: string };
+  CreateGroup: undefined;
+  CustomLeaderboardDetail: { leaderboardId: string };
+  CreateCustomLeaderboard: undefined;
+};
 
 export type MatchesStackParamList = {
   MatchHistory: undefined;
@@ -102,20 +118,18 @@ const TournamentsNavigator = () => (
   </TournamentsStack.Navigator>
 );
 
-const LeaderboardScreen = () => {
-  const { isDark } = useTheme();
-  const { t } = useTranslation('matches');
-
-  return (
-    <ScreenLayout isDark={isDark}>
-      <EmptyState
-        title={t('leaderboard.title')}
-        description={t('leaderboard.comingSoon')}
-        isDark={isDark}
-      />
-    </ScreenLayout>
-  );
-};
+const LeaderboardStack = createNativeStackNavigator<LeaderboardStackParamList>();
+const LeaderboardNavigator = () => (
+  <LeaderboardStack.Navigator screenOptions={{ headerShown: false }}>
+    <LeaderboardStack.Screen name='LeaderboardMain' component={LeaderboardMainScreen} />
+    <LeaderboardStack.Screen name='PlayerProfile' component={PlayerProfileScreen} />
+    <LeaderboardStack.Screen name='UserSearch' component={LeaderboardUserSearchScreen} />
+    <LeaderboardStack.Screen name='GroupDetail' component={GroupDetailScreen} />
+    <LeaderboardStack.Screen name='CreateGroup' component={CreateGroupScreen} />
+    <LeaderboardStack.Screen name='CustomLeaderboardDetail' component={CustomLeaderboardDetailScreen} />
+    <LeaderboardStack.Screen name='CreateCustomLeaderboard' component={CreateCustomLeaderboardScreen} />
+  </LeaderboardStack.Navigator>
+);
 
 // ─── Bottom Tabs ──────────────────────────────────────────────────────────────
 
@@ -210,7 +224,7 @@ export const AppNavigator = () => {
       />
       <Tab.Screen
         name='Leaderboard'
-        component={LeaderboardScreen}
+        component={LeaderboardNavigator}
         options={{
           tabBarLabel: t('tabs.leaderboard'),
           tabBarIcon: ({ color }) => (

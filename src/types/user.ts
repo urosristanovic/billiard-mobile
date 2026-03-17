@@ -10,6 +10,11 @@ export interface User extends BaseEntity {
   location: string | null;
   bio: string | null;
   role: UserRole;
+  countryId: string | null;
+  cityId: string | null;
+  countryName: string | null;
+  cityName: string | null;
+  locationChangedAt: string | null;
 }
 
 export interface SignupInput {
@@ -29,4 +34,6 @@ export interface UpdateProfileInput {
   avatarUrl?: string | null;
   location?: string | null;
   bio?: string | null;
+  countryId?: string | null;
+  cityId?: string | null;
 }

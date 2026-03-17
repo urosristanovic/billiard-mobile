@@ -50,6 +50,37 @@ export const API_ENDPOINTS = {
     list: api('/api/leaderboard'),
   },
 
+  // Locations
+  locations: {
+    countries: api('/api/locations/countries'),
+    cities: (countryId: string) => api(`/api/locations/countries/${countryId}/cities`),
+    suggestCity: api('/api/locations/cities/suggest'),
+  },
+
+  // Groups
+  groups: {
+    list: api('/api/groups'),
+    create: api('/api/groups'),
+    detail: (id: string) => api(`/api/groups/${id}`),
+    update: (id: string) => api(`/api/groups/${id}`),
+    delete: (id: string) => api(`/api/groups/${id}`),
+    members: (id: string) => api(`/api/groups/${id}/members`),
+    addMember: (id: string) => api(`/api/groups/${id}/members`),
+    removeMember: (id: string, userId: string) => api(`/api/groups/${id}/members/${userId}`),
+  },
+
+  // Custom leaderboards
+  customLeaderboards: {
+    list: api('/api/custom-leaderboards'),
+    create: api('/api/custom-leaderboards'),
+    detail: (id: string) => api(`/api/custom-leaderboards/${id}`),
+    update: (id: string) => api(`/api/custom-leaderboards/${id}`),
+    delete: (id: string) => api(`/api/custom-leaderboards/${id}`),
+    members: (id: string) => api(`/api/custom-leaderboards/${id}/members`),
+    addMember: (id: string) => api(`/api/custom-leaderboards/${id}/members`),
+    removeMember: (id: string, userId: string) => api(`/api/custom-leaderboards/${id}/members/${userId}`),
+  },
+
   // Rules
   rules: {
     list: api('/api/rules'),

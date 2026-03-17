@@ -40,7 +40,8 @@ const CreateMatchScreen = ({ navigation, route }: Props) => {
     setScore(field, currentValue - 1);
   };
   const isSubmitDisabled =
-    Number(form.myScore) === 0 && Number(form.opponentScore) === 0;
+    (Number(form.myScore) === 0 && Number(form.opponentScore) === 0) ||
+    Number(form.myScore) === Number(form.opponentScore);
 
   const handleSubmit = () => {
     if (!validate()) return;

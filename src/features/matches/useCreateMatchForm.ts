@@ -63,15 +63,14 @@ export const useCreateMatchForm = () => {
     }
 
     if (
-      form.isTournament &&
       myHasScore &&
       oppHasScore &&
       !isNaN(Number(form.myScore)) &&
       !isNaN(Number(form.opponentScore)) &&
       Number(form.myScore) === Number(form.opponentScore)
     ) {
-      newErrors.myScore = t('create.tournamentNoTie');
-      newErrors.opponentScore = t('create.tournamentNoTie');
+      newErrors.myScore = t('create.scoresMustDiffer');
+      newErrors.opponentScore = t('create.scoresMustDiffer');
     }
 
     setErrors(newErrors);

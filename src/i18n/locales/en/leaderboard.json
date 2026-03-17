@@ -1,0 +1,52 @@
+{
+  "title": "Leaderboard",
+  "scopes": {
+    "global": "Global",
+    "country": "Country",
+    "city": "City",
+    "groups": "Groups",
+    "custom": "Custom"
+  },
+  "disciplines": {
+    "label": "Discipline"
+  },
+  "filters": {
+    "includeProvisional": "Include provisional",
+    "selectGroup": "Select group",
+    "selectLeaderboard": "Select leaderboard"
+  },
+  "entry": {
+    "provisional": "P",
+    "provisionalLabel": "Provisional",
+    "wins": "W",
+    "losses": "L",
+    "rating": "Rating",
+    "rank": "#{{rank}}"
+  },
+  "blocked": {
+    "noCountry": "Set your country in profile settings to view country rankings",
+    "noCity": "Set your city in profile settings to view city rankings",
+    "noGroups": "Create or join a group to view group rankings",
+    "noCustomLeaderboards": "Create a custom leaderboard to view custom rankings"
+  },
+  "empty": "No players yet",
+  "emptyDesc": "Be the first to complete a rated match in this scope",
+  "loadMore": "Load more",
+  "loading": "Loading leaderboard...",
+  "loadFailed": "Failed to load leaderboard",
+  "searchFab": "Find player",
+  "playerProfile": {
+    "title": "Player Profile",
+    "ratingsSection": "Ratings",
+    "statsSection": "Stats",
+    "totalMatches": "Total Matches",
+    "winRate": "Win Rate",
+    "challengeButton": "Challenge"
+  },
+  "userSearch": {
+    "title": "Find Player",
+    "placeholder": "Search by username...",
+    "empty": "No players found",
+    "emptyDesc": "Try a different username"
+  }
+}
