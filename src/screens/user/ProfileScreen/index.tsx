@@ -8,10 +8,11 @@ import { useConfirmDialog } from '@/components/common/dialog';
 import { useAuth } from '@/features/auth/useAuth';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useProfileForm } from '@/features/auth/useProfileForm';
+import { usePlayerRatings } from '@/features/ratings/useRatings';
 import { useTheme } from '@/hooks/useTheme';
 import { setStoredLanguage, type SupportedLanguage } from '@/i18n';
 import { useState } from 'react';
-import { ProfileHero } from './components';
+import { ProfileHero, RatingsSection } from './components';
 import { styles } from './styles';
 
 interface ProfileScreenProps {
@@ -45,6 +46,8 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
   )[0] as SupportedLanguage;
   const [pendingLanguage, setPendingLanguage] =
     useState<SupportedLanguage>(currentLanguage);
+
+  const { data: ratings = [] } = usePlayerRatings(user?.id);
 
   if (!user) return <LoadingState isDark={isDark} />;
 
@@ -87,6 +90,7 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
     <ScreenLayout isDark={isDark}>
       <ScrollView contentContainerStyle={styles.container}>
         <ProfileHero user={user} isDark={isDark} onEditPress={handleOpenEdit} />
+        <RatingsSection ratings={ratings} isDark={isDark} />
         <DangerButton
           label={tAuth('logout.button')}
           onPress={handleLogout}

@@ -1,0 +1,18 @@
+{
+  "title": "Rejtinzi",
+  "noRatings": "Još uvek nema rejtinga",
+  "noRatingsDescription": "Igraj ocenjene mečeve da bi zaradio Glicko-2 rejting",
+  "provisional": "Privremen",
+  "provisionalTooltip": "Manje od 10 ocenjenih mečeva — rejting će se stabilizovati kako budeš više igrao",
+  "ratedGames": "{{count}} ocenjenih mečeva",
+  "wins": "{{count}}P",
+  "losses": "{{count}}G",
+  "rd": "RD {{value}}",
+  "disciplines": {
+    "8ball": "8-Lopta",
+    "9ball": "9-Lopta",
+    "10ball": "10-Lopta",
+    "straight_pool": "Straight Pool",
+    "snooker": "Snuker"
+  }
+}

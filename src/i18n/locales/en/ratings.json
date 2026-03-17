@@ -1,0 +1,18 @@
+{
+  "title": "Ratings",
+  "noRatings": "No ratings yet",
+  "noRatingsDescription": "Play rated matches to earn a Glicko-2 rating",
+  "provisional": "Provisional",
+  "provisionalTooltip": "Fewer than 10 rated games — rating will stabilize as you play more",
+  "ratedGames": "{{count}} rated games",
+  "wins": "{{count}}W",
+  "losses": "{{count}}L",
+  "rd": "RD {{value}}",
+  "disciplines": {
+    "8ball": "8-Ball",
+    "9ball": "9-Ball",
+    "10ball": "10-Ball",
+    "straight_pool": "Straight Pool",
+    "snooker": "Snooker"
+  }
+}

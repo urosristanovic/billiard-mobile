@@ -14,15 +14,18 @@ import esMatches from "./locales/es/matches.json";
 import enTournaments from "./locales/en/tournaments.json";
 import srTournaments from "./locales/sr/tournaments.json";
 import esTournaments from "./locales/es/tournaments.json";
+import enRatings from "./locales/en/ratings.json";
+import srRatings from "./locales/sr/ratings.json";
+import esRatings from "./locales/es/ratings.json";
 
 export const SUPPORTED_LANGUAGES = ["en", "sr", "es"] as const;
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 const LANGUAGE_KEY = "app_language";
 
 const resources = {
-  en: { common: enCommon, auth: enAuth, matches: enMatches, tournaments: enTournaments },
-  sr: { common: srCommon, auth: srAuth, matches: srMatches, tournaments: srTournaments },
-  es: { common: esCommon, auth: esAuth, matches: esMatches, tournaments: esTournaments },
+  en: { common: enCommon, auth: enAuth, matches: enMatches, tournaments: enTournaments, ratings: enRatings },
+  sr: { common: srCommon, auth: srAuth, matches: srMatches, tournaments: srTournaments, ratings: srRatings },
+  es: { common: esCommon, auth: esAuth, matches: esMatches, tournaments: esTournaments, ratings: esRatings },
 };
 
 i18n.use(initReactI18next).init({

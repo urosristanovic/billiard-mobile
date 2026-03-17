@@ -1,0 +1,18 @@
+{
+  "title": "Clasificaciones",
+  "noRatings": "Sin clasificaciones aún",
+  "noRatingsDescription": "Juega partidas clasificatorias para obtener una clasificación Glicko-2",
+  "provisional": "Provisional",
+  "provisionalTooltip": "Menos de 10 partidas — la clasificación se estabilizará con más juegos",
+  "ratedGames": "{{count}} partidas",
+  "wins": "{{count}}V",
+  "losses": "{{count}}D",
+  "rd": "RD {{value}}",
+  "disciplines": {
+    "8ball": "8 Bolas",
+    "9ball": "9 Bolas",
+    "10ball": "10 Bolas",
+    "straight_pool": "Straight Pool",
+    "snooker": "Snooker"
+  }
+}
