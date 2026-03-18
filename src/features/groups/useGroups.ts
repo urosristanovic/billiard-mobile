@@ -74,6 +74,8 @@ export const useGroupMutations = () => {
     onSuccess: (_, { groupId }) => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.GROUP_MEMBERS(groupId) });
       qc.invalidateQueries({ queryKey: QUERY_KEYS.GROUP_DETAIL(groupId) });
+      qc.invalidateQueries({ queryKey: ['leaderboard'] });
+      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARDS });
     },
   });
 
@@ -85,6 +87,8 @@ export const useGroupMutations = () => {
     onSuccess: (_, { groupId }) => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.GROUP_MEMBERS(groupId) });
       qc.invalidateQueries({ queryKey: QUERY_KEYS.GROUP_DETAIL(groupId) });
+      qc.invalidateQueries({ queryKey: ['leaderboard'] });
+      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARDS });
     },
   });
 

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -41,6 +41,40 @@ const LeaderboardScreen = ({ navigation }: Props) => {
 
   const { data: myGroups = [] } = useMyGroups();
   const { data: myLeaderboards = [] } = useMyCustomLeaderboards();
+
+  useEffect(() => {
+    if (scope !== 'group') return;
+
+    if (myGroups.length === 0) {
+      setSelectedGroupId(undefined);
+      return;
+    }
+
+    const selectedGroupExists = selectedGroupId
+      ? myGroups.some(group => group.id === selectedGroupId)
+      : false;
+
+    if (!selectedGroupExists) {
+      setSelectedGroupId(myGroups[0].id);
+    }
+  }, [scope, myGroups, selectedGroupId]);
+
+  useEffect(() => {
+    if (scope !== 'custom') return;
+
+    if (myLeaderboards.length === 0) {
+      setSelectedLeaderboardId(undefined);
+      return;
+    }
+
+    const selectedLeaderboardExists = selectedLeaderboardId
+      ? myLeaderboards.some(leaderboard => leaderboard.id === selectedLeaderboardId)
+      : false;
+
+    if (!selectedLeaderboardExists) {
+      setSelectedLeaderboardId(myLeaderboards[0].id);
+    }
+  }, [scope, myLeaderboards, selectedLeaderboardId]);
 
   const leaderboardParams = useMemo(() => ({
     scope,

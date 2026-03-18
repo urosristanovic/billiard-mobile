@@ -42,6 +42,8 @@
     "createTitle": "Create Custom Leaderboard",
     "nameLabel": "Name",
     "namePlaceholder": "Enter leaderboard name",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Optional description",
     "groupLabel": "Attach to Group",
     "groupPlaceholder": "None (standalone)",
     "thresholdLabel": "Provisional Threshold",
@@ -55,7 +57,8 @@
     "members": "Members",
     "addMember": "Add Member",
     "removeMember": "Remove",
-    "leaveLeaderboard": "Leave Leaderboard"
+    "leaveLeaderboard": "Leave Leaderboard",
+    "groupAttachedNote": "This leaderboard is linked to a group. Members are managed through the group — adding or removing users there will automatically apply here."
   },
   "location": {
     "countryLabel": "Country",

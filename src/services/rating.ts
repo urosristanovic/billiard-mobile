@@ -33,9 +33,11 @@ export const ratingService = {
     token: string,
     userId: string,
     discipline?: Discipline,
+    leaderboardId?: string,
   ): Promise<RatingHistoryPoint[]> {
     const url = new URL(API_ENDPOINTS.ratings.history(userId));
     if (discipline) url.searchParams.set('discipline', discipline);
+    if (leaderboardId) url.searchParams.set('leaderboardId', leaderboardId);
     const res = await fetchWithTimeout(url.toString(), {
       headers: buildHeaders(token),
     });

@@ -11,6 +11,7 @@ interface ConfirmDialogProps {
   confirmLabel: string;
   cancelLabel: string;
   variant?: ConfirmDialogVariant;
+  isConfirming?: boolean;
   isDark?: boolean;
   onCancel: () => void;
   onConfirm: () => void;
@@ -23,6 +24,7 @@ export const ConfirmDialog = ({
   confirmLabel,
   cancelLabel,
   variant = 'default',
+  isConfirming = false,
   isDark = false,
   onCancel,
   onConfirm,
@@ -36,7 +38,7 @@ export const ConfirmDialog = ({
       transparent
       animationType='fade'
       statusBarTranslucent
-      onRequestClose={onCancel}
+      onRequestClose={isConfirming ? undefined : onCancel}
     >
       <View
         style={[styles.backdrop, { backgroundColor: tk.background.overlay }]}
@@ -63,6 +65,7 @@ export const ConfirmDialog = ({
             <SecondaryButton
               label={cancelLabel}
               onPress={onCancel}
+              disabled={isConfirming}
               isDark={isDark}
               style={styles.action}
             />
@@ -70,6 +73,7 @@ export const ConfirmDialog = ({
               <DangerButton
                 label={confirmLabel}
                 onPress={onConfirm}
+                loading={isConfirming}
                 isDark={isDark}
                 style={styles.action}
               />
@@ -77,6 +81,7 @@ export const ConfirmDialog = ({
               <PrimaryButton
                 label={confirmLabel}
                 onPress={onConfirm}
+                loading={isConfirming}
                 isDark={isDark}
                 style={styles.action}
               />

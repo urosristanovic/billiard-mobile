@@ -19,15 +19,19 @@ export const usePlayerRatings = (userId?: string) => {
   });
 };
 
-export const useRatingHistory = (userId?: string, discipline?: Discipline) => {
+export const useRatingHistory = (
+  userId?: string,
+  discipline?: Discipline,
+  leaderboardId?: string,
+) => {
   const { user } = useAuth();
   const targetId = userId ?? user?.id;
 
   return useQuery({
-    queryKey: QUERY_KEYS.RATINGS_HISTORY(targetId ?? '', discipline),
+    queryKey: QUERY_KEYS.RATINGS_HISTORY(targetId ?? '', discipline, leaderboardId),
     queryFn: async () => {
       const token = await getAccessToken();
-      return ratingService.getHistory(token, targetId!, discipline);
+      return ratingService.getHistory(token, targetId!, discipline, leaderboardId);
     },
     enabled: !!targetId,
   });

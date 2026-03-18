@@ -36,6 +36,7 @@ export interface UpdateGroupInput {
 export interface CustomLeaderboard {
   id: string;
   name: string;
+  description: string | null;
   groupId: string | null;
   createdBy: string;
   provisionalThreshold: number;
@@ -46,6 +47,7 @@ export interface CustomLeaderboard {
 
 export interface CreateCustomLeaderboardInput {
   name: string;
+  description?: string;
   groupId?: string;
   provisionalThreshold?: number;
   isPublic?: boolean;
@@ -53,6 +55,7 @@ export interface CreateCustomLeaderboardInput {
 
 export interface UpdateCustomLeaderboardInput {
   name?: string;
+  description?: string | null;
   provisionalThreshold?: number;
   isPublic?: boolean;
 }

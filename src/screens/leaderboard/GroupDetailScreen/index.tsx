@@ -1,4 +1,5 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useCallback, useState } from 'react';
+import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
@@ -20,136 +21,192 @@ const GroupDetailScreen = ({ route, navigation }: Props) => {
   const { confirm } = useConfirmDialog();
   const { user } = useAuth();
 
-  const { data: group, isLoading: groupLoading } = useGroupDetail(groupId);
-  const { data: members = [], isLoading: membersLoading } = useGroupMembers(groupId);
+  const { data: group, isLoading: groupLoading, refetch: refetchGroup } = useGroupDetail(groupId);
+  const { data: members = [], isLoading: membersLoading, refetch: refetchMembers } = useGroupMembers(groupId);
   const { deleteGroup, removeMember } = useGroupMutations();
+  const [pendingRemoveUserId, setPendingRemoveUserId] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  if (groupLoading || membersLoading) return <LoadingState isDark={isDark} />;
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await Promise.all([refetchGroup(), refetchMembers()]);
+    setRefreshing(false);
+  }, [refetchGroup, refetchMembers]);
+
+  if (groupLoading || membersLoading) {
+    return (
+      <ScreenLayout isDark={isDark}>
+        <LoadingState isDark={isDark} />
+      </ScreenLayout>
+    );
+  }
   if (!group) return <EmptyState title='Group not found' description='' isDark={isDark} />;
 
   const isAdmin = group.myRole === 'admin';
   const isCreator = group.createdBy === user?.id;
+  const hasBottomAddAction = isAdmin;
 
   const handleDelete = () => {
     confirm({
       title: t('groups.deleteConfirmTitle'),
       message: t('groups.deleteConfirmMessage'),
-      confirmLabel: t('groups.delete'),
+      confirmLabel: tCommon('delete'),
+      cancelLabel: tCommon('cancel'),
       variant: 'destructive',
-      onConfirm: () => deleteGroup.mutate(groupId, {
-        onSuccess: () => navigation.goBack(),
-      }),
+      onConfirm: async () => {
+        await deleteGroup.mutateAsync(groupId);
+        navigation.goBack();
+      },
     });
   };
 
-  const handleRemoveMember = (memberId: string, memberName: string) => {
-    confirm({
-      title: t('groups.removeMemberConfirmTitle'),
-      message: t('groups.removeMemberConfirmMessage', { name: memberName }),
-      confirmLabel: t('groups.removeMember'),
-      variant: 'destructive',
-      onConfirm: () => removeMember.mutate({ groupId, userId: memberId }),
-    });
+  const handleRemoveMember = (memberId: string) => {
+    const isSelf = memberId === user?.id;
+    setPendingRemoveUserId(memberId);
+    removeMember.mutate(
+      { groupId, userId: memberId },
+      {
+        onSuccess: () => {
+          if (isSelf) {
+            navigation.goBack();
+          }
+        },
+        onSettled: () => {
+          setPendingRemoveUserId(current => (current === memberId ? null : current));
+        },
+      },
+    );
   };
 
   return (
     <ScreenLayout isDark={isDark}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.header}>
-          <Text
-            onPress={() => navigation.goBack()}
-            style={[styles.backButton, { color: tk.primary[400] }]}
-          >
-            ← Back
+      <View style={styles.header}>
+        <Text
+          onPress={() => navigation.goBack()}
+          style={[styles.backButton, { color: tk.primary[400] }]}
+        >
+          ← Back
+        </Text>
+        <Text style={[styles.title, { color: tk.text.primary }]} numberOfLines={2}>
+          {group.name}
+        </Text>
+        {group.description ? (
+          <Text style={[styles.description, { color: tk.text.secondary }]}>
+            {group.description}
           </Text>
-          <Text style={[styles.title, { color: tk.text.primary }]} numberOfLines={2}>
-            {group.name}
+        ) : null}
+        <Text style={[styles.meta, { color: tk.text.muted }]}>
+          {group.isPublic ? 'Public' : 'Private'} ·{' '}
+          {t('groups.memberCount', { count: group.memberCount })}
+        </Text>
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, { color: tk.text.secondary }]}>
+            {t('groups.members')}
           </Text>
-          {group.description ? (
-            <Text style={[styles.description, { color: tk.text.secondary }]}>
-              {group.description}
-            </Text>
-          ) : null}
-          <Text style={[styles.meta, { color: tk.text.muted }]}>
-            {group.isPublic ? 'Public' : 'Private'} ·{' '}
-            {t('groups.memberCount', { count: group.memberCount })}
-          </Text>
-        </View>
-
-        {/* Members section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={[styles.sectionTitle, { color: tk.text.secondary }]}>
-              {t('groups.members')}
-            </Text>
-            {isAdmin && (
-              <TouchableOpacity
-                onPress={() => navigation.push('UserSearch')}
-                style={[styles.addButton, { borderColor: tk.primary[700] }]}
-              >
-                <Text style={[styles.addButtonText, { color: tk.primary[400] }]}>
-                  + {t('groups.addMember')}
-                </Text>
-              </TouchableOpacity>
-            )}
-          </View>
-
-          {members.map(member => (
-            <View
-              key={member.userId}
-              style={[styles.memberRow, { borderBottomColor: tk.primary[900] }]}
-            >
-              <View style={[styles.memberAvatar, { backgroundColor: tk.primary[900], borderColor: tk.primary[700] }]}>
-                <Text style={[styles.memberAvatarText, { color: tk.primary[300] }]}>
-                  {member.displayName.slice(0, 2).toUpperCase()}
-                </Text>
-              </View>
-              <View style={styles.memberInfo}>
-                <Text style={[styles.memberName, { color: tk.text.primary }]}>
-                  {member.displayName}
-                </Text>
-                <Text style={[styles.memberUsername, { color: tk.text.muted }]}>
-                  @{member.username} · {t(`groups.roles.${member.role}`)}
-                </Text>
-              </View>
-              {isAdmin && member.userId !== user?.id && (
-                <TouchableOpacity onPress={() => handleRemoveMember(member.userId, member.displayName)}>
-                  <Text style={[styles.removeText, { color: tk.text.muted }]}>
-                    {t('groups.removeMember')}
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-          ))}
-        </View>
-
-        {/* Danger zone */}
-        {isCreator && (
-          <View style={styles.dangerZone}>
+          {isCreator && (
             <TouchableOpacity
               onPress={handleDelete}
-              style={[styles.deleteButton, { borderColor: '#ef4444' }]}
+              style={[styles.deleteInlineButton, { borderColor: '#ef4444' }]}
             >
-              <Text style={[styles.deleteButtonText, { color: '#ef4444' }]}>
+              <Text style={[styles.deleteInlineButtonText, { color: '#ef4444' }]}>
                 {t('groups.delete')}
               </Text>
             </TouchableOpacity>
+          )}
+        </View>
+      </View>
+
+      <FlatList
+        data={members}
+        keyExtractor={item => item.userId}
+        style={styles.list}
+        contentContainerStyle={[
+          styles.listContent,
+          hasBottomAddAction ? styles.listContentWithBottomAction : null,
+        ]}
+        bounces
+        alwaysBounceVertical
+        overScrollMode="always"
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={tk.primary[400]}
+            colors={[tk.primary[400]]}
+            progressBackgroundColor={tk.background?.primary}
+          />
+        }
+        renderItem={({ item: member }) => (
+          <View style={[styles.memberRow, { borderBottomColor: tk.primary[900] }]}>
+            <View style={[styles.memberAvatar, { backgroundColor: tk.primary[900], borderColor: tk.primary[700] }]}>
+              <Text style={[styles.memberAvatarText, { color: tk.primary[300] }]}>
+                {member.displayName.slice(0, 2).toUpperCase()}
+              </Text>
+            </View>
+            <View style={styles.memberInfo}>
+              <Text style={[styles.memberName, { color: tk.text.primary }]}>
+                {member.displayName}
+              </Text>
+              <Text style={[styles.memberUsername, { color: tk.text.muted }]}>
+                @{member.username} · {t(`groups.roles.${member.role}`)}
+              </Text>
+            </View>
+            {(member.userId === user?.id || isAdmin) && (
+              <TouchableOpacity
+                onPress={() => handleRemoveMember(member.userId)}
+                disabled={pendingRemoveUserId === member.userId}
+                style={styles.removeButton}
+              >
+                {pendingRemoveUserId === member.userId ? (
+                  <ActivityIndicator size='small' color={tk.text.muted} />
+                ) : (
+                  <Text style={[styles.removeText, { color: tk.text.muted }]}>
+                    {member.userId === user?.id ? t('groups.leaveGroup') : t('groups.removeMember')}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            )}
           </View>
         )}
-      </ScrollView>
+        ListFooterComponent={
+          <View style={styles.footer} />
+        }
+      />
+      {hasBottomAddAction && (
+        <View style={[styles.bottomActionBar, { borderTopColor: tk.primary[900] }]}>
+          <TouchableOpacity
+            onPress={() => navigation.push('UserSearch', { groupId })}
+            style={[
+              styles.addMemberButton,
+              { borderColor: tk.primary[700], backgroundColor: tk.primary[500] },
+            ]}
+          >
+            <Text style={[styles.addMemberButtonText, { color: tk.text.onPrimary }]}>
+              + {t('groups.addMember')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingBottom: spacing[8],
-  },
   header: {
     paddingHorizontal: spacing[4],
     paddingTop: spacing[8],
-    paddingBottom: spacing[4],
+    paddingBottom: spacing[2],
     gap: spacing[2],
+  },
+  list: {
+    flex: 1,
+  },
+  listContent: {
+    paddingHorizontal: spacing[4],
+    paddingBottom: spacing[8],
+  },
+  listContentWithBottomAction: {
+    paddingBottom: spacing[20],
   },
   backButton: {
     fontSize: typography.size.sm,
@@ -173,15 +230,11 @@ const styles = StyleSheet.create({
     fontSize: typography.size.xs,
     fontFamily: typography.family.body,
   },
-  section: {
-    marginHorizontal: spacing[4],
-    marginTop: spacing[4],
-  },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: spacing[3],
+    marginTop: spacing[4],
   },
   sectionTitle: {
     fontSize: typography.size.xs,
@@ -189,13 +242,13 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
   },
-  addButton: {
+  deleteInlineButton: {
     paddingHorizontal: spacing[3],
     paddingVertical: spacing[1],
     borderRadius: radius.sm,
     borderWidth: 1,
   },
-  addButtonText: {
+  deleteInlineButtonText: {
     fontSize: typography.size.xs,
     fontFamily: typography.family.display,
     textTransform: 'uppercase',
@@ -236,17 +289,27 @@ const styles = StyleSheet.create({
     fontSize: typography.size.xs,
     fontFamily: typography.family.body,
   },
-  dangerZone: {
-    marginHorizontal: spacing[4],
-    marginTop: spacing[8],
+  removeButton: {
+    minWidth: 60,
+    alignItems: 'flex-end',
   },
-  deleteButton: {
+  footer: {
+    marginTop: spacing[6],
+    gap: spacing[3],
+  },
+  bottomActionBar: {
+    paddingHorizontal: spacing[4],
+    paddingTop: spacing[3],
+    paddingBottom: spacing[5],
+    borderTopWidth: 1,
+  },
+  addMemberButton: {
     padding: spacing[3],
     borderRadius: radius.md,
     borderWidth: 1,
     alignItems: 'center',
   },
-  deleteButtonText: {
+  addMemberButtonText: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.display,
     textTransform: 'uppercase',

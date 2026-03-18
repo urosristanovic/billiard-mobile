@@ -20,6 +20,7 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
   const { data: myGroups = [] } = useMyGroups();
 
   const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [selectedGroupId, setSelectedGroupId] = useState<string | undefined>();
   const [threshold, setThreshold] = useState('10');
   const [isPublic, setIsPublic] = useState(false);
@@ -38,6 +39,7 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
     createLeaderboard.mutate(
       {
         name: name.trim(),
+        description: description.trim() || undefined,
         groupId: selectedGroupId,
         provisionalThreshold: parsedThreshold,
         isPublic,
@@ -77,6 +79,14 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
             placeholder={t('customLeaderboards.namePlaceholder')}
             isDark={isDark}
             required
+          />
+
+          <FormField
+            label={t('customLeaderboards.descriptionLabel')}
+            value={description}
+            onChangeText={setDescription}
+            placeholder={t('customLeaderboards.descriptionPlaceholder')}
+            isDark={isDark}
           />
 
           {/* Group attachment */}

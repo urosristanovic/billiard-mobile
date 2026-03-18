@@ -16,7 +16,7 @@ interface ConfirmDialogOptions {
   confirmLabel: string;
   cancelLabel?: string;
   variant?: ConfirmDialogVariant;
-  onConfirm?: () => void;
+  onConfirm?: () => void | Promise<void>;
 }
 
 interface ConfirmDialogContextValue {
@@ -32,19 +32,31 @@ export const ConfirmDialogProvider = ({ children }: PropsWithChildren) => {
   const { isDark } = useTheme();
   const [currentOptions, setCurrentOptions] =
     useState<ConfirmDialogOptions | null>(null);
+  const [isConfirming, setIsConfirming] = useState(false);
 
   const confirm = useCallback((options: ConfirmDialogOptions) => {
     setCurrentOptions(options);
   }, []);
 
   const handleCancel = useCallback(() => {
+    if (isConfirming) return;
     setCurrentOptions(null);
-  }, []);
+  }, [isConfirming]);
 
-  const handleConfirm = useCallback(() => {
+  const handleConfirm = useCallback(async () => {
     const onConfirm = currentOptions?.onConfirm;
-    setCurrentOptions(null);
-    onConfirm?.();
+    if (!onConfirm) {
+      setCurrentOptions(null);
+      return;
+    }
+
+    setIsConfirming(true);
+    try {
+      await Promise.resolve(onConfirm());
+      setCurrentOptions(null);
+    } finally {
+      setIsConfirming(false);
+    }
   }, [currentOptions]);
 
   const value = useMemo<ConfirmDialogContextValue>(
@@ -64,6 +76,7 @@ export const ConfirmDialogProvider = ({ children }: PropsWithChildren) => {
         confirmLabel={currentOptions?.confirmLabel ?? ''}
         cancelLabel={currentOptions?.cancelLabel ?? t('cancel')}
         variant={currentOptions?.variant}
+        isConfirming={isConfirming}
         onCancel={handleCancel}
         onConfirm={handleConfirm}
         isDark={isDark}

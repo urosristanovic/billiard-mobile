@@ -36,7 +36,7 @@ import CustomLeaderboardDetailScreen from '@/screens/leaderboard/CustomLeaderboa
 export type LeaderboardStackParamList = {
   LeaderboardMain: undefined;
   PlayerProfile: { userId: string };
-  UserSearch: undefined;
+  UserSearch: { groupId?: string; leaderboardId?: string } | undefined;
   GroupDetail: { groupId: string };
   CreateGroup: undefined;
   CustomLeaderboardDetail: { leaderboardId: string };

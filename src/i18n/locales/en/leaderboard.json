@@ -47,6 +47,9 @@
     "title": "Find Player",
     "placeholder": "Search by username...",
     "empty": "No players found",
-    "emptyDesc": "Try a different username"
+    "emptyDesc": "Try a different username",
+    "add": "Add",
+    "added": "Added",
+    "alreadyMember": "Member"
   }
 }

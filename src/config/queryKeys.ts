@@ -14,8 +14,8 @@ export const QUERY_KEYS = {
     ['matches', 'opponents', params] as const,
 
   RATINGS: (userId: string) => ['ratings', userId] as const,
-  RATINGS_HISTORY: (userId: string, discipline?: string) =>
-    ['ratings', userId, 'history', discipline] as const,
+  RATINGS_HISTORY: (userId: string, discipline?: string, leaderboardId?: string) =>
+    ['ratings', userId, 'history', discipline, leaderboardId] as const,
 
   LEADERBOARD: (params: Record<string, unknown>) =>
     ['leaderboard', params] as const,
