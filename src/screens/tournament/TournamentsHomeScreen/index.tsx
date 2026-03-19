@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout } from '@/components/common/layout';
-import { PrimaryButton } from '@/components/common/buttons';
+import { AvatarButton, PrimaryButton } from '@/components/common/buttons';
 import { EmptyState, LoadingState } from '@/components/common/states';
 import {
   useMyTournaments,
@@ -52,9 +52,12 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
         style={[styles.stickyHeader, { borderBottomColor: tk.border.subtle }]}
       >
         <View style={styles.header}>
-          <Text style={[styles.title, { color: tk.text.primary }]}>
-            {t('home.title')}
-          </Text>
+          <View style={styles.headerRow}>
+            <Text style={[styles.title, { color: tk.text.primary }]}>
+              {t('home.title')}
+            </Text>
+            <AvatarButton />
+          </View>
         </View>
 
         <View style={styles.actionRow}>

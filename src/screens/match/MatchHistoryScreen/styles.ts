@@ -5,13 +5,13 @@ export const styles = StyleSheet.create({
   header: {
     paddingHorizontal: spacing[4],
     paddingTop: spacing[8],
-    paddingBottom: spacing[2],
+    paddingBottom: spacing[3],
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    gap: spacing[3],
+    gap: spacing[4],
   },
   title: {
     fontSize: typography.size['2xl'],
@@ -20,18 +20,6 @@ export const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
     flex: 1,
-  },
-  profileButton: {
-    borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-  },
-  profileButtonText: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
   filters: {
     flexDirection: 'row',

@@ -1,6 +1,8 @@
 import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { NavigatorScreenParams } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import { typography } from '@/constants/theme';
@@ -32,6 +34,7 @@ import CreateGroupScreen from '@/screens/leaderboard/CreateGroupScreen';
 import GroupDetailScreen from '@/screens/leaderboard/GroupDetailScreen';
 import CreateCustomLeaderboardScreen from '@/screens/leaderboard/CreateCustomLeaderboardScreen';
 import CustomLeaderboardDetailScreen from '@/screens/leaderboard/CustomLeaderboardDetailScreen';
+import { AppDrawerContent } from './DrawerContent';
 
 // ─── Stack param lists ────────────────────────────────────────────────────────
 
@@ -48,7 +51,7 @@ export type LeaderboardStackParamList = {
 export type MatchesStackParamList = {
   MatchHistory: undefined;
   MatchDetail: { matchId: string };
-  Profile: undefined;
+  Profile: { edit?: boolean } | undefined;
   ProfileSetup: undefined;
   ChangePassword: undefined;
   Feedback: undefined;
@@ -146,15 +149,19 @@ const LeaderboardNavigator = () => (
 // ─── Bottom Tabs ──────────────────────────────────────────────────────────────
 
 export type AppTabParamList = {
-  Matches: undefined;
-  NewMatch: undefined;
-  Tournaments: undefined;
-  Leaderboard: undefined;
+  Matches: NavigatorScreenParams<MatchesStackParamList> | undefined;
+  NewMatch: NavigatorScreenParams<CreateMatchStackParamList> | undefined;
+  Tournaments: NavigatorScreenParams<TournamentsStackParamList> | undefined;
+  Leaderboard: NavigatorScreenParams<LeaderboardStackParamList> | undefined;
 };
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
+export type AppDrawerParamList = {
+  MainTabs: NavigatorScreenParams<AppTabParamList> | undefined;
+};
+const Drawer = createDrawerNavigator<AppDrawerParamList>();
 
-export const AppNavigator = () => {
+const TabsNavigator = () => {
   const { t } = useTranslation('matches');
   const { t: tT } = useTranslation('tournaments');
   const { tk } = useTheme();
@@ -255,3 +262,18 @@ export const AppNavigator = () => {
     </Tab.Navigator>
   );
 };
+
+export const AppNavigator = () => (
+  <Drawer.Navigator
+    screenOptions={{
+      headerShown: false,
+      drawerPosition: 'right',
+      drawerType: 'front',
+      overlayColor: 'rgba(0,0,0,0.45)',
+      drawerStyle: { width: 320 },
+    }}
+    drawerContent={props => <AppDrawerContent {...props} />}
+  >
+    <Drawer.Screen name='MainTabs' component={TabsNavigator} />
+  </Drawer.Navigator>
+);

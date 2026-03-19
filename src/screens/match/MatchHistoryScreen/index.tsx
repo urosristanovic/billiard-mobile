@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   FlatList,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +14,7 @@ import { getOpponentLabel } from '@/features/matches/opponentLabel';
 import { useAuth } from '@/features/auth/useAuth';
 import { DropdownFilter, type FilterOption } from '@/components/common/filters';
 import { ScreenLayout } from '@/components/common/layout';
+import { AvatarButton } from '@/components/common/buttons';
 import { LoadingState, EmptyState } from '@/components/common/states';
 import { useTheme } from '@/hooks/useTheme';
 import {
@@ -137,24 +137,7 @@ const MatchHistoryScreen = ({ navigation }: Props) => {
           <Text style={[styles.title, { color: tk.text.primary }]}>
             {t('history.title')}
           </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Profile')}
-            accessibilityRole='button'
-            accessibilityLabel={t('tabs.profile')}
-            style={[
-              styles.profileButton,
-              {
-                borderColor: tk.primary[700],
-                backgroundColor: tk.surface.raised,
-              },
-            ]}
-          >
-            <Text
-              style={[styles.profileButtonText, { color: tk.primary[300] }]}
-            >
-              {t('tabs.profile')}
-            </Text>
-          </TouchableOpacity>
+          <AvatarButton />
         </View>
       </View>
 

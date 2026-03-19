@@ -1,27 +1,30 @@
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenLayout } from '@/components/common/layout';
 import { LoadingState } from '@/components/common/states';
 import { FormField, FormModal, FormButtons } from '@/components/common/forms';
 import { DangerButton, SecondaryButton } from '@/components/common/buttons';
-import { useConfirmDialog } from '@/components/common/dialog';
 import { useAuth } from '@/features/auth/useAuth';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useProfileForm } from '@/features/auth/useProfileForm';
 import { useCountries, useCities } from '@/features/locations/useLocations';
 import { useTheme } from '@/hooks/useTheme';
 import { setStoredLanguage, type SupportedLanguage } from '@/i18n';
-import { useState } from 'react';
 import { typography, spacing, radius } from '@/constants/theme';
+import type { MatchesStackParamList } from '@/navigation/AppNavigator';
 import { ProfileHero } from './components';
 import { styles } from './styles';
 
-interface ProfileScreenProps {
-  navigation?: {
-    navigate: (screen: 'ChangePassword' | 'Feedback') => void;
-  };
-  isDark?: boolean;
-}
+type Props = NativeStackScreenProps<MatchesStackParamList, 'Profile'>;
 
 const LANGUAGE_OPTIONS: Array<{
   code: SupportedLanguage;
@@ -35,18 +38,13 @@ const LANGUAGE_OPTIONS: Array<{
   { code: 'es', labelKey: 'profile.languageSpanish' },
 ];
 
-const ProfileScreen = ({
-  navigation,
-  isDark: isDarkProp,
-}: ProfileScreenProps) => {
+const ProfileScreen = ({ navigation, route }: Props) => {
   const { t } = useTranslation('common');
   const { t: tAuth, i18n } = useTranslation('auth');
   const { t: tGroups } = useTranslation('groups');
-  const { isDark: systemDark, tk } = useTheme();
-  const { confirm } = useConfirmDialog();
-  const isDark = isDarkProp ?? systemDark;
+  const { isDark, tk } = useTheme();
   const { user } = useAuth();
-  const { logout, updateProfile } = useAuthMutations();
+  const { updateProfile } = useAuthMutations();
   const { form, errors, updateField, loadForEdit, validate } = useProfileForm();
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedCountryId, setSelectedCountryId] = useState<string>('');
@@ -94,37 +92,30 @@ const ProfileScreen = ({
       },
     );
   };
-  const handleLogout = () => {
-    confirm({
-      title: tAuth('logout.title'),
-      message: tAuth('logout.confirm'),
-      cancelLabel: t('cancel'),
-      confirmLabel: tAuth('logout.button'),
-      variant: 'destructive',
-      onConfirm: () => logout.mutate(),
-    });
-  };
+
+  useEffect(() => {
+    if (!route.params?.edit || !user) return;
+    handleOpenEdit();
+    navigation.setParams({ edit: undefined });
+  }, [navigation, route.params?.edit, user]);
+
   return (
     <ScreenLayout isDark={isDark}>
       <ScrollView contentContainerStyle={styles.container}>
         <ProfileHero user={user} isDark={isDark} />
+      </ScrollView>
+      <View
+        style={[
+          styles.bottomBar,
+          {
+            borderTopColor: tk.border.default,
+            backgroundColor: tk.surface.default,
+          },
+        ]}
+      >
         <SecondaryButton
           label={tAuth('profile.editButton')}
           onPress={handleOpenEdit}
-          isDark={isDark}
-        />
-      </ScrollView>
-      <View style={[styles.bottomBar, { borderTopColor: tk.border.default, backgroundColor: tk.surface.default }]}>
-        <DangerButton
-          label={tAuth('logout.button')}
-          onPress={handleLogout}
-          loading={logout.isPending}
-          isDark={isDark}
-          style={styles.bottomBarButton}
-        />
-        <SecondaryButton
-          label={tAuth('feedback.openButton')}
-          onPress={() => navigation?.navigate('Feedback')}
           isDark={isDark}
           style={styles.bottomBarButton}
         />
@@ -308,7 +299,7 @@ const ProfileScreen = ({
             onPress={() => {
               setEditModalVisible(false);
               setPendingLanguage(currentLanguage);
-              navigation?.navigate('ChangePassword');
+              navigation.navigate('ChangePassword');
             }}
             isDark={isDark}
           />

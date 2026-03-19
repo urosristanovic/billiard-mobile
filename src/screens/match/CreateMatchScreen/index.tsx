@@ -5,7 +5,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useCreateMatchForm } from '@/features/matches/useCreateMatchForm';
 import { useMatchMutations } from '@/features/matches/useMatchMutations';
 import { ScreenLayout } from '@/components/common/layout';
-import { PrimaryButton } from '@/components/common/buttons';
+import { AvatarButton, PrimaryButton } from '@/components/common/buttons';
 import { typography } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 import { DisciplineSelector, OpponentField } from './components';
@@ -56,15 +56,20 @@ const CreateMatchScreen = ({ navigation, route }: Props) => {
   return (
     <ScreenLayout isDark={isDark}>
       <View style={styles.screen}>
+        <View style={styles.header}>
+          <View style={styles.headerRow}>
+            <Text style={[styles.title, { color: tk.text.primary }]}>
+              {t('create.title')}
+            </Text>
+            <AvatarButton />
+          </View>
+        </View>
+
         <ScrollView
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps='handled'
           showsVerticalScrollIndicator={false}
         >
-          <Text style={[styles.title, { color: tk.text.primary }]}>
-            {t('create.title')}
-          </Text>
-
           <DisciplineSelector
             value={form.discipline}
             onChange={d => updateField('discipline', d)}

@@ -5,10 +5,21 @@ export const styles = StyleSheet.create({
   screen: {
     flex: 1,
   },
+  header: {
+    paddingHorizontal: spacing[4],
+    paddingTop: spacing[8],
+    paddingBottom: spacing[3],
+  },
   container: {
-    padding: spacing[4],
-    gap: spacing[5],
+    paddingHorizontal: spacing[4],
     paddingBottom: spacing[6],
+    gap: spacing[5],
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing[4],
   },
   title: {
     fontSize: typography.size['2xl'],
@@ -16,6 +27,7 @@ export const styles = StyleSheet.create({
     fontFamily: typography.family.display,
     textTransform: 'uppercase',
     letterSpacing: 1,
+    flex: 1,
   },
   scoreSection: {
     gap: spacing[2],

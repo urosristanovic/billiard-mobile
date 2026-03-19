@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { spacing, radius, typography, theme } from '@/constants/theme';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMatchDetail } from '@/features/matches/useMatchDetail';
 import { useMatchMutations } from '@/features/matches/useMatchMutations';
@@ -279,6 +278,20 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
       opponentBeers: challengeOpponentBeers,
     });
   };
+  const handleIncrementChallengeScore = (field: 'my' | 'opponent') => {
+    if (field === 'my') {
+      setChallengeMyScore(prev => prev + 1);
+      return;
+    }
+    setChallengeOpponentScore(prev => prev + 1);
+  };
+  const handleDecrementChallengeScore = (field: 'my' | 'opponent') => {
+    if (field === 'my') {
+      setChallengeMyScore(prev => Math.max(0, prev - 1));
+      return;
+    }
+    setChallengeOpponentScore(prev => Math.max(0, prev - 1));
+  };
 
   const isDisputeFormVisible =
     activeForm === 'dispute' || activeForm === 'counterDispute';
@@ -371,53 +384,159 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
             <Text style={[styles.challengeScoreTitle, { color: tk.text.secondary }]}>
               {t('detail.recordChallengeScoreTitle')}
             </Text>
-            <View style={styles.challengeScoreRow}>
-              <Text style={[styles.challengeScoreLabel, { color: tk.text.primary }]}>
-                {t('you')}
-              </Text>
-              <View style={styles.challengeScoreControls}>
-                <SecondaryButton
-                  label='-'
-                  compact
-                  onPress={() => setChallengeMyScore(prev => Math.max(0, prev - 1))}
-                  isDark={isDark}
-                />
-                <Text style={[styles.challengeScoreValue, { color: tk.text.primary }]}>
-                  {challengeMyScore}
+            <View style={styles.challengeScoreSection}>
+              <View style={styles.challengeScoreLabelsRow}>
+                <Text
+                  style={[
+                    styles.challengeScoreLabel,
+                    styles.challengeScoreLabelLeft,
+                    { color: tk.text.secondary },
+                  ]}
+                >
+                  {t('create.myScore')}
                 </Text>
-                <SecondaryButton
-                  label='+'
-                  compact
-                  onPress={() => setChallengeMyScore(prev => prev + 1)}
-                  isDark={isDark}
-                />
+                <View style={styles.challengeVsLabelSpacer} />
+                <Text
+                  style={[
+                    styles.challengeScoreLabel,
+                    styles.challengeScoreLabelRight,
+                    { color: tk.text.secondary },
+                  ]}
+                >
+                  {opponent?.profile.displayName ?? t('detail.opponent')}
+                </Text>
+              </View>
+              <View style={styles.challengeScoreRow}>
+                <View style={styles.challengeScoreField}>
+                  <View
+                    style={[
+                      styles.challengeScoreButton,
+                      {
+                        backgroundColor: tk.surface.raised,
+                        borderColor: tk.primary[700],
+                      },
+                    ]}
+                  >
+                    <TouchableOpacity
+                      onPress={() => handleDecrementChallengeScore('my')}
+                      activeOpacity={0.8}
+                      style={[
+                        styles.challengeScoreAdjustButton,
+                        {
+                          borderColor: tk.border.default,
+                          backgroundColor: tk.background.secondary,
+                        },
+                      ]}
+                      accessibilityRole='button'
+                      accessibilityLabel={`${t('create.myScore')} minus`}
+                    >
+                      <Text
+                        style={[
+                          styles.challengeScoreAdjustButtonText,
+                          { color: tk.text.secondary },
+                        ]}
+                      >
+                        -
+                      </Text>
+                    </TouchableOpacity>
+                    <Text
+                      style={[styles.challengeScoreButtonValue, { color: tk.primary[300] }]}
+                    >
+                      {challengeMyScore}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => handleIncrementChallengeScore('my')}
+                      activeOpacity={0.8}
+                      style={[
+                        styles.challengeScoreAdjustButton,
+                        {
+                          borderColor: tk.border.default,
+                          backgroundColor: tk.background.secondary,
+                        },
+                      ]}
+                      accessibilityRole='button'
+                      accessibilityLabel={`${t('create.myScore')} plus`}
+                    >
+                      <Text
+                        style={[
+                          styles.challengeScoreAdjustButtonText,
+                          { color: tk.text.secondary },
+                        ]}
+                      >
+                        +
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.challengeVsWrap}>
+                  <Text style={[styles.challengeVsText, { color: tk.text.muted }]}>
+                    {t('detail.vs')}
+                  </Text>
+                </View>
+                <View style={styles.challengeScoreField}>
+                  <View
+                    style={[
+                      styles.challengeScoreButton,
+                      {
+                        backgroundColor: tk.surface.raised,
+                        borderColor: tk.primary[700],
+                      },
+                    ]}
+                  >
+                    <TouchableOpacity
+                      onPress={() => handleDecrementChallengeScore('opponent')}
+                      activeOpacity={0.8}
+                      style={[
+                        styles.challengeScoreAdjustButton,
+                        {
+                          borderColor: tk.border.default,
+                          backgroundColor: tk.background.secondary,
+                        },
+                      ]}
+                      accessibilityRole='button'
+                      accessibilityLabel={`${t('create.opponentScore')} minus`}
+                    >
+                      <Text
+                        style={[
+                          styles.challengeScoreAdjustButtonText,
+                          { color: tk.text.secondary },
+                        ]}
+                      >
+                        -
+                      </Text>
+                    </TouchableOpacity>
+                    <Text
+                      style={[styles.challengeScoreButtonValue, { color: tk.primary[300] }]}
+                    >
+                      {challengeOpponentScore}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => handleIncrementChallengeScore('opponent')}
+                      activeOpacity={0.8}
+                      style={[
+                        styles.challengeScoreAdjustButton,
+                        {
+                          borderColor: tk.border.default,
+                          backgroundColor: tk.background.secondary,
+                        },
+                      ]}
+                      accessibilityRole='button'
+                      accessibilityLabel={`${t('create.opponentScore')} plus`}
+                    >
+                      <Text
+                        style={[
+                          styles.challengeScoreAdjustButtonText,
+                          { color: tk.text.secondary },
+                        ]}
+                      >
+                        +
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
             </View>
-            <View style={styles.challengeScoreRow}>
-              <Text style={[styles.challengeScoreLabel, { color: tk.text.primary }]}>
-                {opponent?.profile.displayName ?? t('detail.opponent')}
-              </Text>
-              <View style={styles.challengeScoreControls}>
-                <SecondaryButton
-                  label='-'
-                  compact
-                  onPress={() =>
-                    setChallengeOpponentScore(prev => Math.max(0, prev - 1))
-                  }
-                  isDark={isDark}
-                />
-                <Text style={[styles.challengeScoreValue, { color: tk.text.primary }]}>
-                  {challengeOpponentScore}
-                </Text>
-                <SecondaryButton
-                  label='+'
-                  compact
-                  onPress={() => setChallengeOpponentScore(prev => prev + 1)}
-                  isDark={isDark}
-                />
-              </View>
-            </View>
-            <View style={{ marginTop: spacing[1], gap: spacing[2] }}>
+            <View style={styles.challengeBeerSection}>
               {[
                 {
                   label: `🍺 ${t('beers.myBeers')}`,
@@ -432,29 +551,64 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
                   onInc: () => setChallengeOpponentBeers(prev => prev + 1),
                 },
               ].map(item => (
-                <View
-                  key={item.label}
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    borderWidth: 1,
-                    borderRadius: radius.lg,
-                    borderColor: tk.border.subtle,
-                    backgroundColor: tk.surface.default,
-                    paddingHorizontal: spacing[3],
-                    paddingVertical: spacing[2],
-                  }}
-                >
-                  <Text style={{ color: tk.text.secondary, fontSize: typography.size.xs, fontFamily: typography.family.heading, textTransform: 'uppercase', letterSpacing: 0.5, flex: 1 }}>
-                    {item.label}
-                  </Text>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2] }}>
-                    <SecondaryButton label='-' compact onPress={item.onDec} isDark={isDark} />
-                    <Text style={{ color: tk.text.primary, fontFamily: typography.family.display, fontSize: typography.size.xl, minWidth: 28, textAlign: 'center' }}>
-                      {item.value}
+                <View key={item.label} style={styles.challengeBeerRow}>
+                  <View
+                    style={[
+                      styles.challengeBeerField,
+                      {
+                        borderColor: tk.border.subtle,
+                        backgroundColor: tk.surface.default,
+                      },
+                    ]}
+                  >
+                    <Text style={[styles.challengeBeerLabel, { color: tk.text.secondary }]}>
+                      {item.label}
                     </Text>
-                    <SecondaryButton label='+' compact onPress={item.onInc} isDark={isDark} />
+                    <View style={styles.challengeBeerControls}>
+                      <TouchableOpacity
+                        onPress={item.onDec}
+                        activeOpacity={0.8}
+                        style={[
+                          styles.challengeBeerAdjustButton,
+                          {
+                            borderColor: tk.border.default,
+                            backgroundColor: tk.background.secondary,
+                          },
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.challengeBeerAdjustButtonText,
+                            { color: tk.text.secondary },
+                          ]}
+                        >
+                          -
+                        </Text>
+                      </TouchableOpacity>
+                      <Text style={[styles.challengeBeerValue, { color: tk.text.primary }]}>
+                        {item.value}
+                      </Text>
+                      <TouchableOpacity
+                        onPress={item.onInc}
+                        activeOpacity={0.8}
+                        style={[
+                          styles.challengeBeerAdjustButton,
+                          {
+                            borderColor: tk.border.default,
+                            backgroundColor: tk.background.secondary,
+                          },
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.challengeBeerAdjustButtonText,
+                            { color: tk.text.secondary },
+                          ]}
+                        >
+                          +
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               ))}

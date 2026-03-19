@@ -11,12 +11,19 @@ export const styles = StyleSheet.create({
     paddingTop: spacing[8],
     paddingBottom: spacing[3],
   },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing[4],
+  },
   title: {
     fontSize: typography.size['2xl'],
     fontWeight: typography.weight.bold,
     fontFamily: typography.family.display,
     textTransform: 'uppercase',
     letterSpacing: 1,
+    flex: 1,
   },
   actionRow: {
     flexDirection: 'row',
