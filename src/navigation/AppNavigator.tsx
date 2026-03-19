@@ -12,6 +12,7 @@ import UserSearchScreen from '@/screens/match/UserSearchScreen';
 import ProfileScreen from '@/screens/user/ProfileScreen';
 import ProfileSetupScreen from '@/screens/user/ProfileSetupScreen';
 import ChangePasswordScreen from '@/screens/user/ChangePasswordScreen';
+import FeedbackScreen from '@/screens/user/FeedbackScreen';
 import type { UserSearchResult } from '@/services/user';
 import type { Tournament } from '@/types/tournament';
 
@@ -50,6 +51,7 @@ export type MatchesStackParamList = {
   Profile: undefined;
   ProfileSetup: undefined;
   ChangePassword: undefined;
+  Feedback: undefined;
 };
 
 export type CreateMatchStackParamList = {
@@ -78,6 +80,10 @@ const MatchesNavigator = () => (
     <MatchesStack.Screen
       name='ChangePassword'
       component={ChangePasswordScreen}
+    />
+    <MatchesStack.Screen
+      name='Feedback'
+      component={FeedbackScreen}
     />
   </MatchesStack.Navigator>
 );

@@ -99,6 +99,11 @@ export const API_ENDPOINTS = {
     cancel: (id: string) => api(`/api/challenges/${id}/cancel`),
   },
 
+  // Feedback
+  feedback: {
+    submit: api('/api/feedback'),
+  },
+
   // Rules
   rules: {
     list: api('/api/rules'),

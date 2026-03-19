@@ -18,7 +18,7 @@ import { styles } from './styles';
 
 interface ProfileScreenProps {
   navigation?: {
-    navigate: (screen: 'ChangePassword') => void;
+    navigate: (screen: 'ChangePassword' | 'Feedback') => void;
   };
   isDark?: boolean;
 }
@@ -108,6 +108,11 @@ const ProfileScreen = ({
     <ScreenLayout isDark={isDark}>
       <ScrollView contentContainerStyle={styles.container}>
         <ProfileHero user={user} isDark={isDark} />
+        <SecondaryButton
+          label={tAuth('profile.editButton')}
+          onPress={handleOpenEdit}
+          isDark={isDark}
+        />
       </ScrollView>
       <View style={[styles.bottomBar, { borderTopColor: tk.border.default, backgroundColor: tk.surface.default }]}>
         <DangerButton
@@ -118,8 +123,8 @@ const ProfileScreen = ({
           style={styles.bottomBarButton}
         />
         <SecondaryButton
-          label={tAuth('profile.editButton')}
-          onPress={handleOpenEdit}
+          label={tAuth('feedback.openButton')}
+          onPress={() => navigation?.navigate('Feedback')}
           isDark={isDark}
           style={styles.bottomBarButton}
         />
