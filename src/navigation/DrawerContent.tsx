@@ -18,7 +18,7 @@ const WEB_BASE_URL = (process.env.EXPO_PUBLIC_WEB_BASE_URL ?? API_CONFIG.baseURL
 );
 
 type DrawerAction = {
-  key: 'profile' | 'sendFeedback' | 'terms' | 'privacy';
+  key: 'profile' | 'rules' | 'howRatingsWork' | 'sendFeedback' | 'terms' | 'privacy';
   onPress: () => void;
 };
 
@@ -46,7 +46,7 @@ export const AppDrawerContent = (props: DrawerContentComponentProps) => {
     }
   };
 
-  const actions: DrawerAction[] = [
+  const profileSection: DrawerAction[] = [
     {
       key: 'profile',
       onPress: () =>
@@ -54,6 +54,21 @@ export const AppDrawerContent = (props: DrawerContentComponentProps) => {
           screen: 'Matches',
           params: { screen: 'Profile' },
         }),
+    },
+  ];
+
+  const helpSection: DrawerAction[] = [
+    {
+      key: 'rules',
+      onPress: () => {
+        void openWebPath('/rules');
+      },
+    },
+    {
+      key: 'howRatingsWork',
+      onPress: () => {
+        void openWebPath('/how-ratings-work');
+      },
     },
     {
       key: 'sendFeedback',
@@ -63,6 +78,9 @@ export const AppDrawerContent = (props: DrawerContentComponentProps) => {
           params: { screen: 'Feedback' },
         }),
     },
+  ];
+
+  const legalSection: DrawerAction[] = [
     {
       key: 'terms',
       onPress: () => {
@@ -76,6 +94,30 @@ export const AppDrawerContent = (props: DrawerContentComponentProps) => {
       },
     },
   ];
+
+  const menuSections: DrawerAction[][] = [profileSection, helpSection, legalSection];
+
+  const renderMenuItem = (action: DrawerAction) => (
+    <TouchableOpacity
+      key={action.key}
+      onPress={() => {
+        navigation.closeDrawer();
+        action.onPress();
+      }}
+      style={[
+        styles.menuItem,
+        {
+          borderColor: tk.border.default,
+          backgroundColor: tk.surface.raised,
+        },
+      ]}
+      activeOpacity={0.75}
+    >
+      <Text style={[styles.menuText, { color: tk.text.primary }]}>
+        {tAuth(`drawer.${action.key}`)}
+      </Text>
+    </TouchableOpacity>
+  );
 
   return (
     <DrawerContentScrollView
@@ -106,26 +148,21 @@ export const AppDrawerContent = (props: DrawerContentComponentProps) => {
         </View>
 
         <View style={styles.menu}>
-          {actions.map(action => (
-            <TouchableOpacity
-              key={action.key}
-              onPress={() => {
-                navigation.closeDrawer();
-                action.onPress();
-              }}
-              style={[
-                styles.menuItem,
-                {
-                  borderColor: tk.border.default,
-                  backgroundColor: tk.surface.raised,
-                },
-              ]}
-              activeOpacity={0.75}
-            >
-              <Text style={[styles.menuText, { color: tk.text.primary }]}>
-                {tAuth(`drawer.${action.key}`)}
-              </Text>
-            </TouchableOpacity>
+          {menuSections.map((section, sectionIndex) => (
+            <View key={sectionIndex}>
+              {sectionIndex > 0 ? (
+                <View
+                  style={[
+                    styles.menuDivider,
+                    { backgroundColor: tk.border.default },
+                  ]}
+                  accessibilityRole="none"
+                />
+              ) : null}
+              <View style={styles.menuGroup}>
+                {section.map(renderMenuItem)}
+              </View>
+            </View>
           ))}
         </View>
 
@@ -199,7 +236,13 @@ const styles = StyleSheet.create({
   },
   menu: {
     marginTop: spacing[4],
+  },
+  menuGroup: {
     gap: spacing[2],
+  },
+  menuDivider: {
+    height: 1,
+    marginVertical: spacing[3],
   },
   menuItem: {
     borderWidth: 1,
