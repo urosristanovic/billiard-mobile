@@ -20,6 +20,22 @@ interface SignupPendingConfirmation {
   confirmEmail: true;
 }
 
+export interface ForgotPasswordInput {
+  email: string;
+}
+
+export interface ResetPasswordInput {
+  password: string;
+  tokenHash?: string;
+  accessToken?: string;
+  refreshToken?: string;
+}
+
+export interface ChangePasswordInput {
+  currentPassword: string;
+  newPassword: string;
+}
+
 async function parseResponse<T>(res: Response): Promise<T> {
   const result: ApiResponse<T> = await res.json();
   if (!res.ok) {
@@ -66,6 +82,45 @@ export const authService = {
 
     await setTokens(accessToken, refreshToken);
     return user;
+  },
+
+  forgotPassword: async (input: ForgotPasswordInput): Promise<null> => {
+    const res = await fetchWithTimeout(API_ENDPOINTS.auth.forgotPassword, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    });
+
+    return parseResponse<null>(res);
+  },
+
+  resetPassword: async (input: ResetPasswordInput): Promise<null> => {
+    const res = await fetchWithTimeout(API_ENDPOINTS.auth.resetPassword, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    });
+
+    return parseResponse<null>(res);
+  },
+
+  changePassword: async (input: ChangePasswordInput): Promise<null> => {
+    const token = await getAccessToken();
+    const res = await fetchWithTimeout(API_ENDPOINTS.auth.changePassword, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(input),
+    });
+
+    const { accessToken, refreshToken } = await parseResponse<{
+      accessToken: string;
+      refreshToken: string;
+    }>(res);
+    await setTokens(accessToken, refreshToken);
+    return null;
   },
 
   logout: async (): Promise<null> => {

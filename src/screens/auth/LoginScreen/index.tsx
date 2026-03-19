@@ -17,11 +17,13 @@ import { styles } from './styles';
 
 interface LoginScreenProps {
   onNavigateSignup: () => void;
+  onNavigateForgotPassword: () => void;
   isDark?: boolean;
 }
 
 const LoginScreen = ({
   onNavigateSignup,
+  onNavigateForgotPassword,
   isDark: isDarkProp,
 }: LoginScreenProps) => {
   const { t: tAuth } = useTranslation('auth');
@@ -106,6 +108,13 @@ const LoginScreen = ({
               placeholder={tAuth('fields.passwordPlaceholder')}
               isDark={isDark}
             />
+            <Text
+              style={[styles.forgotPasswordLink, { color: tk.primary[600] }]}
+              onPress={onNavigateForgotPassword}
+              accessibilityRole='link'
+            >
+              {tAuth('login.forgotPasswordLink')}
+            </Text>
           </View>
 
           <FormButtons

@@ -17,6 +17,9 @@ import { ProfileHero } from './components';
 import { styles } from './styles';
 
 interface ProfileScreenProps {
+  navigation?: {
+    navigate: (screen: 'ChangePassword') => void;
+  };
   isDark?: boolean;
 }
 
@@ -32,7 +35,10 @@ const LANGUAGE_OPTIONS: Array<{
   { code: 'es', labelKey: 'profile.languageSpanish' },
 ];
 
-const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
+const ProfileScreen = ({
+  navigation,
+  isDark: isDarkProp,
+}: ProfileScreenProps) => {
   const { t } = useTranslation('common');
   const { t: tAuth, i18n } = useTranslation('auth');
   const { t: tGroups } = useTranslation('groups');
@@ -292,6 +298,15 @@ const ProfileScreen = ({ isDark: isDarkProp }: ProfileScreenProps) => {
         </View>
 
         <View style={deleteAccountStyles.container}>
+          <SecondaryButton
+            label={tAuth('changePassword.openButton')}
+            onPress={() => {
+              setEditModalVisible(false);
+              setPendingLanguage(currentLanguage);
+              navigation?.navigate('ChangePassword');
+            }}
+            isDark={isDark}
+          />
           <DangerButton
             label={tAuth('profile.deleteAccount')}
             onPress={() => {
@@ -359,6 +374,7 @@ const deleteAccountStyles = StyleSheet.create({
   container: {
     marginTop: spacing[6],
     paddingTop: spacing[4],
+    gap: spacing[3],
     borderTopWidth: 1,
     borderTopColor: '#333333',
   },
