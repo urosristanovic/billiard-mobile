@@ -171,6 +171,11 @@
     "disputeStatusRejected": "Odbijeno",
     "disputeStatusOpen": "Otvoreno"
   },
+  "beers": {
+    "label": "Piva",
+    "myBeers": "Tvoja piva",
+    "opponentBeers": "Piva protivnika"
+  },
   "create": {
     "title": "Zabeleži meč",
     "game": "Igra",

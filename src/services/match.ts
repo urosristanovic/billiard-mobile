@@ -130,7 +130,7 @@ export const matchService = {
   record: async (
     token: string,
     matchId: string,
-    input: { myScore: number; opponentScore: number },
+    input: { myScore: number; opponentScore: number; myBeers?: number; opponentBeers?: number },
   ): Promise<Match> => {
     const headers = buildHeaders(token, true);
     const res = await fetchWithTimeout(API_ENDPOINTS.matches.record(matchId), {

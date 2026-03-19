@@ -171,6 +171,11 @@
     "disputeStatusRejected": "Rechazada",
     "disputeStatusOpen": "Abierta"
   },
+  "beers": {
+    "label": "Cervezas",
+    "myBeers": "Tus cervezas",
+    "opponentBeers": "Cervezas del oponente"
+  },
   "create": {
     "title": "Registrar partida",
     "game": "Juego",

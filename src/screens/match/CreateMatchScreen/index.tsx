@@ -240,6 +240,93 @@ const CreateMatchScreen = ({ navigation, route }: Props) => {
               </View>
             </View>
           </View>
+          <View style={styles.beerSection}>
+            <View style={styles.beerRow}>
+              <View
+                style={[
+                  styles.beerField,
+                  { borderColor: tk.border.subtle, backgroundColor: tk.surface.default },
+                ]}
+              >
+                <Text style={[styles.beerLabel, { color: tk.text.secondary }]}>
+                  🍺 {t('beers.myBeers')}
+                </Text>
+                <View style={styles.beerControls}>
+                  <TouchableOpacity
+                    onPress={() => updateField('myBeers', Math.max(0, form.myBeers - 1))}
+                    activeOpacity={0.8}
+                    style={[
+                      styles.beerAdjustButton,
+                      { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
+                    ]}
+                  >
+                    <Text style={[styles.beerAdjustButtonText, { color: tk.text.secondary }]}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
+                  <Text style={[styles.beerValue, { color: tk.text.primary }]}>
+                    {form.myBeers}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => updateField('myBeers', form.myBeers + 1)}
+                    activeOpacity={0.8}
+                    style={[
+                      styles.beerAdjustButton,
+                      { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
+                    ]}
+                  >
+                    <Text style={[styles.beerAdjustButtonText, { color: tk.text.secondary }]}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+            <View style={styles.beerRow}>
+              <View
+                style={[
+                  styles.beerField,
+                  { borderColor: tk.border.subtle, backgroundColor: tk.surface.default },
+                ]}
+              >
+                <Text style={[styles.beerLabel, { color: tk.text.secondary }]}>
+                  🍺 {t('beers.opponentBeers')}
+                </Text>
+                <View style={styles.beerControls}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      updateField('opponentBeers', Math.max(0, form.opponentBeers - 1))
+                    }
+                    activeOpacity={0.8}
+                    style={[
+                      styles.beerAdjustButton,
+                      { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
+                    ]}
+                  >
+                    <Text style={[styles.beerAdjustButtonText, { color: tk.text.secondary }]}>
+                      -
+                    </Text>
+                  </TouchableOpacity>
+                  <Text style={[styles.beerValue, { color: tk.text.primary }]}>
+                    {form.opponentBeers}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => updateField('opponentBeers', form.opponentBeers + 1)}
+                    activeOpacity={0.8}
+                    style={[
+                      styles.beerAdjustButton,
+                      { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
+                    ]}
+                  >
+                    <Text style={[styles.beerAdjustButtonText, { color: tk.text.secondary }]}>
+                      +
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
+
           {errors.myScore ? (
             <Text style={[styles.scoreError, { color: tk.error.default }]}>
               {errors.myScore}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { spacing, radius, typography, theme } from '@/constants/theme';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMatchDetail } from '@/features/matches/useMatchDetail';
 import { useMatchMutations } from '@/features/matches/useMatchMutations';
@@ -47,6 +48,8 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
   >(null);
   const [challengeMyScore, setChallengeMyScore] = useState(0);
   const [challengeOpponentScore, setChallengeOpponentScore] = useState(0);
+  const [challengeMyBeers, setChallengeMyBeers] = useState(0);
+  const [challengeOpponentBeers, setChallengeOpponentBeers] = useState(0);
 
   const { data: match, isLoading, error } = useMatchDetail(matchId);
   const {
@@ -272,6 +275,8 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
       matchId: match.id,
       myScore: challengeMyScore,
       opponentScore: challengeOpponentScore,
+      myBeers: challengeMyBeers,
+      opponentBeers: challengeOpponentBeers,
     });
   };
 
@@ -412,6 +417,49 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
                 />
               </View>
             </View>
+            <View style={{ marginTop: spacing[1], gap: spacing[2] }}>
+              {[
+                {
+                  label: `🍺 ${t('beers.myBeers')}`,
+                  value: challengeMyBeers,
+                  onDec: () => setChallengeMyBeers(prev => Math.max(0, prev - 1)),
+                  onInc: () => setChallengeMyBeers(prev => prev + 1),
+                },
+                {
+                  label: `🍺 ${opponent?.profile.displayName ?? t('detail.opponent')}`,
+                  value: challengeOpponentBeers,
+                  onDec: () => setChallengeOpponentBeers(prev => Math.max(0, prev - 1)),
+                  onInc: () => setChallengeOpponentBeers(prev => prev + 1),
+                },
+              ].map(item => (
+                <View
+                  key={item.label}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    borderWidth: 1,
+                    borderRadius: radius.lg,
+                    borderColor: tk.border.subtle,
+                    backgroundColor: tk.surface.default,
+                    paddingHorizontal: spacing[3],
+                    paddingVertical: spacing[2],
+                  }}
+                >
+                  <Text style={{ color: tk.text.secondary, fontSize: typography.size.xs, fontFamily: typography.family.heading, textTransform: 'uppercase', letterSpacing: 0.5, flex: 1 }}>
+                    {item.label}
+                  </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2] }}>
+                    <SecondaryButton label='-' compact onPress={item.onDec} isDark={isDark} />
+                    <Text style={{ color: tk.text.primary, fontFamily: typography.family.display, fontSize: typography.size.xl, minWidth: 28, textAlign: 'center' }}>
+                      {item.value}
+                    </Text>
+                    <SecondaryButton label='+' compact onPress={item.onInc} isDark={isDark} />
+                  </View>
+                </View>
+              ))}
+            </View>
+
             <PrimaryButton
               label={t('detail.recordMatchButton')}
               onPress={handleRecordChallenge}

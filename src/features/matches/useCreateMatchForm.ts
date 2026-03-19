@@ -8,6 +8,8 @@ interface CreateMatchFormState {
   opponent: UserSearchResult | null;
   myScore: string;
   opponentScore: string;
+  myBeers: number;
+  opponentBeers: number;
   isRated: boolean;
   isTournament: boolean;
 }
@@ -17,6 +19,8 @@ const initialState: CreateMatchFormState = {
   opponent: null,
   myScore: '0',
   opponentScore: '0',
+  myBeers: 0,
+  opponentBeers: 0,
   isRated: true,
   isTournament: false,
 };
@@ -83,6 +87,8 @@ export const useCreateMatchForm = () => {
     myScore: form.myScore !== '' ? Number(form.myScore) : null,
     opponentScore:
       form.opponentScore !== '' ? Number(form.opponentScore) : null,
+    myBeers: form.myBeers,
+    opponentBeers: form.opponentBeers,
     isRated: form.isRated,
     isTournament: form.isTournament,
   });

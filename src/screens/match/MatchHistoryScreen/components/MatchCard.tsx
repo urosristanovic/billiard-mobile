@@ -23,6 +23,7 @@ export const MatchCard = ({
   const me = match.players.find(p => p.userId === userId);
   const opponent = match.players.find(p => p.userId !== userId);
   const isWinner = me?.isWinner;
+  const totalBeers = (me?.beers ?? 0) + (opponent?.beers ?? 0);
   const isTie =
     me?.score != null && opponent?.score != null && me.score === opponent.score;
 
@@ -152,9 +153,16 @@ export const MatchCard = ({
         </View>
       </View>
 
-      <Text style={[styles.date, { color: tk.text.muted }]}>
-        {playedAtText}
-      </Text>
+      <View style={styles.bottomRow}>
+        <Text style={[styles.date, { color: tk.text.muted }]}>
+          {playedAtText}
+        </Text>
+        {totalBeers > 0 && (
+          <Text style={[styles.beers, { color: tk.text.muted }]}>
+            🍺 {me?.beers ?? 0} · {opponent?.beers ?? 0}
+          </Text>
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -210,5 +218,11 @@ const styles = StyleSheet.create({
     width: 24,
     textAlign: 'center',
   },
+  bottomRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   date: { fontSize: typography.size.xs, fontFamily: typography.family.body },
+  beers: { fontSize: typography.size.xs, fontFamily: typography.family.body },
 });

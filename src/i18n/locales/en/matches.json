@@ -171,6 +171,11 @@
     "disputeStatusRejected": "Rejected",
     "disputeStatusOpen": "Open"
   },
+  "beers": {
+    "label": "Beers",
+    "myBeers": "Your beers",
+    "opponentBeers": "Opponent beers"
+  },
   "create": {
     "title": "Record Match",
     "game": "Game",

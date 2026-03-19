@@ -99,6 +99,11 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
         >
           {player.score != null ? player.score : '—'}
         </Text>
+        {player.beers > 0 && (
+          <Text style={[styles.beers, { color: tk.text.muted }]}>
+            🍺 {player.beers}
+          </Text>
+        )}
       </View>
     );
   };
@@ -175,6 +180,11 @@ const styles = StyleSheet.create({
     fontFamily: typography.family.display,
     lineHeight: typography.size['4xl'] * 1.1,
     marginTop: spacing[1],
+  },
+  beers: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.body,
+    marginTop: 2,
   },
   vsWrap: {
     alignSelf: 'stretch',

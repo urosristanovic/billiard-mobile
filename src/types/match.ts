@@ -25,6 +25,7 @@ export interface MatchPlayer {
   matchId: string;
   userId: string;
   score: number | null;
+  beers: number;
   isWinner: boolean;
   confirmed: boolean;
   confirmedAt?: string | null;
@@ -74,6 +75,8 @@ export interface CreateMatchInput {
   opponentId: string;
   myScore: number | null;
   opponentScore: number | null;
+  myBeers?: number;
+  opponentBeers?: number;
   isRated: boolean;
   isTournament: boolean;
   playedAt?: string;

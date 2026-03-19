@@ -270,14 +270,18 @@ export const useMatchMutations = () => {
       matchId,
       myScore,
       opponentScore,
+      myBeers,
+      opponentBeers,
     }: {
       matchId: string;
       myScore: number;
       opponentScore: number;
+      myBeers?: number;
+      opponentBeers?: number;
     }) => {
       if (!user) throw new Error('Not authenticated');
       const token = await getAccessToken();
-      return matchService.record(token, matchId, { myScore, opponentScore });
+      return matchService.record(token, matchId, { myScore, opponentScore, myBeers, opponentBeers });
     },
     onSuccess: match => {
       queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
