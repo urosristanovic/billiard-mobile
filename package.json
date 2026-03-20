@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "~19.1.0",
     "jest": "~29.7.0",
     "jest-expo": "~54.0.0",
@@ -51,8 +52,14 @@
   "jest": {
     "preset": "jest-expo",
     "setupFilesAfterFramework": [
-      "@testing-library/react-native/extend-expect"
+      "@testing-library/react-native/matchers"
     ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/test/setup.ts"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
     ]

@@ -10,3 +10,10 @@ alwaysApply: true
 - Tournament participants must have registered accounts; no guest/anonymous tournament players.
 - Rated results must update both players in 1v1 matches, including provisional players.
 - UI must clearly label team matches as `Unrated Team Match`.
+
+## How rating works (product summary)
+
+- **Model**: Glicko-2 per discipline. Full explanation is on the marketing site at `/how-ratings-work` (open via `EXPO_PUBLIC_WEB_BASE_URL` + path, same as Terms/Privacy).
+- **Rated vs unrated**: Rated 1v1 updates both players; unrated and team matches do not.
+- **RD**: Uncertainty drives how much a result can move the number; new or inactive users tend to have higher RD until the implementation’s inactivity logic applies.
+- **Provisional**: Sub-threshold rated-game count (default 10) is a leaderboard/UI flag only; rating math still applies.
