@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Billiard App",
+    "name": "Billiard Tracker",
     "slug": "billiard-mobile",
     "scheme": "billiardapp",
     "version": "1.0.0",

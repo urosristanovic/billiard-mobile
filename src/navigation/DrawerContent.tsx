@@ -22,6 +22,13 @@ type DrawerAction = {
   onPress: () => void;
 };
 
+/** Gold / yellow emphasis (matches brand primary — championship gold). */
+const ACCENT_MENU_KEYS = new Set<DrawerAction['key']>([
+  'rules',
+  'howRatingsWork',
+  'sendFeedback',
+]);
+
 export const AppDrawerContent = (props: DrawerContentComponentProps) => {
   const { navigation } = props;
   const { t } = useTranslation('common');
@@ -97,27 +104,35 @@ export const AppDrawerContent = (props: DrawerContentComponentProps) => {
 
   const menuSections: DrawerAction[][] = [profileSection, helpSection, legalSection];
 
-  const renderMenuItem = (action: DrawerAction) => (
-    <TouchableOpacity
-      key={action.key}
-      onPress={() => {
-        navigation.closeDrawer();
-        action.onPress();
-      }}
-      style={[
-        styles.menuItem,
-        {
-          borderColor: tk.border.default,
-          backgroundColor: tk.surface.raised,
-        },
-      ]}
-      activeOpacity={0.75}
-    >
-      <Text style={[styles.menuText, { color: tk.text.primary }]}>
-        {tAuth(`drawer.${action.key}`)}
-      </Text>
-    </TouchableOpacity>
-  );
+  const renderMenuItem = (action: DrawerAction) => {
+    const accent = ACCENT_MENU_KEYS.has(action.key);
+    return (
+      <TouchableOpacity
+        key={action.key}
+        onPress={() => {
+          navigation.closeDrawer();
+          action.onPress();
+        }}
+        style={[
+          styles.menuItem,
+          {
+            borderColor: accent ? tk.primary[600] : tk.border.default,
+            backgroundColor: tk.surface.raised,
+          },
+        ]}
+        activeOpacity={0.75}
+      >
+        <Text
+          style={[
+            styles.menuText,
+            { color: accent ? tk.primary[400] : tk.text.primary },
+          ]}
+        >
+          {tAuth(`drawer.${action.key}`)}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <DrawerContentScrollView
