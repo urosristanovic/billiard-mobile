@@ -16,6 +16,7 @@ export const API_ENDPOINTS = {
     resetPassword: api('/api/auth/reset-password'),
     changePassword: api('/api/auth/change-password'),
     logout: api('/api/auth/logout'),
+    deleteAccount: api('/api/auth/delete-account'),
     me: api('/api/auth/me'),
     profile: api('/api/auth/profile'),
     refresh: api('/api/auth/refresh'),

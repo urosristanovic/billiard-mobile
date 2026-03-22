@@ -8,11 +8,13 @@ import type {
   ChangePasswordInput,
 } from '@/services/auth';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { clearTokens } from '@/lib/tokenStorage';
 import { QUERY_KEYS } from '@/config/queryKeys';
 import type { SignupInput, LoginInput, UpdateProfileInput } from '@/types/user';
 
 export const useAuthMutations = () => {
   const { t } = useTranslation('common');
+  const { t: tAuth } = useTranslation('auth');
   const { showToast } = useToast();
   const queryClient = useQueryClient();
   const { setUser, clearAuth } = useAuthStore();
@@ -42,12 +44,14 @@ export const useAuthMutations = () => {
       setUser(user);
       queryClient.setQueryData(QUERY_KEYS.ME, user);
     },
-    onError: error =>
+    onError: error => {
+      const message = getErrorMessage(error);
       showToast({
         type: 'error',
         title: t('errorTitle'),
-        message: getErrorMessage(error),
-      }),
+        message: message === 'account_deleted' ? tAuth('accountDeleted') : message,
+      });
+    },
   });
 
   const logout = useMutation({
@@ -108,6 +112,21 @@ export const useAuthMutations = () => {
       }),
   });
 
+  const deleteAccount = useMutation({
+    mutationFn: () => authService.deleteAccount(),
+    onSuccess: async () => {
+      await clearTokens();
+      clearAuth();
+      queryClient.clear();
+    },
+    onError: error =>
+      showToast({
+        type: 'error',
+        title: t('errorTitle'),
+        message: getErrorMessage(error),
+      }),
+  });
+
   return {
     signup,
     login,
@@ -116,5 +135,6 @@ export const useAuthMutations = () => {
     forgotPassword,
     resetPassword,
     changePassword,
+    deleteAccount,
   };
 };

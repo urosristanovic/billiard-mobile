@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import * as Sentry from '@sentry/react-native';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
@@ -19,7 +20,14 @@ import { ToastProvider } from '@/components/common/toast';
 import '@/i18n';
 import { hydrateLanguage } from '@/i18n';
 
-export default function App() {
+Sentry.init({
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
+  enabled: !__DEV__ && !!process.env.EXPO_PUBLIC_SENTRY_DSN,
+  environment: __DEV__ ? 'development' : 'production',
+  tracesSampleRate: 0.2,
+});
+
+function App() {
   const [fontsLoaded] = useFonts({
     Oswald_700Bold,
     Oswald_600SemiBold,
@@ -55,3 +63,5 @@ export default function App() {
     </GestureHandlerRootView>
   );
 }
+
+export default Sentry.wrap(App);

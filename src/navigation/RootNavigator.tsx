@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "@/stores/useAuthStore";
-import { getTokens } from "@/lib/tokenStorage";
+import { getTokens, clearTokens } from "@/lib/tokenStorage";
 import { authService } from "@/services/auth";
 import { AuthNavigator } from "./AuthNavigator";
 import { AppNavigator } from "./AppNavigator";
@@ -26,7 +26,10 @@ export const RootNavigator = () => {
         // getAccessToken inside authService.me() will auto-refresh if needed
         const me = await authService.me();
         setUser(me);
-      } catch {
+      } catch (err) {
+        if (err instanceof Error && err.message === 'account_deleted') {
+          await clearTokens();
+        }
         setUser(null);
       } finally {
         setLoading(false);

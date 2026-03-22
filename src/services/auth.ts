@@ -136,6 +136,15 @@ export const authService = {
     return null;
   },
 
+  deleteAccount: async (): Promise<null> => {
+    const token = await getAccessToken();
+    const res = await fetchWithTimeout(API_ENDPOINTS.auth.deleteAccount, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return parseResponse<null>(res);
+  },
+
   me: async (): Promise<User> => {
     const token = await getAccessToken();
 

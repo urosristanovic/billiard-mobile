@@ -18,7 +18,9 @@
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://billiard-web.vercel.app"
+        "EXPO_PUBLIC_API_URL": "https://billiard-tracker.com",
+        "EXPO_PUBLIC_WEB_BASE_URL": "https://billiard-tracker.com",
+        "EXPO_PUBLIC_SENTRY_DSN": ""
       }
     }
   },

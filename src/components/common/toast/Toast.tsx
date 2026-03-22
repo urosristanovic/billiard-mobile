@@ -50,17 +50,11 @@ export const Toast = ({
     >
       <View style={[styles.accent, { backgroundColor: accentColor }]} />
       <View style={styles.content}>
-        <Text
-          style={[styles.title, { color: tk.text.primary }]}
-          numberOfLines={1}
-        >
+        <Text style={[styles.title, { color: tk.text.primary }]}>
           {title}
         </Text>
         {message ? (
-          <Text
-            style={[styles.message, { color: tk.text.secondary }]}
-            numberOfLines={1}
-          >
+          <Text style={[styles.message, { color: tk.text.secondary }]}>
             {message}
           </Text>
         ) : null}
@@ -103,7 +97,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     overflow: 'hidden',
     zIndex: 1000,
   },
@@ -131,7 +125,8 @@ const styles = StyleSheet.create({
     minWidth: 44,
     minHeight: 44,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: spacing[3],
     marginRight: spacing[1],
   },
   closeText: {

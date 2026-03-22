@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -44,7 +45,7 @@ const ProfileScreen = ({ navigation, route }: Props) => {
   const { t: tGroups } = useTranslation('groups');
   const { isDark, tk } = useTheme();
   const { user } = useAuth();
-  const { updateProfile } = useAuthMutations();
+  const { updateProfile, deleteAccount } = useAuthMutations();
   const { form, errors, updateField, loadForEdit, validate } = useProfileForm();
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedCountryId, setSelectedCountryId] = useState<string>('');
@@ -306,8 +307,23 @@ const ProfileScreen = ({ navigation, route }: Props) => {
           <DangerButton
             label={tAuth('profile.deleteAccount')}
             onPress={() => {
-              // Placeholder — not implemented yet
+              Alert.alert(
+                tAuth('deleteAccount.title'),
+                tAuth('deleteAccount.message'),
+                [
+                  {
+                    text: tAuth('deleteAccount.cancel'),
+                    style: 'cancel',
+                  },
+                  {
+                    text: tAuth('deleteAccount.confirm'),
+                    style: 'destructive',
+                    onPress: () => deleteAccount.mutate(),
+                  },
+                ],
+              );
             }}
+            disabled={deleteAccount.isPending}
             isDark={isDark}
           />
         </View>
