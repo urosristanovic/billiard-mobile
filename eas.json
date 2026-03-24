@@ -20,11 +20,18 @@
       "env": {
         "EXPO_PUBLIC_API_URL": "https://billiard-tracker.com",
         "EXPO_PUBLIC_WEB_BASE_URL": "https://billiard-tracker.com",
-        "EXPO_PUBLIC_SENTRY_DSN": ""
+        "EXPO_PUBLIC_SENTRY_DSN": "https://50c23fca79aa2dbb031d7727b6b15b3a@o4511088140288000.ingest.de.sentry.io/4511088141533264",
+        "SENTRY_ALLOW_FAILURE": "true"
       }
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "appleId": "urosristanovic@gmail.com",
+        "ascAppId": "6760981679",
+        "appleTeamId": "TS9JYA95J9"
+      }
+    }
   }
 }

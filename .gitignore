@@ -21,3 +21,5 @@ web-build/
 
 # OS
 .DS_Store
+
+.env.local

@@ -14,8 +14,11 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.billiardapp.mobile",
-      "usesAppleSignIn": true
+      "bundleIdentifier": "com.billiardtracker.mobile",
+      "usesAppleSignIn": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +27,7 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "com.billiardapp.mobile",
+      "package": "com.billiardtracker.mobile",
       "predictiveBackGestureEnabled": false
     },
     "web": {
@@ -32,12 +35,20 @@
     },
     "plugins": [
       "expo-secure-store",
-      "@sentry/react-native/expo"
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "react-native",
+          "organization": "uros-ristanovic"
+        }
+      ]
     ],
     "extra": {
       "eas": {
-        "projectId": "your-eas-project-id"
+        "projectId": "f4f24803-cd4d-47bc-aa11-a0c895b5c9c1"
       }
-    }
+    },
+    "owner": "urosristanovic"
   }
 }
