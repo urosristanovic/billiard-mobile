@@ -14,7 +14,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.billiardtracker.mobile"
+      "bundleIdentifier": "com.billiardtracker.mobile",
+      "buildNumber": "3"
     },
     "android": {
       "adaptiveIcon": {
@@ -38,7 +39,10 @@
           "project": "react-native",
           "organization": "uros-ristanovic"
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker",
+      "expo-font",
+      "expo-image"
     ],
     "extra": {
       "eas": {}
