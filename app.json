@@ -14,11 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.billiardtracker.mobile",
-      "usesAppleSignIn": true,
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
+      "bundleIdentifier": "com.billiardtracker.mobile"
     },
     "android": {
       "adaptiveIcon": {
@@ -45,10 +41,7 @@
       ]
     ],
     "extra": {
-      "eas": {
-        "projectId": "f4f24803-cd4d-47bc-aa11-a0c895b5c9c1"
-      }
-    },
-    "owner": "urosristanovic"
+      "eas": {}
+    }
   }
 }
