@@ -13,6 +13,7 @@ import { getAccessToken } from '@/features/auth/getAccessToken';
 import { QUERY_KEYS } from '@/config/queryKeys';
 import { API_ENDPOINTS } from '@/config/api';
 import { fetchWithTimeout } from '@/lib/fetchWithTimeout';
+import { matchService } from '@/services/match';
 import { typography, spacing, radius } from '@/constants/theme';
 import { DISCIPLINE_LABELS } from '@/types/match';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
@@ -37,6 +38,15 @@ const PlayerProfileScreen = ({ route, navigation }: Props) => {
       const result = await res.json();
       if (!result.success) throw new Error(result.error);
       return result.data;
+    },
+    enabled: !!userId,
+  });
+
+  const { data: h2hStats } = useQuery({
+    queryKey: QUERY_KEYS.MATCH_STATS({ opponentId: userId }),
+    queryFn: async () => {
+      const token = await getAccessToken();
+      return matchService.stats(token, { opponentId: userId });
     },
     enabled: !!userId,
   });
@@ -103,11 +113,59 @@ const PlayerProfileScreen = ({ route, navigation }: Props) => {
           )}
         </View>
 
+        {/* Head to Head */}
+        {h2hStats && h2hStats.played > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { color: tk.text.secondary }]}>
+                Head to Head
+              </Text>
+              <Text style={[styles.sectionSubtitle, { color: tk.text.muted }]}>
+                Rated & unrated matches
+              </Text>
+            </View>
+            <View style={[styles.statsRow, { backgroundColor: tk.surface.raised, borderColor: tk.primary[800] }]}>
+              <View style={styles.statItem}>
+                <Text style={[styles.statValue, { color: tk.text.primary }]}>
+                  {h2hStats.played}
+                </Text>
+                <Text style={[styles.statLabel, { color: tk.text.muted }]}>Played</Text>
+              </View>
+              <View style={[styles.statDivider, { backgroundColor: tk.primary[800] }]} />
+              <View style={styles.statItem}>
+                <Text style={[styles.statValue, { color: tk.primary[300] }]}>
+                  {h2hStats.wins}
+                </Text>
+                <Text style={[styles.statLabel, { color: tk.text.muted }]}>Wins</Text>
+              </View>
+              <View style={[styles.statDivider, { backgroundColor: tk.primary[800] }]} />
+              <View style={styles.statItem}>
+                <Text style={[styles.statValue, { color: tk.error.default }]}>
+                  {h2hStats.played - h2hStats.wins}
+                </Text>
+                <Text style={[styles.statLabel, { color: tk.text.muted }]}>Losses</Text>
+              </View>
+              <View style={[styles.statDivider, { backgroundColor: tk.primary[800] }]} />
+              <View style={styles.statItem}>
+                <Text style={[styles.statValue, { color: tk.text.primary }]}>
+                  {h2hStats.winRate}%
+                </Text>
+                <Text style={[styles.statLabel, { color: tk.text.muted }]}>Win Rate</Text>
+              </View>
+            </View>
+          </View>
+        )}
+
         {/* Stats */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: tk.text.secondary }]}>
-            {t('playerProfile.statsSection')}
-          </Text>
+          <View style={styles.sectionHeader}>
+            <Text style={[styles.sectionTitle, { color: tk.text.secondary }]}>
+              {t('playerProfile.statsSection')}
+            </Text>
+            <Text style={[styles.sectionSubtitle, { color: tk.text.muted }]}>
+              Rated matches only
+            </Text>
+          </View>
           <View style={[styles.statsRow, { backgroundColor: tk.surface.raised, borderColor: tk.primary[800] }]}>
             <View style={styles.statItem}>
               <Text style={[styles.statValue, { color: tk.text.primary }]}>{totalMatches}</Text>
@@ -261,12 +319,19 @@ const styles = StyleSheet.create({
     marginTop: spacing[4],
     gap: spacing[2],
   },
+  sectionHeader: {
+    gap: 2,
+    marginBottom: spacing[1],
+  },
   sectionTitle: {
     fontSize: typography.size.xs,
     fontFamily: typography.family.display,
     textTransform: 'uppercase',
     letterSpacing: 1,
-    marginBottom: spacing[1],
+  },
+  sectionSubtitle: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.body,
   },
   statsRow: {
     flexDirection: 'row',

@@ -535,6 +535,30 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
           </View>
         )}
 
+        {/* Invite Players — non-organizer participants */}
+        {!isOrganizer &&
+          tournament.status === 'registration' &&
+          tournament.participants.some(p => p.userId === user?.id) && (
+            <View style={styles.participantActionsWrapper}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('InviteParticipants', {
+                    tournamentId: tournament.id,
+                  })
+                }
+                style={[
+                  styles.actionBtn,
+                  styles.participantInviteBtn,
+                  { borderColor: tk.primary[600], backgroundColor: tk.surface.overlay },
+                ]}
+              >
+                <Text style={[styles.actionBtnText, { color: tk.primary[400] }]}>
+                  {t('detail.actions.addParticipants')}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
         {/* Tab bar */}
         <View style={[styles.tabs, { borderBottomColor: tk.border.default }]}>
           {tabs.map(tab => (
@@ -923,6 +947,13 @@ const styles = StyleSheet.create({
   actionsWrapper: {
     paddingBottom: spacing[1],
     gap: spacing[2],
+  },
+  participantActionsWrapper: {
+    paddingHorizontal: spacing[4],
+    paddingBottom: spacing[2],
+  },
+  participantInviteBtn: {
+    flex: 0,
   },
   actions: {
     flexDirection: 'row',

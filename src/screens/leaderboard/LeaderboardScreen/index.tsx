@@ -132,12 +132,22 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const renderEntry = useCallback(
-    ({ item }: { item: LeaderboardEntry }) => (
+    ({ item }: { item: LeaderboardEntry }) => {
+      const isMe = item.userId === user?.id;
+      return (
       <TouchableOpacity
         onPress={() =>
           navigation.push('PlayerProfile', { userId: item.userId })
         }
-        style={[styles.entryRow, { borderBottomColor: tk.primary[900] }]}
+        style={[
+          styles.entryRow,
+          { borderBottomColor: tk.primary[900] },
+          isMe && {
+            borderWidth: 1,
+            borderColor: tk.primary[500],
+            backgroundColor: tk.primary[900] + '20',
+          },
+        ]}
         activeOpacity={0.7}
       >
         <View style={[styles.rankBadge, { backgroundColor: tk.primary[900] }]}>
@@ -198,8 +208,9 @@ const LeaderboardScreen = ({ navigation }: Props) => {
           )}
         </View>
       </TouchableOpacity>
-    ),
-    [navigation, t, tk],
+      );
+    },
+    [navigation, t, tk, user],
   );
 
   const scopeBlockedReason: string | null = (() => {
