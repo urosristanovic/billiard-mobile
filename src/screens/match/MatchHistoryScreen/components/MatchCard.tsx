@@ -81,9 +81,16 @@ export const MatchCard = ({
       ]}
     >
       <View style={styles.topRow}>
-        <Text style={[styles.discipline, { color: tk.text.secondary }]}>
-          {DISCIPLINE_LABELS[match.discipline]}
-        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+          <Text style={[styles.discipline, { color: tk.text.secondary }]}>
+            {DISCIPLINE_LABELS[match.discipline]}
+          </Text>
+          {match.bestOf != null && (
+            <Text style={[styles.discipline, { color: tk.text.muted }]}>
+              BO{match.bestOf}
+            </Text>
+          )}
+        </View>
         <View style={styles.metaRight}>
           {!match.isRated && (
             <Text style={[styles.unrated, { color: tk.text.muted }]}>

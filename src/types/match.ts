@@ -54,6 +54,7 @@ export interface Match {
   isRated: boolean;
   isTournament: boolean;
   tournamentName: string | null;
+  bestOf: number | null;
   createdBy: string | null;
   status: MatchStatus;
   winnerId: string | null;

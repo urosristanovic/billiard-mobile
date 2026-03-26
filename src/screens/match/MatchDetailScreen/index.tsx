@@ -278,12 +278,14 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
       opponentBeers: challengeOpponentBeers,
     });
   };
+  const raceTo = match?.bestOf != null ? Math.ceil(match.bestOf / 2) : null;
+
   const handleIncrementChallengeScore = (field: 'my' | 'opponent') => {
     if (field === 'my') {
-      setChallengeMyScore(prev => prev + 1);
+      setChallengeMyScore(prev => (raceTo != null ? Math.min(raceTo, prev + 1) : prev + 1));
       return;
     }
-    setChallengeOpponentScore(prev => prev + 1);
+    setChallengeOpponentScore(prev => (raceTo != null ? Math.min(raceTo, prev + 1) : prev + 1));
   };
   const handleDecrementChallengeScore = (field: 'my' | 'opponent') => {
     if (field === 'my') {
@@ -334,6 +336,15 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
               {match.isRated ? t('detail.rated') : t('detail.unrated')}
             </Text>
           </View>
+          {match.bestOf != null && (isChallengeRequested || isChallenge) && (
+            <View
+              style={[styles.badge, { backgroundColor: tk.primary[900] }]}
+            >
+              <Text style={[styles.badgeText, { color: tk.primary[300] }]}>
+                BO{match.bestOf}
+              </Text>
+            </View>
+          )}
         </View>
 
         <Text style={[styles.date, { color: tk.text.muted }]}>
