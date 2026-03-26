@@ -64,6 +64,13 @@ export const TournamentCard = ({
       </View>
 
       <View style={styles.meta}>
+        {tournament.isRated && (
+          <View style={[styles.ratedBadge, { borderColor: tk.primary[400] }]}>
+            <Text style={[styles.ratedBadgeText, { color: tk.primary[400] }]}>
+              {t('ratedBadge')}
+            </Text>
+          </View>
+        )}
         <Text style={[styles.metaItem, { color: tk.text.secondary }]}>
           {DISCIPLINE_LABELS[tournament.discipline]}
         </Text>
@@ -131,6 +138,18 @@ const styles = StyleSheet.create({
   },
   dot: {
     fontSize: typography.size.sm,
+  },
+  ratedBadge: {
+    borderWidth: 1,
+    borderRadius: radius.sm,
+    paddingHorizontal: spacing[1] + 2,
+    paddingVertical: 2,
+  },
+  ratedBadgeText: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.heading,
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
   },
   nextMatch: {
     marginTop: spacing[1],

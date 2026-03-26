@@ -213,6 +213,18 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                 {TOURNAMENT_STATUS_LABELS[tournament.status]}
               </Text>
             </View>
+            {tournament.isRated && (
+              <View
+                style={[
+                  styles.statusBadge,
+                  { backgroundColor: tk.surface.overlay, borderColor: tk.primary[400] },
+                ]}
+              >
+                <Text style={[styles.statusText, { color: tk.primary[400] }]}>
+                  {t('ratedBadge')}
+                </Text>
+              </View>
+            )}
             <Text style={[styles.metaItem, { color: tk.text.secondary }]}>
               {DISCIPLINE_LABELS[tournament.discipline]}
             </Text>

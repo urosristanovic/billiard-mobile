@@ -49,6 +49,8 @@
     "scheduledAtPlaceholder": "GGGG-MM-DD HH:MM",
     "location": "Lokacija",
     "locationPlaceholder": "Naziv mesta ili adresa (opciono)",
+    "isRated": "Rangirani turnir",
+    "isRatedHint": "Rezultati mečeva uticaće na Glicko-2 rang igrača",
     "submitButton": "Kreiraj turnir",
     "createSuccess": "Turnir je uspešno kreiran",
     "nameRequired": "Naziv je obavezan",
@@ -180,6 +182,7 @@
     "invited": "Pozvano",
     "joined": "Učestvuje"
   },
+  "ratedBadge": "Rangirani",
   "loading": "Učitavanje turnira...",
   "loadFailed": "Greška pri učitavanju turnira",
   "notFound": "Turnir nije pronađen"

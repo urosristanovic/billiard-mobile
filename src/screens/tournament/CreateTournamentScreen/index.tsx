@@ -1,6 +1,7 @@
 import {
   Platform,
   ScrollView,
+  Switch,
   Text,
   TouchableOpacity,
   View,
@@ -61,6 +62,7 @@ const CreateTournamentScreen = ({ navigation, route }: Props) => {
             maxParticipants: editTournament.maxParticipants,
             scheduledAt: editTournament.scheduledAt,
             location: editTournament.location ?? undefined,
+            isRated: editTournament.isRated,
           }
         : undefined,
     );
@@ -131,6 +133,7 @@ const CreateTournamentScreen = ({ navigation, route }: Props) => {
         maxParticipants: input.maxParticipants,
         scheduledAt: input.scheduledAt,
         location: input.location,
+        isRated: input.isRated,
       };
       updateTournament.mutate(
         { id: editTournament.id, input: updateInput },
@@ -312,6 +315,23 @@ const CreateTournamentScreen = ({ navigation, route }: Props) => {
           isDark={isDark}
         />
 
+        <View style={styles.toggleRow}>
+          <View style={styles.toggleText}>
+            <Text style={[styles.fieldLabel, { color: tk.text.primary }]}>
+              {t('create.isRated')}
+            </Text>
+            <Text style={[styles.toggleHint, { color: tk.text.muted }]}>
+              {t('create.isRatedHint')}
+            </Text>
+          </View>
+          <Switch
+            value={form.isRated}
+            onValueChange={v => setField('isRated', v)}
+            trackColor={{ false: tk.border.default, true: tk.primary[400] }}
+            thumbColor={tk.surface.raised}
+          />
+        </View>
+
         <PrimaryButton
           label={isEditMode ? t('edit.submitButton') : t('create.submitButton')}
           onPress={handleSubmit}
@@ -398,6 +418,20 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginTop: spacing[2],
+  },
+  toggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  toggleText: {
+    flex: 1,
+    marginRight: spacing[3],
+    gap: spacing[1],
+  },
+  toggleHint: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.body,
   },
 });
 

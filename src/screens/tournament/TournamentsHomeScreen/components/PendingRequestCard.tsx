@@ -54,25 +54,39 @@ export const PendingRequestCard = ({
       <View style={[styles.accent, { backgroundColor: accentColor }]} />
 
       <View style={styles.body}>
-        {/* Top row: badge + chevron */}
+        {/* Top row: badge(s) + chevron */}
         <View style={styles.topRow}>
-          <View
-            style={[
-              styles.badge,
-              {
-                backgroundColor: isIncoming ? tk.primary[900] : tk.surface.overlay,
-                borderColor: isIncoming ? tk.primary[700] : tk.border.default,
-              },
-            ]}
-          >
-            <Text
+          <View style={styles.badges}>
+            <View
               style={[
-                styles.badgeText,
-                { color: isIncoming ? tk.primary[300] : tk.text.secondary },
+                styles.badge,
+                {
+                  backgroundColor: isIncoming ? tk.primary[900] : tk.surface.overlay,
+                  borderColor: isIncoming ? tk.primary[700] : tk.border.default,
+                },
               ]}
             >
-              {label}
-            </Text>
+              <Text
+                style={[
+                  styles.badgeText,
+                  { color: isIncoming ? tk.primary[300] : tk.text.secondary },
+                ]}
+              >
+                {label}
+              </Text>
+            </View>
+            {tournament?.isRated && (
+              <View
+                style={[
+                  styles.badge,
+                  { backgroundColor: tk.surface.overlay, borderColor: tk.primary[400] },
+                ]}
+              >
+                <Text style={[styles.badgeText, { color: tk.primary[400] }]}>
+                  {t('ratedBadge')}
+                </Text>
+              </View>
+            )}
           </View>
           <Text style={[styles.chevron, { color: tk.text.muted }]}>›</Text>
         </View>
@@ -160,6 +174,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  badges: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[2],
   },
   badge: {
     borderRadius: radius.sm,

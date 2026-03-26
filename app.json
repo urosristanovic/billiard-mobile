@@ -31,6 +31,15 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0a0a0a",
+          "dark": {
+            "backgroundColor": "#0a0a0a"
+          }
+        }
+      ],
       "expo-secure-store",
       [
         "@sentry/react-native/expo",

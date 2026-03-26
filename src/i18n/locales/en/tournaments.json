@@ -49,6 +49,8 @@
     "scheduledAtPlaceholder": "YYYY-MM-DD HH:MM",
     "location": "Location",
     "locationPlaceholder": "Venue name or address (optional)",
+    "isRated": "Rated Tournament",
+    "isRatedHint": "Match results will affect players' Glicko-2 ratings",
     "submitButton": "Create Tournament",
     "createSuccess": "Tournament created successfully",
     "nameRequired": "Name is required",
@@ -180,6 +182,7 @@
     "invited": "Invited",
     "joined": "Joined"
   },
+  "ratedBadge": "Rated",
   "loading": "Loading tournaments...",
   "loadFailed": "Failed to load tournaments",
   "notFound": "Tournament not found"

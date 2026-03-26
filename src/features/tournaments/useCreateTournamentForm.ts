@@ -15,6 +15,7 @@ export interface CreateTournamentFormState {
   maxParticipants: string;
   scheduledAt: string;
   location: string;
+  isRated: boolean;
 }
 
 export interface CreateTournamentFormErrors {
@@ -35,6 +36,7 @@ export interface CreateTournamentFormInitialValues {
   maxParticipants?: number;
   scheduledAt?: string;
   location?: string;
+  isRated?: boolean;
 }
 
 const DEFAULT_STATE: CreateTournamentFormState = {
@@ -46,6 +48,7 @@ const DEFAULT_STATE: CreateTournamentFormState = {
   maxParticipants: '8',
   scheduledAt: '',
   location: '',
+  isRated: false,
 };
 
 function buildInitialState(
@@ -64,6 +67,7 @@ function buildInitialState(
         : DEFAULT_STATE.maxParticipants,
     scheduledAt: initial.scheduledAt ?? DEFAULT_STATE.scheduledAt,
     location: initial.location ?? DEFAULT_STATE.location,
+    isRated: initial.isRated ?? DEFAULT_STATE.isRated,
   };
 }
 
@@ -115,6 +119,7 @@ export const useCreateTournamentForm = (
     maxParticipants: parseInt(form.maxParticipants, 10),
     scheduledAt: form.scheduledAt,
     location: form.location.trim() || undefined,
+    isRated: form.isRated,
   });
 
   const reset = () => {

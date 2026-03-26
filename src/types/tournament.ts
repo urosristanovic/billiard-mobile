@@ -109,6 +109,7 @@ export interface TournamentSummary {
   location: string | null;
   createdAt: string;
   updatedAt: string;
+  isRated: boolean;
   nextMatchInfo?: NextMatchInfo | null;
   didWin?: boolean;
 }
@@ -133,6 +134,7 @@ export interface CreateTournamentInput {
   maxParticipants: number;
   scheduledAt: string;
   location?: string;
+  isRated?: boolean;
 }
 
 export interface UpdateTournamentInput {
@@ -144,6 +146,7 @@ export interface UpdateTournamentInput {
   maxParticipants?: number;
   scheduledAt?: string;
   location?: string;
+  isRated?: boolean;
 }
 
 export interface TournamentListParams {

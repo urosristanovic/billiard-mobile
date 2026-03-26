@@ -148,9 +148,18 @@ const InvitationDetailScreen = ({ navigation, route }: Props) => {
               },
             ]}
           >
-            <Text style={[styles.tournamentName, { color: tk.text.primary }]}>
-              {tournament.name}
-            </Text>
+            <View style={styles.nameRow}>
+              {tournament.isRated && (
+                <View style={[styles.ratedBadge, { borderColor: tk.primary[400] }]}>
+                  <Text style={[styles.ratedBadgeText, { color: tk.primary[400] }]}>
+                    {t('ratedBadge')}
+                  </Text>
+                </View>
+              )}
+              <Text style={[styles.tournamentName, { color: tk.text.primary }]}>
+                {tournament.name}
+              </Text>
+            </View>
             <Text style={[styles.tournamentMeta, { color: tk.text.secondary }]}>
               {DISCIPLINE_LABELS[tournament.discipline]} ·{' '}
               {TOURNAMENT_FORMAT_LABELS[tournament.format]}
@@ -380,9 +389,26 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 0.8,
   },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[2],
+  },
   tournamentMeta: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
+  },
+  ratedBadge: {
+    borderWidth: 1,
+    borderRadius: radius.sm,
+    paddingHorizontal: spacing[1] + 2,
+    paddingVertical: 2,
+  },
+  ratedBadgeText: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.heading,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   tournamentDescription: {
     fontSize: typography.size.sm,

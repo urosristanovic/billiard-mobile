@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import type { TournamentSummary, TournamentRequestStatus } from '@/types/tournament';
@@ -49,9 +49,18 @@ export const TournamentSearchCard = ({
       ]}
     >
       <View style={styles.info}>
-        <Text style={[styles.name, { color: tk.text.primary }]} numberOfLines={1}>
-          {tournament.name}
-        </Text>
+        <View style={styles.nameRow}>
+          {tournament.isRated && (
+            <View style={[styles.ratedBadge, { borderColor: tk.primary[400] }]}>
+              <Text style={[styles.ratedBadgeText, { color: tk.primary[400] }]}>
+                {t('ratedBadge')}
+              </Text>
+            </View>
+          )}
+          <Text style={[styles.name, { color: tk.text.primary }]} numberOfLines={1}>
+            {tournament.name}
+          </Text>
+        </View>
         <Text style={[styles.meta, { color: tk.text.secondary }]}>
           {DISCIPLINE_LABELS[tournament.discipline]} ·{' '}
           {TOURNAMENT_FORMAT_LABELS[tournament.format]}
@@ -126,9 +135,26 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[2],
+  },
   meta: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
+  },
+  ratedBadge: {
+    borderWidth: 1,
+    borderRadius: radius.sm,
+    paddingHorizontal: spacing[1] + 2,
+    paddingVertical: 2,
+  },
+  ratedBadgeText: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.heading,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   location: {
     fontSize: typography.size.sm,

@@ -49,6 +49,8 @@
     "scheduledAtPlaceholder": "AAAA-MM-DD HH:MM",
     "location": "Ubicación",
     "locationPlaceholder": "Nombre del lugar o dirección (opcional)",
+    "isRated": "Torneo clasificatorio",
+    "isRatedHint": "Los resultados afectarán las clasificaciones Glicko-2 de los jugadores",
     "submitButton": "Crear torneo",
     "createSuccess": "Torneo creado exitosamente",
     "nameRequired": "El nombre es obligatorio",
@@ -180,6 +182,7 @@
     "invited": "Invitado",
     "joined": "Unido"
   },
+  "ratedBadge": "Clasificatorio",
   "loading": "Cargando torneos...",
   "loadFailed": "Error al cargar torneos",
   "notFound": "Torneo no encontrado"
