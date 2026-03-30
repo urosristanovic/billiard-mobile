@@ -1,9 +1,8 @@
-import { TouchableOpacity, StyleSheet, Text, ViewStyle } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useTheme } from '@/hooks/useTheme';
-import { useAuth } from '@/features/auth/useAuth';
-import { radius, typography } from '@/constants/theme';
+import { radius, spacing } from '@/constants/theme';
 import type { AppDrawerParamList } from '@/navigation/AppNavigator';
 
 interface AvatarButtonProps {
@@ -13,13 +12,6 @@ interface AvatarButtonProps {
 export const AvatarButton = ({ style }: AvatarButtonProps) => {
   const navigation = useNavigation<DrawerNavigationProp<AppDrawerParamList>>();
   const { tk } = useTheme();
-  const { user } = useAuth();
-
-  const initials = (
-    user?.displayName?.slice(0, 2) ||
-    user?.username?.slice(0, 2) ||
-    'U'
-  ).toUpperCase();
 
   return (
     <TouchableOpacity
@@ -36,7 +28,9 @@ export const AvatarButton = ({ style }: AvatarButtonProps) => {
       ]}
       activeOpacity={0.8}
     >
-      <Text style={[styles.text, { color: tk.primary[300] }]}>{initials}</Text>
+      <View style={[styles.bar, { backgroundColor: tk.primary[300] }]} />
+      <View style={[styles.bar, styles.barMid, { backgroundColor: tk.primary[300] }]} />
+      <View style={[styles.bar, { backgroundColor: tk.primary[300] }]} />
     </TouchableOpacity>
   );
 };
@@ -45,16 +39,20 @@ const styles = StyleSheet.create({
   button: {
     width: 36,
     height: 36,
-    borderRadius: radius.full,
+    borderRadius: radius.md,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: spacing[1],
   },
-  text: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.display,
-    fontWeight: typography.weight.bold,
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
+  bar: {
+    width: 16,
+    height: 2,
+    borderRadius: 1,
+  },
+  barMid: {
+    width: 12,
+    alignSelf: 'flex-start',
+    marginLeft: 2,
   },
 });

@@ -2,8 +2,8 @@
   "tab": "Tournaments",
   "home": {
     "title": "Tournaments",
-    "createButton": "Create Tournament",
-    "joinButton": "Join Tournament",
+    "createButton": "Create",
+    "joinButton": "Join",
     "stats": {
       "active": "Active",
       "won": "Won"

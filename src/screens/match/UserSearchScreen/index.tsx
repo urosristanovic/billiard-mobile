@@ -7,10 +7,14 @@ import { EmptyState } from "@/components/common/states";
 import { useTheme } from "@/hooks/useTheme";
 import { UserResultItem } from "./components";
 import { styles } from "./styles";
-import type { CreateMatchStackParamList } from "@/navigation/AppNavigator";
 import type { UserSearchResult } from "@/services/user";
 
-type Props = NativeStackScreenProps<CreateMatchStackParamList, "UserSearch">;
+type LocalStackParamList = {
+  CreateMatch: { selectedOpponent?: UserSearchResult };
+  UserSearch: { excludeId?: string };
+};
+
+type Props = NativeStackScreenProps<LocalStackParamList, "UserSearch">;
 
 const UserSearchScreen = ({ navigation, route }: Props) => {
   const { t } = useTranslation("matches");

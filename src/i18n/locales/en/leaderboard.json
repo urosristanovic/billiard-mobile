@@ -11,10 +11,19 @@
     "label": "Discipline"
   },
   "filters": {
+    "title": "Filter",
+    "reset": "Reset",
+    "close": "Close",
+    "apply": "Apply",
+    "scope": "Scope",
+    "discipline": "Discipline",
+    "group": "Group",
     "includeProvisional": "Include provisional",
     "selectGroup": "Select group",
     "selectLeaderboard": "Select leaderboard"
   },
+  "createFab": "Create Leaderboard",
+  "createGroup": "Create Group",
   "entry": {
     "provisional": "P",
     "provisionalLabel": "Provisional",
@@ -45,7 +54,7 @@
   },
   "userSearch": {
     "title": "Find Player",
-    "placeholder": "Search by username...",
+    "placeholder": "Search by name or username...",
     "empty": "No players found",
     "emptyDesc": "Try a different username",
     "add": "Add",

@@ -10,9 +10,14 @@ import { typography } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 import { DisciplineSelector, OpponentField } from './components';
 import { styles } from './styles';
-import type { CreateMatchStackParamList } from '@/navigation/AppNavigator';
+import type { UserSearchResult } from '@/services/user';
 
-type Props = NativeStackScreenProps<CreateMatchStackParamList, 'CreateMatch'>;
+type LocalStackParamList = {
+  CreateMatch: { selectedOpponent?: UserSearchResult };
+  UserSearch: { excludeId?: string };
+};
+
+type Props = NativeStackScreenProps<LocalStackParamList, 'CreateMatch'>;
 
 const CreateMatchScreen = ({ navigation, route }: Props) => {
   const { t } = useTranslation('matches');

@@ -1,90 +1,20 @@
 import { Text, View, StyleSheet } from 'react-native';
 import { theme, typography, spacing } from '@/constants/theme';
-import type { TournamentMatch, TournamentParticipant } from '@/types/tournament';
-
-interface StandingsRow {
-  userId: string;
-  displayName: string;
-  played: number;
-  wins: number;
-  losses: number;
-  points: number;
-  scored: number;
-  conceded: number;
-}
-
-function buildStandings(
-  matches: TournamentMatch[],
-  participants: TournamentParticipant[],
-): StandingsRow[] {
-  const profileMap = new Map(
-    participants.map(p => [
-      p.userId,
-      p.profile.displayName || p.profile.username,
-    ]),
-  );
-
-  const stats: Record<string, StandingsRow> = {};
-
-  // Seed every participant with zeroed stats so the table is never empty.
-  for (const p of participants) {
-    stats[p.userId] = {
-      userId: p.userId,
-      displayName: profileMap.get(p.userId) ?? p.userId,
-      played: 0,
-      wins: 0,
-      losses: 0,
-      points: 0,
-      scored: 0,
-      conceded: 0,
-    };
-  }
-
-  for (const match of matches) {
-    if (!match.winnerId || !match.homeUserId || !match.awayUserId) continue;
-    const loserId =
-      match.homeUserId === match.winnerId
-        ? match.awayUserId
-        : match.homeUserId;
-
-    stats[match.winnerId].wins++;
-    stats[match.winnerId].played++;
-    stats[match.winnerId].points += 3;
-    stats[loserId].losses++;
-    stats[loserId].played++;
-
-    // Track score difference for tiebreaking.
-    const homeScore = match.homeScore ?? 0;
-    const awayScore = match.awayScore ?? 0;
-    stats[match.homeUserId].scored += homeScore;
-    stats[match.homeUserId].conceded += awayScore;
-    stats[match.awayUserId].scored += awayScore;
-    stats[match.awayUserId].conceded += homeScore;
-  }
-
-  return Object.values(stats).sort((a, b) => {
-    if (b.points !== a.points) return b.points - a.points;
-    return (b.scored - b.conceded) - (a.scored - a.conceded);
-  });
-}
+import type { StandingsRow } from '@/types/tournament';
 
 interface StandingsTableProps {
-  matches: TournamentMatch[];
-  participants: TournamentParticipant[];
+  rows: StandingsRow[];
   isDark?: boolean;
 }
 
 export const StandingsTable = ({
-  matches,
-  participants,
+  rows,
   isDark = false,
 }: StandingsTableProps) => {
   const tk = isDark ? theme.dark : theme.light;
-  const rows = buildStandings(matches, participants);
 
   return (
     <View style={styles.container}>
-      {/* Table header */}
       <View style={[styles.row, styles.headerRow, { borderBottomColor: tk.border.default }]}>
         <Text style={[styles.rank, { color: tk.text.muted }]}>#</Text>
         <Text style={[styles.name, { color: tk.text.muted }]}>Player</Text>
@@ -95,7 +25,6 @@ export const StandingsTable = ({
       </View>
 
       {rows.map((row, idx) => {
-        // Shared rank: same position number for players that are fully tied.
         const prev = rows[idx - 1];
         const isTiedWithPrev =
           prev !== undefined &&
@@ -112,6 +41,7 @@ export const StandingsTable = ({
         const diff = row.scored - row.conceded;
         const diffColor =
           diff > 0 ? tk.primary[400] : diff < 0 ? tk.error.text : tk.text.muted;
+
         return (
           <View
             key={row.userId}

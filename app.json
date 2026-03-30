@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.billiardtracker.mobile",
-      "buildNumber": "3"
+      "buildNumber": "4"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,6 +25,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "package": "com.billiardtracker.mobile",
+      "versionCode": 1,
       "predictiveBackGestureEnabled": false
     },
     "web": {
@@ -35,8 +36,11 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#0a0a0a",
+          "image": "./assets/splash-icon.png",
+          "resizeMode": "contain",
           "dark": {
-            "backgroundColor": "#0a0a0a"
+            "backgroundColor": "#0a0a0a",
+            "image": "./assets/splash-icon.png"
           }
         }
       ],

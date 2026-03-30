@@ -2,8 +2,8 @@
   "tab": "Turniri",
   "home": {
     "title": "Turniri",
-    "createButton": "Kreiraj turnir",
-    "joinButton": "Pridruži se turniru",
+    "createButton": "Kreiraj",
+    "joinButton": "Pridruži se",
     "stats": {
       "active": "Aktivni",
       "won": "Pobede"

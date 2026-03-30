@@ -11,10 +11,19 @@
     "label": "Disciplina"
   },
   "filters": {
+    "title": "Filtriraj",
+    "reset": "Resetuj",
+    "close": "Zatvori",
+    "apply": "Primeni",
+    "scope": "Opseg",
+    "discipline": "Disciplina",
+    "group": "Grupa",
     "includeProvisional": "Uključi privremene",
     "selectGroup": "Izaberi grupu",
     "selectLeaderboard": "Izaberi listu"
   },
+  "createFab": "Kreiraj listu",
+  "createGroup": "Kreiraj grupu",
   "entry": {
     "provisional": "P",
     "provisionalLabel": "Privremeni",
@@ -45,7 +54,7 @@
   },
   "userSearch": {
     "title": "Pronađi igrača",
-    "placeholder": "Pretraži po korisničkom imenu...",
+    "placeholder": "Pretraži po imenu ili korisničkom imenu...",
     "empty": "Nema pronađenih igrača",
     "emptyDesc": "Pokušajte sa drugim korisničkim imenom"
   }

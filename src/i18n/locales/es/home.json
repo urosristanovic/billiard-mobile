@@ -1,0 +1,22 @@
+{
+  "tab": "Inicio",
+  "title": "Inicio",
+  "stats": {
+    "played": "Jugados",
+    "winRate": "Victorias",
+    "winStreak": "Racha"
+  },
+  "recentMatches": "Partidas recientes",
+  "noMatches": "Aún no hay partidas",
+  "noMatchesDesc": "Desafía a alguien para empezar",
+  "fab": {
+    "challenge": "Desafío",
+    "tournament": "Torneo"
+  },
+  "filters": {
+    "title": "Filtrar partidas",
+    "reset": "Restablecer",
+    "close": "Cerrar",
+    "apply": "Aplicar"
+  }
+}

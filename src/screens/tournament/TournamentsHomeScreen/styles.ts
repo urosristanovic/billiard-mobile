@@ -4,7 +4,6 @@ import { typography, spacing, radius } from '@/constants/theme';
 export const styles = StyleSheet.create({
   stickyHeader: {
     borderBottomWidth: 1,
-    paddingBottom: spacing[3],
   },
   header: {
     paddingHorizontal: spacing[4],
@@ -25,19 +24,11 @@ export const styles = StyleSheet.create({
     letterSpacing: 1,
     flex: 1,
   },
-  actionRow: {
-    flexDirection: 'row',
-    paddingHorizontal: spacing[4],
-    paddingBottom: spacing[4],
-    gap: spacing[3],
-  },
-  actionButton: {
-    flex: 1,
-  },
   statsContainer: {
     marginHorizontal: spacing[4],
     paddingVertical: spacing[3],
     paddingHorizontal: spacing[2],
+    marginBottom: spacing[4],
     borderRadius: radius.xl,
     borderWidth: 1,
     flexDirection: 'row',
@@ -73,7 +64,7 @@ export const styles = StyleSheet.create({
   list: {
     padding: spacing[4],
     gap: spacing[3],
-    paddingBottom: spacing[8],
+    paddingBottom: 160,
   },
   cardList: {
     gap: spacing[2],

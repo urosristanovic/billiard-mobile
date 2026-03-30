@@ -7,15 +7,14 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import { typography } from '@/constants/theme';
 
-import MatchHistoryScreen from '@/screens/match/MatchHistoryScreen';
+import HomeScreen from '@/screens/home/HomeScreen';
 import MatchDetailScreen from '@/screens/match/MatchDetailScreen';
-import CreateMatchScreen from '@/screens/match/CreateMatchScreen';
-import UserSearchScreen from '@/screens/match/UserSearchScreen';
+import UserSearchScreen from '@/screens/leaderboard/UserSearchScreen';
+import PlayerProfileScreen from '@/screens/leaderboard/PlayerProfileScreen';
 import ProfileScreen from '@/screens/user/ProfileScreen';
 import ProfileSetupScreen from '@/screens/user/ProfileSetupScreen';
 import ChangePasswordScreen from '@/screens/user/ChangePasswordScreen';
 import FeedbackScreen from '@/screens/user/FeedbackScreen';
-import type { UserSearchResult } from '@/services/user';
 import type { Tournament } from '@/types/tournament';
 
 import {
@@ -28,8 +27,6 @@ import {
 } from '@/screens/tournament';
 
 import LeaderboardMainScreen from '@/screens/leaderboard/LeaderboardScreen';
-import PlayerProfileScreen from '@/screens/leaderboard/PlayerProfileScreen';
-import LeaderboardUserSearchScreen from '@/screens/leaderboard/UserSearchScreen';
 import CreateGroupScreen from '@/screens/leaderboard/CreateGroupScreen';
 import GroupDetailScreen from '@/screens/leaderboard/GroupDetailScreen';
 import CreateCustomLeaderboardScreen from '@/screens/leaderboard/CreateCustomLeaderboardScreen';
@@ -37,6 +34,17 @@ import CustomLeaderboardDetailScreen from '@/screens/leaderboard/CustomLeaderboa
 import { AppDrawerContent } from './DrawerContent';
 
 // ─── Stack param lists ────────────────────────────────────────────────────────
+
+export type HomeStackParamList = {
+  Home: undefined;
+  MatchDetail: { matchId: string };
+  UserSearch: undefined;
+  PlayerProfile: { userId: string };
+  Profile: { edit?: boolean } | undefined;
+  ProfileSetup: undefined;
+  ChangePassword: undefined;
+  Feedback: undefined;
+};
 
 export type LeaderboardStackParamList = {
   LeaderboardMain: undefined;
@@ -46,20 +54,6 @@ export type LeaderboardStackParamList = {
   CreateGroup: undefined;
   CustomLeaderboardDetail: { leaderboardId: string };
   CreateCustomLeaderboard: undefined;
-};
-
-export type MatchesStackParamList = {
-  MatchHistory: undefined;
-  MatchDetail: { matchId: string };
-  Profile: { edit?: boolean } | undefined;
-  ProfileSetup: undefined;
-  ChangePassword: undefined;
-  Feedback: undefined;
-};
-
-export type CreateMatchStackParamList = {
-  CreateMatch: { selectedOpponent?: UserSearchResult };
-  UserSearch: { excludeId?: string };
 };
 
 export type TournamentsStackParamList = {
@@ -73,34 +67,18 @@ export type TournamentsStackParamList = {
 
 // ─── Stacks ───────────────────────────────────────────────────────────────────
 
-const MatchesStack = createNativeStackNavigator<MatchesStackParamList>();
-const MatchesNavigator = () => (
-  <MatchesStack.Navigator screenOptions={{ headerShown: false }}>
-    <MatchesStack.Screen name='MatchHistory' component={MatchHistoryScreen} />
-    <MatchesStack.Screen name='MatchDetail' component={MatchDetailScreen} />
-    <MatchesStack.Screen name='Profile' component={ProfileScreen} />
-    <MatchesStack.Screen name='ProfileSetup' component={ProfileSetupScreen} />
-    <MatchesStack.Screen
-      name='ChangePassword'
-      component={ChangePasswordScreen}
-    />
-    <MatchesStack.Screen
-      name='Feedback'
-      component={FeedbackScreen}
-    />
-  </MatchesStack.Navigator>
-);
-
-const CreateStack = createNativeStackNavigator<CreateMatchStackParamList>();
-const CreateMatchNavigator = () => (
-  <CreateStack.Navigator screenOptions={{ headerShown: false }}>
-    <CreateStack.Screen
-      name='CreateMatch'
-      component={CreateMatchScreen}
-      initialParams={{}}
-    />
-    <CreateStack.Screen name='UserSearch' component={UserSearchScreen} />
-  </CreateStack.Navigator>
+const HomeStack = createNativeStackNavigator<HomeStackParamList>();
+const HomeNavigator = () => (
+  <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+    <HomeStack.Screen name='Home' component={HomeScreen} />
+    <HomeStack.Screen name='MatchDetail' component={MatchDetailScreen} />
+    <HomeStack.Screen name='UserSearch' component={UserSearchScreen} />
+    <HomeStack.Screen name='PlayerProfile' component={PlayerProfileScreen} />
+    <HomeStack.Screen name='Profile' component={ProfileScreen} />
+    <HomeStack.Screen name='ProfileSetup' component={ProfileSetupScreen} />
+    <HomeStack.Screen name='ChangePassword' component={ChangePasswordScreen} />
+    <HomeStack.Screen name='Feedback' component={FeedbackScreen} />
+  </HomeStack.Navigator>
 );
 
 const TournamentsStack = createNativeStackNavigator<TournamentsStackParamList>();
@@ -138,7 +116,7 @@ const LeaderboardNavigator = () => (
   <LeaderboardStack.Navigator screenOptions={{ headerShown: false }}>
     <LeaderboardStack.Screen name='LeaderboardMain' component={LeaderboardMainScreen} />
     <LeaderboardStack.Screen name='PlayerProfile' component={PlayerProfileScreen} />
-    <LeaderboardStack.Screen name='UserSearch' component={LeaderboardUserSearchScreen} />
+    <LeaderboardStack.Screen name='UserSearch' component={UserSearchScreen} />
     <LeaderboardStack.Screen name='GroupDetail' component={GroupDetailScreen} />
     <LeaderboardStack.Screen name='CreateGroup' component={CreateGroupScreen} />
     <LeaderboardStack.Screen name='CustomLeaderboardDetail' component={CustomLeaderboardDetailScreen} />
@@ -149,8 +127,7 @@ const LeaderboardNavigator = () => (
 // ─── Bottom Tabs ──────────────────────────────────────────────────────────────
 
 export type AppTabParamList = {
-  Matches: NavigatorScreenParams<MatchesStackParamList> | undefined;
-  NewMatch: NavigatorScreenParams<CreateMatchStackParamList> | undefined;
+  Home: NavigatorScreenParams<HomeStackParamList> | undefined;
   Tournaments: NavigatorScreenParams<TournamentsStackParamList> | undefined;
   Leaderboard: NavigatorScreenParams<LeaderboardStackParamList> | undefined;
 };
@@ -162,12 +139,14 @@ export type AppDrawerParamList = {
 const Drawer = createDrawerNavigator<AppDrawerParamList>();
 
 const TabsNavigator = () => {
-  const { t } = useTranslation('matches');
+  const { t } = useTranslation('home');
   const { t: tT } = useTranslation('tournaments');
+  const { t: tLB } = useTranslation('leaderboard');
   const { tk } = useTheme();
 
   return (
     <Tab.Navigator
+      initialRouteName='Home'
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -188,42 +167,6 @@ const TabsNavigator = () => {
       }}
     >
       <Tab.Screen
-        name='Matches'
-        component={MatchesNavigator}
-        options={{
-          tabBarLabel: t('tabs.history'),
-          tabBarIcon: ({ color }) => (
-            <Text
-              style={{
-                fontSize: 14,
-                color,
-                fontFamily: typography.family.display,
-              }}
-            >
-              MH
-            </Text>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name='NewMatch'
-        component={CreateMatchNavigator}
-        options={{
-          tabBarLabel: t('tabs.record'),
-          tabBarIcon: ({ color }) => (
-            <Text
-              style={{
-                fontSize: 16,
-                color,
-                fontFamily: typography.family.display,
-              }}
-            >
-              +
-            </Text>
-          ),
-        }}
-      />
-      <Tab.Screen
         name='Tournaments'
         component={TournamentsNavigator}
         options={{
@@ -242,10 +185,28 @@ const TabsNavigator = () => {
         }}
       />
       <Tab.Screen
+        name='Home'
+        component={HomeNavigator}
+        options={{
+          tabBarLabel: t('tab'),
+          tabBarIcon: ({ color }) => (
+            <Text
+              style={{
+                fontSize: 14,
+                color,
+                fontFamily: typography.family.display,
+              }}
+            >
+              HM
+            </Text>
+          ),
+        }}
+      />
+      <Tab.Screen
         name='Leaderboard'
         component={LeaderboardNavigator}
         options={{
-          tabBarLabel: t('tabs.leaderboard'),
+          tabBarLabel: tLB('title'),
           tabBarIcon: ({ color }) => (
             <Text
               style={{

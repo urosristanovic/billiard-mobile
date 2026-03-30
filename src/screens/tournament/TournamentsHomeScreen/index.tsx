@@ -9,7 +9,8 @@ import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout } from '@/components/common/layout';
-import { AvatarButton, PrimaryButton } from '@/components/common/buttons';
+import { AvatarButton } from '@/components/common/buttons';
+import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
 import { EmptyState, LoadingState } from '@/components/common/states';
 import {
   useMyTournaments,
@@ -58,23 +59,6 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
             </Text>
             <AvatarButton />
           </View>
-        </View>
-
-        <View style={styles.actionRow}>
-          <PrimaryButton
-            label={t('home.createButton')}
-            onPress={() => navigation.navigate('CreateTournament')}
-            isDark={isDark}
-            compact
-            style={styles.actionButton}
-          />
-          <PrimaryButton
-            label={t('home.joinButton')}
-            onPress={() => navigation.navigate('BrowseTournaments')}
-            isDark={isDark}
-            compact
-            style={styles.actionButton}
-          />
         </View>
 
         <View
@@ -216,6 +200,17 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
           </View>
         )}
       </ScrollView>
+
+      <FloatingActionButton
+        label={t('home.createButton')}
+        onPress={() => navigation.navigate('CreateTournament')}
+        style={{ bottom: 24 }}
+      />
+      <FloatingActionButton
+        label={t('home.joinButton')}
+        onPress={() => navigation.navigate('BrowseTournaments')}
+        style={{ bottom: 24 + 64 }}
+      />
     </ScreenLayout>
   );
 };

@@ -6,3 +6,6 @@ export { DisputeHistory } from './DisputeHistory';
 export { MatchTimeline } from './MatchTimeline';
 export { MatchActions } from './MatchActions';
 export { CancellationForm } from './CancellationForm';
+export { MatchHeader } from './MatchHeader';
+export { ChallengeScoreCard } from './ChallengeScoreCard';
+export { ChallengeActions } from './ChallengeActions';

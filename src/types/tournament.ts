@@ -70,6 +70,8 @@ export interface TournamentMatch {
   nextLoserMatchId: string | null;
   homeProfile: TournamentParticipantProfile | null;
   awayProfile: TournamentParticipantProfile | null;
+  canRecord?: boolean;
+  canEdit?: boolean;
 }
 
 export interface NextMatchInfo {
@@ -118,6 +120,17 @@ export interface Tournament extends TournamentSummary {
   participants: TournamentParticipant[];
   rounds: TournamentRound[];
   matches: TournamentMatch[];
+}
+
+export interface StandingsRow {
+  userId: string;
+  displayName: string;
+  played: number;
+  wins: number;
+  losses: number;
+  points: number;
+  scored: number;
+  conceded: number;
 }
 
 export interface TournamentStats {

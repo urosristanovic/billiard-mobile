@@ -1,14 +1,4 @@
-import { useState } from 'react';
-import {
-  ActivityIndicator,
-  Modal,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
@@ -20,13 +10,10 @@ import { getAccessToken } from '@/features/auth/getAccessToken';
 import { tournamentService } from '@/services/tournament';
 import { useAuth } from '@/features/auth/useAuth';
 import { useTournamentMutations } from '@/features/tournaments/useTournamentMutations';
-import {
-  TOURNAMENT_FORMAT_LABELS,
-  TOURNAMENT_STATUS_LABELS,
-} from '@/types/tournament';
-import { DISCIPLINE_LABELS } from '@/types/match';
-import { radius, shadows, spacing, typography } from '@/constants/theme';
 import type { TournamentsStackParamList } from '@/navigation/AppNavigator';
+import { TournamentSummaryCard } from './components/TournamentSummaryCard';
+import { InvitationActions } from './components/InvitationActions';
+import { styles } from './styles';
 
 type Props = NativeStackScreenProps<TournamentsStackParamList, 'InvitationDetail'>;
 
@@ -37,9 +24,6 @@ const InvitationDetailScreen = ({ navigation, route }: Props) => {
   const { isDark, tk } = useTheme();
   const { user } = useAuth();
   const { confirm } = useConfirmDialog();
-
-  const [showDeclineModal, setShowDeclineModal] = useState(false);
-  const [declineReason, setDeclineReason] = useState('');
 
   const { data: request, isLoading } = useQuery({
     queryKey: ['tournament-request', requestId],
@@ -76,11 +60,6 @@ const InvitationDetailScreen = ({ navigation, route }: Props) => {
       cancelLabel: tCommon('cancel'),
       onConfirm: () => handleRespond('accepted'),
     });
-
-  const handleDeclineConfirm = () => {
-    setShowDeclineModal(false);
-    handleRespond('rejected', declineReason);
-  };
 
   const handleCancelRequestPress = () =>
     confirm({
@@ -132,374 +111,24 @@ const InvitationDetailScreen = ({ navigation, route }: Props) => {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
-        {/* Intro */}
         <Text style={[styles.intro, { color: tk.text.secondary }]}>
           {isIncoming ? t('invitation.invitedTo') : t('invitation.requestedFor')}
         </Text>
 
-        {/* Tournament card */}
-        {tournament && (
-          <View
-            style={[
-              styles.tournamentCard,
-              {
-                backgroundColor: tk.surface.raised,
-                borderColor: tk.border.default,
-              },
-            ]}
-          >
-            <View style={styles.nameRow}>
-              {tournament.isRated && (
-                <View style={[styles.ratedBadge, { borderColor: tk.primary[400] }]}>
-                  <Text style={[styles.ratedBadgeText, { color: tk.primary[400] }]}>
-                    {t('ratedBadge')}
-                  </Text>
-                </View>
-              )}
-              <Text style={[styles.tournamentName, { color: tk.text.primary }]}>
-                {tournament.name}
-              </Text>
-            </View>
-            <Text style={[styles.tournamentMeta, { color: tk.text.secondary }]}>
-              {DISCIPLINE_LABELS[tournament.discipline]} ·{' '}
-              {TOURNAMENT_FORMAT_LABELS[tournament.format]}
-            </Text>
-            <Text style={[styles.tournamentMeta, { color: tk.text.secondary }]}>
-              {TOURNAMENT_STATUS_LABELS[tournament.status]} ·{' '}
-              {tournament.participantCount}/{tournament.maxParticipants}{' '}
-              {t('detail.participants')}
-            </Text>
-            {tournament.location && (
-              <Text style={[styles.tournamentMeta, { color: tk.text.muted }]}>
-                📍 {tournament.location}
-              </Text>
-            )}
-            <Text style={[styles.tournamentMeta, { color: tk.text.muted }]}>
-              🗓{' '}
-              {new Date(tournament.scheduledAt).toLocaleString(undefined, {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </Text>
-            {tournament.description ? (
-              <Text style={[styles.tournamentDescription, { color: tk.text.secondary }]}>
-                {tournament.description}
-              </Text>
-            ) : null}
-          </View>
-        )}
+        {tournament && <TournamentSummaryCard tournament={tournament} />}
 
-        {/* Actions */}
         {isPending && (
-          <View style={styles.actionsRow}>
-            {respondToRequest.isPending ? (
-              <ActivityIndicator color={tk.primary[400]} style={styles.loader} />
-            ) : isIncoming ? (
-              <>
-                {/* Decline — left, danger */}
-                <TouchableOpacity
-                  onPress={() => {
-                    setDeclineReason('');
-                    setShowDeclineModal(true);
-                  }}
-                  style={[
-                    styles.actionBtn,
-                    { backgroundColor: tk.error.dark, borderColor: tk.error.border },
-                  ]}
-                  accessibilityRole='button'
-                >
-                  <Text style={[styles.actionBtnText, { color: tk.error.text }]}>
-                    {t('invitation.rejectButton')}
-                  </Text>
-                </TouchableOpacity>
-
-                {/* Accept — right, primary */}
-                <TouchableOpacity
-                  onPress={handleAcceptPress}
-                  style={[
-                    styles.actionBtn,
-                    { backgroundColor: tk.primary[500], borderColor: tk.primary[700] },
-                  ]}
-                  accessibilityRole='button'
-                >
-                  <Text style={[styles.actionBtnText, { color: tk.text.onPrimary }]}>
-                    {t('invitation.acceptButton')}
-                  </Text>
-                </TouchableOpacity>
-              </>
-            ) : (
-              /* Cancel own request — full width, danger */
-              <TouchableOpacity
-                onPress={handleCancelRequestPress}
-                style={[
-                  styles.actionBtn,
-                  styles.actionBtnFull,
-                  { backgroundColor: tk.error.dark, borderColor: tk.error.border },
-                ]}
-                accessibilityRole='button'
-              >
-                <Text style={[styles.actionBtnText, { color: tk.error.text }]}>
-                  {t('invitation.cancelButton')}
-                </Text>
-              </TouchableOpacity>
-            )}
-          </View>
+          <InvitationActions
+            isIncoming={isIncoming}
+            isSubmitting={respondToRequest.isPending}
+            onAccept={handleAcceptPress}
+            onDecline={reason => handleRespond('rejected', reason)}
+            onCancel={handleCancelRequestPress}
+          />
         )}
       </ScrollView>
-
-      {/* Decline modal with reason input */}
-      <Modal
-        visible={showDeclineModal}
-        transparent
-        animationType='fade'
-        statusBarTranslucent
-        onRequestClose={() => setShowDeclineModal(false)}
-      >
-        <View
-          style={[
-            styles.modalBackdrop,
-            { backgroundColor: tk.background.overlay },
-          ]}
-        >
-          <View
-            style={[
-              styles.modalDialog,
-              {
-                backgroundColor: tk.surface.default,
-                borderColor: tk.error.border,
-              },
-              shadows.lg,
-            ]}
-            accessibilityRole='alert'
-          >
-            <Text style={[styles.modalTitle, { color: tk.text.primary }]}>
-              {t('invitation.confirmDeclineTitle')}
-            </Text>
-            <Text style={[styles.modalMessage, { color: tk.text.secondary }]}>
-              {t('invitation.confirmDeclineMessage')}
-            </Text>
-
-            <View style={styles.reasonSection}>
-              <Text style={[styles.reasonLabel, { color: tk.text.muted }]}>
-                {t('invitation.reasonLabel')}
-              </Text>
-              <TextInput
-                value={declineReason}
-                onChangeText={setDeclineReason}
-                placeholder={t('invitation.reasonPlaceholder')}
-                placeholderTextColor={tk.text.muted}
-                multiline
-                numberOfLines={3}
-                style={[
-                  styles.reasonInput,
-                  {
-                    backgroundColor: tk.surface.raised,
-                    borderColor: tk.border.default,
-                    color: tk.text.primary,
-                  },
-                ]}
-              />
-            </View>
-
-            <View style={styles.modalActions}>
-              <TouchableOpacity
-                onPress={() => setShowDeclineModal(false)}
-                style={[
-                  styles.modalBtn,
-                  {
-                    backgroundColor: tk.surface.overlay,
-                    borderColor: tk.border.default,
-                  },
-                ]}
-              >
-                <Text style={[styles.modalBtnText, { color: tk.text.secondary }]}>
-                  {tCommon('cancel')}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleDeclineConfirm}
-                style={[
-                  styles.modalBtn,
-                  {
-                    backgroundColor: tk.error.dark,
-                    borderColor: tk.error.border,
-                  },
-                ]}
-              >
-                <Text style={[styles.modalBtnText, { color: tk.error.text }]}>
-                  {t('invitation.rejectButton')}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </ScreenLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing[4],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[3],
-    borderBottomWidth: 1,
-    gap: spacing[2],
-  },
-  back: {
-    fontSize: 22,
-    fontFamily: typography.family.display,
-    width: 32,
-  },
-  backPlaceholder: {
-    width: 32,
-  },
-  headerTitle: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: typography.size.lg,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
-  content: {
-    padding: spacing[4],
-    gap: spacing[5],
-    paddingBottom: spacing[12],
-  },
-  intro: {
-    fontSize: typography.size.base,
-    fontFamily: typography.family.body,
-    textAlign: 'center',
-  },
-  tournamentCard: {
-    borderRadius: radius.xl,
-    borderWidth: 1,
-    padding: spacing[4],
-    gap: spacing[2],
-  },
-  tournamentName: {
-    fontSize: typography.size.lg,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
-  nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing[2],
-  },
-  tournamentMeta: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.body,
-  },
-  ratedBadge: {
-    borderWidth: 1,
-    borderRadius: radius.sm,
-    paddingHorizontal: spacing[1] + 2,
-    paddingVertical: 2,
-  },
-  ratedBadgeText: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  tournamentDescription: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.body,
-    lineHeight: typography.size.sm * 1.55,
-    marginTop: spacing[1],
-  },
-  actionsRow: {
-    flexDirection: 'row',
-    gap: spacing[3],
-  },
-  loader: {
-    flex: 1,
-    paddingVertical: spacing[4],
-  },
-  actionBtn: {
-    flex: 1,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingVertical: spacing[4],
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  actionBtnFull: {
-    flex: 1,
-  },
-  actionBtnText: {
-    fontSize: typography.size.base,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
-  // Decline modal
-  modalBackdrop: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: spacing[6],
-  },
-  modalDialog: {
-    borderRadius: radius.xl,
-    borderWidth: 2,
-    padding: spacing[6],
-    gap: spacing[4],
-  },
-  modalTitle: {
-    fontSize: typography.size.xl,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.7,
-  },
-  modalMessage: {
-    fontSize: typography.size.base,
-    fontFamily: typography.family.body,
-  },
-  reasonSection: {
-    gap: spacing[2],
-  },
-  reasonLabel: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  reasonInput: {
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    fontSize: typography.size.base,
-    fontFamily: typography.family.body,
-    minHeight: 80,
-    textAlignVertical: 'top',
-  },
-  modalActions: {
-    flexDirection: 'row',
-    gap: spacing[3],
-    marginTop: spacing[2],
-  },
-  modalBtn: {
-    flex: 1,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingVertical: spacing[3],
-    alignItems: 'center',
-  },
-  modalBtnText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
-  },
-});
 
 export default InvitationDetailScreen;

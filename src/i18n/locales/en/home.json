@@ -1,0 +1,22 @@
+{
+  "tab": "Home",
+  "title": "Home",
+  "stats": {
+    "played": "Played",
+    "winRate": "Win Rate",
+    "winStreak": "Streak"
+  },
+  "recentMatches": "Recent Matches",
+  "noMatches": "No matches yet",
+  "noMatchesDesc": "Challenge someone to get started",
+  "fab": {
+    "challenge": "Challenge",
+    "tournament": "Tournament"
+  },
+  "filters": {
+    "title": "Filter Matches",
+    "reset": "Reset",
+    "close": "Close",
+    "apply": "Apply"
+  }
+}

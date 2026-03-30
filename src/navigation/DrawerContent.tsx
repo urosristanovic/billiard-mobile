@@ -58,7 +58,7 @@ export const AppDrawerContent = (props: DrawerContentComponentProps) => {
       key: 'profile',
       onPress: () =>
         navigation.navigate('MainTabs', {
-          screen: 'Matches',
+          screen: 'Home',
           params: { screen: 'Profile' },
         }),
     },
@@ -81,7 +81,7 @@ export const AppDrawerContent = (props: DrawerContentComponentProps) => {
       key: 'sendFeedback',
       onPress: () =>
         navigation.navigate('MainTabs', {
-          screen: 'Matches',
+          screen: 'Home',
           params: { screen: 'Feedback' },
         }),
     },

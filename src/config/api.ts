@@ -131,5 +131,6 @@ export const API_ENDPOINTS = {
     requests: (id: string) => api(`/api/tournaments/${id}/requests`),
     respondToRequest: (id: string, requestId: string) =>
       api(`/api/tournaments/${id}/requests/${requestId}`),
+    standings: (id: string) => api(`/api/tournaments/${id}/standings`),
   },
 } as const;

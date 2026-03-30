@@ -2,8 +2,8 @@
   "tab": "Torneos",
   "home": {
     "title": "Torneos",
-    "createButton": "Crear torneo",
-    "joinButton": "Unirse a torneo",
+    "createButton": "Crear",
+    "joinButton": "Unirse",
     "stats": {
       "active": "Activos",
       "won": "Ganados"

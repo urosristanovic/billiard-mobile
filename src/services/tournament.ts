@@ -11,6 +11,7 @@ import type {
   TournamentStats,
   RespondToRequestInput,
   ReportResultInput,
+  StandingsRow,
 } from '@/types/tournament';
 
 function buildHeaders(
@@ -216,6 +217,16 @@ export const tournamentService = {
       },
     );
     return parseResponse<Tournament>(res);
+  },
+
+  getStandings: async (
+    token: string,
+    id: string,
+  ): Promise<StandingsRow[]> => {
+    const res = await fetchWithTimeout(API_ENDPOINTS.tournaments.standings(id), {
+      headers: buildHeaders(token),
+    });
+    return parseResponse<StandingsRow[]>(res);
   },
 
   editResult: async (

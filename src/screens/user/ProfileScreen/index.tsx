@@ -21,11 +21,11 @@ import { useCountries, useCities } from '@/features/locations/useLocations';
 import { useTheme } from '@/hooks/useTheme';
 import { setStoredLanguage, type SupportedLanguage } from '@/i18n';
 import { typography, spacing, radius } from '@/constants/theme';
-import type { MatchesStackParamList } from '@/navigation/AppNavigator';
+import type { HomeStackParamList } from '@/navigation/AppNavigator';
 import { ProfileHero } from './components';
 import { styles } from './styles';
 
-type Props = NativeStackScreenProps<MatchesStackParamList, 'Profile'>;
+type Props = NativeStackScreenProps<HomeStackParamList, 'Profile'>;
 
 const LANGUAGE_OPTIONS: Array<{
   code: SupportedLanguage;

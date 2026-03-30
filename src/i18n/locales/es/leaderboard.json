@@ -11,10 +11,19 @@
     "label": "Disciplina"
   },
   "filters": {
+    "title": "Filtrar",
+    "reset": "Restablecer",
+    "close": "Cerrar",
+    "apply": "Aplicar",
+    "scope": "Alcance",
+    "discipline": "Disciplina",
+    "group": "Grupo",
     "includeProvisional": "Incluir provisionales",
     "selectGroup": "Seleccionar grupo",
     "selectLeaderboard": "Seleccionar tabla"
   },
+  "createFab": "Crear ranking",
+  "createGroup": "Crear grupo",
   "entry": {
     "provisional": "P",
     "provisionalLabel": "Provisional",
@@ -45,7 +54,7 @@
   },
   "userSearch": {
     "title": "Buscar jugador",
-    "placeholder": "Buscar por nombre de usuario...",
+    "placeholder": "Buscar por nombre o usuario...",
     "empty": "No se encontraron jugadores",
     "emptyDesc": "Prueba con otro nombre de usuario"
   }

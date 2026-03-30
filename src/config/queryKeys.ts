@@ -48,4 +48,6 @@ export const QUERY_KEYS = {
   TOURNAMENT_DETAIL: (id: string) => ['tournaments', id] as const,
   TOURNAMENT_REQUESTS: (id: string) =>
     ['tournaments', id, 'requests'] as const,
+  TOURNAMENT_STANDINGS: (id: string) =>
+    ['tournaments', id, 'standings'] as const,
 } as const;

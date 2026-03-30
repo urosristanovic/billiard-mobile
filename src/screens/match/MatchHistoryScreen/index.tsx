@@ -26,9 +26,12 @@ import {
 } from '@/types/match';
 import { MatchCard } from './components';
 import { styles } from './styles';
-import type { MatchesStackParamList } from '@/navigation/AppNavigator';
+type LocalStackParamList = {
+  MatchHistory: undefined;
+  MatchDetail: { matchId: string };
+};
 
-type Props = NativeStackScreenProps<MatchesStackParamList, 'MatchHistory'>;
+type Props = NativeStackScreenProps<LocalStackParamList, 'MatchHistory'>;
 type DisciplineFilter = Discipline | 'all';
 type OpponentFilter = 'all' | string;
 type StatusFilter = MatchStatus | 'all';

@@ -31,6 +31,10 @@
         "appleId": "urosristanovic@gmail.com",
         "ascAppId": "6760981679",
         "appleTeamId": "TS9JYA95J9"
+      },
+      "android": {
+        "serviceAccountKeyPath": "./google-service-account.json",
+        "track": "internal"
       }
     }
   }

@@ -29,3 +29,16 @@ export const useTournamentRequests = (tournamentId: string, enabled = true) => {
     enabled: !!user && !!tournamentId && enabled,
   });
 };
+
+export const useStandings = (tournamentId: string, enabled = true) => {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: QUERY_KEYS.TOURNAMENT_STANDINGS(tournamentId),
+    queryFn: async () => {
+      const token = await getAccessToken();
+      return tournamentService.getStandings(token, tournamentId);
+    },
+    enabled: !!user && !!tournamentId && enabled,
+  });
+};

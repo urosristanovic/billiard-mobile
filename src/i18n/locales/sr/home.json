@@ -1,0 +1,22 @@
+{
+  "tab": "Početna",
+  "title": "Početna",
+  "stats": {
+    "played": "Odigrano",
+    "winRate": "Pobede",
+    "winStreak": "Niz"
+  },
+  "recentMatches": "Nedavni mečevi",
+  "noMatches": "Još nema mečeva",
+  "noMatchesDesc": "Izazovi nekoga da počneš",
+  "fab": {
+    "challenge": "Izazov",
+    "tournament": "Turnir"
+  },
+  "filters": {
+    "title": "Filtriraj mečeve",
+    "reset": "Resetuj",
+    "close": "Zatvori",
+    "apply": "Primeni"
+  }
+}
