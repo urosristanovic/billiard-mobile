@@ -23,6 +23,7 @@ type Props = NativeStackScreenProps<LeaderboardStackParamList, 'PlayerProfile'>;
 const PlayerProfileScreen = ({ route, navigation }: Props) => {
   const { userId } = route.params;
   const { t } = useTranslation('leaderboard');
+  const { t: tCommon } = useTranslation('common');
   const { isDark, tk } = useTheme();
   const [challengeModalVisible, setChallengeModalVisible] = useState(false);
 
@@ -84,7 +85,7 @@ const PlayerProfileScreen = ({ route, navigation }: Props) => {
             onPress={() => navigation.goBack()}
             style={[styles.backButton, { color: tk.primary[400] }]}
           >
-            ← Back
+            ← {tCommon('back')}
           </Text>
         </View>
 

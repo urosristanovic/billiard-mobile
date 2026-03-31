@@ -110,7 +110,7 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
           onPress={() => navigation.goBack()}
           style={[styles.backButton, { color: tk.primary[400] }]}
         >
-          ← Back
+          ← {tCommon('back')}
         </Text>
         <Text style={[styles.title, { color: tk.text.primary }]} numberOfLines={2}>
           {lb.name}

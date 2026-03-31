@@ -19,6 +19,7 @@ type Props = NativeStackScreenProps<LeaderboardStackParamList, 'UserSearch'>;
 
 const UserSearchScreen = ({ navigation, route }: Props) => {
   const { t } = useTranslation('leaderboard');
+  const { t: tCommon } = useTranslation('common');
   const { isDark, tk } = useTheme();
   const { query, setQuery, results, isFetching, isSearchMode } = useUserSearch();
   const [pendingAdds, setPendingAdds] = useState<Set<string>>(new Set());
@@ -86,7 +87,7 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
             onPress={() => navigation.goBack()}
             style={[styles.backButton, { color: tk.primary[400] }]}
           >
-            ← Back
+            ← {tCommon('back')}
           </Text>
           <Text style={[styles.title, { color: tk.text.primary }]}>
             {t('userSearch.title')}

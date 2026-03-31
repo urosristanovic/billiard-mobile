@@ -58,7 +58,8 @@ const ProfileScreen = ({ navigation, route }: Props) => {
   const [pendingLanguage, setPendingLanguage] =
     useState<SupportedLanguage>(currentLanguage);
 
-  const { data: countries = [], isLoading: countriesLoading } = useCountries(editModalVisible);
+  const { data: countries = [], isLoading: countriesLoading } =
+    useCountries(editModalVisible);
   const { data: cities = [], isLoading: citiesLoading } = useCities(
     editModalVisible ? selectedCountryId || undefined : undefined,
   );
@@ -108,7 +109,7 @@ const ProfileScreen = ({ navigation, route }: Props) => {
             onPress={() => navigation.goBack()}
             style={[styles.backButton, { color: tk.primary[400] }]}
           >
-            ← Back
+            ← {t('back')}
           </Text>
         </View>
         <ProfileHero user={user} isDark={isDark} />
@@ -186,19 +187,44 @@ const ProfileScreen = ({ navigation, route }: Props) => {
               setCountryListOpen(v => !v);
               setCityListOpen(false);
             }}
-            style={[pickerStyles.selectButton, { backgroundColor: tk.surface.raised, borderColor: countryListOpen ? tk.primary[500] : tk.primary[700] }]}
+            style={[
+              pickerStyles.selectButton,
+              {
+                backgroundColor: tk.surface.raised,
+                borderColor: countryListOpen
+                  ? tk.primary[500]
+                  : tk.primary[700],
+              },
+            ]}
           >
-            <Text style={[pickerStyles.selectButtonText, { color: selectedCountryId ? tk.text.primary : tk.text.muted }]}>
-              {selectedCountryId ? (countries.find(c => c.id === selectedCountryId)?.name ?? tGroups('location.countryPlaceholder')) : tGroups('location.countryPlaceholder')}
+            <Text
+              style={[
+                pickerStyles.selectButtonText,
+                { color: selectedCountryId ? tk.text.primary : tk.text.muted },
+              ]}
+            >
+              {selectedCountryId
+                ? (countries.find(c => c.id === selectedCountryId)?.name ??
+                  tGroups('location.countryPlaceholder'))
+                : tGroups('location.countryPlaceholder')}
             </Text>
-            {countriesLoading
-              ? <ActivityIndicator size='small' color={tk.primary[400]} />
-              : <Text style={{ color: tk.text.muted }}>{countryListOpen ? '▴' : '▾'}</Text>
-            }
+            {countriesLoading ? (
+              <ActivityIndicator size='small' color={tk.primary[400]} />
+            ) : (
+              <Text style={{ color: tk.text.muted }}>
+                {countryListOpen ? '▴' : '▾'}
+              </Text>
+            )}
           </TouchableOpacity>
           {countryListOpen && !countriesLoading && (
             <ScrollView
-              style={[pickerStyles.inlineList, { borderColor: tk.primary[700], backgroundColor: tk.surface.raised }]}
+              style={[
+                pickerStyles.inlineList,
+                {
+                  borderColor: tk.primary[700],
+                  backgroundColor: tk.surface.raised,
+                },
+              ]}
               nestedScrollEnabled
             >
               {countries.map(c => (
@@ -209,10 +235,30 @@ const ProfileScreen = ({ navigation, route }: Props) => {
                     setSelectedCityId('');
                     setCountryListOpen(false);
                   }}
-                  style={[pickerStyles.inlineOption, { borderBottomColor: tk.primary[900] }, selectedCountryId === c.id && { backgroundColor: tk.primary[900] }]}
+                  style={[
+                    pickerStyles.inlineOption,
+                    { borderBottomColor: tk.primary[900] },
+                    selectedCountryId === c.id && {
+                      backgroundColor: tk.primary[900],
+                    },
+                  ]}
                 >
-                  <Text style={[pickerStyles.inlineOptionText, { color: tk.text.primary }]}>{c.name}</Text>
-                  <Text style={[pickerStyles.inlineOptionCode, { color: tk.text.muted }]}>{c.code}</Text>
+                  <Text
+                    style={[
+                      pickerStyles.inlineOptionText,
+                      { color: tk.text.primary },
+                    ]}
+                  >
+                    {c.name}
+                  </Text>
+                  <Text
+                    style={[
+                      pickerStyles.inlineOptionCode,
+                      { color: tk.text.muted },
+                    ]}
+                  >
+                    {c.code}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -232,34 +278,86 @@ const ProfileScreen = ({ navigation, route }: Props) => {
                   setCountryListOpen(false);
                 }
               }}
-              style={[pickerStyles.selectButton, { backgroundColor: tk.surface.raised, borderColor: cityListOpen ? tk.primary[500] : tk.primary[700] }]}
+              style={[
+                pickerStyles.selectButton,
+                {
+                  backgroundColor: tk.surface.raised,
+                  borderColor: cityListOpen ? tk.primary[500] : tk.primary[700],
+                },
+              ]}
             >
-              <Text style={[pickerStyles.selectButtonText, { color: selectedCityId ? tk.text.primary : tk.text.muted }]}>
-                {selectedCityId ? (cities.find(c => c.id === selectedCityId)?.name ?? tGroups('location.cityPlaceholder')) : tGroups('location.cityPlaceholder')}
+              <Text
+                style={[
+                  pickerStyles.selectButtonText,
+                  { color: selectedCityId ? tk.text.primary : tk.text.muted },
+                ]}
+              >
+                {selectedCityId
+                  ? (cities.find(c => c.id === selectedCityId)?.name ??
+                    tGroups('location.cityPlaceholder'))
+                  : tGroups('location.cityPlaceholder')}
               </Text>
-              {citiesLoading
-                ? <ActivityIndicator size='small' color={tk.primary[400]} />
-                : <Text style={{ color: tk.text.muted }}>{cityListOpen ? '▴' : '▾'}</Text>
-              }
+              {citiesLoading ? (
+                <ActivityIndicator size='small' color={tk.primary[400]} />
+              ) : (
+                <Text style={{ color: tk.text.muted }}>
+                  {cityListOpen ? '▴' : '▾'}
+                </Text>
+              )}
             </TouchableOpacity>
             {cityListOpen && !citiesLoading && (
               <ScrollView
-                style={[pickerStyles.inlineList, { borderColor: tk.primary[700], backgroundColor: tk.surface.raised }]}
+                style={[
+                  pickerStyles.inlineList,
+                  {
+                    borderColor: tk.primary[700],
+                    backgroundColor: tk.surface.raised,
+                  },
+                ]}
                 nestedScrollEnabled
               >
                 <TouchableOpacity
-                  onPress={() => { setSelectedCityId(''); setCityListOpen(false); }}
-                  style={[pickerStyles.inlineOption, { borderBottomColor: tk.primary[900] }]}
+                  onPress={() => {
+                    setSelectedCityId('');
+                    setCityListOpen(false);
+                  }}
+                  style={[
+                    pickerStyles.inlineOption,
+                    { borderBottomColor: tk.primary[900] },
+                  ]}
                 >
-                  <Text style={[pickerStyles.inlineOptionText, { color: tk.text.muted }]}>{tGroups('location.cityPlaceholder')}</Text>
+                  <Text
+                    style={[
+                      pickerStyles.inlineOptionText,
+                      { color: tk.text.muted },
+                    ]}
+                  >
+                    {tGroups('location.cityPlaceholder')}
+                  </Text>
                 </TouchableOpacity>
                 {cities.map(c => (
                   <TouchableOpacity
                     key={c.id}
-                    onPress={() => { setSelectedCityId(c.id); setCityListOpen(false); }}
-                    style={[pickerStyles.inlineOption, { borderBottomColor: tk.primary[900] }, selectedCityId === c.id && { backgroundColor: tk.primary[900] }]}
+                    onPress={() => {
+                      setSelectedCityId(c.id);
+                      setCityListOpen(false);
+                    }}
+                    style={[
+                      pickerStyles.inlineOption,
+                      { borderBottomColor: tk.primary[900] },
+                      selectedCityId === c.id && {
+                        backgroundColor: tk.primary[900],
+                      },
+                    ]}
                   >
-                    <Text style={[pickerStyles.inlineOptionText, { color: tk.text.primary }]}>{c.name}</Text>
+                    <Text
+                      style={[
+                        pickerStyles.inlineOptionText,
+                        { color: tk.text.primary },
+                      ]}
+                    >
+                      {c.name}
+                    </Text>
                   </TouchableOpacity>
                 ))}
               </ScrollView>
@@ -333,7 +431,6 @@ const ProfileScreen = ({ navigation, route }: Props) => {
           />
         </View>
       </FormModal>
-
     </ScreenLayout>
   );
 };

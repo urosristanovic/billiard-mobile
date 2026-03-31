@@ -106,7 +106,7 @@ const ChangePasswordScreen = ({
             onPress={() => navigation.goBack()}
             style={[styles.backButton, { color: tk.primary[400] }]}
           >
-            ← Back
+            ← {t('back')}
           </Text>
 
           <View style={styles.header}>

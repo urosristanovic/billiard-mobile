@@ -28,7 +28,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "package": "com.billiardtracker.mobile",
-      "versionCode": 2,
+      "versionCode": 1,
       "predictiveBackGestureEnabled": false
     },
     "web": {
