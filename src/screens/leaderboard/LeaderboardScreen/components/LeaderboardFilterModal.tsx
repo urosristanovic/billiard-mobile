@@ -153,19 +153,21 @@ export const LeaderboardFilterModal = ({
               <Text style={[styles.sectionLabel, { color: tk.text.secondary }]}>
                 {t('filters.scope')}
               </Text>
-              <View style={styles.pillRow}>
-                {scopeLabels.map(({ value, label }) => (
-                  <TouchableOpacity
-                    key={value}
-                    onPress={() => handleScopeChange(value)}
-                    style={pillStyle(draft.scope === value)}
-                  >
-                    <Text style={pillTextStyle(draft.scope === value)}>
-                      {label}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.pillRow}>
+                  {scopeLabels.map(({ value, label }) => (
+                    <TouchableOpacity
+                      key={value}
+                      onPress={() => handleScopeChange(value)}
+                      style={pillStyle(draft.scope === value)}
+                    >
+                      <Text style={pillTextStyle(draft.scope === value)}>
+                        {label}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
             </View>
 
             {/* Group picker — only when scope=group */}

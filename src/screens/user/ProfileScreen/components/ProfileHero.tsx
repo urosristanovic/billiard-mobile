@@ -33,14 +33,6 @@ export const ProfileHero = ({
           {user.displayName.slice(0, 2).toUpperCase()}
         </Text>
       </View>
-      <Text
-        style={[
-          styles.contenderTag,
-          { color: tk.primary[300], borderColor: tk.primary[700] },
-        ]}
-      >
-        Contender
-      </Text>
       <Text style={[styles.displayName, { color: tk.text.primary }]}>
         {user.displayName}
       </Text>

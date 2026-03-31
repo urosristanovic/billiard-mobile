@@ -103,6 +103,14 @@ const ProfileScreen = ({ navigation, route }: Props) => {
   return (
     <ScreenLayout isDark={isDark}>
       <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.headerRow}>
+          <Text
+            onPress={() => navigation.goBack()}
+            style={[styles.backButton, { color: tk.primary[400] }]}
+          >
+            ← Back
+          </Text>
+        </View>
         <ProfileHero user={user} isDark={isDark} />
       </ScrollView>
       <View
@@ -114,6 +122,12 @@ const ProfileScreen = ({ navigation, route }: Props) => {
           },
         ]}
       >
+        <SecondaryButton
+          label={tAuth('changePassword.openButton')}
+          onPress={() => navigation.navigate('ChangePassword')}
+          isDark={isDark}
+          style={styles.bottomBarButton}
+        />
         <SecondaryButton
           label={tAuth('profile.editButton')}
           onPress={handleOpenEdit}
@@ -295,15 +309,6 @@ const ProfileScreen = ({ navigation, route }: Props) => {
         </View>
 
         <View style={deleteAccountStyles.container}>
-          <SecondaryButton
-            label={tAuth('changePassword.openButton')}
-            onPress={() => {
-              setEditModalVisible(false);
-              setPendingLanguage(currentLanguage);
-              navigation.navigate('ChangePassword');
-            }}
-            isDark={isDark}
-          />
           <DangerButton
             label={tAuth('profile.deleteAccount')}
             onPress={() => {

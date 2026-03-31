@@ -1,4 +1,4 @@
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import { DISCIPLINE_LABELS, type Match } from '@/types/match';
@@ -6,9 +6,10 @@ import { styles } from '../styles';
 
 interface MatchHeaderProps {
   match: Match;
+  onBack: () => void;
 }
 
-export const MatchHeader = ({ match }: MatchHeaderProps) => {
+export const MatchHeader = ({ match, onBack }: MatchHeaderProps) => {
   const { t } = useTranslation('matches');
   const { tk } = useTheme();
 
@@ -35,9 +36,22 @@ export const MatchHeader = ({ match }: MatchHeaderProps) => {
 
   return (
     <>
-      <Text style={[styles.discipline, { color: tk.text.primary }]}>
-        {DISCIPLINE_LABELS[match.discipline]}
-      </Text>
+      <View style={styles.matchHeaderRow}>
+        <TouchableOpacity
+          onPress={onBack}
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          accessibilityRole='button'
+        >
+          <Text style={[styles.back, { color: tk.primary[400] }]}>←</Text>
+        </TouchableOpacity>
+        <Text
+          style={[styles.discipline, { color: tk.text.primary }]}
+          numberOfLines={1}
+        >
+          {DISCIPLINE_LABELS[match.discipline]}
+        </Text>
+        <View style={styles.backPlaceholder} />
+      </View>
 
       <View style={styles.metaRow}>
         <View

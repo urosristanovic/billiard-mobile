@@ -8,6 +8,13 @@ export const styles = StyleSheet.create({
     gap: spacing[8],
     justifyContent: 'center',
   },
+  backButton: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.display,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    alignSelf: 'flex-start',
+  },
   header: {
     gap: spacing[3],
   },

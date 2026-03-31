@@ -102,6 +102,13 @@ const ChangePasswordScreen = ({
           automaticallyAdjustKeyboardInsets
           showsVerticalScrollIndicator={false}
         >
+          <Text
+            onPress={() => navigation.goBack()}
+            style={[styles.backButton, { color: tk.primary[400] }]}
+          >
+            ← Back
+          </Text>
+
           <View style={styles.header}>
             <Text style={[styles.title, { color: tk.text.primary }]}>
               {tAuth('changePassword.title')}

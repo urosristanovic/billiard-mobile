@@ -36,7 +36,7 @@ import { AppDrawerContent } from './DrawerContent';
 // ─── Stack param lists ────────────────────────────────────────────────────────
 
 export type HomeStackParamList = {
-  Home: undefined;
+  HomeFeed: undefined;
   MatchDetail: { matchId: string };
   UserSearch: undefined;
   PlayerProfile: { userId: string };
@@ -70,7 +70,7 @@ export type TournamentsStackParamList = {
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 const HomeNavigator = () => (
   <HomeStack.Navigator screenOptions={{ headerShown: false }}>
-    <HomeStack.Screen name='Home' component={HomeScreen} />
+    <HomeStack.Screen name='HomeFeed' component={HomeScreen} />
     <HomeStack.Screen name='MatchDetail' component={MatchDetailScreen} />
     <HomeStack.Screen name='UserSearch' component={UserSearchScreen} />
     <HomeStack.Screen name='PlayerProfile' component={PlayerProfileScreen} />

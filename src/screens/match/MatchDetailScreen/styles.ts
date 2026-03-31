@@ -7,7 +7,20 @@ export const styles = StyleSheet.create({
     gap: spacing[4],
     paddingBottom: spacing[8],
   },
+  matchHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[6],
+  },
+  back: {
+    fontSize: 22,
+    fontFamily: typography.family.display,
+  },
+  backPlaceholder: {
+    width: 22,
+  },
   discipline: {
+    flex: 1,
     fontSize: typography.size['2xl'],
     fontWeight: typography.weight.bold,
     fontFamily: typography.family.display,
@@ -198,5 +211,9 @@ export const styles = StyleSheet.create({
   opponentStatusText: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.bodyMedium,
+  },
+  refreshingIndicator: {
+    alignItems: 'center',
+    paddingVertical: spacing[2],
   },
 });

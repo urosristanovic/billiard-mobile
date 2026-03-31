@@ -26,7 +26,7 @@ import {
 import { styles } from './styles';
 import type { HomeStackParamList } from '@/navigation/AppNavigator';
 
-type Props = NativeStackScreenProps<HomeStackParamList, 'Home'>;
+type Props = NativeStackScreenProps<HomeStackParamList, 'HomeFeed'>;
 
 const HomeScreen = ({ navigation }: Props) => {
   const { t } = useTranslation('home');
@@ -209,8 +209,8 @@ const HomeScreen = ({ navigation }: Props) => {
           </>
         }
         ListEmptyComponent={
-          isLoading || isRefetching ? (
-            <LoadingState message={t('noMatches')} isDark={isDark} />
+          isLoading ? (
+            <LoadingState isDark={isDark} />
           ) : error ? (
             <EmptyState title={t('noMatches')} isDark={isDark} />
           ) : (

@@ -7,6 +7,16 @@ export const styles = StyleSheet.create({
     padding: spacing[8],
     gap: spacing[8],
   },
+  headerRow: {
+    paddingBottom: spacing[2],
+    marginTop: -spacing[4],
+  },
+  backButton: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.display,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
   hero: {
     alignItems: 'center',
     gap: spacing[3],
@@ -49,16 +59,6 @@ export const styles = StyleSheet.create({
     fontFamily: typography.family.body,
     textAlign: 'center',
     lineHeight: typography.size.sm * 1.6,
-  },
-  contenderTag: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    paddingHorizontal: spacing[2],
-    paddingVertical: spacing[1],
-    borderRadius: radius.sm,
-    borderWidth: 1,
   },
   bottomBar: {
     flexDirection: 'row',

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ScrollView } from 'react-native';
+import { useState, useCallback } from 'react';
+import { ScrollView, RefreshControl, ActivityIndicator, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMatchDetail } from '@/features/matches/useMatchDetail';
@@ -29,7 +29,7 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
   const { matchId } = route.params;
   const { t } = useTranslation('matches');
   const { t: tCommon } = useTranslation('common');
-  const { isDark } = useTheme();
+  const { isDark, tk } = useTheme();
   const { confirm } = useConfirmDialog();
   const { user } = useAuth();
   const [activeForm, setActiveForm] = useState<
@@ -43,7 +43,11 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
     string | null
   >(null);
 
-  const { data: match, isLoading, error } = useMatchDetail(matchId);
+  const { data: match, isLoading, isRefetching, error, refetch } = useMatchDetail(matchId);
+
+  const handleRefresh = useCallback(async () => {
+    await refetch();
+  }, [refetch]);
   const {
     confirmMatch,
     disputeMatch,
@@ -243,8 +247,22 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <MatchHeader match={match} />
+      <ScrollView
+        contentContainerStyle={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={handleRefresh}
+          />
+        }
+      >
+        {isRefetching && (
+          <View style={styles.refreshingIndicator}>
+            <ActivityIndicator size='small' color={tk.primary[600]} />
+          </View>
+        )}
+
+        <MatchHeader match={match} onBack={() => navigation.goBack()} />
 
         <ScoreBoard match={match} myUserId={user?.id ?? ''} isDark={isDark} />
 
