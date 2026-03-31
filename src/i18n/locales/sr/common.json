@@ -1,7 +1,7 @@
 {
   "appName": "Billiard Tracker",
   "loading": "Učitavanje...",
-  "error": "Nešto je pošlo po krivu",
+  "error": "Nešto je pošlo po zlu",
   "retry": "Pokušaj ponovo",
   "save": "Sačuvaj",
   "cancel": "Otkaži",
@@ -22,7 +22,7 @@
     "9ball": "9-Ball",
     "10ball": "10-Ball",
     "straightPool": "Straight Pool",
-    "snooker": "Snuker"
+    "snooker": "Snooker"
   },
   "matchStatus": {
     "pendingConfirmation": "Čeka potvrdu",
@@ -32,7 +32,7 @@
   },
   "rating": {
     "provisional": "Privremeni",
-    "established": "Etabliran",
+    "established": "Stabilan",
     "ratingDeviation": "Devijacija rejtinga",
     "volatility": "Volatilnost"
   },

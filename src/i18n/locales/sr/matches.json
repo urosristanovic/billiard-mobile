@@ -1,10 +1,10 @@
 {
   "disciplines": {
-    "8ball": "8-lопtica",
-    "9ball": "9-loptica",
-    "10ball": "10-loptica",
-    "straight_pool": "Ravni bazen",
-    "snooker": "Snuker",
+    "8ball": "8-ball",
+    "9ball": "9-ball",
+    "10ball": "10-ball",
+    "straight_pool": "Straight pool",
+    "snooker": "Snooker",
     "all": "Sve"
   },
   "status": {
@@ -46,7 +46,7 @@
     "title": "Istorija mečeva",
     "empty": "Nema mečeva",
     "emptyDesc": "Zabeležite prvi meč da biste počeli",
-    "statsNote": "Samo potvrđeni mečevi utiču na ovu statistiku",
+    "statsNote": "Samo potvrđeni mečevi su uračunati u statistici",
     "filters": {
       "game": "Igra",
       "user": "Igrač",
@@ -85,12 +85,12 @@
     "confirmButton": "Potvrdi rezultat",
     "acceptResultButton": "Prihvati rezultat",
     "confirmShortButton": "Potvrdi",
-    "disputeButton": "Osporavaj",
+    "disputeButton": "Ospori",
     "confirmTitle": "Potvrdi rezultat meča?",
     "confirmMessage": "Ovo će potvrditi rezultat i ažurirati rejtinge.",
     "disputeTitle": "Osporavate ovaj meč?",
     "disputeMessage": "Meč će biti označen za pregled. Rejtinzi neće biti pogođeni dok se ne reši.",
-    "disputeFormTitle": "Spor Sa Ispravljenim Rezultatom",
+    "disputeFormTitle": "Spor sa ispravljenim rezultatom",
     "disputeReasonLabel": "Razlog",
     "disputeReasonPlaceholder": "Šta je uneto pogrešno?",
     "disputeReasonEmpty": "Razlog nije naveden",
@@ -99,7 +99,7 @@
     "submitDisputeButton": "Pošalji spor",
     "closeDisputeFormButton": "Zatvori formu za spor",
     "closeCancellationFormButton": "Zatvori formu za otkazivanje",
-    "scoresMustBePositive": "Rezultati moraju biti 0 ili veći",
+    "scoresMustBePositive": "Rezultati moraju biti veći od 0",
     "disputeResolutionTitle": "Rešavanje spora",
     "currentScoresLabel": "Trenutni rezultati",
     "proposedScoresLabel": "Predloženi rezultati",
@@ -121,7 +121,7 @@
     "cancelChallengeRequestMessage": "Ovaj zahtev za izazov će biti uklonjen.",
     "acceptChallengeButton": "Prihvati izazov",
     "acceptChallengeTitle": "Prihvatiti izazov?",
-    "acceptChallengeMessage": "Meč prelazi u izazov režim gde unosite rezultat.",
+    "acceptChallengeMessage": "Meč prelazi u režim izazova, gde unosite rezultat.",
     "declineChallengeButton": "Odbij izazov",
     "declineChallengeTitle": "Odbiti izazov?",
     "declineChallengeMessage": "Možete dodati opcioni razlog.",
@@ -173,7 +173,7 @@
   },
   "beers": {
     "label": "Piva",
-    "myBeers": "Tvoja piva",
+    "myBeers": "Moja piva",
     "opponentBeers": "Piva protivnika"
   },
   "create": {
@@ -185,7 +185,7 @@
     "opponentScore": "Rezultat protivnika",
     "scorePlaceholder": "Dobijene runde",
     "isRated": "Rangirani meč",
-    "isRatedDesc": "Utiče na Glicko-2 rejtinge",
+    "isRatedDesc": "Utiče na rejting",
     "submitButton": "Zabeleži meč",
     "scoresOptional": "Rezultati su opcioni",
     "scoresRequired": "Rezultat je obavezan",
@@ -196,7 +196,7 @@
   },
   "search": {
     "title": "Pronađi protivnika",
-    "placeholder": "Pretraži po korisničkom imenu...",
+    "placeholder": "Pretraži po imenu ili korisničkom imenu...",
     "empty": "Nema pronađenih igrača",
     "emptyDesc": "Pokušajte sa drugim korisničkim imenom"
   }

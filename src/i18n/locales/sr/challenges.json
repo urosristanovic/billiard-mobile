@@ -1,9 +1,9 @@
 {
-  "modalTitle": "Izazovi igrača",
+  "modalTitle": "Izazovi",
   "disciplineLabel": "Disciplina",
-  "bestOfLabel": "Sistem",
+  "bestOfLabel": "Format",
   "messageLabel": "Poruka (opcionalno)",
-  "messagePlaceholder": "Dodaj poruku izazovu...",
+  "messagePlaceholder": "Dodaj poruku...",
   "sendButton": "Pošalji izazov",
   "sending": "Slanje...",
   "successTitle": "Izazov poslat!",
