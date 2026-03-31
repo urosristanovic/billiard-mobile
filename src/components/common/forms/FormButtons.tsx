@@ -11,6 +11,7 @@ interface FormButtonsProps {
   submitDisabled?: boolean;
   submitLoading?: boolean;
   isDark?: boolean;
+  cancelFirst?: boolean;
 }
 
 export const FormButtons = ({
@@ -21,8 +22,9 @@ export const FormButtons = ({
   submitDisabled,
   submitLoading,
   isDark = false,
-}: FormButtonsProps) => (
-  <View style={styles.container}>
+  cancelFirst = false,
+}: FormButtonsProps) => {
+  const submitButton = (
     <PrimaryButton
       label={submitLabel}
       onPress={onSubmit}
@@ -31,16 +33,33 @@ export const FormButtons = ({
       isDark={isDark}
       style={styles.submit}
     />
-    {onCancel && (
-      <SecondaryButton
-        label={cancelLabel}
-        onPress={onCancel}
-        isDark={isDark}
-        style={styles.cancel}
-      />
-    )}
-  </View>
-);
+  );
+
+  const cancelButton = onCancel ? (
+    <SecondaryButton
+      label={cancelLabel}
+      onPress={onCancel}
+      isDark={isDark}
+      style={styles.cancel}
+    />
+  ) : null;
+
+  return (
+    <View style={styles.container}>
+      {cancelFirst ? (
+        <>
+          {cancelButton}
+          {submitButton}
+        </>
+      ) : (
+        <>
+          {submitButton}
+          {cancelButton}
+        </>
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

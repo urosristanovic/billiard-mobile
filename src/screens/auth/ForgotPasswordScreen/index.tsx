@@ -131,6 +131,7 @@ const ForgotPasswordScreen = ({
             onCancel={onNavigateLogin}
             submitLoading={forgotPassword.isPending}
             isDark={isDark}
+            cancelFirst
           />
         </ScrollView>
       </KeyboardAvoidingView>
