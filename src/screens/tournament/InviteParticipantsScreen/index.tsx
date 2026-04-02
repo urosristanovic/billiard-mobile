@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
-import { ScreenLayout } from '@/components/common/layout';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { EmptyState } from '@/components/common/states';
 import { useTournamentMutations } from '@/features/tournaments/useTournamentMutations';
 import {
@@ -96,19 +96,10 @@ const InviteParticipantsScreen = ({ navigation, route }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <View style={[styles.header, { borderBottomColor: tk.border.subtle }]}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-          accessibilityRole='button'
-        >
-          <Text style={[styles.back, { color: tk.primary[400] }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.title, { color: tk.text.primary }]}>
-          {t('inviteParticipants.title')}
-        </Text>
-        <View style={styles.backPlaceholder} />
-      </View>
+      <ScreenHeader
+        title={t('inviteParticipants.title')}
+        onBack={() => navigation.goBack()}
+      />
 
       <View style={styles.searchContainer}>
         <TextInput
@@ -247,31 +238,6 @@ const InviteParticipantsScreen = ({ navigation, route }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing[4],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[3],
-    borderBottomWidth: 1,
-    gap: spacing[2],
-  },
-  back: {
-    fontSize: 22,
-    fontFamily: typography.family.display,
-    width: 32,
-  },
-  backPlaceholder: {
-    width: 32,
-  },
-  title: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: typography.size.lg,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
   searchContainer: {
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[3],

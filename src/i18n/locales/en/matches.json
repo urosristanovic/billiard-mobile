@@ -9,8 +9,8 @@
   },
   "status": {
     "challenge_requested": "Challenge Requested",
-    "challenge": "Challenge",
-    "pending_confirmation": "Pending",
+    "challenge": "Playing",
+    "pending_confirmation": "Waiting to Confirm",
     "confirmed": "Confirmed",
     "disputed": "Disputed",
     "cancelled": "Cancelled"
@@ -48,7 +48,7 @@
     "emptyDesc": "Record your first match to get started",
     "statsNote": "Only confirmed matches affect these stats",
     "filters": {
-      "game": "Game",
+      "discipline": "Discipline",
       "user": "User",
       "status": "Status",
       "allOpponents": "All users"

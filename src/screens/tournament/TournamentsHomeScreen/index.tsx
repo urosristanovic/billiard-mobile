@@ -5,11 +5,11 @@ import {
   View,
   RefreshControl,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
-import { ScreenLayout } from '@/components/common/layout';
-import { AvatarButton } from '@/components/common/buttons';
+import { ScreenLayout, AppHeader } from '@/components/common/layout';
 import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
 import { EmptyState, LoadingState } from '@/components/common/states';
 import {
@@ -52,14 +52,7 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
       <View
         style={[styles.stickyHeader, { borderBottomColor: tk.border.subtle }]}
       >
-        <View style={styles.header}>
-          <View style={styles.headerRow}>
-            <Text style={[styles.title, { color: tk.text.primary }]}>
-              {t('home.title')}
-            </Text>
-            <AvatarButton />
-          </View>
-        </View>
+        <AppHeader />
 
         <View
           style={[
@@ -201,16 +194,21 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
         )}
       </ScrollView>
 
-      <FloatingActionButton
-        label={t('home.createButton')}
-        onPress={() => navigation.navigate('CreateTournament')}
-        style={{ bottom: 24 }}
-      />
-      <FloatingActionButton
-        label={t('home.joinButton')}
-        onPress={() => navigation.navigate('BrowseTournaments')}
-        style={{ bottom: 24 + 64 }}
-      />
+      <View style={styles.fabRow}>
+        <FloatingActionButton
+          label={t('home.joinButton')}
+          icon={<Feather name='plus' size={18} color={tk.text.primary} />}
+          onPress={() => navigation.navigate('BrowseTournaments')}
+          variant='secondary'
+          style={{ flex: 1 }}
+        />
+        <FloatingActionButton
+          label={t('home.createButton')}
+          icon={<Feather name='award' size={18} color={tk.text.onPrimary} />}
+          onPress={() => navigation.navigate('CreateTournament')}
+          style={{ flex: 1 }}
+        />
+      </View>
     </ScreenLayout>
   );
 };

@@ -80,4 +80,12 @@ export const styles = StyleSheet.create({
     marginHorizontal: spacing[4],
     marginBottom: spacing[4],
   },
+  fabRow: {
+    position: 'absolute',
+    bottom: spacing[4],
+    left: spacing[5],
+    right: spacing[5],
+    flexDirection: 'row',
+    gap: spacing[3],
+  },
 });

@@ -24,7 +24,7 @@
     "removeMember": "Remove",
     "removeMemberConfirmTitle": "Remove member?",
     "removeMemberConfirmMessage": "{{name}} will be removed from the group.",
-    "leaveGroup": "Leave Group",
+    "leaveGroup": "Leave",
     "leaveGroupConfirmTitle": "Leave group?",
     "leaveGroupConfirmMessage": "You will lose access to this group.",
     "roles": {
@@ -55,9 +55,11 @@
     "deleteConfirmTitle": "Delete leaderboard?",
     "deleteConfirmMessage": "This will permanently delete the leaderboard.",
     "members": "Members",
+    "memberCount": "{{count}} member",
+    "memberCount_other": "{{count}} members",
     "addMember": "Add Member",
     "removeMember": "Remove",
-    "leaveLeaderboard": "Leave Leaderboard",
+    "leaveLeaderboard": "Leave",
     "groupAttachedNote": "This leaderboard is linked to a group. Members are managed through the group — adding or removing users there will automatically apply here."
   },
   "location": {

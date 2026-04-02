@@ -24,7 +24,7 @@
     "removeMember": "Ukloni",
     "removeMemberConfirmTitle": "Ukloniti člana?",
     "removeMemberConfirmMessage": "{{name}} će biti uklonjen iz grupe.",
-    "leaveGroup": "Napusti grupu",
+    "leaveGroup": "Napusti",
     "leaveGroupConfirmTitle": "Napustiti grupu?",
     "leaveGroupConfirmMessage": "Izgubićete pristup ovoj grupi.",
     "roles": {
@@ -53,9 +53,12 @@
     "deleteConfirmTitle": "Obrisati rang listu?",
     "deleteConfirmMessage": "Ovo će trajno obrisati rang listu.",
     "members": "Članovi",
+    "memberCount": "{{count}} član",
+    "memberCount_other": "{{count}} članova",
     "addMember": "Dodaj člana",
     "removeMember": "Ukloni",
-    "leaveLeaderboard": "Napusti rang listu"
+    "leaveLeaderboard": "Napusti",
+    "groupAttachedNote": "Ova rang lista je povezana sa grupom. Članovi se upravljaju putem grupe — dodavanjem ili uklanjanjem korisnika tamo će se automatski primeniti i ovde."
   },
   "location": {
     "countryLabel": "Zemlja",

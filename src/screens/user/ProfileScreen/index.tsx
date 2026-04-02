@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ScreenLayout } from '@/components/common/layout';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { LoadingState } from '@/components/common/states';
 import { FormField, FormModal, FormButtons } from '@/components/common/forms';
 import { DangerButton, SecondaryButton } from '@/components/common/buttons';
@@ -103,15 +103,8 @@ const ProfileScreen = ({ navigation, route }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
+      <ScreenHeader onBack={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.headerRow}>
-          <Text
-            onPress={() => navigation.goBack()}
-            style={[styles.backButton, { color: tk.primary[400] }]}
-          >
-            ← {t('back')}
-          </Text>
-        </View>
         <ProfileHero user={user} isDark={isDark} />
       </ScrollView>
       <View

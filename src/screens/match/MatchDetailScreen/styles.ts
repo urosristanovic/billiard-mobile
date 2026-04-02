@@ -5,27 +5,11 @@ export const styles = StyleSheet.create({
   container: {
     padding: spacing[4],
     gap: spacing[4],
-    paddingBottom: spacing[8],
   },
-  matchHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing[6],
-  },
-  back: {
-    fontSize: 22,
-    fontFamily: typography.family.display,
-  },
-  backPlaceholder: {
-    width: 22,
-  },
-  discipline: {
-    flex: 1,
-    fontSize: typography.size['2xl'],
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+  metaBadges: {
+    paddingHorizontal: spacing[6],
+    paddingTop: spacing[4],
+    gap: spacing[2],
   },
   metaRow: {
     flexDirection: 'row',
@@ -47,6 +31,7 @@ export const styles = StyleSheet.create({
   date: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
+    paddingBottom: spacing[3],
   },
   actions: {
     gap: spacing[3],

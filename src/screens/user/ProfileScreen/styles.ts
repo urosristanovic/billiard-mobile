@@ -7,16 +7,6 @@ export const styles = StyleSheet.create({
     padding: spacing[8],
     gap: spacing[8],
   },
-  headerRow: {
-    paddingBottom: spacing[2],
-    marginTop: -spacing[4],
-  },
-  backButton: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
   hero: {
     alignItems: 'center',
     gap: spacing[3],

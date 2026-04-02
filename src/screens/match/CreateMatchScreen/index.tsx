@@ -255,7 +255,10 @@ const CreateMatchScreen = ({ navigation, route }: Props) => {
               <View
                 style={[
                   styles.beerField,
-                  { borderColor: tk.border.subtle, backgroundColor: tk.surface.default },
+                  {
+                    borderColor: tk.border.subtle,
+                    backgroundColor: tk.surface.default,
+                  },
                 ]}
               >
                 <Text style={[styles.beerLabel, { color: tk.text.secondary }]}>
@@ -263,14 +266,24 @@ const CreateMatchScreen = ({ navigation, route }: Props) => {
                 </Text>
                 <View style={styles.beerControls}>
                   <TouchableOpacity
-                    onPress={() => updateField('myBeers', Math.max(0, form.myBeers - 1))}
+                    onPress={() =>
+                      updateField('myBeers', Math.max(0, form.myBeers - 1))
+                    }
                     activeOpacity={0.8}
                     style={[
                       styles.beerAdjustButton,
-                      { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
+                      {
+                        borderColor: tk.border.default,
+                        backgroundColor: tk.background.secondary,
+                      },
                     ]}
                   >
-                    <Text style={[styles.beerAdjustButtonText, { color: tk.text.secondary }]}>
+                    <Text
+                      style={[
+                        styles.beerAdjustButtonText,
+                        { color: tk.text.secondary },
+                      ]}
+                    >
                       -
                     </Text>
                   </TouchableOpacity>
@@ -282,10 +295,18 @@ const CreateMatchScreen = ({ navigation, route }: Props) => {
                     activeOpacity={0.8}
                     style={[
                       styles.beerAdjustButton,
-                      { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
+                      {
+                        borderColor: tk.border.default,
+                        backgroundColor: tk.background.secondary,
+                      },
                     ]}
                   >
-                    <Text style={[styles.beerAdjustButtonText, { color: tk.text.secondary }]}>
+                    <Text
+                      style={[
+                        styles.beerAdjustButtonText,
+                        { color: tk.text.secondary },
+                      ]}
+                    >
                       +
                     </Text>
                   </TouchableOpacity>
@@ -296,7 +317,10 @@ const CreateMatchScreen = ({ navigation, route }: Props) => {
               <View
                 style={[
                   styles.beerField,
-                  { borderColor: tk.border.subtle, backgroundColor: tk.surface.default },
+                  {
+                    borderColor: tk.border.subtle,
+                    backgroundColor: tk.surface.default,
+                  },
                 ]}
               >
                 <Text style={[styles.beerLabel, { color: tk.text.secondary }]}>
@@ -305,15 +329,26 @@ const CreateMatchScreen = ({ navigation, route }: Props) => {
                 <View style={styles.beerControls}>
                   <TouchableOpacity
                     onPress={() =>
-                      updateField('opponentBeers', Math.max(0, form.opponentBeers - 1))
+                      updateField(
+                        'opponentBeers',
+                        Math.max(0, form.opponentBeers - 1),
+                      )
                     }
                     activeOpacity={0.8}
                     style={[
                       styles.beerAdjustButton,
-                      { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
+                      {
+                        borderColor: tk.border.default,
+                        backgroundColor: tk.background.secondary,
+                      },
                     ]}
                   >
-                    <Text style={[styles.beerAdjustButtonText, { color: tk.text.secondary }]}>
+                    <Text
+                      style={[
+                        styles.beerAdjustButtonText,
+                        { color: tk.text.secondary },
+                      ]}
+                    >
                       -
                     </Text>
                   </TouchableOpacity>
@@ -321,14 +356,24 @@ const CreateMatchScreen = ({ navigation, route }: Props) => {
                     {form.opponentBeers}
                   </Text>
                   <TouchableOpacity
-                    onPress={() => updateField('opponentBeers', form.opponentBeers + 1)}
+                    onPress={() =>
+                      updateField('opponentBeers', form.opponentBeers + 1)
+                    }
                     activeOpacity={0.8}
                     style={[
                       styles.beerAdjustButton,
-                      { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
+                      {
+                        borderColor: tk.border.default,
+                        backgroundColor: tk.background.secondary,
+                      },
                     ]}
                   >
-                    <Text style={[styles.beerAdjustButtonText, { color: tk.text.secondary }]}>
+                    <Text
+                      style={[
+                        styles.beerAdjustButtonText,
+                        { color: tk.text.secondary },
+                      ]}
+                    >
                       +
                     </Text>
                   </TouchableOpacity>
@@ -367,7 +412,7 @@ const CreateMatchScreen = ({ navigation, route }: Props) => {
             <Switch
               value={form.isRated}
               onValueChange={v => updateField('isRated', v)}
-              trackColor={{ false: tk.border.default, true: tk.primary[400] }}
+              trackColor={{ false: tk.border.default, true: tk.primary[600] }}
               thumbColor={form.isRated ? tk.primary[600] : tk.surface.default}
             />
           </View>

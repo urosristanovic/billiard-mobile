@@ -43,19 +43,32 @@
   "loadMore": "Cargar más",
   "loading": "Cargando clasificación...",
   "loadFailed": "Error al cargar la clasificación",
-  "searchFab": "Buscar jugador",
   "playerProfile": {
-    "title": "Perfil del jugador",
+    "title": "Perfil de usuario",
     "ratingsSection": "Puntuaciones",
     "statsSection": "Estadísticas",
     "totalMatches": "Partidas totales",
     "winRate": "Tasa de victorias",
-    "challengeButton": "Desafiar"
+    "challengeButton": "Desafiar",
+    "failedToLoad": "Error al cargar el jugador",
+    "notFound": "Jugador no encontrado",
+    "h2hSection": "Cara a cara",
+    "h2hSubtitle": "Partidas puntuadas y no puntuadas",
+    "ratedOnly": "Solo partidas puntuadas",
+    "played": "Jugadas",
+    "wins": "Victorias",
+    "losses": "Derrotas",
+    "ratingRecord": "{{wins}}V {{losses}}D · {{games}} partidas"
   },
+  "manage": "Gestionar",
   "userSearch": {
     "title": "Buscar jugador",
     "placeholder": "Buscar por nombre o usuario...",
     "empty": "No se encontraron jugadores",
-    "emptyDesc": "Prueba con otro nombre de usuario"
+    "emptyDesc": "Prueba con otro nombre de usuario",
+    "add": "Agregar",
+    "added": "Agregado",
+    "alreadyMember": "Miembro",
+    "challenge": "Retar"
   }
 }

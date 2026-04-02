@@ -24,7 +24,7 @@
     "removeMember": "Eliminar",
     "removeMemberConfirmTitle": "¿Eliminar miembro?",
     "removeMemberConfirmMessage": "{{name}} será eliminado del grupo.",
-    "leaveGroup": "Abandonar grupo",
+    "leaveGroup": "Abandonar",
     "leaveGroupConfirmTitle": "¿Abandonar grupo?",
     "leaveGroupConfirmMessage": "Perderás el acceso a este grupo.",
     "roles": {
@@ -53,9 +53,12 @@
     "deleteConfirmTitle": "¿Eliminar tabla?",
     "deleteConfirmMessage": "Esto eliminará permanentemente la tabla.",
     "members": "Miembros",
+    "memberCount": "{{count}} miembro",
+    "memberCount_other": "{{count}} miembros",
     "addMember": "Añadir miembro",
     "removeMember": "Eliminar",
-    "leaveLeaderboard": "Abandonar tabla"
+    "leaveLeaderboard": "Abandonar",
+    "groupAttachedNote": "Esta tabla está vinculada a un grupo. Los miembros se gestionan a través del grupo — agregar o eliminar usuarios allí se aplicará automáticamente aquí."
   },
   "location": {
     "countryLabel": "País",

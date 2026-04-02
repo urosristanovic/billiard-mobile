@@ -2,73 +2,75 @@
  * Single source of truth for all design tokens in the mobile app.
  * This is the ONLY file that may contain hex color values.
  * All components consume tokens from this file -- never inline hex.
+ *
+ * Palette aligned with the web prototype (Tailwind amber + custom darks).
  */
 
 const palette = {
-  // Championship gold
+  // Tailwind amber — primary accent
   primary: {
-    50: '#FFF8E7',
-    100: '#FFEFC7',
-    200: '#FFE19A',
-    300: '#FFD06A',
-    400: '#FFBE3D',
-    500: '#F5A623',
-    600: '#DE920F',
-    700: '#C17D10',
-    800: '#9B640D',
-    900: '#7A4A00',
+    50: '#FFFBEB',
+    100: '#FEF3C7',
+    200: '#FDE68A',
+    300: '#FCD34D',
+    400: '#FBBF24',
+    500: '#F59E0B',
+    600: '#D97706',
+    700: '#B45309',
+    800: '#92400E',
+    900: '#78350F',
   },
 
-  // Carbon neutrals
+  // Neutral scale — dark end uses the blue-tinted darks from the web prototype
   zinc: {
-    50: '#F5F5F5',
-    100: '#E5E5E5',
-    200: '#D4D4D4',
-    300: '#B5B5B5',
-    400: '#888888',
-    500: '#666666',
-    600: '#444444',
-    700: '#2A2A2A',
-    800: '#1A1A1A',
-    900: '#111111',
-    950: '#0A0A0A',
+    50: '#F9FAFB',
+    100: '#F3F4F6',
+    200: '#E5E7EB',
+    300: '#D1D5DB',
+    400: '#9CA3AF',
+    500: '#6B7280',
+    600: '#4B5563',
+    700: '#18181B',
+    800: '#111114',
+    900: '#0A0A0C',
+    950: '#050505',
   },
 
   success: {
-    light: '#2A1E09',
-    default: '#F5A623',
-    dark: '#1A1408',
-    text: '#FFD06A',
-    border: '#9B640D',
+    light: '#052E16',
+    default: '#22C55E',
+    dark: '#041F10',
+    text: '#4ADE80',
+    border: '#166534',
   },
   error: {
     light: '#2A1111',
-    default: '#E53935',
+    default: '#EF4444',
     dark: '#190A0A',
-    text: '#FF7A76',
-    border: '#8A1F1C',
+    text: '#F87171',
+    border: '#991B1B',
   },
   warning: {
     light: '#2B1A08',
-    default: '#FF6D00',
+    default: '#F97316',
     dark: '#1A1007',
-    text: '#FFB06E',
-    border: '#9A4600',
+    text: '#FB923C',
+    border: '#9A3412',
   },
   info: {
-    light: '#111D2A',
-    default: '#3FA9F5',
-    dark: '#0A121A',
-    text: '#73C2FF',
-    border: '#1E5E8C',
+    light: '#0C1929',
+    default: '#3B82F6',
+    dark: '#081321',
+    text: '#60A5FA',
+    border: '#1E40AF',
   },
 
   rating: {
-    provisional: '#F5A623',
-    established: '#3FA9F5',
+    provisional: '#F59E0B',
+    established: '#3B82F6',
     trendUp: '#22C55E',
-    trendDown: '#E53935',
-    trendStable: '#888888',
+    trendDown: '#EF4444',
+    trendStable: '#6B7280',
   },
 
   white: '#FFFFFF',
@@ -78,28 +80,28 @@ const palette = {
 
 const lightTheme = {
   background: {
-    primary: '#120D06',
-    secondary: '#181108',
-    tertiary: '#22170A',
+    primary: '#0A0A0C',
+    secondary: '#111114',
+    tertiary: '#18181B',
     overlay: 'rgba(0, 0, 0, 0.75)',
   },
   surface: {
-    default: '#1A1A1A',
-    raised: '#222222',
-    overlay: '#2A2A2A',
+    default: '#111114',
+    raised: '#1A1A1F',
+    overlay: '#222228',
   },
   border: {
-    subtle: '#2A2A2A',
-    default: '#333333',
-    strong: '#444444',
+    subtle: 'rgba(255, 255, 255, 0.03)',
+    default: 'rgba(255, 255, 255, 0.05)',
+    strong: 'rgba(255, 255, 255, 0.10)',
   },
   text: {
-    primary: '#F5F5F5',
-    secondary: '#B5B5B5',
-    muted: '#888888',
-    disabled: '#666666',
-    inverse: '#111111',
-    onPrimary: '#090909',
+    primary: '#FFFFFF',
+    secondary: '#9CA3AF',
+    muted: '#6B7280',
+    disabled: '#4B5563',
+    inverse: '#0A0A0C',
+    onPrimary: '#000000',
   },
   primary: palette.primary,
   success: palette.success,
@@ -111,28 +113,28 @@ const lightTheme = {
 
 const darkTheme = {
   background: {
-    primary: palette.zinc[950],
-    secondary: palette.zinc[900],
-    tertiary: palette.zinc[800],
-    overlay: 'rgba(0, 0, 0, 0.8)',
+    primary: '#050505',
+    secondary: '#0A0A0C',
+    tertiary: '#111114',
+    overlay: 'rgba(0, 0, 0, 0.80)',
   },
   surface: {
-    default: '#141414',
-    raised: '#1C1C1C',
-    overlay: '#222222',
+    default: '#0A0A0C',
+    raised: '#111114',
+    overlay: '#1A1A1F',
   },
   border: {
-    subtle: '#2A2A2A',
-    default: '#333333',
-    strong: '#444444',
+    subtle: 'rgba(255, 255, 255, 0.03)',
+    default: 'rgba(255, 255, 255, 0.05)',
+    strong: 'rgba(255, 255, 255, 0.10)',
   },
   text: {
-    primary: '#F5F5F5',
-    secondary: '#AAAAAA',
-    muted: '#666666',
-    disabled: '#4F4F4F',
-    inverse: '#0F0F0F',
-    onPrimary: '#090909',
+    primary: '#FFFFFF',
+    secondary: '#9CA3AF',
+    muted: '#6B7280',
+    disabled: '#4B5563',
+    inverse: '#050505',
+    onPrimary: '#000000',
   },
   primary: palette.primary,
   success: palette.success,
@@ -152,16 +154,18 @@ export type Theme = typeof lightTheme;
 
 export const gradients = {
   light: {
-    header: ['#1F1508', '#0E0A05'] as string[],
-    card: ['#232323', '#171717'] as string[],
-    background: ['#161008', '#090909'] as string[],
+    header: ['#111114', '#0A0A0C'] as string[],
+    card: ['#1A1A1F', '#111114'] as string[],
+    background: ['#0A0A0C', '#050505'] as string[],
     rating: [palette.primary[400], palette.primary[800]] as string[],
+    hero: ['#1C160B', '#111114'] as string[],
   },
   dark: {
-    header: ['#1A1A1A', '#0A0A0A'] as string[],
-    card: ['#1A1A1A', '#111111'] as string[],
-    background: ['#111111', '#0A0A0A'] as string[],
+    header: ['#0A0A0C', '#050505'] as string[],
+    card: ['#111114', '#0A0A0C'] as string[],
+    background: ['#050505', '#030303'] as string[],
     rating: [palette.primary[500], palette.primary[800]] as string[],
+    hero: ['#1C160B', '#111114'] as string[],
   },
 } as const;
 
@@ -177,6 +181,8 @@ export const spacing = {
   12: 48,
   16: 64,
   20: 80,
+  24: 96,
+  32: 128,
 } as const;
 
 export const radius = {
@@ -185,6 +191,8 @@ export const radius = {
   lg: 8,
   xl: 12,
   '2xl': 16,
+  '3xl': 20,
+  '4xl': 24,
   full: 9999,
 } as const;
 
@@ -206,6 +214,7 @@ export const typography = {
     '2xl': 26,
     '3xl': 32,
     '4xl': 38,
+    '5xl': 44,
   },
   weight: {
     normal: '400' as const,
@@ -218,6 +227,13 @@ export const typography = {
     snug: 1.375,
     normal: 1.5,
     relaxed: 1.625,
+  },
+  letterSpacing: {
+    tight: 0.5,
+    snug: 0.6,
+    normal: 1,
+    relaxed: 1.2,
+    extraRelaxed: 1.4,
   },
 } as const;
 
@@ -237,7 +253,7 @@ export const shadows = {
     elevation: 5,
   },
   lg: {
-    shadowColor: '#C17D10',
+    shadowColor: '#D97706',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.16,
     shadowRadius: 16,

@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ScreenLayout } from '@/components/common/layout';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { FormField, FormButtons } from '@/components/common/forms';
 import { useToast } from '@/components/common/toast';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
@@ -90,6 +90,7 @@ const ChangePasswordScreen = ({
 
   return (
     <ScreenLayout isDark={isDark}>
+      <ScreenHeader onBack={() => navigation.goBack()} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -102,13 +103,6 @@ const ChangePasswordScreen = ({
           automaticallyAdjustKeyboardInsets
           showsVerticalScrollIndicator={false}
         >
-          <Text
-            onPress={() => navigation.goBack()}
-            style={[styles.backButton, { color: tk.primary[400] }]}
-          >
-            ← {t('back')}
-          </Text>
-
           <View style={styles.header}>
             <Text style={[styles.title, { color: tk.text.primary }]}>
               {tAuth('changePassword.title')}

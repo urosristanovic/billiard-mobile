@@ -247,6 +247,7 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
+      <MatchHeader match={match} onBack={() => navigation.goBack()} />
       <ScrollView
         contentContainerStyle={styles.container}
         refreshControl={
@@ -261,8 +262,6 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
             <ActivityIndicator size='small' color={tk.primary[600]} />
           </View>
         )}
-
-        <MatchHeader match={match} onBack={() => navigation.goBack()} />
 
         <ScoreBoard match={match} myUserId={user?.id ?? ''} isDark={isDark} />
 

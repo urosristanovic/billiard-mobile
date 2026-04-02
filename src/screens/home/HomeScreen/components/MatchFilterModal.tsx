@@ -67,7 +67,10 @@ export const MatchFilterModal = ({
   const disciplineOptions = useMemo(
     () => [
       { value: 'all' as DisciplineFilter, label: t('disciplines.all') },
-      ...DISCIPLINES.map(d => ({ value: d as DisciplineFilter, label: DISCIPLINE_LABELS[d] })),
+      ...DISCIPLINES.map(d => ({
+        value: d as DisciplineFilter,
+        label: DISCIPLINE_LABELS[d],
+      })),
     ],
     [t],
   );
@@ -100,19 +103,6 @@ export const MatchFilterModal = ({
     onClose();
   };
 
-  const pillStyle = (active: boolean) => [
-    styles.pill,
-    {
-      borderColor: active ? tk.primary[500] : tk.border.default,
-      backgroundColor: active ? tk.primary[500] : 'transparent',
-    },
-  ];
-
-  const pillTextStyle = (active: boolean) => [
-    styles.pillText,
-    { color: active ? tk.background.primary : tk.text.secondary },
-  ];
-
   return (
     <Modal
       visible={visible}
@@ -136,7 +126,12 @@ export const MatchFilterModal = ({
           ]}
         >
           {/* Header */}
-          <View style={[styles.sheetHeader, { borderBottomColor: tk.border.default }]}>
+          <View
+            style={[
+              styles.sheetHeader,
+              { borderBottomColor: tk.border.default },
+            ]}
+          >
             <Text style={[styles.sheetTitle, { color: tk.text.primary }]}>
               {tHome('filters.title')}
             </Text>
@@ -145,7 +140,7 @@ export const MatchFilterModal = ({
               accessibilityRole='button'
               accessibilityLabel={tHome('filters.reset')}
             >
-              <Text style={[styles.resetLabel, { color: tk.primary[400] }]}>
+              <Text style={[styles.resetLabel, { color: tk.primary[600] }]}>
                 {tHome('filters.reset')}
               </Text>
             </TouchableOpacity>
@@ -160,17 +155,29 @@ export const MatchFilterModal = ({
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.pillRow}>
-                  {opponentOptions.map(({ value, label }) => (
-                    <TouchableOpacity
-                      key={value}
-                      onPress={() => setDraft(prev => ({ ...prev, opponent: value }))}
-                      style={pillStyle(draft.opponent === value)}
-                    >
-                      <Text style={pillTextStyle(draft.opponent === value)}>
-                        {label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                  {opponentOptions.map(({ value, label }) =>
+                    draft.opponent === value ? (
+                      <PrimaryButton
+                        key={value}
+                        label={label}
+                        compact
+                        isDark={isDark}
+                        onPress={() =>
+                          setDraft(prev => ({ ...prev, opponent: value }))
+                        }
+                      />
+                    ) : (
+                      <SecondaryButton
+                        key={value}
+                        label={label}
+                        size='xs'
+                        isDark={isDark}
+                        onPress={() =>
+                          setDraft(prev => ({ ...prev, opponent: value }))
+                        }
+                      />
+                    ),
+                  )}
                 </View>
               </ScrollView>
             </View>
@@ -178,21 +185,33 @@ export const MatchFilterModal = ({
             {/* Discipline */}
             <View style={styles.section}>
               <Text style={[styles.sectionLabel, { color: tk.text.secondary }]}>
-                {t('history.filters.game')}
+                {t('history.filters.discipline')}
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.pillRow}>
-                  {disciplineOptions.map(({ value, label }) => (
-                    <TouchableOpacity
-                      key={value}
-                      onPress={() => setDraft(prev => ({ ...prev, discipline: value }))}
-                      style={pillStyle(draft.discipline === value)}
-                    >
-                      <Text style={pillTextStyle(draft.discipline === value)}>
-                        {label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                  {disciplineOptions.map(({ value, label }) =>
+                    draft.discipline === value ? (
+                      <PrimaryButton
+                        key={value}
+                        label={label}
+                        compact
+                        isDark={isDark}
+                        onPress={() =>
+                          setDraft(prev => ({ ...prev, discipline: value }))
+                        }
+                      />
+                    ) : (
+                      <SecondaryButton
+                        key={value}
+                        label={label}
+                        size='xs'
+                        isDark={isDark}
+                        onPress={() =>
+                          setDraft(prev => ({ ...prev, discipline: value }))
+                        }
+                      />
+                    ),
+                  )}
                 </View>
               </ScrollView>
             </View>
@@ -204,17 +223,29 @@ export const MatchFilterModal = ({
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.pillRow}>
-                  {statusOptions.map(({ value, label }) => (
-                    <TouchableOpacity
-                      key={value}
-                      onPress={() => setDraft(prev => ({ ...prev, status: value }))}
-                      style={pillStyle(draft.status === value)}
-                    >
-                      <Text style={pillTextStyle(draft.status === value)}>
-                        {label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                  {statusOptions.map(({ value, label }) =>
+                    draft.status === value ? (
+                      <PrimaryButton
+                        key={value}
+                        label={label}
+                        compact
+                        isDark={isDark}
+                        onPress={() =>
+                          setDraft(prev => ({ ...prev, status: value }))
+                        }
+                      />
+                    ) : (
+                      <SecondaryButton
+                        key={value}
+                        label={label}
+                        size='xs'
+                        isDark={isDark}
+                        onPress={() =>
+                          setDraft(prev => ({ ...prev, status: value }))
+                        }
+                      />
+                    ),
+                  )}
                 </View>
               </ScrollView>
             </View>
@@ -292,18 +323,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing[2],
-  },
-  pill: {
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    borderRadius: radius.full,
-    borderWidth: 1,
-  },
-  pillText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
   },
   actions: {
     flexDirection: 'row',

@@ -1,23 +1,20 @@
 import { TouchableOpacity, StyleSheet, View, ViewStyle } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { DrawerNavigationProp } from '@react-navigation/drawer';
 import { useTheme } from '@/hooks/useTheme';
 import { radius, spacing } from '@/constants/theme';
-import type { AppDrawerParamList } from '@/navigation/AppNavigator';
 
 interface AvatarButtonProps {
+  onPress?: () => void;
   style?: ViewStyle;
 }
 
-export const AvatarButton = ({ style }: AvatarButtonProps) => {
-  const navigation = useNavigation<DrawerNavigationProp<AppDrawerParamList>>();
+export const AvatarButton = ({ onPress, style }: AvatarButtonProps) => {
   const { tk } = useTheme();
 
   return (
     <TouchableOpacity
       accessibilityRole='button'
       accessibilityLabel='Open menu'
-      onPress={() => navigation.openDrawer()}
+      onPress={onPress}
       style={[
         styles.button,
         {

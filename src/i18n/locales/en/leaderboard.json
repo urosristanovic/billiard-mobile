@@ -43,15 +43,24 @@
   "loadMore": "Load more",
   "loading": "Loading leaderboard...",
   "loadFailed": "Failed to load leaderboard",
-  "searchFab": "Find player",
   "playerProfile": {
-    "title": "Player Profile",
+    "title": "User Profile",
     "ratingsSection": "Ratings",
     "statsSection": "Stats",
     "totalMatches": "Total Matches",
     "winRate": "Win Rate",
-    "challengeButton": "Challenge"
+    "challengeButton": "Challenge",
+    "failedToLoad": "Failed to load player",
+    "notFound": "Player not found",
+    "h2hSection": "Head to Head",
+    "h2hSubtitle": "Rated & unrated matches",
+    "ratedOnly": "Rated matches only",
+    "played": "Played",
+    "wins": "Wins",
+    "losses": "Losses",
+    "ratingRecord": "{{wins}}W {{losses}}L · {{games}} games"
   },
+  "manage": "Manage",
   "userSearch": {
     "title": "Find Player",
     "placeholder": "Search by name or username...",
@@ -59,6 +68,7 @@
     "emptyDesc": "Try a different username",
     "add": "Add",
     "added": "Added",
-    "alreadyMember": "Member"
+    "alreadyMember": "Member",
+    "challenge": "Challenge"
   }
 }

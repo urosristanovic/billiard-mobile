@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
-import { ScreenLayout } from '@/components/common/layout';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { FormField, FormButtons } from '@/components/common/forms';
+import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { useCustomLeaderboardMutations } from '@/features/leaderboard/useCustomLeaderboards';
 import { useMyGroups } from '@/features/groups/useGroups';
-import { typography, spacing, radius } from '@/constants/theme';
+import { typography, spacing } from '@/constants/theme';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
 
-type Props = NativeStackScreenProps<LeaderboardStackParamList, 'CreateCustomLeaderboard'>;
+type Props = NativeStackScreenProps<
+  LeaderboardStackParamList,
+  'CreateCustomLeaderboard'
+>;
 
 const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
   const { t } = useTranslation('groups');
@@ -46,7 +50,9 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
       },
       {
         onSuccess: lb => {
-          navigation.replace('CustomLeaderboardDetail', { leaderboardId: lb.id });
+          navigation.replace('CustomLeaderboardDetail', {
+            leaderboardId: lb.id,
+          });
         },
       },
     );
@@ -54,22 +60,15 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
+      <ScreenHeader
+        onBack={() => navigation.goBack()}
+        title={t('customLeaderboards.createTitle')}
+      />
       <ScrollView
+        style={styles.scroll}
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps='handled'
       >
-        <View style={styles.header}>
-          <Text
-            onPress={() => navigation.goBack()}
-            style={[styles.backButton, { color: tk.primary[400] }]}
-          >
-            ← {tCommon('cancel')}
-          </Text>
-          <Text style={[styles.title, { color: tk.text.primary }]}>
-            {t('customLeaderboards.createTitle')}
-          </Text>
-        </View>
-
         <View style={styles.form}>
           <FormField
             label={t('customLeaderboards.nameLabel')}
@@ -99,24 +98,16 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
                 <GroupOption
                   label={t('customLeaderboards.groupPlaceholder')}
                   selected={!selectedGroupId}
+                  isDark={isDark}
                   onPress={() => setSelectedGroupId(undefined)}
-                  selectedColor={tk.primary[300]}
-                  selectedBg={tk.primary[900]}
-                  defaultColor={tk.text.muted}
-                  borderColor={tk.primary[800]}
-                  selectedBorderColor={tk.primary[500]}
                 />
                 {myGroups.map(g => (
                   <GroupOption
                     key={g.id}
                     label={g.name}
                     selected={selectedGroupId === g.id}
+                    isDark={isDark}
                     onPress={() => setSelectedGroupId(g.id)}
-                    selectedColor={tk.primary[300]}
-                    selectedBg={tk.primary[900]}
-                    defaultColor={tk.text.muted}
-                    borderColor={tk.primary[800]}
-                    selectedBorderColor={tk.primary[500]}
                   />
                 ))}
               </View>
@@ -144,21 +135,22 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
             <Switch
               value={isPublic}
               onValueChange={setIsPublic}
-              trackColor={{ false: tk.primary[800], true: tk.primary[500] }}
+              trackColor={{ false: tk.border.default, true: tk.primary[600] }}
               thumbColor={tk.text.onPrimary}
+              style={{ transform: [{ scaleX: 1 }, { scaleY: 1 }] }}
             />
           </View>
         </View>
-
-        <FormButtons
-          submitLabel={t('customLeaderboards.submit')}
-          cancelLabel={tCommon('cancel')}
-          onSubmit={handleSubmit}
-          onCancel={() => navigation.goBack()}
-          submitLoading={createLeaderboard.isPending}
-          isDark={isDark}
-        />
       </ScrollView>
+      <FormButtons
+        submitLabel={t('customLeaderboards.submit')}
+        cancelLabel={tCommon('cancel')}
+        onSubmit={handleSubmit}
+        onCancel={() => navigation.goBack()}
+        submitLoading={createLeaderboard.isPending}
+        isDark={isDark}
+        cancelFirst
+      />
     </ScreenLayout>
   );
 };
@@ -166,70 +158,49 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
 interface GroupOptionProps {
   label: string;
   selected: boolean;
+  isDark: boolean;
   onPress: () => void;
-  selectedColor: string;
-  selectedBg: string;
-  defaultColor: string;
-  borderColor: string;
-  selectedBorderColor: string;
 }
 
-const GroupOption = ({
-  label,
-  selected,
-  onPress,
-  selectedColor,
-  selectedBg,
-  defaultColor,
-  borderColor,
-  selectedBorderColor,
-}: GroupOptionProps) => (
-  <TouchableOpacity
-    onPress={onPress}
-    style={[
-      optionStyles.pill,
-      {
-        borderColor: selected ? selectedBorderColor : borderColor,
-        backgroundColor: selected ? selectedBg : 'transparent',
-      },
-    ]}
-  >
-    <Text style={[optionStyles.pillText, { color: selected ? selectedColor : defaultColor }]}>
-      {label}
-    </Text>
-  </TouchableOpacity>
-);
+const GroupOption = ({ label, selected, isDark, onPress }: GroupOptionProps) =>
+  selected ? (
+    <PrimaryButton
+      label={label}
+      size='xs'
+      isDark={isDark}
+      onPress={onPress}
+      style={optionStyles.pill}
+    />
+  ) : (
+    <SecondaryButton
+      label={label}
+      size='xs'
+      isDark={isDark}
+      onPress={onPress}
+      style={optionStyles.pill}
+    />
+  );
 
 const optionStyles = StyleSheet.create({
   pill: {
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    borderRadius: radius.sm,
-    borderWidth: 1,
     marginRight: spacing[2],
     marginBottom: spacing[2],
-  },
-  pillText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.body,
   },
 });
 
 const styles = StyleSheet.create({
+  scroll: {
+    flex: 1,
+  },
   container: {
-    paddingBottom: spacing[8],
+    paddingBottom: spacing[4],
+    paddingTop: spacing[4],
   },
   header: {
     paddingHorizontal: spacing[4],
     paddingTop: spacing[8],
     paddingBottom: spacing[4],
     gap: spacing[3],
-  },
-  backButton: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
   title: {
     fontSize: typography.size['2xl'],
@@ -244,7 +215,6 @@ const styles = StyleSheet.create({
   },
   fieldLabel: {
     fontSize: typography.size.sm,
-    fontFamily: typography.family.heading,
     fontWeight: typography.weight.semibold,
     marginBottom: spacing[2],
   },
@@ -253,7 +223,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   thresholdDesc: {
-    fontSize: typography.size.xs,
+    fontSize: typography.size.sm,
     fontFamily: typography.family.body,
     marginTop: -spacing[2],
   },

@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { ScreenLayout } from '@/components/common/layout';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { FormField } from '@/components/common/forms';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { useToast } from '@/components/common/toast';
@@ -82,6 +82,10 @@ const FeedbackScreen = ({
 
   return (
     <ScreenLayout isDark={isDark}>
+      <ScreenHeader
+        title={tAuth('feedback.title')}
+        onBack={() => navigation.goBack()}
+      />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -95,9 +99,6 @@ const FeedbackScreen = ({
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.header}>
-            <Text style={[styles.title, { color: tk.text.primary }]}>
-              {tAuth('feedback.title')}
-            </Text>
             <Text style={[styles.subtitle, { color: tk.text.muted }]}>
               {tAuth('feedback.subtitle')}
             </Text>

@@ -2,28 +2,6 @@ import { StyleSheet } from 'react-native';
 import { typography, spacing, radius } from '@/constants/theme';
 
 export const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing[4],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[3],
-    gap: spacing[6],
-  },
-  back: {
-    fontSize: 22,
-    fontFamily: typography.family.display,
-  },
-  backPlaceholder: {
-    width: 32,
-  },
-  headerTitle: {
-    fontSize: typography.size['3xl'],
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    lineHeight: typography.size['3xl'] * 1.15,
-  },
   metaSection: {
     paddingHorizontal: spacing[4],
     paddingBottom: spacing[3],

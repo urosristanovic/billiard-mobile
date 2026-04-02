@@ -33,9 +33,13 @@ export const ChallengeScoreCard = ({
 
   const handleIncrement = (field: 'my' | 'opponent') => {
     if (field === 'my') {
-      setMyScore(prev => (raceTo != null ? Math.min(raceTo, prev + 1) : prev + 1));
+      setMyScore(prev =>
+        raceTo != null ? Math.min(raceTo, prev + 1) : prev + 1,
+      );
     } else {
-      setOpponentScore(prev => (raceTo != null ? Math.min(raceTo, prev + 1) : prev + 1));
+      setOpponentScore(prev =>
+        raceTo != null ? Math.min(raceTo, prev + 1) : prev + 1,
+      );
     }
   };
 
@@ -116,7 +120,10 @@ export const ChallengeScoreCard = ({
                 </Text>
               </TouchableOpacity>
               <Text
-                style={[styles.challengeScoreButtonValue, { color: tk.primary[300] }]}
+                style={[
+                  styles.challengeScoreButtonValue,
+                  { color: tk.primary[300] },
+                ]}
               >
                 {myScore}
               </Text>
@@ -185,7 +192,10 @@ export const ChallengeScoreCard = ({
                 </Text>
               </TouchableOpacity>
               <Text
-                style={[styles.challengeScoreButtonValue, { color: tk.primary[300] }]}
+                style={[
+                  styles.challengeScoreButtonValue,
+                  { color: tk.primary[300] },
+                ]}
               >
                 {opponentScore}
               </Text>
@@ -242,7 +252,12 @@ export const ChallengeScoreCard = ({
                 },
               ]}
             >
-              <Text style={[styles.challengeBeerLabel, { color: tk.text.secondary }]}>
+              <Text
+                style={[
+                  styles.challengeBeerLabel,
+                  { color: tk.text.secondary },
+                ]}
+              >
                 {item.label}
               </Text>
               <View style={styles.challengeBeerControls}>
@@ -266,7 +281,12 @@ export const ChallengeScoreCard = ({
                     -
                   </Text>
                 </TouchableOpacity>
-                <Text style={[styles.challengeBeerValue, { color: tk.text.primary }]}>
+                <Text
+                  style={[
+                    styles.challengeBeerValue,
+                    { color: tk.text.primary },
+                  ]}
+                >
                   {item.value}
                 </Text>
                 <TouchableOpacity

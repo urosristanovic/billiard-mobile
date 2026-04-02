@@ -5,3 +5,4 @@ export * from './layout';
 export * from './filters';
 export * from './dialog';
 export * from './toast';
+export * from './MatchStatusBadge';

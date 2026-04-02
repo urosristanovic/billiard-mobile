@@ -3,7 +3,7 @@ import { typography, spacing, radius } from '@/constants/theme';
 
 export const styles = StyleSheet.create({
   header: {
-    paddingHorizontal: spacing[4],
+    paddingHorizontal: spacing[6],
     paddingTop: spacing[8],
     paddingBottom: spacing[3],
     borderBottomWidth: 1,
@@ -25,7 +25,12 @@ export const styles = StyleSheet.create({
   secondRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     marginTop: spacing[3],
+  },
+  secondRowLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: spacing[2],
   },
   headerActionButton: {
@@ -64,7 +69,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   manageGroupName: {
-    fontSize: typography.size.sm,
+    fontSize: typography.size.base,
     fontFamily: typography.family.display,
     textTransform: 'uppercase',
     letterSpacing: 0.5,

@@ -1,1 +1,0 @@
-export { UserResultItem } from "./UserResultItem";
