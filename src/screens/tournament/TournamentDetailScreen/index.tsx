@@ -1,17 +1,12 @@
 import { useState } from 'react';
-import {
-  ScrollView,
-  Text,
-  View,
-  RefreshControl,
-} from 'react-native';
+import { ScrollView, Text, View, RefreshControl } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { useConfirmDialog } from '@/components/common/dialog';
 import { ScreenLayout } from '@/components/common/layout';
-import { LoadingState, EmptyState, Loading } from '@/components/common/states';
-import { SecondaryButton } from '@/components/common/buttons';
+import { LoadingState, EmptyState } from '@/components/common/states';
+import { FloatingActionButton } from '@/components/common/buttons';
 import {
   useTournamentDetail,
   useTournamentRequests,
@@ -34,8 +29,8 @@ import {
 } from './components';
 import type { Tab } from './components';
 import { styles } from './styles';
-import { spacing } from '@/constants/theme';
 import type { TournamentsStackParamList } from '@/navigation/AppNavigator';
+import { Feather } from '@expo/vector-icons';
 
 type Props = NativeStackScreenProps<
   TournamentsStackParamList,
@@ -213,24 +208,6 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
           />
         )}
 
-        {!isOrganizer &&
-          tournament.status === 'registration' &&
-          tournament.participants.some(p => p.userId === user?.id) && (
-            <View style={styles.participantActionsWrapper}>
-              <SecondaryButton
-                label={t('detail.actions.addParticipants')}
-                compact
-                isDark={isDark}
-                style={{ shadowOpacity: 0, elevation: 0, flex: 1 }}
-                onPress={() =>
-                  navigation.navigate('InviteParticipants', {
-                    tournamentId: tournament.id,
-                  })
-                }
-              />
-            </View>
-          )}
-
         <TabBar
           tabs={tabs}
           activeTab={effectiveTab}
@@ -249,18 +226,6 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
           />
         }
       >
-        {isRefetching && (
-          <View
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingVertical: spacing[3],
-            }}
-          >
-            <Loading />
-          </View>
-        )}
-
         <View style={styles.tabContent}>
           {effectiveTab === 'matches' && hasStarted && (
             <CurrentMatches
@@ -327,6 +292,21 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
           )}
         </View>
       </ScrollView>
+
+      {!isOrganizer &&
+        tournament.status === 'registration' &&
+        tournament.participants.some(p => p.userId === user?.id) && (
+          <FloatingActionButton
+            label={t('detail.actions.addParticipants')}
+            icon={<Feather name='plus' size={20} />}
+            style={styles.fab}
+            onPress={() =>
+              navigation.navigate('InviteParticipants', {
+                tournamentId: tournament.id,
+              })
+            }
+          />
+        )}
 
       <RecordScoreModal
         visible={Boolean(selectedMatch)}

@@ -1,5 +1,11 @@
 import { useCallback, useState } from 'react';
-import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  Text,
+  View,
+  type ViewStyle,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
@@ -13,10 +19,12 @@ import {
 } from '@/features/groups/useGroups';
 import { useAuth } from '@/features/auth/useAuth';
 import { DangerButton } from '@/components/common/buttons/DangerButton';
-import { PrimaryButton } from '@/components/common/buttons/PrimaryButton';
+import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
 import { detailStyles } from '../shared/detailStyles';
 import { MemberRow } from '../shared/MemberRow';
+import { spacing } from '@/constants/theme';
+import { Feather } from '@expo/vector-icons';
 
 type Props = NativeStackScreenProps<LeaderboardStackParamList, 'GroupDetail'>;
 
@@ -173,21 +181,26 @@ const GroupDetailScreen = ({ route, navigation }: Props) => {
         ListFooterComponent={<View style={detailStyles.footer} />}
       />
       {hasBottomAddAction && (
-        <View
-          style={[
-            detailStyles.bottomActionBar,
-            { borderTopColor: tk.primary[900] },
-          ]}
-        >
-          <PrimaryButton
-            isDark={isDark}
-            label={`+ ${t('groups.addMember')}`}
+        <View style={fabRow}>
+          <View style={{ flex: 1 }} />
+          <FloatingActionButton
+            label={t('groups.addMember')}
+            icon={<Feather name='plus' size={18} />}
             onPress={() => navigation.push('UserSearch', { groupId })}
           />
         </View>
       )}
     </ScreenLayout>
   );
+};
+
+const fabRow: ViewStyle = {
+  position: 'absolute',
+  bottom: spacing[4],
+  left: spacing[5],
+  right: spacing[5],
+  flexDirection: 'row',
+  gap: spacing[3],
 };
 
 export default GroupDetailScreen;

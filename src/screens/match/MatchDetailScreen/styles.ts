@@ -35,6 +35,7 @@ export const styles = StyleSheet.create({
   },
   actions: {
     gap: spacing[3],
+    flexDirection: 'row',
   },
   challengeScoreCard: {
     borderRadius: radius.lg,

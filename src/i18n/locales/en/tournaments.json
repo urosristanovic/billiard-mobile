@@ -106,7 +106,9 @@
       "recordResult": "Record Result",
       "editResult": "Edit Result",
       "invite": "Invite Player",
-      "addParticipants": "Add"
+      "addParticipants": "Add",
+      "showDetails": "Show Details",
+      "hideDetails": "Hide Details"
     },
     "currentMatches": {
       "title": "Next Matches",

@@ -86,16 +86,18 @@ export const DisputeForm = ({
       ) : null}
 
       <View style={styles.actions}>
+        <SecondaryButton
+          label={t('detail.closeDisputeFormButton')}
+          onPress={onCancel}
+          isDark={isDark}
+          style={{ flex: 1 }}
+        />
         <PrimaryButton
           label={submitLabel ?? t('detail.submitDisputeButton')}
           onPress={onSubmit}
           loading={isSubmitting}
           isDark={isDark}
-        />
-        <SecondaryButton
-          label={t('detail.closeDisputeFormButton')}
-          onPress={onCancel}
-          isDark={isDark}
+          style={{ flex: 1 }}
         />
       </View>
     </View>
@@ -122,5 +124,6 @@ const styles = StyleSheet.create({
   },
   actions: {
     gap: spacing[2],
+    flexDirection: 'row',
   },
 });

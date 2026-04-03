@@ -1,4 +1,18 @@
-import { Text, View } from 'react-native';
+import { useRef, useState } from 'react';
+import {
+  Animated,
+  LayoutAnimation,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  UIManager,
+  View,
+} from 'react-native';
+
+if (Platform.OS === 'android') {
+  UIManager.setLayoutAnimationEnabledExperimental?.(true);
+}
 import { useTranslation } from 'react-i18next';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
@@ -37,6 +51,48 @@ export const TournamentMeta = ({
 }: TournamentMetaProps) => {
   const { t } = useTranslation('tournaments');
   const { isDark, tk } = useTheme();
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const contentOpacity = useRef(new Animated.Value(1)).current;
+  const chevronRotation = useRef(new Animated.Value(0)).current;
+
+  const layoutAnimation = LayoutAnimation.create(
+    300,
+    LayoutAnimation.Types.easeInEaseOut,
+    LayoutAnimation.Properties.opacity,
+  );
+
+  const toggle = () => {
+    Animated.timing(chevronRotation, {
+      toValue: isCollapsed ? 0 : 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+
+    if (!isCollapsed) {
+      Animated.timing(contentOpacity, {
+        toValue: 0,
+        duration: 180,
+        useNativeDriver: true,
+      }).start(() => {
+        LayoutAnimation.configureNext(layoutAnimation);
+        setIsCollapsed(true);
+      });
+    } else {
+      LayoutAnimation.configureNext(layoutAnimation);
+      setIsCollapsed(false);
+      Animated.timing(contentOpacity, {
+        toValue: 1,
+        duration: 250,
+        delay: 80,
+        useNativeDriver: true,
+      }).start();
+    }
+  };
+
+  const chevronRotate = chevronRotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'],
+  });
 
   return (
     <View style={styles.metaSection}>
@@ -75,43 +131,61 @@ export const TournamentMeta = ({
         )}
       </View>
 
-      <View style={styles.metaDetails}>
-        {location ? (
-          <View style={styles.metaDetailRow}>
-            <Feather name='map-pin' size={14} color={tk.text.muted} />
-            <Text style={[styles.metaDetailText, { color: tk.text.primary }]}>
-              {location}
-            </Text>
+      {!isCollapsed && (
+        <Animated.View style={{ opacity: contentOpacity }}>
+          <View style={styles.metaDetails}>
+            {location ? (
+              <View style={styles.metaDetailRow}>
+                <Feather name='map-pin' size={14} color={tk.text.muted} />
+                <Text
+                  style={[styles.metaDetailText, { color: tk.text.primary }]}
+                >
+                  {location}
+                </Text>
+              </View>
+            ) : null}
+            <View style={styles.metaDetailRow}>
+              <Feather name='calendar' size={14} color={tk.text.muted} />
+              <Text style={[styles.metaDetailText, { color: tk.text.primary }]}>
+                {new Date(scheduledAt).toLocaleString(undefined, {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </Text>
+            </View>
+            <View style={styles.metaDetailRow}>
+              <Feather name='user' size={14} color={tk.text.muted} />
+              <Text style={[styles.metaDetailText, { color: tk.text.primary }]}>
+                {organizerProfile.displayName || organizerProfile.username}
+              </Text>
+              <Text style={[styles.metaDetailLabel, { color: tk.text.muted }]}>
+                {t('detail.organizer').toLowerCase()}
+              </Text>
+            </View>
           </View>
-        ) : null}
-        <View style={styles.metaDetailRow}>
-          <Feather name='calendar' size={14} color={tk.text.muted} />
-          <Text style={[styles.metaDetailText, { color: tk.text.primary }]}>
-            {new Date(scheduledAt).toLocaleString(undefined, {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </Text>
-        </View>
-        <View style={styles.metaDetailRow}>
-          <Feather name='user' size={14} color={tk.text.muted} />
-          <Text style={[styles.metaDetailText, { color: tk.text.primary }]}>
-            {organizerProfile.displayName || organizerProfile.username}
-          </Text>
-          <Text style={[styles.metaDetailLabel, { color: tk.text.muted }]}>
-            {t('detail.organizer').toLowerCase()}
-          </Text>
-        </View>
-      </View>
 
-      {description ? (
-        <Text style={[styles.description, { color: tk.text.secondary }]}>
-          {description}
-        </Text>
-      ) : null}
+          {description ? (
+            <ScrollView
+              style={styles.descriptionScroll}
+              showsVerticalScrollIndicator={false}
+              nestedScrollEnabled
+            >
+              <Text style={[styles.description, { color: tk.text.secondary }]}>
+                {description}
+              </Text>
+            </ScrollView>
+          ) : null}
+        </Animated.View>
+      )}
+
+      <Pressable onPress={toggle} style={styles.metaCollapseBtn} hitSlop={8}>
+        <Animated.View style={{ transform: [{ rotate: chevronRotate }] }}>
+          <Feather name='chevron-up' size={24} color={tk.primary[600]} />
+        </Animated.View>
+      </Pressable>
     </View>
   );
 };

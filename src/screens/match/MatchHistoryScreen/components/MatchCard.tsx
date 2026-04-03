@@ -85,18 +85,7 @@ export const MatchCard = ({
         },
       ]}
     >
-      {/* ── Left: status / date column ─────────────────────── */}
-      <View style={[styles.leftCol, { borderRightColor: tk.border.default }]}>
-        <MatchStatusBadge status={match.status} />
-
-        <Text style={[styles.timeText, { color: tk.text.muted }]}>
-          {dateStr}
-        </Text>
-        <Text style={[styles.timeText, { color: tk.text.muted }]}>
-          {timeStr}
-        </Text>
-      </View>
-
+      {/* ── I switched the positions, so naming is not correct ── */}
       {/* ── Right: two player rows ──────────────────────────── */}
       <View style={styles.rightCol}>
         {/* Me */}
@@ -155,6 +144,18 @@ export const MatchCard = ({
           </Text>
         </View>
       </View>
+
+      {/* ── Left: status / date column ─────────────────────── */}
+      <View style={[styles.leftCol, { borderLeftColor: tk.border.default }]}>
+        <MatchStatusBadge status={match.status} />
+
+        <Text style={[styles.timeText, { color: tk.text.muted }]}>
+          {dateStr}
+        </Text>
+        <Text style={[styles.timeText, { color: tk.text.muted }]}>
+          {timeStr}
+        </Text>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -164,7 +165,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: radius['2xl'],
     borderWidth: 1,
-    padding: spacing[4],
+    paddingVertical: spacing[4],
+    paddingLeft: spacing[4],
   },
 
   // ── Left column ──────────────────────────────────────────
@@ -172,9 +174,8 @@ const styles = StyleSheet.create({
     width: spacing[24],
     justifyContent: 'center',
     alignItems: 'center',
-    borderRightWidth: 1,
-    paddingRight: spacing[3],
-    marginRight: spacing[3],
+    borderLeftWidth: 1,
+    marginLeft: spacing[3],
     gap: spacing[1],
   },
   timeText: {

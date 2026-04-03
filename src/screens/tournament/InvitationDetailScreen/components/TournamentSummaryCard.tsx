@@ -26,7 +26,7 @@ export const TournamentSummaryCard = ({ tournament }: Props) => {
       ]}
     >
       <View style={styles.nameRow}>
-        {tournament.isRated && (
+        {!tournament.isRated && (
           <View style={[styles.ratedBadge, { borderColor: tk.primary[400] }]}>
             <Text style={[styles.ratedBadgeText, { color: tk.primary[400] }]}>
               {t('ratedBadge')}

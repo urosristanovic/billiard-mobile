@@ -106,7 +106,9 @@
       "recordResult": "Upiši rezultat",
       "editResult": "Izmeni rezultat",
       "invite": "Pozovi igrača",
-      "addParticipants": "Dodaj"
+      "addParticipants": "Dodaj",
+      "showDetails": "Prikaži detalje",
+      "hideDetails": "Sakrij detalje"
     },
     "currentMatches": {
       "title": "Sledeći mečevi",

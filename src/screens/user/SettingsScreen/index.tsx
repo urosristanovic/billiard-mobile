@@ -10,7 +10,6 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { DangerButton } from '@/components/common/buttons';
-import { useConfirmDialog } from '@/components/common/dialog';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { typography, spacing, radius } from '@/constants/theme';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
@@ -38,7 +37,6 @@ const SettingsScreen = ({ navigation }: Props) => {
   const { t } = useTranslation('common');
   const { t: tAuth } = useTranslation('auth');
   const { isDark, tk } = useTheme();
-  const { confirm } = useConfirmDialog();
   const { logout } = useAuthMutations();
 
   const openWebPath = async (path: string) => {
@@ -173,16 +171,7 @@ const SettingsScreen = ({ navigation }: Props) => {
             <DangerButton
               noShadow
               label={tAuth('logout.button')}
-              onPress={() => {
-                confirm({
-                  title: tAuth('logout.title'),
-                  message: tAuth('logout.confirm'),
-                  cancelLabel: t('cancel'),
-                  confirmLabel: tAuth('logout.button'),
-                  variant: 'destructive',
-                  onConfirm: () => logout.mutate(),
-                });
-              }}
+              onPress={() => logout.mutate()}
               loading={logout.isPending}
               isDark={isDark}
             />

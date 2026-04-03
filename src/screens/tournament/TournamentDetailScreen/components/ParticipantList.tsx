@@ -1,7 +1,10 @@
 import { Text, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
-import type { TournamentParticipant, TournamentRequest } from '@/types/tournament';
+import type {
+  TournamentParticipant,
+  TournamentRequest,
+} from '@/types/tournament';
 
 interface ParticipantListProps {
   participants: TournamentParticipant[];
@@ -67,16 +70,18 @@ export const ParticipantList = ({
             ]}
           >
             <Text style={[styles.avatarText, { color: tk.primary[400] }]}>
-              {(
-                inv.profile.displayName || inv.profile.username
-              )[0]?.toUpperCase()}
+              {(inv.profile.displayName ||
+                inv.profile.username)[0]?.toUpperCase()}
             </Text>
           </View>
           <Text style={[styles.name, { color: tk.text.muted }]}>
             {inv.profile.displayName || inv.profile.username}
           </Text>
           <View
-            style={[styles.invitedBadge, { backgroundColor: tk.surface.overlay }]}
+            style={[
+              styles.invitedBadge,
+              { backgroundColor: tk.surface.overlay },
+            ]}
           >
             <Text style={[styles.invitedBadgeText, { color: tk.primary[400] }]}>
               {t('detail.invitedBadge')}

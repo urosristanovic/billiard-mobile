@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { spacing, typography } from '@/constants/theme';
+import { radius, spacing, typography } from '@/constants/theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -44,7 +44,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: spacing[2],
+    borderRadius: radius.xl,
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[3],
     gap: spacing[3],
@@ -74,8 +74,6 @@ export const styles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
     gap: spacing[3],
-    marginVertical: spacing[2],
-    paddingHorizontal: spacing[4],
   },
   button: {
     flex: 1,

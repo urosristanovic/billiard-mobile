@@ -158,6 +158,7 @@ export const LeaderboardFilterModal = ({
                         key={value}
                         label={label}
                         compact
+                        size='xs'
                         isDark={isDark}
                         onPress={() => handleScopeChange(value)}
                       />
@@ -192,6 +193,7 @@ export const LeaderboardFilterModal = ({
                             key={g.id}
                             label={g.name}
                             compact
+                            size='xs'
                             isDark={isDark}
                             onPress={() =>
                               setDraft(prev => ({
@@ -251,6 +253,7 @@ export const LeaderboardFilterModal = ({
                             key={lb.id}
                             label={lb.name}
                             compact
+                            size='xs'
                             isDark={isDark}
                             onPress={() =>
                               setDraft(prev => ({
@@ -306,6 +309,7 @@ export const LeaderboardFilterModal = ({
                         key={d}
                         label={DISCIPLINE_LABELS[d]}
                         compact
+                        size='xs'
                         isDark={isDark}
                         onPress={() =>
                           setDraft(prev => ({ ...prev, discipline: d }))

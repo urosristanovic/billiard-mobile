@@ -142,23 +142,15 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
   };
 
   const handleSubmitCancel = () =>
-    confirm({
-      title: t('detail.cancelWithReasonButton'),
-      message: t('detail.acceptCancelMessage'),
-      cancelLabel: tCommon('cancel'),
-      confirmLabel: tCommon('submit'),
-      variant: 'destructive',
-      onConfirm: () =>
-        cancelMatch.mutate(
-          { matchId: match.id, reason: cancellationReason.trim() || undefined },
-          {
-            onSuccess: () => {
-              setActiveForm('none');
-              setCancellationReason('');
-            },
-          },
-        ),
-    });
+    cancelMatch.mutate(
+      { matchId: match.id, reason: cancellationReason.trim() || undefined },
+      {
+        onSuccess: () => {
+          setActiveForm('none');
+          setCancellationReason('');
+        },
+      },
+    );
 
   const handleCancelChallengeRequest = () =>
     confirm({

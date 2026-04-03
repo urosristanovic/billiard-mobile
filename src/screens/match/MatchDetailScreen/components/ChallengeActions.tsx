@@ -1,10 +1,6 @@
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import {
-  DangerButton,
-  PrimaryButton,
-  SecondaryButton,
-} from '@/components/common/buttons';
+import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { useTheme } from '@/hooks/useTheme';
 import type { Match } from '@/types/match';
 import { styles } from '../styles';
@@ -45,20 +41,22 @@ export const ChallengeActions = ({
           isDark={isDark}
         />
       ) : (
-        <>
-          <PrimaryButton
-            label={t('detail.acceptChallengeButton')}
-            onPress={onAccept}
-            loading={isAccepting}
-            isDark={isDark}
-          />
-          <DangerButton
+        <View style={{ flexDirection: 'row', gap: 12 }}>
+          <SecondaryButton
+            style={{ flex: 1 }}
             label={t('detail.declineChallengeButton')}
             onPress={onDecline}
             loading={isDeclining}
             isDark={isDark}
           />
-        </>
+          <PrimaryButton
+            style={{ flex: 1 }}
+            label={t('detail.acceptChallengeButton')}
+            onPress={onAccept}
+            loading={isAccepting}
+            isDark={isDark}
+          />
+        </View>
       )}
     </View>
   );

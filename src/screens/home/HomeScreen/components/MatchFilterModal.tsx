@@ -161,6 +161,7 @@ export const MatchFilterModal = ({
                         key={value}
                         label={label}
                         compact
+                        size='xs'
                         isDark={isDark}
                         onPress={() =>
                           setDraft(prev => ({ ...prev, opponent: value }))
@@ -195,6 +196,7 @@ export const MatchFilterModal = ({
                         key={value}
                         label={label}
                         compact
+                        size='xs'
                         isDark={isDark}
                         onPress={() =>
                           setDraft(prev => ({ ...prev, discipline: value }))

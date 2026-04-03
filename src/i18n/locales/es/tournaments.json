@@ -106,7 +106,9 @@
       "recordResult": "Registrar resultado",
       "editResult": "Editar resultado",
       "invite": "Invitar jugador",
-      "addParticipants": "Agregar"
+      "addParticipants": "Agregar",
+      "showDetails": "Ver detalles",
+      "hideDetails": "Ocultar detalles"
     },
     "currentMatches": {
       "title": "Próximos partidos",

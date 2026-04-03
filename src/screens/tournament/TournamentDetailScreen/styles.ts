@@ -4,7 +4,7 @@ import { typography, spacing, radius } from '@/constants/theme';
 export const styles = StyleSheet.create({
   metaSection: {
     paddingHorizontal: spacing[4],
-    paddingVertical: spacing[2],
+    paddingTop: spacing[2],
     gap: spacing[3],
   },
   metaRow: {
@@ -52,22 +52,27 @@ export const styles = StyleSheet.create({
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
   },
+  descriptionScroll: {
+    maxHeight: '90%',
+    marginTop: spacing[2],
+  },
   description: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
-    lineHeight: typography.size.sm * 1.55,
-    marginTop: spacing[1],
+    lineHeight: typography.size.sm * 1.5,
+  },
+  metaCollapseBtn: {
+    alignItems: 'center',
+    paddingBottom: spacing[2],
   },
   actionsWrapper: {
     paddingBottom: spacing[1],
     gap: spacing[2],
   },
-  participantActionsWrapper: {
-    paddingHorizontal: spacing[4],
-    paddingBottom: spacing[2],
-  },
-  participantInviteBtn: {
-    flex: 0,
+  fab: {
+    position: 'absolute',
+    bottom: spacing[6],
+    right: spacing[5],
   },
   actions: {
     flexDirection: 'row',

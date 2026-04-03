@@ -38,8 +38,7 @@ export const TabBar = <T extends string>({
             style={[
               styles.tabText,
               {
-                color:
-                  activeTab === tab.key ? tk.primary[400] : tk.text.muted,
+                color: activeTab === tab.key ? tk.primary[400] : tk.text.muted,
               },
             ]}
           >

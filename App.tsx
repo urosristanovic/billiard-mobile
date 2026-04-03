@@ -14,6 +14,7 @@ import {
 } from '@expo-google-fonts/barlow';
 import { Oswald_600SemiBold, Oswald_700Bold } from '@expo-google-fonts/oswald';
 import { queryClient } from '@/lib/queryClient';
+import { clearHasSeenOnboarding } from '@/lib/onboardingStorage';
 import { RootNavigator } from '@/navigation/RootNavigator';
 import { ConfirmDialogProvider } from '@/components/common/dialog';
 import { ToastProvider } from '@/components/common/toast';
@@ -39,9 +40,14 @@ function App() {
   const [isLanguageReady, setIsLanguageReady] = useState(false);
 
   useEffect(() => {
-    hydrateLanguage()
-      .catch(() => undefined)
-      .finally(() => setIsLanguageReady(true));
+    const init = async () => {
+      if (__DEV__) {
+        await clearHasSeenOnboarding();
+      }
+      await hydrateLanguage().catch(() => undefined);
+      setIsLanguageReady(true);
+    };
+    void init();
   }, []);
 
   if (!fontsLoaded || !isLanguageReady) {

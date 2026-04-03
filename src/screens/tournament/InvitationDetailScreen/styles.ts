@@ -23,10 +23,11 @@ export const styles = StyleSheet.create({
     fontFamily: typography.family.display,
     textTransform: 'uppercase',
     letterSpacing: 0.8,
+    flexShrink: 1,
   },
   nameRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: spacing[2],
   },
   tournamentMeta: {
@@ -36,8 +37,8 @@ export const styles = StyleSheet.create({
   ratedBadge: {
     borderWidth: 1,
     borderRadius: radius.sm,
-    paddingHorizontal: spacing[1] + 2,
-    paddingVertical: 2,
+    paddingHorizontal: spacing[2],
+    paddingVertical: spacing[1],
   },
   ratedBadgeText: {
     fontSize: typography.size.xs,

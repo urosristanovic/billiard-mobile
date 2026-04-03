@@ -66,6 +66,7 @@ export const MatchActions = ({
           onPress={onConfirm}
           loading={isConfirming}
           isDark={isDark}
+          style={{ flex: 1 }}
         />
       )}
 
@@ -75,6 +76,7 @@ export const MatchActions = ({
           onPress={onOpenDispute}
           loading={isDisputing}
           isDark={isDark}
+          style={{ flex: 1 }}
         />
       )}
 
@@ -91,6 +93,7 @@ export const MatchActions = ({
           loading={isCancelling}
           disabled={!canOpenCancel && !canAcceptCancel}
           isDark={isDark}
+          style={{ flex: 1 }}
         />
       )}
     </View>

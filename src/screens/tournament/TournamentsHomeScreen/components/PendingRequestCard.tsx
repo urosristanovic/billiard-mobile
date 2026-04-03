@@ -210,8 +210,8 @@ const styles = StyleSheet.create({
     fontSize: typography.size['2xl'],
     fontFamily: typography.family.display,
     textTransform: 'uppercase',
-    letterSpacing: 0.6,
-    lineHeight: typography.size.base * 1.3,
+    letterSpacing: typography.letterSpacing.snug,
+    lineHeight: typography.size['2xl'] * 1.2,
     paddingVertical: spacing[2],
   },
   sub: {

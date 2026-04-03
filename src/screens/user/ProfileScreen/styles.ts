@@ -78,19 +78,5 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing[2],
   },
-  languageButton: {
-    flex: 1,
-    borderWidth: 1,
-    borderRadius: radius.md,
-    minHeight: 42,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: spacing[2],
-  },
-  languageButtonText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
+
 });

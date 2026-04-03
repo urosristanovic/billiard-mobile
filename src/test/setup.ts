@@ -2,6 +2,11 @@
 // point (the /extend-expect path does not exist in this version of RNTL)
 import '@testing-library/react-native/matchers';
 
+jest.mock('@/components/common/toast/ToastProvider', () => ({
+  ToastProvider: ({ children }: { children: React.ReactNode }) => children,
+  useToast: () => ({ showToast: jest.fn(), hideToast: jest.fn() }),
+}));
+
 jest.mock('@expo/vector-icons', () => {
   const React = require('react');
   const { Text } = require('react-native');

@@ -64,6 +64,16 @@ export const OrganizerActions = ({
           />
         )}
 
+        {['draft', 'registration'].includes(tournament.status) && (
+          <SecondaryButton
+            label={t('detail.actions.edit')}
+            compact
+            isDark={isDark}
+            style={btnStyle}
+            onPress={onEdit}
+          />
+        )}
+
         {tournament.status === 'registration' && canStartTournament && (
           <PrimaryButton
             label={t('detail.actions.start')}
@@ -103,27 +113,18 @@ export const OrganizerActions = ({
           />
         )}
 
-        {['draft', 'registration'].includes(tournament.status) && (
-          <SecondaryButton
-            label={t('detail.actions.edit')}
-            compact
-            isDark={isDark}
-            style={btnStyle}
-            onPress={onEdit}
-          />
-        )}
-
-        {['draft', 'registration'].includes(tournament.status) && (
-          <PrimaryButton
-            label={t('detail.actions.addParticipants')}
-            disabled={tournament.status === 'draft'}
-            compact
-            isDark={isDark}
-            style={btnStyle}
-            onPress={onInvite}
-            icon={<Feather name='plus' size={16} color={tk.text.onPrimary} />}
-          />
-        )}
+        {['draft', 'registration'].includes(tournament.status) &&
+          !canStartTournament && (
+            <PrimaryButton
+              label={t('detail.actions.addParticipants')}
+              disabled={tournament.status === 'draft'}
+              compact
+              isDark={isDark}
+              style={btnStyle}
+              onPress={onInvite}
+              icon={<Feather name='plus' size={16} color={tk.text.onPrimary} />}
+            />
+          )}
       </View>
 
       {tournament.status === 'registration' && !canStartTournament && (

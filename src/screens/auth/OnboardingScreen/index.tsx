@@ -2,14 +2,13 @@ import { useCallback, useRef, useState } from 'react';
 import {
   FlatList,
   Text,
-  TouchableOpacity,
   View,
   useWindowDimensions,
   type ViewToken,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ScreenLayout } from '@/components/common/layout';
-import { PrimaryButton } from '@/components/common/buttons';
+import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { useTheme } from '@/hooks/useTheme';
 import { setHasSeenOnboarding } from '@/lib/onboardingStorage';
 import { styles } from './styles';
@@ -121,16 +120,11 @@ const OnboardingScreen = ({
           </View>
           <View style={styles.controls}>
             {!isLastSlide && (
-              <TouchableOpacity
+              <SecondaryButton
+                label={tAuth('onboarding.skip')}
                 onPress={() => void handleFinish()}
-                accessibilityRole='button'
-                accessibilityLabel={tAuth('onboarding.skip')}
-                style={styles.skipButton}
-              >
-                <Text style={[styles.skipText, { color: tk.text.muted }]}>
-                  {tAuth('onboarding.skip')}
-                </Text>
-              </TouchableOpacity>
+                isDark={isDark}
+              />
             )}
             <PrimaryButton
               label={

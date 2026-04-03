@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { FormField } from '@/components/common/forms/FormField';
-import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
+import { DangerButton, SecondaryButton } from '@/components/common/buttons';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 
 interface CancellationFormProps {
@@ -55,16 +55,18 @@ export const CancellationForm = ({
       />
 
       <View style={styles.actions}>
-        <PrimaryButton
+        <DangerButton
           label={submitLabel ?? tCommon('submit')}
           onPress={onSubmit}
           loading={isSubmitting}
           isDark={isDark}
+          style={{ flex: 1 }}
         />
         <SecondaryButton
           label={tCommon('close')}
           onPress={onCancel}
           isDark={isDark}
+          style={{ flex: 1 }}
         />
       </View>
     </View>
@@ -73,7 +75,7 @@ export const CancellationForm = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: radius.lg,
+    borderRadius: radius['3xl'],
     borderWidth: 1,
     padding: spacing[4],
     gap: spacing[3],
@@ -87,5 +89,6 @@ const styles = StyleSheet.create({
   },
   actions: {
     gap: spacing[2],
+    flexDirection: 'row',
   },
 });

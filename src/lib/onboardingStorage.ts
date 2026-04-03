@@ -10,3 +10,7 @@ export async function getHasSeenOnboarding(): Promise<boolean> {
 export async function setHasSeenOnboarding(): Promise<void> {
   await SecureStore.setItemAsync(ONBOARDING_KEY, 'true');
 }
+
+export async function clearHasSeenOnboarding(): Promise<void> {
+  await SecureStore.deleteItemAsync(ONBOARDING_KEY);
+}

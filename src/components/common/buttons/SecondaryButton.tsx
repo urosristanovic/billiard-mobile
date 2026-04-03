@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: typography.size.base,
+    lineHeight: typography.size.base * 1.3,
     fontFamily: typography.family.display,
     fontWeight: typography.weight.bold,
     textTransform: 'uppercase',

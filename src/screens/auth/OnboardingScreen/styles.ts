@@ -67,18 +67,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing[4],
   },
-  skipButton: {
-    minHeight: 44,
-    justifyContent: 'center',
-    paddingHorizontal: spacing[2],
-  },
-  skipText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.heading,
-    fontWeight: typography.weight.semibold,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
   nextButton: {
     flex: 1,
   },

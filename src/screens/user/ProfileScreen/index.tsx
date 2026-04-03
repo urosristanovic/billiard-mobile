@@ -12,7 +12,13 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { LoadingState, Loading } from '@/components/common/states';
 import { FormField, FormModal, FormButtons } from '@/components/common/forms';
-import { DangerButton, SecondaryButton } from '@/components/common/buttons';
+import { useToast } from '@/components/common/toast';
+import {
+  DangerButton,
+  GhostButton,
+  PrimaryButton,
+  SecondaryButton,
+} from '@/components/common/buttons';
 import { useAuth } from '@/features/auth/useAuth';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useProfileForm } from '@/features/auth/useProfileForm';
@@ -43,6 +49,7 @@ const ProfileScreen = ({ navigation, route }: Props) => {
   const { t: tAuth, i18n } = useTranslation('auth');
   const { t: tGroups } = useTranslation('groups');
   const { isDark, tk } = useTheme();
+  const { showToast } = useToast();
   const { user } = useAuth();
   const { updateProfile, deleteAccount } = useAuthMutations();
   const { form, errors, updateField, loadForEdit, validate } = useProfileForm();
@@ -85,6 +92,11 @@ const ProfileScreen = ({ navigation, route }: Props) => {
       {
         onSuccess: () => {
           setEditModalVisible(false);
+          showToast({
+            type: 'success',
+            title: t('successTitle'),
+            message: tAuth('profile.successMessage'),
+          });
           if (selectedLanguage !== currentLanguage) {
             void i18n.changeLanguage(selectedLanguage);
             void setStoredLanguage(selectedLanguage);
@@ -102,7 +114,7 @@ const ProfileScreen = ({ navigation, route }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <ScreenHeader onBack={() => navigation.goBack()} />
+      <ScreenHeader onBack={() => navigation.goBack()} title={tAuth('settings.accountSettings')} />
       <ScrollView contentContainerStyle={styles.container}>
         <ProfileHero user={user} isDark={isDark} />
       </ScrollView>
@@ -115,7 +127,7 @@ const ProfileScreen = ({ navigation, route }: Props) => {
           },
         ]}
       >
-        <SecondaryButton
+        <GhostButton
           label={tAuth('changePassword.openButton')}
           onPress={() => navigation.navigate('ChangePassword')}
           isDark={isDark}
@@ -148,6 +160,7 @@ const ProfileScreen = ({ navigation, route }: Props) => {
             }}
             submitLoading={updateProfile.isPending}
             isDark={isDark}
+            cancelFirst
           />
         }
       >
@@ -364,35 +377,22 @@ const ProfileScreen = ({ navigation, route }: Props) => {
           <View style={styles.languageOptions}>
             {LANGUAGE_OPTIONS.map(option => {
               const isSelected = pendingLanguage === option.code;
-              return (
-                <TouchableOpacity
+              return isSelected ? (
+                <PrimaryButton
                   key={option.code}
+                  label={tAuth(option.labelKey)}
+                  size='xs'
+                  isDark={isDark}
                   onPress={() => setPendingLanguage(option.code)}
-                  style={[
-                    styles.languageButton,
-                    {
-                      borderColor: isSelected
-                        ? tk.primary[500]
-                        : tk.border.default,
-                      backgroundColor: isSelected
-                        ? tk.primary[900]
-                        : tk.background.secondary,
-                    },
-                  ]}
-                  accessibilityRole='button'
-                  accessibilityState={{ selected: isSelected }}
-                >
-                  <Text
-                    style={[
-                      styles.languageButtonText,
-                      {
-                        color: isSelected ? tk.primary[300] : tk.text.secondary,
-                      },
-                    ]}
-                  >
-                    {tAuth(option.labelKey)}
-                  </Text>
-                </TouchableOpacity>
+                />
+              ) : (
+                <SecondaryButton
+                  key={option.code}
+                  label={tAuth(option.labelKey)}
+                  size='xs'
+                  isDark={isDark}
+                  onPress={() => setPendingLanguage(option.code)}
+                />
               );
             })}
           </View>

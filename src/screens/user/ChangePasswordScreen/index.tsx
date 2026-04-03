@@ -99,7 +99,9 @@ const ChangePasswordScreen = ({
         <ScrollView
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps='handled'
-          keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
+          keyboardDismissMode={
+            Platform.OS === 'ios' ? 'interactive' : 'on-drag'
+          }
           automaticallyAdjustKeyboardInsets
           showsVerticalScrollIndicator={false}
         >
@@ -156,17 +158,17 @@ const ChangePasswordScreen = ({
               isDark={isDark}
             />
           </View>
-
-          <FormButtons
-            submitLabel='UPDATE'
-            cancelLabel={t('cancel')}
-            onSubmit={handleSubmit}
-            onCancel={() => navigation.goBack()}
-            submitLoading={changePassword.isPending}
-            isDark={isDark}
-          />
         </ScrollView>
       </KeyboardAvoidingView>
+      <FormButtons
+        submitLabel={tAuth('changePassword.submitButton')}
+        cancelLabel={t('cancel')}
+        onSubmit={handleSubmit}
+        onCancel={() => navigation.goBack()}
+        submitLoading={changePassword.isPending}
+        isDark={isDark}
+        cancelFirst
+      />
     </ScreenLayout>
   );
 };

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
-import { FormField } from '@/components/common/forms';
+import { FormButtons, FormField } from '@/components/common/forms';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { useToast } from '@/components/common/toast';
 import { useFeedbackMutation } from '@/features/feedback/useFeedbackMutation';
@@ -26,7 +26,10 @@ interface FeedbackScreenProps {
 
 type FeedbackTypeOption = {
   value: FeedbackType;
-  labelKey: 'feedback.typeSuggestion' | 'feedback.typeBug' | 'feedback.typeOther';
+  labelKey:
+    | 'feedback.typeSuggestion'
+    | 'feedback.typeBug'
+    | 'feedback.typeOther';
 };
 
 const TYPE_OPTIONS: FeedbackTypeOption[] = [
@@ -94,7 +97,9 @@ const FeedbackScreen = ({
         <ScrollView
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps='handled'
-          keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
+          keyboardDismissMode={
+            Platform.OS === 'ios' ? 'interactive' : 'on-drag'
+          }
           automaticallyAdjustKeyboardInsets
           showsVerticalScrollIndicator={false}
         >
@@ -102,7 +107,9 @@ const FeedbackScreen = ({
             <Text style={[styles.subtitle, { color: tk.text.muted }]}>
               {tAuth('feedback.subtitle')}
             </Text>
-            <View style={[styles.divider, { backgroundColor: tk.primary[500] }]} />
+            <View
+              style={[styles.divider, { backgroundColor: tk.primary[500] }]}
+            />
           </View>
 
           <View style={styles.form}>
@@ -119,8 +126,10 @@ const FeedbackScreen = ({
                       style={[
                         styles.typeOption,
                         {
-                          borderColor: selected ? tk.primary[500] : tk.border.default,
-                          backgroundColor: selected ? tk.primary[900] : tk.background.secondary,
+                          borderColor: selected
+                            ? tk.primary[500]
+                            : tk.border.default,
+                          backgroundColor: tk.surface.default,
                         },
                       ]}
                       onPress={() => setType(option.value)}
@@ -129,14 +138,18 @@ const FeedbackScreen = ({
                       <View
                         style={[
                           styles.typeRadio,
-                          { borderColor: selected ? tk.primary[400] : tk.border.default },
+                          {
+                            borderColor: selected
+                              ? tk.primary[500]
+                              : tk.border.default,
+                          },
                         ]}
                       >
                         {selected && (
                           <View
                             style={[
                               styles.typeRadioInner,
-                              { backgroundColor: tk.primary[400] },
+                              { backgroundColor: tk.primary[500] },
                             ]}
                           />
                         )}
@@ -144,7 +157,11 @@ const FeedbackScreen = ({
                       <Text
                         style={[
                           styles.typeOptionText,
-                          { color: selected ? tk.primary[300] : tk.text.secondary },
+                          {
+                            color: selected
+                              ? tk.primary[500]
+                              : tk.text.secondary,
+                          },
                         ]}
                       >
                         {tAuth(option.labelKey)}
@@ -170,24 +187,17 @@ const FeedbackScreen = ({
               isDark={isDark}
             />
           </View>
-
-          <View style={styles.buttons}>
-            <SecondaryButton
-              label={t('cancel')}
-              onPress={() => navigation.goBack()}
-              isDark={isDark}
-              style={styles.button}
-            />
-            <PrimaryButton
-              label={tAuth('feedback.submitButton')}
-              onPress={handleSubmit}
-              loading={submitFeedback.isPending}
-              isDark={isDark}
-              style={styles.button}
-            />
-          </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      <FormButtons
+        submitLabel={tAuth('feedback.submitButton')}
+        cancelLabel={t('cancel')}
+        onSubmit={handleSubmit}
+        onCancel={() => navigation.goBack()}
+        submitLoading={submitFeedback.isPending}
+        isDark={isDark}
+        cancelFirst
+      />
     </ScreenLayout>
   );
 };
