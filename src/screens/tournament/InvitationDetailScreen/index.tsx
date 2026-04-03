@@ -1,8 +1,8 @@
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
-import { ScreenLayout } from '@/components/common/layout';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { LoadingState, EmptyState } from '@/components/common/states';
 import { useConfirmDialog } from '@/components/common/dialog';
 import { useQuery } from '@tanstack/react-query';
@@ -15,7 +15,10 @@ import { TournamentSummaryCard } from './components/TournamentSummaryCard';
 import { InvitationActions } from './components/InvitationActions';
 import { styles } from './styles';
 
-type Props = NativeStackScreenProps<TournamentsStackParamList, 'InvitationDetail'>;
+type Props = NativeStackScreenProps<
+  TournamentsStackParamList,
+  'InvitationDetail'
+>;
 
 const InvitationDetailScreen = ({ navigation, route }: Props) => {
   const { requestId } = route.params;
@@ -93,31 +96,39 @@ const InvitationDetailScreen = ({ navigation, route }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <View style={[styles.header, { borderBottomColor: tk.border.subtle }]}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-          accessibilityRole='button'
-        >
-          <Text style={[styles.back, { color: tk.primary[400] }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: tk.text.primary }]}>
-          {isIncoming ? t('invitation.title') : t('invitation.requestTitle')}
-        </Text>
-        <View style={styles.backPlaceholder} />
-      </View>
+      <ScreenHeader
+        title={
+          isIncoming ? t('invitation.title') : t('invitation.requestTitle')
+        }
+        onBack={() => navigation.goBack()}
+      />
 
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          isPending && { paddingBottom: 0 },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         <Text style={[styles.intro, { color: tk.text.secondary }]}>
-          {isIncoming ? t('invitation.invitedTo') : t('invitation.requestedFor')}
+          {isIncoming
+            ? t('invitation.invitedTo')
+            : t('invitation.requestedFor')}
         </Text>
 
         {tournament && <TournamentSummaryCard tournament={tournament} />}
+      </ScrollView>
 
-        {isPending && (
+      {isPending && (
+        <View
+          style={[
+            styles.bottomBar,
+            {
+              borderTopColor: tk.border.default,
+              backgroundColor: tk.background.primary,
+            },
+          ]}
+        >
           <InvitationActions
             isIncoming={isIncoming}
             isSubmitting={respondToRequest.isPending}
@@ -125,8 +136,8 @@ const InvitationDetailScreen = ({ navigation, route }: Props) => {
             onDecline={reason => handleRespond('rejected', reason)}
             onCancel={handleCancelRequestPress}
           />
-        )}
-      </ScrollView>
+        </View>
+      )}
     </ScreenLayout>
   );
 };

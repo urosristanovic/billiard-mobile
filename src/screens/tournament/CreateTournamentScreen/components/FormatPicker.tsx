@@ -1,6 +1,7 @@
-import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { theme, typography, spacing, radius } from '@/constants/theme';
+import { theme, typography, spacing } from '@/constants/theme';
+import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { TOURNAMENT_FORMATS, TOURNAMENT_FORMAT_LABELS } from '@/types/tournament';
 import type { TournamentFormat } from '@/types/tournament';
 
@@ -26,32 +27,24 @@ export const FormatPicker = ({
       <View style={styles.options}>
         {TOURNAMENT_FORMATS.map(format => {
           const selected = value === format;
-          return (
-            <TouchableOpacity
+          return selected ? (
+            <PrimaryButton
               key={format}
+              label={TOURNAMENT_FORMAT_LABELS[format]}
+              size='xs'
+              isDark={isDark}
               onPress={() => onChange(format)}
-              activeOpacity={0.8}
-              accessibilityRole='radio'
-              accessibilityState={{ selected }}
-              style={[
-                styles.option,
-                {
-                  backgroundColor: selected
-                    ? tk.primary[900]
-                    : tk.surface.raised,
-                  borderColor: selected ? tk.primary[500] : tk.border.default,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.optionText,
-                  { color: selected ? tk.primary[300] : tk.text.secondary },
-                ]}
-              >
-                {TOURNAMENT_FORMAT_LABELS[format]}
-              </Text>
-            </TouchableOpacity>
+              style={styles.pill}
+            />
+          ) : (
+            <SecondaryButton
+              key={format}
+              label={TOURNAMENT_FORMAT_LABELS[format]}
+              size='xs'
+              isDark={isDark}
+              onPress={() => onChange(format)}
+              style={styles.pill}
+            />
           );
         })}
       </View>
@@ -74,14 +67,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing[2],
   },
-  option: {
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-  },
-  optionText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.bodyMedium,
+  pill: {
+    marginBottom: 0,
   },
 });

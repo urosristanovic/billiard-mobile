@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import type { TournamentRequest } from '@/types/tournament';
+import { Loading } from '@/components/common/states';
 import { styles } from '../styles';
 
 interface PendingRequestsProps {
@@ -59,11 +60,7 @@ export const PendingRequests = ({
       </Text>
 
       {isLoading ? (
-        <ActivityIndicator
-          size='small'
-          color={tk.primary[400]}
-          style={{ marginVertical: 12 }}
-        />
+        <Loading style={{ marginVertical: 12 }} />
       ) : joinRequests.length === 0 ? (
         <Text style={[styles.requestsEmpty, { color: tk.text.muted }]}>
           {t('detail.requests.empty')}
@@ -97,11 +94,7 @@ export const PendingRequests = ({
             </View>
             <View style={styles.reqActions}>
               {respondingTo[req.id] ? (
-                <ActivityIndicator
-                  size='small'
-                  color={tk.primary[400]}
-                  style={styles.reqLoadingIndicator}
-                />
+                <Loading style={styles.reqLoadingIndicator} />
               ) : (
                 <>
                   <TouchableOpacity

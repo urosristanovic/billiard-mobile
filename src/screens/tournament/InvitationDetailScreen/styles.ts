@@ -2,31 +2,6 @@ import { StyleSheet } from 'react-native';
 import { radius, spacing, typography } from '@/constants/theme';
 
 export const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing[4],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[3],
-    borderBottomWidth: 1,
-    gap: spacing[2],
-  },
-  back: {
-    fontSize: 22,
-    fontFamily: typography.family.display,
-    width: 32,
-  },
-  backPlaceholder: {
-    width: 32,
-  },
-  headerTitle: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: typography.size.lg,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
   content: {
     padding: spacing[4],
     gap: spacing[5],
@@ -38,7 +13,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   tournamentCard: {
-    borderRadius: radius.xl,
+    borderRadius: radius['2xl'],
     borderWidth: 1,
     padding: spacing[4],
     gap: spacing[2],
@@ -76,6 +51,12 @@ export const styles = StyleSheet.create({
     lineHeight: typography.size.sm * 1.55,
     marginTop: spacing[1],
   },
+  bottomBar: {
+    paddingHorizontal: spacing[4],
+    paddingTop: spacing[4],
+    paddingBottom: spacing[4],
+    borderTopWidth: 1,
+  },
   actionsRow: {
     flexDirection: 'row',
     gap: spacing[3],
@@ -83,14 +64,6 @@ export const styles = StyleSheet.create({
   loader: {
     flex: 1,
     paddingVertical: spacing[4],
-  },
-  actionBtn: {
-    flex: 1,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingVertical: spacing[4],
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   actionBtnFull: {
     flex: 1,

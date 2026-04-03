@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
-import { FlatList, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
-import { ScreenLayout } from '@/components/common/layout';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { LoadingState, EmptyState } from '@/components/common/states';
 import { useConfirmDialog } from '@/components/common/dialog';
 import { useGroupMembers } from '@/features/groups/useGroups';
@@ -13,10 +13,17 @@ import {
   useCustomLeaderboardMutations,
 } from '@/features/leaderboard/useCustomLeaderboards';
 import { useAuth } from '@/features/auth/useAuth';
-import { typography, spacing, radius } from '@/constants/theme';
+import { DangerButton } from '@/components/common/buttons/DangerButton';
+import { PrimaryButton } from '@/components/common/buttons/PrimaryButton';
+import { typography } from '@/constants/theme';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
+import { detailStyles } from '../shared/detailStyles';
+import { MemberRow } from '../shared/MemberRow';
 
-type Props = NativeStackScreenProps<LeaderboardStackParamList, 'CustomLeaderboardDetail'>;
+type Props = NativeStackScreenProps<
+  LeaderboardStackParamList,
+  'CustomLeaderboardDetail'
+>;
 
 const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
   const { leaderboardId } = route.params;
@@ -26,7 +33,11 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
   const { confirm } = useConfirmDialog();
   const { user } = useAuth();
 
-  const { data: lb, isLoading: lbLoading, refetch: refetchLb } = useCustomLeaderboardDetail(leaderboardId);
+  const {
+    data: lb,
+    isLoading: lbLoading,
+    refetch: refetchLb,
+  } = useCustomLeaderboardDetail(leaderboardId);
   const {
     data: customMembers = [],
     isLoading: customMembersLoading,
@@ -41,7 +52,9 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
   const [refreshing, setRefreshing] = useState(false);
   const isGroupAttached = !!lb?.groupId;
   const members = isGroupAttached ? groupMembers : customMembers;
-  const membersLoading = isGroupAttached ? groupMembersLoading : customMembersLoading;
+  const membersLoading = isGroupAttached
+    ? groupMembersLoading
+    : customMembersLoading;
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -59,7 +72,14 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
       </ScreenLayout>
     );
   }
-  if (!lb) return <EmptyState title='Leaderboard not found' description='' isDark={isDark} />;
+  if (!lb)
+    return (
+      <EmptyState
+        title='Leaderboard not found'
+        description=''
+        isDark={isDark}
+      />
+    );
 
   const isCreator = lb.createdBy === user?.id;
   const hasBottomAddAction = isCreator && !isGroupAttached;
@@ -82,8 +102,12 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
     const isSelf = memberId === user?.id;
     confirm({
       title: isSelf
-        ? t('customLeaderboards.leaveLeaderboard', { defaultValue: 'Leave leaderboard?' })
-        : t('customLeaderboards.removeMemberConfirmTitle', { defaultValue: 'Remove member?' }),
+        ? t('customLeaderboards.leaveLeaderboard', {
+            defaultValue: 'Leave leaderboard?',
+          })
+        : t('customLeaderboards.removeMemberConfirmTitle', {
+            defaultValue: 'Remove member?',
+          }),
       message: isSelf
         ? t('customLeaderboards.leaveLeaderboardConfirmMessage', {
             defaultValue: 'You will be removed from this leaderboard.',
@@ -105,39 +129,29 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <View style={styles.header}>
-        <Text
-          onPress={() => navigation.goBack()}
-          style={[styles.backButton, { color: tk.primary[400] }]}
-        >
-          ← {tCommon('back')}
-        </Text>
-        <Text style={[styles.title, { color: tk.text.primary }]} numberOfLines={2}>
-          {lb.name}
-        </Text>
+      <ScreenHeader onBack={() => navigation.goBack()} title={lb.name} />
+      <View style={detailStyles.header}>
         {lb.description ? (
-          <Text style={[styles.description, { color: tk.text.secondary }]}>
+          <Text style={[detailStyles.description, { color: tk.text.secondary }]}>
             {lb.description}
           </Text>
         ) : null}
-        <Text style={[styles.meta, { color: tk.text.muted }]}>
+        <Text style={[detailStyles.meta, { color: tk.text.muted }]}>
           {lb.isPublic ? 'Public' : 'Private'} ·{' '}
           {t('customLeaderboards.thresholdLabel')}: {lb.provisionalThreshold} ·{' '}
-          {lb.memberCount} members
+          {t('customLeaderboards.memberCount', { count: lb.memberCount })}
         </Text>
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: tk.text.secondary }]}>
+        <View style={detailStyles.sectionHeader}>
+          <Text style={[detailStyles.sectionTitle, { color: tk.text.secondary }]}>
             {t('customLeaderboards.members')}
           </Text>
           {isCreator && (
-            <TouchableOpacity
+            <DangerButton
+              size='xs'
+              isDark={isDark}
+              label={t('customLeaderboards.delete')}
               onPress={handleDelete}
-              style={[styles.deleteInlineButton, { borderColor: '#ef4444' }]}
-            >
-              <Text style={[styles.deleteInlineButtonText, { color: '#ef4444' }]}>
-                {t('customLeaderboards.delete')}
-              </Text>
-            </TouchableOpacity>
+            />
           )}
         </View>
       </View>
@@ -145,14 +159,14 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
       <FlatList
         data={members}
         keyExtractor={item => item.userId}
-        style={styles.list}
+        style={detailStyles.list}
         contentContainerStyle={[
-          styles.listContent,
-          hasBottomAddAction ? styles.listContentWithBottomAction : null,
+          detailStyles.listContent,
+          hasBottomAddAction ? detailStyles.listContentWithBottomAction : null,
         ]}
         bounces
         alwaysBounceVertical
-        overScrollMode="always"
+        overScrollMode='always'
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -168,33 +182,25 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
           </Text>
         }
         renderItem={({ item: member }) => (
-          <View style={[styles.memberRow, { borderBottomColor: tk.primary[900] }]}>
-            <View style={[styles.memberAvatar, { backgroundColor: tk.primary[900], borderColor: tk.primary[700] }]}>
-              <Text style={[styles.memberAvatarText, { color: tk.primary[300] }]}>
-                {member.displayName.slice(0, 2).toUpperCase()}
-              </Text>
-            </View>
-            <View style={styles.memberInfo}>
-              <Text style={[styles.memberName, { color: tk.text.primary }]}>
-                {member.displayName}
-              </Text>
-              <Text style={[styles.memberUsername, { color: tk.text.muted }]}>
-                @{member.username}
-              </Text>
-            </View>
-            {!isGroupAttached && (isCreator || member.userId === user?.id) && (
-              <TouchableOpacity onPress={() => handleRemoveMember(member.userId, member.displayName)}>
-                <Text style={[styles.removeText, { color: tk.text.muted }]}>
-                  {member.userId === user?.id
-                    ? t('customLeaderboards.leaveLeaderboard')
-                    : t('customLeaderboards.removeMember')}
-                </Text>
-              </TouchableOpacity>
-            )}
-          </View>
+          <MemberRow
+            displayName={member.displayName}
+            username={member.username}
+            actionLabel={
+              !isGroupAttached && (isCreator || member.userId === user?.id)
+                ? member.userId === user?.id
+                  ? t('customLeaderboards.leaveLeaderboard')
+                  : t('customLeaderboards.removeMember')
+                : undefined
+            }
+            onAction={
+              !isGroupAttached && (isCreator || member.userId === user?.id)
+                ? () => handleRemoveMember(member.userId, member.displayName)
+                : undefined
+            }
+          />
         )}
         ListFooterComponent={
-          <View style={styles.footer}>
+          <View style={detailStyles.footer}>
             {isCreator && isGroupAttached && (
               <Text style={[styles.groupNote, { color: tk.text.muted }]}>
                 {t('customLeaderboards.groupAttachedNote')}
@@ -204,18 +210,14 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
         }
       />
       {hasBottomAddAction && (
-        <View style={[styles.bottomActionBar, { borderTopColor: tk.primary[900] }]}>
-          <TouchableOpacity
+        <View
+          style={[detailStyles.bottomActionBar, { borderTopColor: tk.primary[900] }]}
+        >
+          <PrimaryButton
+            isDark={isDark}
+            label={`+ ${t('customLeaderboards.addMember')}`}
             onPress={() => navigation.push('UserSearch', { leaderboardId })}
-            style={[
-              styles.addMemberButton,
-              { borderColor: tk.primary[700], backgroundColor: tk.primary[500] },
-            ]}
-          >
-            <Text style={[styles.addMemberButtonText, { color: tk.text.onPrimary }]}>
-              + {t('customLeaderboards.addMember')}
-            </Text>
-          </TouchableOpacity>
+          />
         </View>
       )}
     </ScreenLayout>
@@ -223,128 +225,9 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: spacing[4],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[2],
-    gap: spacing[2],
-  },
-  list: {
-    flex: 1,
-  },
-  listContent: {
-    paddingHorizontal: spacing[4],
-    paddingBottom: spacing[8],
-  },
-  listContentWithBottomAction: {
-    paddingBottom: spacing[20],
-  },
-  backButton: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    marginBottom: spacing[2],
-  },
-  title: {
-    fontSize: typography.size['2xl'],
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  description: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.body,
-  },
-  meta: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.body,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: spacing[4],
-  },
-  sectionTitle: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  deleteInlineButton: {
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[1],
-    borderRadius: radius.sm,
-    borderWidth: 1,
-  },
-  deleteInlineButtonText: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
   emptyText: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
-  },
-  memberRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: spacing[3],
-    borderBottomWidth: 1,
-    gap: spacing[3],
-  },
-  memberAvatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  memberAvatarText: {
-    fontSize: typography.size.sm,
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-  },
-  memberInfo: { flex: 1 },
-  memberName: {
-    fontSize: typography.size.base,
-    fontWeight: typography.weight.semibold,
-    fontFamily: typography.family.heading,
-  },
-  memberUsername: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.body,
-    marginTop: 2,
-  },
-  removeText: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.body,
-  },
-  footer: {
-    marginTop: spacing[6],
-    gap: spacing[3],
-  },
-  bottomActionBar: {
-    paddingHorizontal: spacing[4],
-    paddingTop: spacing[3],
-    paddingBottom: spacing[5],
-    borderTopWidth: 1,
-  },
-  addMemberButton: {
-    padding: spacing[3],
-    borderRadius: radius.md,
-    borderWidth: 1,
-    alignItems: 'center',
-  },
-  addMemberButtonText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
   groupNote: {
     fontSize: typography.size.xs,

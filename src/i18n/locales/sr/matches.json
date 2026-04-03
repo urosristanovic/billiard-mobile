@@ -9,8 +9,8 @@
   },
   "status": {
     "challenge_requested": "Izazov poslat",
-    "challenge": "Izazov",
-    "pending_confirmation": "Na čekanju",
+    "challenge": "U toku",
+    "pending_confirmation": "Čeka potvrdu",
     "confirmed": "Potvrđeno",
     "disputed": "Sporno",
     "cancelled": "Otkazano"
@@ -48,7 +48,7 @@
     "emptyDesc": "Zabeležite prvi meč da biste počeli",
     "statsNote": "Samo potvrđeni mečevi su uračunati u statistici",
     "filters": {
-      "game": "Igra",
+      "discipline": "Disciplina",
       "user": "Igrač",
       "status": "Status",
       "allOpponents": "Svi igrači"

@@ -1,10 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  ActivityIndicator,
-  FlatList,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMatches } from '@/features/matches/useMatches';
@@ -15,7 +10,7 @@ import { useAuth } from '@/features/auth/useAuth';
 import { DropdownFilter, type FilterOption } from '@/components/common/filters';
 import { ScreenLayout } from '@/components/common/layout';
 import { AvatarButton } from '@/components/common/buttons';
-import { LoadingState, EmptyState } from '@/components/common/states';
+import { LoadingState, EmptyState, Loading } from '@/components/common/states';
 import { useTheme } from '@/hooks/useTheme';
 import {
   DISCIPLINES,
@@ -243,7 +238,7 @@ const MatchHistoryScreen = ({ navigation }: Props) => {
                 paddingVertical: 12,
               }}
             >
-              <ActivityIndicator size='small' color={tk.primary[600]} />
+              <Loading />
             </View>
           ) : null
         }
@@ -263,7 +258,7 @@ const MatchHistoryScreen = ({ navigation }: Props) => {
         ListFooterComponent={
           isFetchingNextPage ? (
             <View style={{ paddingVertical: 12 }}>
-              <ActivityIndicator size='small' color={tk.primary[600]} />
+              <Loading />
             </View>
           ) : null
         }

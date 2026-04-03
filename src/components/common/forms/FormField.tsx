@@ -1,14 +1,14 @@
 import {
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   type TextInputProps,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { theme, typography, radius, spacing } from '@/constants/theme';
+import { theme, typography, spacing } from '@/constants/theme';
 import { useState } from 'react';
+import { Input } from './Input';
 
 interface FormFieldProps extends TextInputProps {
   label: string;
@@ -29,7 +29,6 @@ export const FormField = ({
   ...inputProps
 }: FormFieldProps) => {
   const t = isDark ? theme.dark : theme.light;
-  const [isFocused, setIsFocused] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const isPasswordField = secureTextEntry === true;
@@ -44,31 +43,13 @@ export const FormField = ({
         {required && <Text style={{ color: t.error.default }}> *</Text>}
       </Text>
       <View style={isPasswordField ? styles.inputWrapper : undefined}>
-        <TextInput
-          placeholderTextColor={t.text.muted}
+        <Input
           accessibilityLabel={label}
           accessibilityHint={helperText}
           secureTextEntry={isPasswordField && !passwordVisible}
-          onFocus={e => {
-            setIsFocused(true);
-            inputProps.onFocus?.(e);
-          }}
-          onBlur={e => {
-            setIsFocused(false);
-            inputProps.onBlur?.(e);
-          }}
           style={[
-            styles.input,
-            {
-              backgroundColor: t.surface.raised,
-              borderColor: error
-                ? t.error.default
-                : isFocused
-                  ? t.primary[500]
-                  : t.border.default,
-              color: t.text.primary,
-              paddingRight: isPasswordField ? spacing[10] : spacing[3],
-            },
+            error ? { borderColor: t.error.default } : undefined,
+            isPasswordField ? { paddingRight: spacing[10] } : undefined,
             style,
           ]}
           {...inputProps}
@@ -120,15 +101,6 @@ const styles = StyleSheet.create({
   inputWrapper: {
     position: 'relative',
     justifyContent: 'center',
-  },
-  input: {
-    minHeight: 44,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    fontSize: typography.size.base,
-    fontFamily: typography.family.body,
   },
   eyeButton: {
     position: 'absolute',

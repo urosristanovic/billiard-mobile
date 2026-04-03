@@ -1,8 +1,9 @@
-import { Text, TouchableOpacity, View } from 'react-native';
-import { useTranslation } from 'react-i18next';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image } from 'expo-image';
+import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { LeaderboardEntry } from '@/types/rating';
-import { styles } from '../styles';
+import { spacing, radius, typography } from '@/constants/theme';
 
 interface Props {
   entry: LeaderboardEntry;
@@ -10,74 +11,198 @@ interface Props {
   onPress: () => void;
 }
 
-export const LeaderboardEntryRow = ({ entry, isMe, onPress }: Props) => {
-  const { t } = useTranslation('leaderboard');
+const countryCodeToFlag = (code: string) =>
+  code
+    .toUpperCase()
+    .replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
+
+const TrendIndicator = ({ change }: { change: number | null }) => {
   const { tk } = useTheme();
+  if (change == null || change === 0) return null;
+  const isUp = change > 0;
+  const color = isUp ? tk.success.default : tk.error.default;
+  return (
+    <View style={styles.trendRow}>
+      <Feather
+        name={isUp ? 'arrow-up-right' : 'arrow-down-right'}
+        size={12}
+        color={color}
+      />
+      <Text style={[styles.trendText, { color }]}>
+        {isUp ? `+${change}` : change}
+      </Text>
+    </View>
+  );
+};
+
+export const LeaderboardEntryRow = ({ entry, isMe, onPress }: Props) => {
+  const { tk } = useTheme();
+
+  const initials = (
+    entry.displayName?.slice(0, 2) ||
+    entry.username?.slice(0, 2) ||
+    'U'
+  ).toUpperCase();
 
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[
-        styles.entryRow,
-        { borderBottomColor: tk.primary[900] },
-        isMe && {
-          borderWidth: 1,
-          borderColor: tk.primary[500],
-          backgroundColor: tk.primary[900] + '20',
-        },
-      ]}
       activeOpacity={0.7}
+      style={[
+        styles.row,
+        isMe
+          ? {
+              backgroundColor: `${tk.primary[500]}14`,
+              borderColor: `${tk.primary[500]}4D`,
+            }
+          : {
+              backgroundColor: tk.surface.default,
+              borderColor: tk.border.default,
+            },
+      ]}
     >
-      <View style={[styles.rankBadge, { backgroundColor: tk.primary[900] }]}>
-        <Text style={[styles.rankText, { color: tk.primary[300] }]}>
-          {t('entry.rank', { rank: entry.rank })}
+      {/* Rank */}
+      <View style={styles.rankWrap}>
+        <Text style={[styles.rank, { color: `${tk.text.primary}66` }]}>
+          {entry.rank}
         </Text>
       </View>
-      <View style={styles.entryInfo}>
+
+      {/* Avatar + flag */}
+      <View style={styles.avatarWrap}>
+        {entry.avatarUrl ? (
+          <Image
+            source={{ uri: entry.avatarUrl }}
+            style={[styles.avatar, { borderColor: tk.border.strong }]}
+            contentFit='cover'
+          />
+        ) : (
+          <View
+            style={[
+              styles.avatar,
+              styles.avatarFallback,
+              {
+                borderColor: tk.border.strong,
+                backgroundColor: tk.surface.raised,
+              },
+            ]}
+          >
+            <Text style={[styles.avatarInitials, { color: tk.text.muted }]}>
+              {initials}
+            </Text>
+          </View>
+        )}
+        {entry.countryCode && (
+          <Text style={styles.flag}>
+            {countryCodeToFlag(entry.countryCode)}
+          </Text>
+        )}
+      </View>
+
+      {/* Name + handle */}
+      <View style={styles.info}>
         <Text
-          style={[styles.entryName, { color: tk.text.primary }]}
+          style={[
+            styles.name,
+            { color: isMe ? tk.primary[400] : tk.text.primary },
+          ]}
           numberOfLines={1}
         >
           {entry.displayName}
         </Text>
         <Text
-          style={[styles.entryUsername, { color: tk.text.muted }]}
+          style={[styles.handle, { color: tk.text.muted }]}
           numberOfLines={1}
         >
           @{entry.username}
-          {entry.country ? ` · ${entry.country}` : ''}
-          {entry.city ? `, ${entry.city}` : ''}
         </Text>
       </View>
-      <View style={styles.entryStats}>
-        <View style={styles.entryRatingRow}>
-          {entry.ratingChange != null && entry.ratingChange !== 0 && (
-            <Text
-              style={[
-                styles.entryRatingChange,
-                { color: entry.ratingChange > 0 ? '#4ade80' : '#f87171' },
-              ]}
-            >
-              {entry.ratingChange > 0 ? `+${entry.ratingChange}` : entry.ratingChange}
-            </Text>
-          )}
-          <Text style={[styles.entryRating, { color: tk.text.primary }]}>
-            {Math.round(entry.rating)}
-          </Text>
-        </View>
-        <Text style={[styles.entryWL, { color: tk.text.muted }]}>
-          {entry.wins}W {entry.losses}L
+
+      {/* Rating + trend */}
+      <View style={styles.stats}>
+        <Text style={[styles.rating, { color: tk.text.primary }]}>
+          {Math.round(entry.rating)}
         </Text>
-        {entry.isProvisional && (
-          <View
-            style={[styles.provisionalBadge, { backgroundColor: tk.primary[800] }]}
-          >
-            <Text style={[styles.provisionalText, { color: tk.primary[300] }]}>
-              {t('entry.provisional')}
-            </Text>
-          </View>
-        )}
+        <TrendIndicator change={entry.ratingChange} />
       </View>
     </TouchableOpacity>
   );
 };
+
+const styles = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: spacing[4],
+    marginBottom: spacing[2],
+    paddingHorizontal: spacing[3],
+    paddingVertical: spacing[3],
+    borderRadius: radius['4xl'],
+    borderWidth: 1,
+    gap: spacing[3],
+  },
+  rankWrap: {
+    width: 20,
+    alignItems: 'center',
+  },
+  rank: {
+    fontSize: typography.size.base,
+    fontFamily: typography.family.display,
+    fontWeight: typography.weight.bold,
+  },
+  avatarWrap: {
+    position: 'relative',
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: radius.full,
+    borderWidth: 1,
+  },
+  avatarFallback: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarInitials: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.display,
+  },
+  flag: {
+    position: 'absolute',
+    bottom: -4,
+    right: -4,
+    fontSize: typography.size.xs,
+  },
+  info: {
+    flex: 1,
+  },
+  name: {
+    fontSize: typography.size.lg,
+    fontFamily: typography.family.heading,
+    fontWeight: typography.weight.bold,
+  },
+  handle: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.body,
+    marginTop: 2,
+  },
+  stats: {
+    alignItems: 'flex-end',
+    gap: spacing[2],
+  },
+  rating: {
+    fontSize: typography.size.xl,
+    fontFamily: typography.family.display,
+    fontWeight: typography.weight.bold,
+  },
+  trendRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[1],
+  },
+  trendText: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.display,
+    fontWeight: typography.weight.bold,
+  },
+});

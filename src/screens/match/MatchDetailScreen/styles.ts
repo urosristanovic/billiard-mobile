@@ -5,27 +5,11 @@ export const styles = StyleSheet.create({
   container: {
     padding: spacing[4],
     gap: spacing[4],
-    paddingBottom: spacing[8],
   },
-  matchHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing[6],
-  },
-  back: {
-    fontSize: 22,
-    fontFamily: typography.family.display,
-  },
-  backPlaceholder: {
-    width: 22,
-  },
-  discipline: {
-    flex: 1,
-    fontSize: typography.size['2xl'],
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
+  metaBadges: {
+    paddingHorizontal: spacing[6],
+    paddingTop: spacing[4],
+    gap: spacing[2],
   },
   metaRow: {
     flexDirection: 'row',
@@ -47,6 +31,7 @@ export const styles = StyleSheet.create({
   date: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
+    paddingBottom: spacing[3],
   },
   actions: {
     gap: spacing[3],
@@ -64,29 +49,24 @@ export const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
-  challengeScoreSection: {
-    gap: spacing[2],
-  },
   challengeScoreLabelsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing[2],
   },
   challengeScoreLabel: {
-    fontSize: typography.size.sm,
+    flex: 1,
+    fontSize: typography.size.lg,
     fontFamily: typography.family.heading,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
-  challengeScoreLabelLeft: {
-    flex: 1,
-  },
+  challengeScoreLabelLeft: {},
   challengeScoreLabelRight: {
-    flex: 1,
     textAlign: 'right',
   },
   challengeVsLabelSpacer: {
-    width: 28,
+    width: spacing[6],
   },
   challengeScoreRow: {
     flexDirection: 'row',
@@ -96,34 +76,32 @@ export const styles = StyleSheet.create({
   challengeScoreField: {
     flex: 1,
   },
-  challengeScoreButton: {
+  challengeScoreBlock: {
     borderWidth: 1,
-    borderRadius: radius.lg,
-    minHeight: 64,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    borderRadius: radius.xl,
+    paddingVertical: spacing[3],
     paddingHorizontal: spacing[2],
+    alignItems: 'center',
+    gap: spacing[2],
   },
-  challengeScoreAdjustButton: {
-    width: 36,
-    height: 36,
+  challengeScoreValue: {
+    fontFamily: typography.family.display,
+    fontSize: typography.size['5xl'],
+    lineHeight: typography.size['5xl'] * 1.15,
+    textAlignVertical: 'center',
+    paddingTop: spacing[1],
+  },
+  challengeAdjRow: {
+    flexDirection: 'row',
+    gap: spacing[1],
+  },
+  challengeAdjBtn: {
+    width: spacing[12],
+    height: spacing[12],
     borderRadius: radius.md,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  challengeScoreAdjustButtonText: {
-    fontFamily: typography.family.heading,
-    fontSize: typography.size.lg,
-    lineHeight: typography.size.lg * 1.1,
-  },
-  challengeScoreButtonValue: {
-    fontFamily: typography.family.display,
-    fontSize: typography.size['4xl'],
-    lineHeight: typography.size['4xl'] * 1.15,
-    textAlignVertical: 'center',
-    paddingTop: 3,
   },
   challengeVsWrap: {
     width: 28,

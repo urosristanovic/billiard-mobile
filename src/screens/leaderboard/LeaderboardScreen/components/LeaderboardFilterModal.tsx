@@ -4,13 +4,13 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
+import { ToggleSwitch } from '@/components/common/forms';
 import { useTheme } from '@/hooks/useTheme';
 import { typography, spacing, radius } from '@/constants/theme';
 import { DISCIPLINES, DISCIPLINE_LABELS, type Discipline } from '@/types/match';
@@ -39,8 +39,13 @@ export const countActiveLbFilters = (filters: LeaderboardFilters): number =>
   (filters.discipline !== '8ball' ? 1 : 0) +
   (!filters.includeProvisional ? 1 : 0);
 
-
-const SCOPES: LeaderboardScopeFilter[] = ['global', 'country', 'city', 'group', 'custom'];
+const SCOPES: LeaderboardScopeFilter[] = [
+  'global',
+  'country',
+  'city',
+  'group',
+  'custom',
+];
 
 interface LeaderboardFilterModalProps {
   visible: boolean;
@@ -95,19 +100,6 @@ export const LeaderboardFilterModal = ({
     [t],
   );
 
-  const pillStyle = (active: boolean) => [
-    styles.pill,
-    {
-      borderColor: active ? tk.primary[500] : tk.border.default,
-      backgroundColor: active ? tk.primary[500] : 'transparent',
-    },
-  ];
-
-  const pillTextStyle = (active: boolean) => [
-    styles.pillText,
-    { color: active ? tk.background.primary : tk.text.secondary },
-  ];
-
   return (
     <Modal
       visible={visible}
@@ -131,7 +123,12 @@ export const LeaderboardFilterModal = ({
           ]}
         >
           {/* Header */}
-          <View style={[styles.sheetHeader, { borderBottomColor: tk.border.default }]}>
+          <View
+            style={[
+              styles.sheetHeader,
+              { borderBottomColor: tk.border.default },
+            ]}
+          >
             <Text style={[styles.sheetTitle, { color: tk.text.primary }]}>
               {t('filters.title')}
             </Text>
@@ -140,7 +137,7 @@ export const LeaderboardFilterModal = ({
               accessibilityRole='button'
               accessibilityLabel={t('filters.reset')}
             >
-              <Text style={[styles.resetLabel, { color: tk.primary[400] }]}>
+              <Text style={[styles.resetLabel, { color: tk.primary[600] }]}>
                 {t('filters.reset')}
               </Text>
             </TouchableOpacity>
@@ -155,17 +152,25 @@ export const LeaderboardFilterModal = ({
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.pillRow}>
-                  {scopeLabels.map(({ value, label }) => (
-                    <TouchableOpacity
-                      key={value}
-                      onPress={() => handleScopeChange(value)}
-                      style={pillStyle(draft.scope === value)}
-                    >
-                      <Text style={pillTextStyle(draft.scope === value)}>
-                        {label}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                  {scopeLabels.map(({ value, label }) =>
+                    draft.scope === value ? (
+                      <PrimaryButton
+                        key={value}
+                        label={label}
+                        compact
+                        isDark={isDark}
+                        onPress={() => handleScopeChange(value)}
+                      />
+                    ) : (
+                      <SecondaryButton
+                        key={value}
+                        label={label}
+                        size='xs'
+                        isDark={isDark}
+                        onPress={() => handleScopeChange(value)}
+                      />
+                    ),
+                  )}
                 </View>
               </ScrollView>
             </View>
@@ -173,30 +178,55 @@ export const LeaderboardFilterModal = ({
             {/* Group picker — only when scope=group */}
             {draft.scope === 'group' && (
               <View style={styles.section}>
-                <Text style={[styles.sectionLabel, { color: tk.text.secondary }]}>
+                <Text
+                  style={[styles.sectionLabel, { color: tk.text.secondary }]}
+                >
                   {t('filters.group')}
                 </Text>
                 {groups.length > 0 ? (
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <View style={styles.pillRow}>
-                      {groups.map(g => (
-                        <TouchableOpacity
-                          key={g.id}
-                          onPress={() =>
-                            setDraft(prev => ({ ...prev, selectedGroupId: g.id }))
-                          }
-                          style={pillStyle(draft.selectedGroupId === g.id)}
-                        >
-                          <Text style={pillTextStyle(draft.selectedGroupId === g.id)}>
-                            {g.name}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
+                      {groups.map(g =>
+                        draft.selectedGroupId === g.id ? (
+                          <PrimaryButton
+                            key={g.id}
+                            label={g.name}
+                            compact
+                            isDark={isDark}
+                            onPress={() =>
+                              setDraft(prev => ({
+                                ...prev,
+                                selectedGroupId: g.id,
+                              }))
+                            }
+                          />
+                        ) : (
+                          <SecondaryButton
+                            key={g.id}
+                            label={g.name}
+                            size='xs'
+                            isDark={isDark}
+                            onPress={() =>
+                              setDraft(prev => ({
+                                ...prev,
+                                selectedGroupId: g.id,
+                              }))
+                            }
+                          />
+                        ),
+                      )}
                     </View>
                   </ScrollView>
                 ) : (
-                  <View style={[styles.emptyNote, { backgroundColor: tk.primary[900] }]}>
-                    <Text style={[styles.emptyNoteText, { color: tk.text.muted }]}>
+                  <View
+                    style={[
+                      styles.emptyNote,
+                      { backgroundColor: tk.surface.default },
+                    ]}
+                  >
+                    <Text
+                      style={[styles.emptyNoteText, { color: tk.text.muted }]}
+                    >
                       {t('blocked.noGroups')}
                     </Text>
                   </View>
@@ -207,30 +237,55 @@ export const LeaderboardFilterModal = ({
             {/* Custom leaderboard picker — only when scope=custom */}
             {draft.scope === 'custom' && (
               <View style={styles.section}>
-                <Text style={[styles.sectionLabel, { color: tk.text.secondary }]}>
+                <Text
+                  style={[styles.sectionLabel, { color: tk.text.secondary }]}
+                >
                   {t('filters.selectLeaderboard')}
                 </Text>
                 {customLeaderboards.length > 0 ? (
                   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <View style={styles.pillRow}>
-                      {customLeaderboards.map(lb => (
-                        <TouchableOpacity
-                          key={lb.id}
-                          onPress={() =>
-                            setDraft(prev => ({ ...prev, selectedLeaderboardId: lb.id }))
-                          }
-                          style={pillStyle(draft.selectedLeaderboardId === lb.id)}
-                        >
-                          <Text style={pillTextStyle(draft.selectedLeaderboardId === lb.id)}>
-                            {lb.name}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
+                      {customLeaderboards.map(lb =>
+                        draft.selectedLeaderboardId === lb.id ? (
+                          <PrimaryButton
+                            key={lb.id}
+                            label={lb.name}
+                            compact
+                            isDark={isDark}
+                            onPress={() =>
+                              setDraft(prev => ({
+                                ...prev,
+                                selectedLeaderboardId: lb.id,
+                              }))
+                            }
+                          />
+                        ) : (
+                          <SecondaryButton
+                            key={lb.id}
+                            label={lb.name}
+                            size='xs'
+                            isDark={isDark}
+                            onPress={() =>
+                              setDraft(prev => ({
+                                ...prev,
+                                selectedLeaderboardId: lb.id,
+                              }))
+                            }
+                          />
+                        ),
+                      )}
                     </View>
                   </ScrollView>
                 ) : (
-                  <View style={[styles.emptyNote, { backgroundColor: tk.primary[900] }]}>
-                    <Text style={[styles.emptyNoteText, { color: tk.text.muted }]}>
+                  <View
+                    style={[
+                      styles.emptyNote,
+                      { backgroundColor: tk.surface.default },
+                    ]}
+                  >
+                    <Text
+                      style={[styles.emptyNoteText, { color: tk.text.muted }]}
+                    >
                       {t('blocked.noCustomLeaderboards')}
                     </Text>
                   </View>
@@ -245,36 +300,47 @@ export const LeaderboardFilterModal = ({
               </Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 <View style={styles.pillRow}>
-                  {DISCIPLINES.map(d => (
-                    <TouchableOpacity
-                      key={d}
-                      onPress={() =>
-                        setDraft(prev => ({ ...prev, discipline: d }))
-                      }
-                      style={pillStyle(draft.discipline === d)}
-                    >
-                      <Text style={pillTextStyle(draft.discipline === d)}>
-                        {DISCIPLINE_LABELS[d]}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                  {DISCIPLINES.map(d =>
+                    draft.discipline === d ? (
+                      <PrimaryButton
+                        key={d}
+                        label={DISCIPLINE_LABELS[d]}
+                        compact
+                        isDark={isDark}
+                        onPress={() =>
+                          setDraft(prev => ({ ...prev, discipline: d }))
+                        }
+                      />
+                    ) : (
+                      <SecondaryButton
+                        key={d}
+                        label={DISCIPLINE_LABELS[d]}
+                        size='xs'
+                        isDark={isDark}
+                        onPress={() =>
+                          setDraft(prev => ({ ...prev, discipline: d }))
+                        }
+                      />
+                    ),
+                  )}
                 </View>
               </ScrollView>
             </View>
 
             {/* Provisional toggle */}
-            <View style={[styles.toggleRow, { borderTopColor: tk.border.default }]}>
+            <View
+              style={[styles.toggleRow, { borderTopColor: tk.border.default }]}
+            >
               <Text style={[styles.sectionLabel, { color: tk.text.secondary }]}>
                 {t('filters.includeProvisional')}
               </Text>
-              <Switch
+              <ToggleSwitch
                 value={draft.includeProvisional}
                 onValueChange={v =>
                   setDraft(prev => ({ ...prev, includeProvisional: v }))
                 }
-                trackColor={{ false: tk.primary[800], true: tk.primary[500] }}
+                trackColor={{ false: tk.border.default, true: tk.primary[600] }}
                 thumbColor={tk.text.onPrimary}
-                style={{ transform: [{ scaleX: 0.85 }, { scaleY: 0.85 }] }}
               />
             </View>
           </View>
@@ -352,18 +418,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing[2],
   },
-  pill: {
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    borderRadius: radius.full,
-    borderWidth: 1,
-  },
-  pillText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
-  },
   emptyNote: {
     paddingHorizontal: spacing[3],
     paddingTop: spacing[3],
@@ -372,8 +426,7 @@ const styles = StyleSheet.create({
     overflow: 'visible',
   },
   emptyNoteText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.heading,
+    fontSize: typography.size.base,
     lineHeight: 20,
     includeFontPadding: false,
   },

@@ -1,11 +1,7 @@
-import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import type { NavigatorScreenParams } from '@react-navigation/native';
-import { useTranslation } from 'react-i18next';
-import { useTheme } from '@/hooks/useTheme';
-import { typography } from '@/constants/theme';
+import { CustomTabBar } from './CustomTabBar';
 
 import HomeScreen from '@/screens/home/HomeScreen';
 import MatchDetailScreen from '@/screens/match/MatchDetailScreen';
@@ -15,6 +11,7 @@ import ProfileScreen from '@/screens/user/ProfileScreen';
 import ProfileSetupScreen from '@/screens/user/ProfileSetupScreen';
 import ChangePasswordScreen from '@/screens/user/ChangePasswordScreen';
 import FeedbackScreen from '@/screens/user/FeedbackScreen';
+import SettingsScreen from '@/screens/user/SettingsScreen';
 import type { Tournament } from '@/types/tournament';
 
 import {
@@ -31,7 +28,6 @@ import CreateGroupScreen from '@/screens/leaderboard/CreateGroupScreen';
 import GroupDetailScreen from '@/screens/leaderboard/GroupDetailScreen';
 import CreateCustomLeaderboardScreen from '@/screens/leaderboard/CreateCustomLeaderboardScreen';
 import CustomLeaderboardDetailScreen from '@/screens/leaderboard/CustomLeaderboardDetailScreen';
-import { AppDrawerContent } from './DrawerContent';
 
 // ─── Stack param lists ────────────────────────────────────────────────────────
 
@@ -44,6 +40,7 @@ export type HomeStackParamList = {
   ProfileSetup: undefined;
   ChangePassword: undefined;
   Feedback: undefined;
+  Settings: undefined;
 };
 
 export type LeaderboardStackParamList = {
@@ -78,6 +75,7 @@ const HomeNavigator = () => (
     <HomeStack.Screen name='ProfileSetup' component={ProfileSetupScreen} />
     <HomeStack.Screen name='ChangePassword' component={ChangePasswordScreen} />
     <HomeStack.Screen name='Feedback' component={FeedbackScreen} />
+    <HomeStack.Screen name='Settings' component={SettingsScreen} />
   </HomeStack.Navigator>
 );
 
@@ -133,108 +131,15 @@ export type AppTabParamList = {
 };
 
 const Tab = createBottomTabNavigator<AppTabParamList>();
-export type AppDrawerParamList = {
-  MainTabs: NavigatorScreenParams<AppTabParamList> | undefined;
-};
-const Drawer = createDrawerNavigator<AppDrawerParamList>();
-
-const TabsNavigator = () => {
-  const { t } = useTranslation('home');
-  const { t: tT } = useTranslation('tournaments');
-  const { t: tLB } = useTranslation('leaderboard');
-  const { tk } = useTheme();
-
-  return (
-    <Tab.Navigator
-      initialRouteName='Home'
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: tk.background.primary,
-          borderTopColor: tk.primary[900],
-          borderTopWidth: 1,
-          paddingTop: 4,
-          height: 100,
-        },
-        tabBarActiveTintColor: tk.primary[400],
-        tabBarInactiveTintColor: tk.text.muted,
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontFamily: typography.family.heading,
-          textTransform: 'uppercase',
-          letterSpacing: 0.5,
-        },
-      }}
-    >
-      <Tab.Screen
-        name='Tournaments'
-        component={TournamentsNavigator}
-        options={{
-          tabBarLabel: tT('tab'),
-          tabBarIcon: ({ color }) => (
-            <Text
-              style={{
-                fontSize: 14,
-                color,
-                fontFamily: typography.family.display,
-              }}
-            >
-              TR
-            </Text>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name='Home'
-        component={HomeNavigator}
-        options={{
-          tabBarLabel: t('tab'),
-          tabBarIcon: ({ color }) => (
-            <Text
-              style={{
-                fontSize: 14,
-                color,
-                fontFamily: typography.family.display,
-              }}
-            >
-              HM
-            </Text>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name='Leaderboard'
-        component={LeaderboardNavigator}
-        options={{
-          tabBarLabel: tLB('title'),
-          tabBarIcon: ({ color }) => (
-            <Text
-              style={{
-                fontSize: 14,
-                color,
-                fontFamily: typography.family.display,
-              }}
-            >
-              LB
-            </Text>
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
 
 export const AppNavigator = () => (
-  <Drawer.Navigator
-    screenOptions={{
-      headerShown: false,
-      drawerPosition: 'right',
-      drawerType: 'front',
-      overlayColor: 'rgba(0,0,0,0.45)',
-      drawerStyle: { width: 320 },
-    }}
-    drawerContent={props => <AppDrawerContent {...props} />}
+  <Tab.Navigator
+    initialRouteName='Home'
+    screenOptions={{ headerShown: false }}
+    tabBar={props => <CustomTabBar {...props} />}
   >
-    <Drawer.Screen name='MainTabs' component={TabsNavigator} />
-  </Drawer.Navigator>
+    <Tab.Screen name='Home' component={HomeNavigator} />
+    <Tab.Screen name='Tournaments' component={TournamentsNavigator} />
+    <Tab.Screen name='Leaderboard' component={LeaderboardNavigator} />
+  </Tab.Navigator>
 );

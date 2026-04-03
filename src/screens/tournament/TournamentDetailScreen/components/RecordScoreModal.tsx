@@ -1,14 +1,71 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { theme, typography, spacing, radius, shadows } from '@/constants/theme';
 import type { TournamentMatch } from '@/types/tournament';
+
+interface ScoreAdjusterProps {
+  score: number;
+  isWinner: boolean;
+  playerName: string;
+  tk: (typeof theme)[keyof typeof theme];
+  onAdjust: (delta: number) => void;
+}
+
+const ScoreAdjuster = ({
+  score,
+  isWinner,
+  playerName,
+  tk,
+  onAdjust,
+}: ScoreAdjusterProps) => (
+  <View
+    style={[
+      styles.scoreBlock,
+      {
+        backgroundColor: tk.surface.raised,
+        borderColor: isWinner ? tk.primary[600] : tk.border.default,
+      },
+    ]}
+  >
+    <Text style={[styles.scoreValue, { color: tk.primary[600] }]}>{score}</Text>
+
+    <View style={styles.adjRow}>
+      <TouchableOpacity
+        onPress={() => onAdjust(-1)}
+        activeOpacity={0.8}
+        style={[
+          styles.adjBtn,
+          {
+            borderColor: tk.border.default,
+            backgroundColor: tk.background.secondary,
+          },
+        ]}
+        accessibilityRole='button'
+        accessibilityLabel={`${playerName} minus`}
+      >
+        <Feather name='minus' size={18} color={tk.text.secondary} />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => onAdjust(1)}
+        activeOpacity={0.8}
+        style={[
+          styles.adjBtn,
+          {
+            borderColor: tk.border.default,
+            backgroundColor: tk.background.secondary,
+          },
+        ]}
+        accessibilityRole='button'
+        accessibilityLabel={`${playerName} plus`}
+      >
+        <Feather name='plus' size={18} color={tk.text.secondary} />
+      </TouchableOpacity>
+    </View>
+  </View>
+);
 
 interface RecordScoreModalProps {
   visible: boolean;
@@ -73,28 +130,43 @@ export const RecordScoreModal = ({
       statusBarTranslucent
       onRequestClose={onClose}
     >
-      <View style={[styles.backdrop, { backgroundColor: tk.background.overlay }]}>
+      <View
+        style={[styles.backdrop, { backgroundColor: tk.background.overlay }]}
+      >
         <View
           style={[
             styles.dialog,
-            { backgroundColor: tk.surface.default, borderColor: tk.primary[700] },
+            {
+              backgroundColor: tk.surface.default,
+              borderColor: tk.primary[600],
+            },
             shadows.lg,
           ]}
         >
-          <Text style={[styles.title, { color: tk.text.primary }]}>{title}</Text>
+          <Text style={[styles.title, { color: tk.text.primary }]}>
+            {title}
+          </Text>
 
           {/* Player name labels */}
           <View style={styles.labelsRow}>
             <Text
               numberOfLines={1}
-              style={[styles.playerLabel, styles.playerLabelLeft, { color: tk.text.secondary }]}
+              style={[
+                styles.playerLabel,
+                styles.playerLabelLeft,
+                { color: tk.text.secondary },
+              ]}
             >
               {homeName}
             </Text>
             <View style={styles.vsSpacer} />
             <Text
               numberOfLines={1}
-              style={[styles.playerLabel, styles.playerLabelRight, { color: tk.text.secondary }]}
+              style={[
+                styles.playerLabel,
+                styles.playerLabelRight,
+                { color: tk.text.secondary },
+              ]}
             >
               {awayName}
             </Text>
@@ -104,47 +176,13 @@ export const RecordScoreModal = ({
           <View style={styles.scoreRow}>
             {/* Home */}
             <View style={styles.scoreField}>
-              <View
-                style={[
-                  styles.scoreBlock,
-                  {
-                    backgroundColor: tk.surface.raised,
-                    borderColor:
-                      winnerSide === 'home' ? tk.primary[500] : tk.primary[700],
-                  },
-                  winnerSide === 'home' && styles.scoreBlockWinner,
-                ]}
-              >
-                <TouchableOpacity
-                  onPress={() => adjust('home', -1)}
-                  activeOpacity={0.8}
-                  style={[
-                    styles.adjBtn,
-                    { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
-                  ]}
-                  accessibilityRole='button'
-                  accessibilityLabel={`${homeName} minus`}
-                >
-                  <Text style={[styles.adjText, { color: tk.text.secondary }]}>-</Text>
-                </TouchableOpacity>
-
-                <Text style={[styles.scoreValue, { color: tk.primary[300] }]}>
-                  {homeScore}
-                </Text>
-
-                <TouchableOpacity
-                  onPress={() => adjust('home', 1)}
-                  activeOpacity={0.8}
-                  style={[
-                    styles.adjBtn,
-                    { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
-                  ]}
-                  accessibilityRole='button'
-                  accessibilityLabel={`${homeName} plus`}
-                >
-                  <Text style={[styles.adjText, { color: tk.text.secondary }]}>+</Text>
-                </TouchableOpacity>
-              </View>
+              <ScoreAdjuster
+                score={homeScore}
+                isWinner={winnerSide === 'home'}
+                playerName={homeName}
+                tk={tk}
+                onAdjust={delta => adjust('home', delta)}
+              />
             </View>
 
             {/* vs */}
@@ -154,47 +192,13 @@ export const RecordScoreModal = ({
 
             {/* Away */}
             <View style={styles.scoreField}>
-              <View
-                style={[
-                  styles.scoreBlock,
-                  {
-                    backgroundColor: tk.surface.raised,
-                    borderColor:
-                      winnerSide === 'away' ? tk.primary[500] : tk.primary[700],
-                  },
-                  winnerSide === 'away' && styles.scoreBlockWinner,
-                ]}
-              >
-                <TouchableOpacity
-                  onPress={() => adjust('away', -1)}
-                  activeOpacity={0.8}
-                  style={[
-                    styles.adjBtn,
-                    { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
-                  ]}
-                  accessibilityRole='button'
-                  accessibilityLabel={`${awayName} minus`}
-                >
-                  <Text style={[styles.adjText, { color: tk.text.secondary }]}>-</Text>
-                </TouchableOpacity>
-
-                <Text style={[styles.scoreValue, { color: tk.primary[300] }]}>
-                  {awayScore}
-                </Text>
-
-                <TouchableOpacity
-                  onPress={() => adjust('away', 1)}
-                  activeOpacity={0.8}
-                  style={[
-                    styles.adjBtn,
-                    { borderColor: tk.border.default, backgroundColor: tk.background.secondary },
-                  ]}
-                  accessibilityRole='button'
-                  accessibilityLabel={`${awayName} plus`}
-                >
-                  <Text style={[styles.adjText, { color: tk.text.secondary }]}>+</Text>
-                </TouchableOpacity>
-              </View>
+              <ScoreAdjuster
+                score={awayScore}
+                isWinner={winnerSide === 'away'}
+                playerName={awayName}
+                tk={tk}
+                onAdjust={delta => adjust('away', delta)}
+              />
             </View>
           </View>
 
@@ -227,13 +231,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing[6],
   },
   dialog: {
-    borderRadius: radius.xl,
-    borderWidth: 2,
-    padding: spacing[5],
+    borderRadius: radius['4xl'],
+    borderWidth: 0.5,
+    padding: spacing[6],
     gap: spacing[4],
   },
   title: {
-    fontSize: typography.size.lg,
+    fontSize: typography.size.xl,
     fontFamily: typography.family.heading,
     textTransform: 'uppercase',
     letterSpacing: 0.6,
@@ -245,7 +249,7 @@ const styles = StyleSheet.create({
   },
   playerLabel: {
     flex: 1,
-    fontSize: typography.size.sm,
+    fontSize: typography.size.lg,
     fontFamily: typography.family.heading,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -255,7 +259,7 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   vsSpacer: {
-    width: 28,
+    width: spacing[6],
   },
   scoreRow: {
     flexDirection: 'row',
@@ -267,35 +271,30 @@ const styles = StyleSheet.create({
   },
   scoreBlock: {
     borderWidth: 1,
-    borderRadius: radius.lg,
-    minHeight: 64,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    borderRadius: radius.xl,
+    paddingVertical: spacing[3],
     paddingHorizontal: spacing[2],
+    alignItems: 'center',
+    gap: spacing[2],
   },
-  scoreBlockWinner: {
-    borderWidth: 2,
+  adjRow: {
+    flexDirection: 'row',
+    gap: spacing[1],
   },
   adjBtn: {
-    width: 36,
-    height: 36,
+    width: spacing[12],
+    height: spacing[12],
     borderRadius: radius.md,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  adjText: {
-    fontFamily: typography.family.heading,
-    fontSize: typography.size.lg,
-    lineHeight: typography.size.lg * 1.1,
-  },
   scoreValue: {
     fontFamily: typography.family.display,
-    fontSize: typography.size['4xl'],
-    lineHeight: typography.size['4xl'] * 1.15,
+    fontSize: typography.size['5xl'],
+    lineHeight: typography.size['5xl'] * 1.15,
     textAlignVertical: 'center',
-    paddingTop: 3,
+    paddingTop: spacing[1],
   },
   vsWrap: {
     width: 28,
@@ -311,6 +310,7 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: 'row',
     gap: spacing[2],
+    marginTop: spacing[10],
   },
   action: {
     flex: 1,

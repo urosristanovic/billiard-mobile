@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   StyleSheet,
@@ -12,8 +10,9 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
-import { ScreenLayout } from '@/components/common/layout';
-import { EmptyState } from '@/components/common/states';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
+import { Input } from '@/components/common/forms';
+import { EmptyState, Loading } from '@/components/common/states';
 import { useTournamentMutations } from '@/features/tournaments/useTournamentMutations';
 import {
   useTournamentDetail,
@@ -52,7 +51,11 @@ const InviteParticipantsScreen = ({ navigation, route }: Props) => {
   const { invitePlayer } = useTournamentMutations();
 
   const { data: searchResults = [], isFetching } = useQuery({
-    queryKey: [...QUERY_KEYS.USER_SEARCH(normalizedQuery), 'invite-participants', tournamentId],
+    queryKey: [
+      ...QUERY_KEYS.USER_SEARCH(normalizedQuery),
+      'invite-participants',
+      tournamentId,
+    ],
     queryFn: async () => {
       const token = await getAccessToken();
       return userService.search(token, normalizedQuery, user?.id);
@@ -96,46 +99,23 @@ const InviteParticipantsScreen = ({ navigation, route }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <View style={[styles.header, { borderBottomColor: tk.border.subtle }]}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-          accessibilityRole='button'
-        >
-          <Text style={[styles.back, { color: tk.primary[400] }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.title, { color: tk.text.primary }]}>
-          {t('inviteParticipants.title')}
-        </Text>
-        <View style={styles.backPlaceholder} />
-      </View>
+      <ScreenHeader
+        title={t('inviteParticipants.title')}
+        onBack={() => navigation.goBack()}
+      />
 
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={[
-            styles.searchInput,
-            {
-              backgroundColor: tk.surface.raised,
-              borderColor: tk.primary[700],
-              color: tk.text.primary,
-            },
-          ]}
+      <View style={styles.searchWrap}>
+        <Input
+          variant='search'
           placeholder={t('inviteParticipants.searchPlaceholder')}
-          placeholderTextColor={tk.text.muted}
           value={query}
           onChangeText={setQuery}
-          autoCapitalize='none'
-          autoCorrect={false}
           autoFocus
         />
       </View>
 
       {isFetching ? (
-        <ActivityIndicator
-          style={styles.loader}
-          color={tk.primary[600]}
-          size='large'
-        />
+        <Loading size='large' style={styles.loader} />
       ) : !isSearchMode ? (
         <EmptyState
           title={t('inviteParticipants.searchHint')}
@@ -159,8 +139,8 @@ const InviteParticipantsScreen = ({ navigation, route }: Props) => {
                 style={[
                   styles.playerRow,
                   {
-                    backgroundColor: tk.surface.raised,
-                    borderColor: tk.primary[800],
+                    backgroundColor: tk.surface.default,
+                    borderColor: tk.border.default,
                   },
                 ]}
               >
@@ -168,23 +148,26 @@ const InviteParticipantsScreen = ({ navigation, route }: Props) => {
                   style={[
                     styles.avatar,
                     {
-                      backgroundColor: tk.background.secondary,
-                      borderColor: tk.primary[600],
+                      backgroundColor: `${tk.primary[600]}20`,
+                      borderColor: tk.border.strong,
                     },
                   ]}
                 >
-                  <Text style={[styles.avatarText, { color: tk.primary[300] }]}>
+                  <Text style={[styles.avatarText, { color: tk.primary[600] }]}>
                     {(item.displayName || item.username)
-                      .charAt(0)
+                      .slice(0, 2)
                       .toUpperCase()}
                   </Text>
                 </View>
                 <View style={styles.playerInfo}>
-                  <Text style={[styles.displayName, { color: tk.text.primary }]}>
+                  <Text
+                    style={[styles.displayName, { color: tk.text.primary }]}
+                  >
                     {item.displayName || item.username}
                   </Text>
                   <Text style={[styles.username, { color: tk.text.muted }]}>
                     @{item.username}
+                    {item.location ? ` · ${item.location}` : ''}
                   </Text>
                 </View>
                 {isParticipant ? (
@@ -221,17 +204,9 @@ const InviteParticipantsScreen = ({ navigation, route }: Props) => {
                     ]}
                   >
                     {isInviting ? (
-                      <ActivityIndicator
-                        size='small'
-                        color={tk.surface.default}
-                      />
+                      <Loading />
                     ) : (
-                      <Text
-                        style={[
-                          styles.inviteText,
-                          { color: tk.surface.default },
-                        ]}
-                      >
+                      <Text style={[styles.inviteText, { color: '#000' }]}>
                         {t('inviteParticipants.invite')}
                       </Text>
                     )}
@@ -247,86 +222,60 @@ const InviteParticipantsScreen = ({ navigation, route }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  searchWrap: {
     paddingHorizontal: spacing[4],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[3],
-    borderBottomWidth: 1,
-    gap: spacing[2],
-  },
-  back: {
-    fontSize: 22,
-    fontFamily: typography.family.display,
-    width: 32,
-  },
-  backPlaceholder: {
-    width: 32,
-  },
-  title: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: typography.size.lg,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
-  searchContainer: {
-    paddingHorizontal: spacing[4],
-    paddingVertical: spacing[3],
-  },
-  searchInput: {
-    borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[3],
-    fontSize: typography.size.base,
-    fontFamily: typography.family.body,
+    paddingTop: spacing[4],
+    paddingBottom: spacing[2],
   },
   loader: {
     marginTop: spacing[8],
   },
   list: {
-    padding: spacing[4],
+    paddingHorizontal: spacing[4],
+    paddingTop: spacing[2],
+    paddingBottom: spacing[10],
+    gap: spacing[2],
   },
   playerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: spacing[3],
-    borderRadius: radius.lg,
+    borderRadius: radius['2xl'],
     borderWidth: 1,
     gap: spacing[3],
-    marginBottom: spacing[2],
   },
   avatar: {
     width: 44,
     height: 44,
     borderRadius: 22,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    flexShrink: 0,
   },
   avatarText: {
-    fontSize: typography.size.lg,
+    fontSize: typography.size.sm,
+    fontWeight: typography.weight.bold,
     fontFamily: typography.family.display,
   },
-  playerInfo: {
-    flex: 1,
-    gap: 2,
-  },
+  playerInfo: { flex: 1 },
   displayName: {
     fontSize: typography.size.base,
-    fontFamily: typography.family.bodySemibold,
+    fontWeight: typography.weight.semibold,
+    fontFamily: typography.family.heading,
+    letterSpacing: typography.letterSpacing.relaxed,
   },
   username: {
-    fontSize: typography.size.sm,
+    fontSize: typography.size.xs,
     fontFamily: typography.family.body,
+    marginTop: 2,
   },
   badge: {
     paddingHorizontal: spacing[3],
     paddingVertical: spacing[1],
     borderRadius: radius.sm,
+    minWidth: 64,
+    alignItems: 'center',
   },
   badgeText: {
     fontSize: typography.size.xs,
@@ -335,19 +284,19 @@ const styles = StyleSheet.create({
     letterSpacing: 0.4,
   },
   inviteButton: {
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    borderRadius: radius.md,
-    minWidth: 64,
+    paddingHorizontal: spacing[6],
+    paddingVertical: spacing[3],
+    borderRadius: radius['2xl'],
     alignItems: 'center',
     justifyContent: 'center',
-    height: 32,
+    flexShrink: 0,
   },
   inviteText: {
-    fontSize: typography.size.sm,
+    fontSize: typography.size.xs,
     fontFamily: typography.family.heading,
+    fontWeight: typography.weight.bold,
     textTransform: 'uppercase',
-    letterSpacing: 0.4,
+    letterSpacing: typography.letterSpacing.extraRelaxed,
   },
 });
 

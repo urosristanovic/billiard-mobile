@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import {
-  ActivityIndicator,
   ScrollView,
   Text,
-  TouchableOpacity,
   View,
   RefreshControl,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
+import { useConfirmDialog } from '@/components/common/dialog';
 import { ScreenLayout } from '@/components/common/layout';
-import { LoadingState, EmptyState } from '@/components/common/states';
+import { LoadingState, EmptyState, Loading } from '@/components/common/states';
+import { SecondaryButton } from '@/components/common/buttons';
 import {
   useTournamentDetail,
   useTournamentRequests,
@@ -50,7 +50,7 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
   const { t: tCommon } = useTranslation('common');
   const { isDark, tk } = useTheme();
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<ActiveTab>('matches');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('bracket');
   const [selectedMatch, setSelectedMatch] = useState<TournamentMatch | null>(
     null,
   );
@@ -71,7 +71,20 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
     editResult,
   } = useTournamentMutations();
 
+  const { confirm } = useConfirmDialog();
+
   const isOrganizer = user?.id === tournament?.organizerId;
+
+  const handleCancelTournament = (id: string) =>
+    confirm({
+      title: t('detail.confirmCancel'),
+      message: t('detail.confirmCancelMessage'),
+      confirmLabel: t('detail.actions.cancel'),
+      cancelLabel: tCommon('close'),
+      variant: 'destructive',
+      onConfirm: () => cancelTournament.mutate(id),
+    });
+
   const canManageRequests =
     isOrganizer && tournament?.status === 'registration';
 
@@ -137,26 +150,25 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
     );
   }
 
-  const isActive = ['in_progress', 'pending_review'].includes(tournament.status);
   const showBracket = hasStarted && tournament.rounds.length > 0;
 
-  const tabs: Tab<ActiveTab>[] = [
-    ...(isActive
-      ? [{ key: 'matches' as ActiveTab, label: t('detail.matches') }]
-      : []),
-    { key: 'participants', label: t('detail.participants') },
-    ...(hasStarted
-      ? [{ key: 'bracket' as ActiveTab, label: t('detail.bracket') }]
-      : []),
-    ...(hasStarted && isRoundRobin
-      ? [{ key: 'standings' as ActiveTab, label: t('detail.standings') }]
-      : []),
-  ];
+  const tabs: Tab<ActiveTab>[] = hasStarted
+    ? isRoundRobin
+      ? [
+          { key: 'matches', label: t('detail.matches') },
+          { key: 'standings', label: t('detail.standings') },
+        ]
+      : [
+          { key: 'bracket', label: t('detail.bracket') },
+          { key: 'matches', label: t('detail.matches') },
+          { key: 'participants', label: t('detail.participants') },
+        ]
+    : [{ key: 'participants', label: t('detail.participants') }];
 
   // Fall back to first available tab when active tab is no longer in the list
   const effectiveTab = tabs.some(tab => tab.key === activeTab)
     ? activeTab
-    : tabs[0]?.key ?? 'participants';
+    : (tabs[0]?.key ?? 'participants');
 
   return (
     <ScreenLayout isDark={isDark}>
@@ -176,6 +188,12 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
           scheduledAt={tournament.scheduledAt}
           organizerProfile={tournament.organizerProfile}
           description={tournament.description}
+          onCancel={
+            isOrganizer &&
+            !['completed', 'cancelled'].includes(tournament.status)
+              ? () => handleCancelTournament(tournament.id)
+              : undefined
+          }
         />
 
         {isOrganizer && (
@@ -184,7 +202,6 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
             publishMutation={publishTournament}
             startMutation={startTournament}
             completeMutation={completeTournament}
-            cancelMutation={cancelTournament}
             onEdit={() =>
               navigation.navigate('CreateTournament', { tournament })
             }
@@ -200,27 +217,17 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
           tournament.status === 'registration' &&
           tournament.participants.some(p => p.userId === user?.id) && (
             <View style={styles.participantActionsWrapper}>
-              <TouchableOpacity
+              <SecondaryButton
+                label={t('detail.actions.addParticipants')}
+                compact
+                isDark={isDark}
+                style={{ shadowOpacity: 0, elevation: 0, flex: 1 }}
                 onPress={() =>
                   navigation.navigate('InviteParticipants', {
                     tournamentId: tournament.id,
                   })
                 }
-                style={[
-                  styles.actionBtn,
-                  styles.participantInviteBtn,
-                  {
-                    borderColor: tk.primary[600],
-                    backgroundColor: tk.surface.overlay,
-                  },
-                ]}
-              >
-                <Text
-                  style={[styles.actionBtnText, { color: tk.primary[400] }]}
-                >
-                  {t('detail.actions.addParticipants')}
-                </Text>
-              </TouchableOpacity>
+              />
             </View>
           )}
 
@@ -250,7 +257,7 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
               paddingVertical: spacing[3],
             }}
           >
-            <ActivityIndicator size='small' color={tk.primary[600]} />
+            <Loading />
           </View>
         )}
 
@@ -274,11 +281,10 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                 matches={tournament.matches}
                 isDark={isDark}
                 onMatchPress={setSelectedMatch}
-                canInteract={match =>
-                  Boolean(match.canRecord || match.canEdit)
-                }
+                canInteract={match => Boolean(match.canRecord || match.canEdit)}
                 recordResultLabel={t('detail.actions.recordResult')}
                 editResultLabel={t('detail.actions.editResult')}
+                waitingLabel={t('detail.waitingPlayers')}
               />
             ) : (
               <Text style={[styles.noBracket, { color: tk.text.muted }]}>

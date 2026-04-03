@@ -1,7 +1,10 @@
-import { Text, TouchableOpacity, View } from 'react-native';
+import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
-import { AvatarButton } from '@/components/common/buttons';
+import { AppLogo } from '@/components/common/AppLogo';
+import { PlusIcon } from '@/components/common/icons';
+import { SecondaryButton, GhostButton } from '@/components/common/buttons';
 import { styles } from '../styles';
 
 interface Props {
@@ -23,70 +26,40 @@ export const LeaderboardHeader = ({
   return (
     <View style={[styles.header, { borderBottomColor: tk.primary[900] }]}>
       <View style={styles.headerTopRow}>
-        <Text style={[styles.title, { color: tk.text.primary }]}>
-          {t('title')}
-        </Text>
-        <AvatarButton />
+        <AppLogo />
       </View>
       <View style={styles.secondRow}>
-        <TouchableOpacity
-          onPress={onOpenFilters}
-          accessibilityRole='button'
+        <View style={styles.secondRowLeft}>
+          <SecondaryButton
+            label={t('title')}
+            size='xs'
+            icon={<PlusIcon size={12} color={tk.primary[500]} />}
+            accessibilityLabel={t('createFab')}
+            onPress={onCreateLeaderboard}
+          />
+
+          <SecondaryButton
+            label={t('filters.group')}
+            size='xs'
+            icon={<PlusIcon size={12} color={tk.primary[500]} />}
+            accessibilityLabel={t('createGroup')}
+            onPress={onCreateGroup}
+          />
+        </View>
+
+        <GhostButton
+          label={t('filters.title')}
+          size='sm'
+          icon={
+            activeFilterCount > 0 ? undefined : (
+              <Feather name='sliders' size={14} color={tk.primary[600]} />
+            )
+          }
+          active={activeFilterCount > 0}
+          badge={activeFilterCount}
           accessibilityLabel={t('filters.title')}
-          style={[
-            styles.headerActionButton,
-            {
-              borderColor: activeFilterCount > 0 ? tk.primary[500] : tk.border.default,
-              backgroundColor: activeFilterCount > 0 ? tk.primary[900] : 'transparent',
-            },
-          ]}
-        >
-          <Text
-            style={[
-              styles.headerActionLabel,
-              { color: activeFilterCount > 0 ? tk.primary[300] : tk.text.muted },
-            ]}
-          >
-            {t('filters.title')}
-          </Text>
-          {activeFilterCount > 0 && (
-            <View style={[styles.filterBadge, { backgroundColor: tk.primary[500] }]}>
-              <Text
-                style={[styles.filterBadgeText, { color: tk.background.primary }]}
-              >
-                {activeFilterCount}
-              </Text>
-            </View>
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={onCreateLeaderboard}
-          accessibilityRole='button'
-          accessibilityLabel={t('createFab')}
-          style={[
-            styles.headerActionButton,
-            { borderColor: tk.primary[600], backgroundColor: 'transparent' },
-          ]}
-        >
-          <Text style={[styles.headerActionLabel, { color: tk.primary[400] }]}>
-            {t('createFab')}
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={onCreateGroup}
-          accessibilityRole='button'
-          accessibilityLabel={t('createGroup')}
-          style={[
-            styles.headerActionButton,
-            { borderColor: tk.primary[600], backgroundColor: 'transparent' },
-          ]}
-        >
-          <Text style={[styles.headerActionLabel, { color: tk.primary[400] }]}>
-            {t('createGroup')}
-          </Text>
-        </TouchableOpacity>
+          onPress={onOpenFilters}
+        />
       </View>
     </View>
   );

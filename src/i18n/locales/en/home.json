@@ -4,7 +4,8 @@
   "stats": {
     "played": "Played",
     "winRate": "Win Rate",
-    "winStreak": "Streak"
+    "winStreak": "Streak",
+    "winRecord": "Win Record"
   },
   "recentMatches": "Recent Matches",
   "noMatches": "No matches yet",
@@ -14,7 +15,7 @@
     "tournament": "Tournament"
   },
   "filters": {
-    "title": "Filter Matches",
+    "title": "Filter",
     "reset": "Reset",
     "close": "Close",
     "apply": "Apply"

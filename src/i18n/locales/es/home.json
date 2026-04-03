@@ -4,7 +4,8 @@
   "stats": {
     "played": "Jugados",
     "winRate": "Victorias",
-    "winStreak": "Racha"
+    "winStreak": "Racha",
+    "winRecord": "Récord"
   },
   "recentMatches": "Partidas recientes",
   "noMatches": "Aún no hay partidas",

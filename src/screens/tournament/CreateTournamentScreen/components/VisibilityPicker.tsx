@@ -1,6 +1,7 @@
-import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { theme, typography, spacing, radius } from '@/constants/theme';
+import { theme, typography, spacing } from '@/constants/theme';
+import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import type { TournamentVisibility } from '@/types/tournament';
 
 const VISIBILITY_OPTIONS: TournamentVisibility[] = ['public', 'invite_only'];
@@ -27,33 +28,24 @@ export const VisibilityPicker = ({
       <View style={styles.options}>
         {VISIBILITY_OPTIONS.map(vis => {
           const selected = value === vis;
-          return (
-            <TouchableOpacity
+          return selected ? (
+            <PrimaryButton
               key={vis}
+              label={t(`visibility.${vis}`)}
+              size='xs'
+              isDark={isDark}
               onPress={() => onChange(vis)}
-              activeOpacity={0.8}
-              accessibilityRole='radio'
-              accessibilityState={{ selected }}
-              style={[
-                styles.option,
-                {
-                  flex: 1,
-                  backgroundColor: selected
-                    ? tk.primary[900]
-                    : tk.surface.raised,
-                  borderColor: selected ? tk.primary[500] : tk.border.default,
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.optionText,
-                  { color: selected ? tk.primary[300] : tk.text.secondary },
-                ]}
-              >
-                {t(`visibility.${vis}`)}
-              </Text>
-            </TouchableOpacity>
+              style={styles.pill}
+            />
+          ) : (
+            <SecondaryButton
+              key={vis}
+              label={t(`visibility.${vis}`)}
+              size='xs'
+              isDark={isDark}
+              onPress={() => onChange(vis)}
+              style={styles.pill}
+            />
           );
         })}
       </View>
@@ -75,15 +67,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing[2],
   },
-  option: {
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[3],
-    alignItems: 'center',
-  },
-  optionText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.bodyMedium,
+  pill: {
+    flex: 1,
   },
 });

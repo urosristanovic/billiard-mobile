@@ -1,30 +1,27 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   FlatList,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
   StyleSheet,
-  ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { useAuth } from '@/features/auth/useAuth';
-import { ScreenLayout } from '@/components/common/layout';
-import { EmptyState } from '@/components/common/states';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
+import { Input } from '@/components/common/forms';
+import { EmptyState, Loading } from '@/components/common/states';
 import { useBrowseTournaments } from '@/features/tournaments/useBrowseTournaments';
 import { useTournamentMutations } from '@/features/tournaments/useTournamentMutations';
 import { TournamentSearchCard } from './components';
-import { typography, spacing, radius } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { TournamentsStackParamList } from '@/navigation/AppNavigator';
 
 type Props = NativeStackScreenProps<TournamentsStackParamList, 'BrowseTournaments'>;
 
 const BrowseTournamentsScreen = ({ navigation }: Props) => {
   const { t } = useTranslation('tournaments');
-  const { isDark, tk } = useTheme();
+  const { isDark } = useTheme();
   const { user } = useAuth();
   const [searchText, setSearchText] = useState('');
   const [requestedIds, setRequestedIds] = useState<Set<string>>(new Set());
@@ -57,36 +54,15 @@ const BrowseTournamentsScreen = ({ navigation }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <View style={[styles.header, { borderBottomColor: tk.border.subtle }]}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-          accessibilityRole='button'
-        >
-          <Text style={[styles.back, { color: tk.primary[400] }]}>←</Text>
-        </TouchableOpacity>
-        <Text style={[styles.title, { color: tk.text.primary }]}>
-          {t('browse.title')}
-        </Text>
-        <View style={styles.backPlaceholder} />
-      </View>
+      <ScreenHeader onBack={() => navigation.goBack()} title={t('browse.title')} />
 
-      {/* Search bar */}
-      <View style={[styles.searchBar, { borderColor: tk.border.default }]}>
-        <TextInput
+      <View style={styles.searchBar}>
+        <Input
+          variant='search'
           value={searchText}
           onChangeText={setSearchText}
           placeholder={t('browse.searchPlaceholder')}
-          placeholderTextColor={tk.text.muted}
           returnKeyType='search'
-          style={[
-            styles.searchInput,
-            {
-              backgroundColor: tk.surface.raised,
-              color: tk.text.primary,
-              borderColor: tk.border.default,
-            },
-          ]}
         />
       </View>
 
@@ -98,7 +74,7 @@ const BrowseTournamentsScreen = ({ navigation }: Props) => {
         ListEmptyComponent={
           isLoading ? (
             <View style={styles.loadingRow}>
-              <ActivityIndicator color={tk.primary[400]} />
+              <Loading />
             </View>
           ) : query.length < 2 ? (
             <EmptyState
@@ -134,41 +110,10 @@ const BrowseTournamentsScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing[4],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[3],
-    borderBottomWidth: 1,
-  },
-  back: {
-    fontSize: 22,
-    fontFamily: typography.family.display,
-    width: 32,
-  },
-  backPlaceholder: {
-    width: 32,
-  },
-  title: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: typography.size.lg,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-  },
   searchBar: {
     paddingHorizontal: spacing[4],
-    paddingVertical: spacing[3],
-  },
-  searchInput: {
-    height: 44,
-    borderRadius: radius.md,
-    borderWidth: 1,
-    paddingHorizontal: spacing[3],
-    fontSize: typography.size.base,
-    fontFamily: typography.family.body,
+    paddingTop: spacing[3],
+    paddingBottom: spacing[1],
   },
   list: {
     padding: spacing[4],

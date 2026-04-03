@@ -1,11 +1,6 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { theme, typography, spacing, radius } from '@/constants/theme';
+import { SecondaryButton } from '@/components/common/buttons';
 import type { TournamentMatch } from '@/types/tournament';
 
 interface CurrentMatchesProps {
@@ -38,7 +33,7 @@ export const CurrentMatches = ({
         styles.container,
         {
           borderColor: tk.border.default,
-          backgroundColor: tk.surface.overlay,
+          backgroundColor: tk.surface.default,
         },
       ]}
     >
@@ -74,27 +69,32 @@ export const CurrentMatches = ({
                   },
                 ]}
               >
-                <Text style={[styles.players, { color: tk.text.primary }]}>
-                  {homeName} vs {awayName}
-                </Text>
-                {canRecord && (
-                  <TouchableOpacity
-                    onPress={() => onRecordResult(match)}
-                    style={[
-                      styles.button,
-                      {
-                        borderColor: tk.primary[700],
-                        backgroundColor: tk.primary[500],
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={[styles.buttonLabel, { color: tk.text.onPrimary }]}
-                    >
-                      {recordResultLabel}
+                <View style={styles.rowInner}>
+                  <View style={styles.matchup}>
+                    <Text style={[styles.players, { color: tk.text.primary }]}>
+                      {homeName}
                     </Text>
-                  </TouchableOpacity>
-                )}
+                    <View
+                      style={[
+                        styles.divider,
+                        { backgroundColor: tk.border.strong },
+                      ]}
+                    />
+                    <Text style={[styles.players, { color: tk.text.primary }]}>
+                      {awayName}
+                    </Text>
+                  </View>
+                  {canRecord && (
+                    <SecondaryButton
+                      label={recordResultLabel}
+                      compact
+                      size='xs'
+                      isDark={isDark}
+                      style={{ shadowOpacity: 0, elevation: 0 }}
+                      onPress={() => onRecordResult(match)}
+                    />
+                  )}
+                </View>
               </View>
             );
           })}
@@ -128,11 +128,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: radius.md,
     padding: spacing[2],
+  },
+  rowInner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     gap: spacing[2],
   },
+  matchup: {
+    flex: 1,
+  },
   players: {
-    fontSize: typography.size.sm,
+    fontSize: typography.size.base,
     fontFamily: typography.family.bodyMedium,
+  },
+  divider: {
+    width: '100%',
+    height: 1,
+    marginVertical: spacing[2],
   },
   button: {
     borderWidth: 1,

@@ -1,6 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   RefreshControl,
   View,
@@ -9,13 +8,14 @@ import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout } from '@/components/common/layout';
-import { EmptyState, LoadingState } from '@/components/common/states';
+import { EmptyState, LoadingState, Loading } from '@/components/common/states';
 import { useLeaderboard } from '@/features/leaderboard/useLeaderboard';
 import { useMyGroups } from '@/features/groups/useGroups';
 import { useMyCustomLeaderboards } from '@/features/leaderboard/useCustomLeaderboards';
 import { useAuth } from '@/features/auth/useAuth';
 import type { LeaderboardEntry } from '@/types/rating';
 import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
+import { CueIcon } from '@/components/common/icons';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
 import {
   LeaderboardFilterModal,
@@ -26,9 +26,13 @@ import {
 import { LeaderboardEntryRow } from './components/LeaderboardEntryRow';
 import { LeaderboardHeader } from './components/LeaderboardHeader';
 import { ScopeManageRow } from './components/ScopeManageRow';
+import { spacing } from '@/constants/theme';
 import { styles } from './styles';
 
-type Props = NativeStackScreenProps<LeaderboardStackParamList, 'LeaderboardMain'>;
+type Props = NativeStackScreenProps<
+  LeaderboardStackParamList,
+  'LeaderboardMain'
+>;
 
 const LeaderboardScreen = ({ navigation }: Props) => {
   const { t } = useTranslation('leaderboard');
@@ -37,7 +41,8 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   const { user } = useAuth();
 
   const [filterModalOpen, setFilterModalOpen] = useState(false);
-  const [filters, setFilters] = useState<LeaderboardFilters>(DEFAULT_LB_FILTERS);
+  const [filters, setFilters] =
+    useState<LeaderboardFilters>(DEFAULT_LB_FILTERS);
 
   const { data: myGroups = [] } = useMyGroups();
   const { data: myCustomLeaderboards = [] } = useMyCustomLeaderboards();
@@ -78,7 +83,9 @@ const LeaderboardScreen = ({ navigation }: Props) => {
       scope: filters.scope,
       discipline: filters.discipline,
       countryId:
-        filters.scope === 'country' ? (user?.countryId ?? undefined) : undefined,
+        filters.scope === 'country'
+          ? (user?.countryId ?? undefined)
+          : undefined,
       cityId:
         filters.scope === 'city' ? (user?.cityId ?? undefined) : undefined,
       groupId: filters.scope === 'group' ? filters.selectedGroupId : undefined,
@@ -114,7 +121,9 @@ const LeaderboardScreen = ({ navigation }: Props) => {
       <LeaderboardEntryRow
         entry={item}
         isMe={item.userId === user?.id}
-        onPress={() => navigation.push('PlayerProfile', { userId: item.userId })}
+        onPress={() =>
+          navigation.push('PlayerProfile', { userId: item.userId })
+        }
       />
     ),
     [navigation, user],
@@ -176,7 +185,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
         renderItem={renderEntry}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}
-        contentContainerStyle={{ paddingBottom: 140 }}
+        contentContainerStyle={{ paddingBottom: 140, paddingTop: 8 }}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching && !isLoading}
@@ -185,20 +194,21 @@ const LeaderboardScreen = ({ navigation }: Props) => {
             colors={[tk.primary[400]]}
           />
         }
-        ListHeaderComponent={
-          isRefetching && !isLoading && entries.length > 0 ? (
-            <View style={styles.refreshingIndicator}>
-              <ActivityIndicator size='small' color={tk.primary[400]} />
-            </View>
-          ) : null
-        }
         ListEmptyComponent={
           scopeBlockedReason ? (
-            <EmptyState title={scopeBlockedReason} description='' isDark={isDark} />
+            <EmptyState
+              title={scopeBlockedReason}
+              description=''
+              isDark={isDark}
+            />
           ) : isLoading ? (
             <LoadingState message={t('loading')} isDark={isDark} />
           ) : isError ? (
-            <EmptyState title={t('loadFailed')} description='' isDark={isDark} />
+            <EmptyState
+              title={t('loadFailed')}
+              description=''
+              isDark={isDark}
+            />
           ) : (
             <EmptyState
               title={t('empty')}
@@ -210,17 +220,30 @@ const LeaderboardScreen = ({ navigation }: Props) => {
         ListFooterComponent={
           isFetchingNextPage ? (
             <View style={styles.footerLoader}>
-              <ActivityIndicator size='small' color={tk.primary[400]} />
+              <Loading />
             </View>
           ) : null
         }
       />
 
-      <FloatingActionButton
-        label={tHome('fab.challenge')}
-        onPress={() => navigation.push('UserSearch')}
-        style={{ bottom: 24 }}
-      />
+      <View
+        style={{
+          position: 'absolute',
+          bottom: spacing[4],
+          left: spacing[5],
+          right: spacing[5],
+          flexDirection: 'row',
+          gap: spacing[3],
+        }}
+      >
+        <View style={{ flex: 1 }} />
+        <FloatingActionButton
+          label={tHome('fab.challenge')}
+          icon={<CueIcon size={18} color={tk.text.onPrimary} />}
+          onPress={() => navigation.push('UserSearch')}
+          style={{ flex: 1 }}
+        />
+      </View>
 
       <LeaderboardFilterModal
         visible={filterModalOpen}

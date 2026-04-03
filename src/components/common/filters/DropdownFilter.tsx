@@ -84,15 +84,15 @@ export function DropdownFilter({
         style={[
           styles.trigger,
           {
-            backgroundColor: t.surface.raised,
-            borderColor: t.primary[700],
+            backgroundColor: t.surface.default,
+            borderColor: t.primary[600],
           },
         ]}
       >
-        <Text style={[styles.triggerLabel, { color: t.primary[200] }]}>
+        <Text style={[styles.triggerLabel, { color: t.primary[500] }]}>
           {selectedOption?.label ?? value}
         </Text>
-        <Text style={[styles.triggerIcon, { color: t.primary[300] }]}>▼</Text>
+        <Text style={[styles.triggerIcon, { color: t.primary[500] }]}>▼</Text>
       </TouchableOpacity>
 
       <Modal

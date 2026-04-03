@@ -1,9 +1,10 @@
 import { Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
+import { DangerButton, TournamentStatusBadge } from '@/components/common';
 import {
   TOURNAMENT_FORMAT_LABELS,
-  TOURNAMENT_STATUS_LABELS,
   type TournamentFormat,
   type TournamentStatus,
   type TournamentParticipantProfile,
@@ -20,6 +21,7 @@ interface TournamentMetaProps {
   scheduledAt: string;
   organizerProfile: TournamentParticipantProfile;
   description: string | null;
+  onCancel?: () => void;
 }
 
 export const TournamentMeta = ({
@@ -31,34 +33,26 @@ export const TournamentMeta = ({
   scheduledAt,
   organizerProfile,
   description,
+  onCancel,
 }: TournamentMetaProps) => {
   const { t } = useTranslation('tournaments');
-  const { tk } = useTheme();
+  const { isDark, tk } = useTheme();
 
   return (
     <View style={styles.metaSection}>
       <View style={styles.metaRow}>
-        <View
-          style={[
-            styles.statusBadge,
-            {
-              backgroundColor: tk.surface.overlay,
-              borderColor: tk.border.default,
-            },
-          ]}
-        >
-          <Text style={[styles.statusText, { color: tk.primary[400] }]}>
-            {TOURNAMENT_STATUS_LABELS[status]}
-          </Text>
-        </View>
+        <TournamentStatusBadge status={status} isDark={isDark} />
         {isRated && (
           <View
             style={[
               styles.statusBadge,
-              { backgroundColor: tk.surface.overlay, borderColor: tk.primary[400] },
+              {
+                backgroundColor: tk.surface.overlay,
+                borderColor: tk.primary[500],
+              },
             ]}
           >
-            <Text style={[styles.statusText, { color: tk.primary[400] }]}>
+            <Text style={[styles.statusText, { color: tk.primary[500] }]}>
               {t('ratedBadge')}
             </Text>
           </View>
@@ -70,23 +64,28 @@ export const TournamentMeta = ({
         <Text style={[styles.metaItem, { color: tk.text.secondary }]}>
           {TOURNAMENT_FORMAT_LABELS[format]}
         </Text>
+        {onCancel && (
+          <DangerButton
+            label={t('detail.actions.cancel')}
+            size='xs'
+            isDark={isDark}
+            style={{ marginLeft: 'auto' }}
+            onPress={onCancel}
+          />
+        )}
       </View>
 
       <View style={styles.metaDetails}>
         {location ? (
           <View style={styles.metaDetailRow}>
-            <Text style={[styles.metaDetailIcon, { color: tk.text.muted }]}>
-              📍
-            </Text>
+            <Feather name='map-pin' size={14} color={tk.text.muted} />
             <Text style={[styles.metaDetailText, { color: tk.text.primary }]}>
               {location}
             </Text>
           </View>
         ) : null}
         <View style={styles.metaDetailRow}>
-          <Text style={[styles.metaDetailIcon, { color: tk.text.muted }]}>
-            🗓
-          </Text>
+          <Feather name='calendar' size={14} color={tk.text.muted} />
           <Text style={[styles.metaDetailText, { color: tk.text.primary }]}>
             {new Date(scheduledAt).toLocaleString(undefined, {
               year: 'numeric',
@@ -98,9 +97,7 @@ export const TournamentMeta = ({
           </Text>
         </View>
         <View style={styles.metaDetailRow}>
-          <Text style={[styles.metaDetailIcon, { color: tk.text.muted }]}>
-            👤
-          </Text>
+          <Feather name='user' size={14} color={tk.text.muted} />
           <Text style={[styles.metaDetailText, { color: tk.text.primary }]}>
             {organizerProfile.displayName || organizerProfile.username}
           </Text>

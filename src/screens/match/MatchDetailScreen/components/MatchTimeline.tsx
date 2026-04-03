@@ -64,7 +64,7 @@ export const MatchTimeline = ({
     <View
       style={[
         styles.container,
-        { backgroundColor: tk.surface.raised, borderColor: tk.border.default },
+        { backgroundColor: tk.surface.default, borderColor: tk.border.default },
       ]}
     >
       <Text style={[styles.title, { color: tk.text.primary }]}>
@@ -121,14 +121,14 @@ const styles = StyleSheet.create({
     gap: spacing[3],
   },
   title: {
-    fontSize: typography.size.sm,
+    fontSize: typography.size.base,
     fontFamily: typography.family.heading,
     fontWeight: typography.weight.semibold,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   emptyText: {
-    fontSize: typography.size.sm,
+    fontSize: typography.size.base,
     fontFamily: typography.family.bodyMedium,
   },
   item: {

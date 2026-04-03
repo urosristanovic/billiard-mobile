@@ -1,10 +1,12 @@
 {
   "tab": "Početna",
   "title": "Početna",
+  "status": "Status: Aktivan igrač",
   "stats": {
     "played": "Odigrano",
     "winRate": "Pobede",
-    "winStreak": "Niz"
+    "winStreak": "Niz pobeda",
+    "winRecord": "Rekord"
   },
   "recentMatches": "Nedavni mečevi",
   "noMatches": "Još nema mečeva",

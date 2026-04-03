@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import type { Match } from '@/types/match';
@@ -17,9 +18,6 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
   const [firstPlayer, secondPlayer] = match.players;
   const left = me ?? firstPlayer;
   const right = opponent ?? secondPlayer;
-  const isTie =
-    left?.score != null && right?.score != null && left.score === right.score;
-
   if (!left || !right) {
     return null;
   }
@@ -40,11 +38,7 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
             styles.avatar,
             {
               backgroundColor: tk.background.secondary,
-              borderColor: isTie
-                ? tk.info.default
-                : isWinner
-                  ? tk.primary[500]
-                  : tk.error.default,
+              borderColor: tk.primary[600],
             },
           ]}
         >
@@ -52,11 +46,7 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
             style={[
               styles.avatarText,
               {
-                color: isTie
-                  ? tk.info.text
-                  : isWinner
-                    ? tk.primary[300]
-                    : tk.error.text,
+                color: tk.primary[600],
               },
             ]}
           >
@@ -68,7 +58,7 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
             styles.name,
             {
               color: tk.text.primary,
-              textAlign: align === 'right' ? 'right' : 'left',
+              textAlign: align,
             },
           ]}
         >
@@ -79,7 +69,7 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
             styles.username,
             {
               color: tk.text.muted,
-              textAlign: align === 'right' ? 'right' : 'left',
+              textAlign: align,
             },
           ]}
         >
@@ -89,20 +79,23 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
           style={[
             styles.score,
             {
-              color: isTie
-                ? tk.info.default
-                : isWinner
-                  ? tk.primary[400]
-                  : tk.text.secondary,
+              color: isWinner ? tk.primary[600] : tk.text.secondary,
             },
           ]}
         >
           {player.score != null ? player.score : '—'}
         </Text>
         {player.beers > 0 && (
-          <Text style={[styles.beers, { color: tk.text.muted }]}>
-            🍺 {player.beers}
-          </Text>
+          <View style={styles.beersRow}>
+            <MaterialCommunityIcons
+              name='beer-outline'
+              size={13}
+              color={tk.text.muted}
+            />
+            <Text style={[styles.beers, { color: tk.text.muted }]}>
+              {player.beers}
+            </Text>
+          </View>
         )}
       </View>
     );
@@ -113,20 +106,15 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
       style={[
         styles.board,
         {
-          backgroundColor: tk.surface.raised,
-          borderColor: isTie ? tk.info.border : tk.primary[800],
+          backgroundColor: tk.surface.default,
+          borderColor: tk.primary[600],
         },
       ]}
     >
       {renderFighter(left, 'left')}
       <View style={styles.vsWrap}>
-        <Text
-          style={[
-            styles.vs,
-            { color: isTie ? tk.info.default : tk.primary[300] },
-          ]}
-        >
-          {isTie ? t('tie') : t('detail.vs')}
+        <Text style={[styles.vs, { color: tk.primary[600] }]}>
+          {t('detail.vs')}
         </Text>
       </View>
       {renderFighter(right, 'right')}
@@ -136,8 +124,8 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
 
 const styles = StyleSheet.create({
   board: {
-    borderRadius: radius.xl,
-    borderWidth: 1,
+    borderRadius: radius['4xl'],
+    borderWidth: 0.5,
     padding: spacing[4],
     flexDirection: 'row',
     alignItems: 'center',
@@ -166,25 +154,30 @@ const styles = StyleSheet.create({
     fontFamily: typography.family.display,
   },
   name: {
-    fontSize: typography.size.base,
+    fontSize: typography.size.lg,
     fontWeight: typography.weight.semibold,
     fontFamily: typography.family.bodySemibold,
   },
   username: {
-    fontSize: typography.size.sm,
+    fontSize: typography.size.base,
     fontFamily: typography.family.body,
   },
   score: {
     fontWeight: typography.weight.bold,
-    fontSize: typography.size['4xl'],
+    fontSize: typography.size['5xl'],
     fontFamily: typography.family.display,
-    lineHeight: typography.size['4xl'] * 1.1,
-    marginTop: spacing[1],
+    lineHeight: typography.size['5xl'] * 1.1,
+    marginTop: spacing[5],
+  },
+  beersRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 2,
   },
   beers: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
-    marginTop: 2,
   },
   vsWrap: {
     alignSelf: 'stretch',

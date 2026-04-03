@@ -1,17 +1,28 @@
 import { useMemo, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useUserSearch } from '@/features/matches/useUserSearch';
-import { useGroupMembers, useGroupMutations } from '@/features/groups/useGroups';
+import {
+  useGroupMembers,
+  useGroupMutations,
+} from '@/features/groups/useGroups';
 import {
   useCustomLeaderboardMembers,
   useCustomLeaderboardMutations,
 } from '@/features/leaderboard/useCustomLeaderboards';
-import { ScreenLayout } from '@/components/common/layout';
-import { EmptyState } from '@/components/common/states';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
+import { Input } from '@/components/common/forms';
+import { EmptyState, Loading } from '@/components/common/states';
+import { ChevronRightIcon } from '@/components/common/icons';
 import { useTheme } from '@/hooks/useTheme';
-import { typography, spacing, radius, minTouchTarget } from '@/constants/theme';
+import { typography, spacing, radius } from '@/constants/theme';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
 import type { UserSearchResult } from '@/services/user';
 
@@ -19,16 +30,18 @@ type Props = NativeStackScreenProps<LeaderboardStackParamList, 'UserSearch'>;
 
 const UserSearchScreen = ({ navigation, route }: Props) => {
   const { t } = useTranslation('leaderboard');
-  const { t: tCommon } = useTranslation('common');
   const { isDark, tk } = useTheme();
-  const { query, setQuery, results, isFetching, isSearchMode } = useUserSearch();
+  const { query, setQuery, results, isFetching, isSearchMode } =
+    useUserSearch();
   const [pendingAdds, setPendingAdds] = useState<Set<string>>(new Set());
   const [locallyAdded, setLocallyAdded] = useState<Set<string>>(new Set());
   const groupId = route.params?.groupId;
   const leaderboardId = route.params?.leaderboardId;
   const isAddMode = Boolean(groupId || leaderboardId);
   const { data: groupMembers = [] } = useGroupMembers(groupId ?? '');
-  const { data: customMembers = [] } = useCustomLeaderboardMembers(leaderboardId ?? '');
+  const { data: customMembers = [] } = useCustomLeaderboardMembers(
+    leaderboardId ?? '',
+  );
   const { addMember: addGroupMember } = useGroupMutations();
   const { addMember: addCustomMember } = useCustomLeaderboardMutations();
 
@@ -81,39 +94,23 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <View style={styles.header}>
-        <View style={styles.headerRow}>
-          <Text
-            onPress={() => navigation.goBack()}
-            style={[styles.backButton, { color: tk.primary[400] }]}
-          >
-            ← {tCommon('back')}
-          </Text>
-          <Text style={[styles.title, { color: tk.text.primary }]}>
-            {t('userSearch.title')}
-          </Text>
-        </View>
-        <TextInput
-          style={[
-            styles.searchInput,
-            {
-              backgroundColor: tk.surface.raised,
-              borderColor: tk.primary[700],
-              color: tk.text.primary,
-            },
-          ]}
+      <ScreenHeader
+        title={t('userSearch.title')}
+        onBack={() => navigation.goBack()}
+      />
+
+      <View style={styles.searchWrap}>
+        <Input
+          variant='search'
           placeholder={t('userSearch.placeholder')}
-          placeholderTextColor={tk.text.muted}
           value={query}
           onChangeText={setQuery}
-          autoCapitalize='none'
-          autoCorrect={false}
           autoFocus
         />
       </View>
 
       {isFetching ? (
-        <ActivityIndicator style={styles.loader} color={tk.primary[600]} size='large' />
+        <Loading size='large' style={styles.loader} />
       ) : results.length === 0 && isSearchMode ? (
         <EmptyState
           title={t('userSearch.empty')}
@@ -133,34 +130,74 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
             return (
               <TouchableOpacity
                 onPress={() => handleSelect(item)}
-                style={[styles.resultRow, { borderBottomColor: tk.primary[900] }]}
-                activeOpacity={0.7}
+                style={[
+                  styles.resultRow,
+                  {
+                    backgroundColor: tk.surface.default,
+                    borderColor: tk.border.default,
+                  },
+                ]}
+                activeOpacity={0.75}
               >
-                <View style={[styles.avatar, { backgroundColor: tk.primary[900], borderColor: tk.primary[700] }]}>
-                  <Text style={[styles.avatarText, { color: tk.primary[300] }]}>
+                {/* Avatar */}
+                <View
+                  style={[
+                    styles.avatar,
+                    {
+                      backgroundColor: `${tk.primary[600]}20`,
+                      borderColor: tk.border.strong,
+                    },
+                  ]}
+                >
+                  <Text style={[styles.avatarText, { color: tk.primary[600] }]}>
                     {item.displayName.slice(0, 2).toUpperCase()}
                   </Text>
                 </View>
+
+                {/* Name + handle */}
                 <View style={styles.resultInfo}>
                   <Text style={[styles.resultName, { color: tk.text.primary }]}>
                     {item.displayName}
                   </Text>
-                  <Text style={[styles.resultUsername, { color: tk.text.muted }]}>
+                  <Text
+                    style={[styles.resultUsername, { color: tk.text.muted }]}
+                  >
                     @{item.username}
                     {item.location ? ` · ${item.location}` : ''}
                   </Text>
                 </View>
 
-                {isAddMode && (
+                {/* Right-side action */}
+                {isAddMode ? (
                   isMember ? (
-                    <View style={[styles.statusBadge, { backgroundColor: tk.surface.overlay }]}>
-                      <Text style={[styles.statusBadgeText, { color: tk.text.muted }]}>
+                    <View
+                      style={[
+                        styles.statusBadge,
+                        { backgroundColor: tk.surface.overlay },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.statusBadgeText,
+                          { color: tk.text.muted },
+                        ]}
+                      >
                         {t('userSearch.alreadyMember')}
                       </Text>
                     </View>
                   ) : isAdded ? (
-                    <View style={[styles.statusBadge, { backgroundColor: tk.surface.overlay }]}>
-                      <Text style={[styles.statusBadgeText, { color: tk.primary[400] }]}>
+                    <View
+                      style={[
+                        styles.statusBadge,
+                        { backgroundColor: tk.surface.overlay },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.statusBadgeText,
+                          { color: tk.primary[400] },
+                        ]}
+                      >
                         {t('userSearch.added')}
                       </Text>
                     </View>
@@ -168,17 +205,24 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
                     <TouchableOpacity
                       onPress={() => handleAddMember(item)}
                       disabled={isAdding}
-                      style={[styles.addButton, { backgroundColor: tk.primary[500] }]}
+                      style={[
+                        styles.challengeBtn,
+                        { backgroundColor: tk.primary[500] },
+                      ]}
                     >
                       {isAdding ? (
-                        <ActivityIndicator size='small' color={tk.surface.default} />
+                        <Loading />
                       ) : (
-                        <Text style={[styles.addButtonText, { color: tk.surface.default }]}>
+                        <Text
+                          style={[styles.challengeBtnText, { color: '#000' }]}
+                        >
                           {t('userSearch.add')}
                         </Text>
                       )}
                     </TouchableOpacity>
                   )
+                ) : (
+                  <ChevronRightIcon size={16} color={tk.primary[600]} />
                 )}
               </TouchableOpacity>
             );
@@ -190,60 +234,38 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
+  searchWrap: {
     paddingHorizontal: spacing[4],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[3],
+    paddingTop: spacing[4],
+    paddingBottom: spacing[2],
   },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing[3],
-    marginBottom: spacing[3],
-  },
-  backButton: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  title: {
-    fontSize: typography.size.xl,
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  searchInput: {
-    borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing[4],
-    paddingVertical: spacing[3],
-    fontSize: typography.size.base,
-    fontFamily: typography.family.body,
-    minHeight: minTouchTarget,
-  },
+
+  // ── List ───────────────────────────────────────────────────
   loader: {
     marginTop: spacing[8],
   },
   list: {
     paddingHorizontal: spacing[4],
+    paddingTop: spacing[2],
+    paddingBottom: spacing[10],
+    gap: spacing[2],
   },
   resultRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: spacing[3],
-    borderBottomWidth: 1,
+    padding: spacing[3],
+    borderRadius: radius['2xl'],
+    borderWidth: 1,
     gap: spacing[3],
-    minHeight: minTouchTarget,
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
   avatarText: {
     fontSize: typography.size.sm,
@@ -255,11 +277,29 @@ const styles = StyleSheet.create({
     fontSize: typography.size.base,
     fontWeight: typography.weight.semibold,
     fontFamily: typography.family.heading,
+    letterSpacing: typography.letterSpacing.relaxed,
   },
   resultUsername: {
     fontSize: typography.size.xs,
     fontFamily: typography.family.body,
     marginTop: 2,
+  },
+
+  // ── Action buttons ─────────────────────────────────────────
+  challengeBtn: {
+    paddingHorizontal: spacing[6],
+    paddingVertical: spacing[3],
+    borderRadius: radius['2xl'],
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  challengeBtnText: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.heading,
+    fontWeight: typography.weight.bold,
+    textTransform: 'uppercase',
+    letterSpacing: typography.letterSpacing.extraRelaxed,
   },
   statusBadge: {
     paddingHorizontal: spacing[3],
@@ -270,21 +310,6 @@ const styles = StyleSheet.create({
   },
   statusBadgeText: {
     fontSize: typography.size.xs,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
-  },
-  addButton: {
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[2],
-    borderRadius: radius.md,
-    minWidth: 64,
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 32,
-  },
-  addButtonText: {
-    fontSize: typography.size.sm,
     fontFamily: typography.family.heading,
     textTransform: 'uppercase',
     letterSpacing: 0.4,

@@ -1,10 +1,14 @@
+import { type ReactNode, useRef } from 'react';
 import {
   ActivityIndicator,
+  Animated,
+  Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  type TouchableOpacityProps,
+  View,
+  type ViewStyle,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import {
   theme,
   typography,
@@ -13,88 +17,167 @@ import {
   minTouchTarget,
 } from '@/constants/theme';
 
-interface PrimaryButtonProps extends TouchableOpacityProps {
+interface PrimaryButtonProps {
   label: string;
   loading?: boolean;
   compact?: boolean;
+  size?: 'xs';
+  icon?: ReactNode;
   isDark?: boolean;
+  disabled?: boolean;
+  onPress?: () => void;
+  style?: ViewStyle;
+  accessibilityLabel?: string;
 }
 
 export const PrimaryButton = ({
   label,
   loading,
   compact,
+  size,
+  icon,
   isDark = false,
   disabled,
+  onPress,
   style,
-  ...props
+  accessibilityLabel,
 }: PrimaryButtonProps) => {
   const t = isDark ? theme.dark : theme.light;
+  const scale = useRef(new Animated.Value(1)).current;
+  const isXs = size === 'xs';
+
+  const animateIn = () =>
+    Animated.spring(scale, {
+      toValue: 0.93,
+      useNativeDriver: true,
+    }).start();
+
+  const animateOut = () =>
+    Animated.spring(scale, {
+      toValue: 1,
+      friction: 4,
+      useNativeDriver: true,
+    }).start();
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      disabled={disabled || loading}
-      accessibilityRole='button'
-      accessibilityLabel={label}
-      accessibilityState={{ disabled: disabled || loading }}
+    <Animated.View
       style={[
         styles.base,
-        compact ? styles.compact : styles.regular,
+        isXs ? styles.sizeXs : compact ? styles.compact : styles.regular,
         {
-          backgroundColor: t.primary[500],
-          borderColor: t.primary[700],
+          transform: [{ scale }],
+          shadowColor: t.primary[600],
+          opacity: disabled || loading ? 0.5 : 1,
         },
-        (disabled || loading) && styles.disabled,
         style,
       ]}
-      {...props}
     >
-      {loading ? (
-        <ActivityIndicator
-          size='small'
-          color={t.text.onPrimary}
-          accessibilityLabel='Loading'
+      <View style={[StyleSheet.absoluteFill, styles.gradientClip]}>
+        <LinearGradient
+          colors={[t.primary[700], t.primary[500]]}
+          start={{ x: 0, y: 0.5 }}
+          end={{ x: 1, y: 0.5 }}
+          style={StyleSheet.absoluteFill}
         />
-      ) : (
-        <Text
-          style={[styles.label, { color: t.text.onPrimary }]}
-          numberOfLines={1}
-        >
-          {label}
-        </Text>
-      )}
-    </TouchableOpacity>
+      </View>
+
+      <Pressable
+        onPress={onPress}
+        onPressIn={animateIn}
+        onPressOut={animateOut}
+        disabled={disabled || loading}
+        accessibilityRole='button'
+        accessibilityLabel={accessibilityLabel ?? label}
+        accessibilityState={{ disabled: disabled || loading }}
+        style={
+          isXs ? styles.innerXs : compact ? styles.innerCompact : styles.inner
+        }
+      >
+        {loading ? (
+          <ActivityIndicator
+            size='small'
+            color={t.primary[400]}
+            accessibilityLabel='Loading'
+          />
+        ) : (
+          <>
+            {icon}
+            <Text
+              style={[
+                styles.label,
+                isXs && styles.labelXs,
+                { color: t.text.onPrimary },
+              ]}
+              numberOfLines={1}
+            >
+              {label}
+            </Text>
+          </>
+        )}
+      </Pressable>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   base: {
+    borderRadius: radius['2xl'],
+    elevation: 8,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    minHeight: minTouchTarget,
+    justifyContent: 'center',
+  },
+  gradientClip: {
+    borderRadius: radius['2xl'],
+    overflow: 'hidden',
+  },
+  regular: {
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+  },
+  compact: {
+    minHeight: 36,
+  },
+  sizeXs: {
+    minHeight: 32,
+    paddingHorizontal: spacing[1],
+    paddingVertical: spacing[1],
+  },
+  inner: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: radius.md,
-    borderWidth: 1,
-    minHeight: minTouchTarget,
-  },
-  regular: {
+    gap: spacing[2],
     paddingHorizontal: spacing[6],
-    paddingVertical: spacing[3],
+    paddingVertical: spacing[4],
   },
-  compact: {
+  innerCompact: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing[2],
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[2],
-    minHeight: 36,
+  },
+  innerXs: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing[1],
+    paddingHorizontal: spacing[3],
+    paddingVertical: spacing[1],
   },
   label: {
     fontSize: typography.size.base,
-    fontWeight: typography.weight.semibold,
     fontFamily: typography.family.display,
-    letterSpacing: 0.8,
+    fontWeight: typography.weight.bold,
     textTransform: 'uppercase',
+    letterSpacing: typography.letterSpacing.tight,
     textAlign: 'center',
   },
-  disabled: {
-    opacity: 0.5,
+  labelXs: {
+    fontSize: typography.size.xs,
   },
 });

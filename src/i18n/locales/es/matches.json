@@ -9,8 +9,8 @@
   },
   "status": {
     "challenge_requested": "Desafío enviado",
-    "challenge": "Desafío",
-    "pending_confirmation": "Pendiente",
+    "challenge": "Jugando",
+    "pending_confirmation": "Pendiente de confirmación",
     "confirmed": "Confirmado",
     "disputed": "Disputado",
     "cancelled": "Cancelado"
@@ -48,7 +48,7 @@
     "emptyDesc": "Registra tu primera partida para comenzar",
     "statsNote": "Solo las partidas confirmadas afectan estas estadísticas",
     "filters": {
-      "game": "Juego",
+      "discipline": "Disciplina",
       "user": "Jugador",
       "status": "Estado",
       "allOpponents": "Todos los jugadores"

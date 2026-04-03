@@ -1,7 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
-import { DISCIPLINE_LABELS, type Match } from '@/types/match';
+import { type Match } from '@/types/match';
+import { MatchStatusBadge } from '@/components/common/MatchStatusBadge';
 
 interface MatchCardProps {
   match: Match;
@@ -20,43 +21,23 @@ export const MatchCard = ({
 }: MatchCardProps) => {
   const { t } = useTranslation('matches');
   const tk = isDark ? theme.dark : theme.light;
+
   const me = match.players.find(p => p.userId === userId);
   const opponent = match.players.find(p => p.userId !== userId);
   const isWinner = me?.isWinner;
-  const totalBeers = (me?.beers ?? 0) + (opponent?.beers ?? 0);
   const isTie =
     me?.score != null && opponent?.score != null && me.score === opponent.score;
 
-  const statusColor: Record<string, string> = {
-    challenge_requested: tk.info.default,
-    challenge: tk.primary[300],
-    pending_confirmation: tk.primary[400],
-    confirmed: tk.success.default,
-    disputed: tk.error.default,
-    cancelled: tk.text.muted,
-  };
-  const cardAccent =
-    match.status === 'challenge_requested'
-      ? { borderColor: tk.info.border, borderLeftColor: tk.info.default }
-      : match.status === 'challenge'
-        ? { borderColor: tk.primary[700], borderLeftColor: tk.primary[300] }
-      : match.status === 'cancelled'
-      ? { borderColor: tk.text.muted, borderLeftColor: tk.text.muted }
-      : match.status === 'pending_confirmation' || match.status === 'disputed'
-        ? { borderColor: tk.primary[700], borderLeftColor: tk.primary[400] }
-        : isTie
-          ? { borderColor: tk.info.border, borderLeftColor: tk.info.default }
-          : isWinner
-            ? {
-                borderColor: tk.rating.trendUp,
-                borderLeftColor: tk.rating.trendUp,
-              }
-            : {
-                borderColor: tk.error.border,
-                borderLeftColor: tk.error.default,
-              };
   const playedAt = new Date(match.playedAt);
-  const playedAtText = `${playedAt.toLocaleDateString()} ${playedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  const dateStr = playedAt.toLocaleDateString([], {
+    month: 'short',
+    day: 'numeric',
+  });
+  const timeStr = playedAt.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
   const meName =
     userName || me?.profile.displayName || me?.profile.username || t('you');
   const opponentName =
@@ -64,10 +45,34 @@ export const MatchCard = ({
     opponent?.profile.username ||
     (opponent?.userId ? opponent.userId.slice(0, 8) : '—');
 
+  const meInitials = meName.slice(0, 2).toUpperCase();
+  const opponentInitials = opponentName.slice(0, 2).toUpperCase();
+
+  const meNameColor = isTie
+    ? tk.info.default
+    : isWinner
+      ? tk.text.primary
+      : tk.text.secondary;
+  const oppNameColor = isTie
+    ? tk.info.default
+    : opponent?.isWinner
+      ? tk.text.primary
+      : tk.text.secondary;
+  const meScoreColor = isTie
+    ? tk.info.default
+    : isWinner
+      ? tk.primary[500]
+      : tk.text.muted;
+  const oppScoreColor = isTie
+    ? tk.info.default
+    : opponent?.isWinner
+      ? tk.primary[500]
+      : tk.text.muted;
+
   return (
     <TouchableOpacity
       onPress={onPress}
-      activeOpacity={0.7}
+      activeOpacity={0.75}
       accessibilityRole='button'
       accessibilityLabel={t('detail.vs', {
         replace: { opponentName: opponent?.profile.displayName ?? '—' },
@@ -75,100 +80,80 @@ export const MatchCard = ({
       style={[
         styles.card,
         {
-          backgroundColor: tk.surface.raised,
-          ...cardAccent,
+          backgroundColor: tk.surface.default,
+          borderColor: tk.border.default,
         },
       ]}
     >
-      <View style={styles.topRow}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Text style={[styles.discipline, { color: tk.text.secondary }]}>
-            {DISCIPLINE_LABELS[match.discipline]}
-          </Text>
-          {match.bestOf != null && (
-            <Text style={[styles.discipline, { color: tk.text.muted }]}>
-              BO{match.bestOf}
-            </Text>
-          )}
-        </View>
-        <View style={styles.metaRight}>
-          {!match.isRated && (
-            <Text style={[styles.unrated, { color: tk.text.muted }]}>
-              {t('detail.unrated')}
-            </Text>
-          )}
+      {/* ── Left: status / date column ─────────────────────── */}
+      <View style={[styles.leftCol, { borderRightColor: tk.border.default }]}>
+        <MatchStatusBadge status={match.status} />
+
+        <Text style={[styles.timeText, { color: tk.text.muted }]}>
+          {dateStr}
+        </Text>
+        <Text style={[styles.timeText, { color: tk.text.muted }]}>
+          {timeStr}
+        </Text>
+      </View>
+
+      {/* ── Right: two player rows ──────────────────────────── */}
+      <View style={styles.rightCol}>
+        {/* Me */}
+        <View style={styles.playerRow}>
           <View
-            style={[styles.dot, { backgroundColor: statusColor[match.status] }]}
-          />
-          <Text
-            style={[styles.statusLabel, { color: statusColor[match.status] }]}
-          >
-            {t(`status.${match.status}`)}
-          </Text>
-        </View>
-      </View>
-
-      <View style={styles.players}>
-        <View style={styles.playerCol}>
-          <Text
             style={[
-              styles.playerName,
+              styles.avatar,
               {
-                color: isTie
-                  ? tk.info.default
-                  : isWinner
-                    ? tk.primary[600]
-                    : tk.text.primary,
+                backgroundColor: `${tk.primary[400]}20`,
+                borderColor: tk.border.strong,
               },
             ]}
           >
-            {isTie ? `${meName} 🤝` : isWinner ? `${meName} 🏆` : meName}
-          </Text>
-          {me?.score != null && (
-            <Text style={[styles.score, { color: tk.text.primary }]}>
-              {me.score}
+            <Text style={[styles.avatarText, { color: tk.primary[500] }]}>
+              {meInitials}
             </Text>
-          )}
-        </View>
-        <Text style={[styles.vs, { color: tk.primary[300] }]}>
-          {t('detail.vs')}
-        </Text>
-        <View style={[styles.playerCol, styles.playerColRight]}>
+          </View>
           <Text
+            style={[styles.playerName, { color: meNameColor }]}
+            numberOfLines={1}
+          >
+            {meName}
+          </Text>
+          <Text style={[styles.playerScore, { color: meScoreColor }]}>
+            {me?.score ?? '—'}
+          </Text>
+        </View>
+
+        <View
+          style={[styles.rowDivider, { backgroundColor: tk.border.subtle }]}
+        />
+
+        {/* Opponent */}
+        <View style={styles.playerRow}>
+          <View
             style={[
-              styles.playerName,
+              styles.avatar,
               {
-                color: isTie
-                  ? tk.info.default
-                  : opponent?.isWinner
-                    ? tk.error.default
-                    : tk.text.primary,
+                backgroundColor: tk.background.secondary,
+                borderColor: tk.border.strong,
               },
             ]}
           >
-            {isTie
-              ? t('opponentTie', { name: opponentName })
-              : opponent?.isWinner
-                ? t('opponentWinner', { name: opponentName })
-                : opponentName}
-          </Text>
-          {opponent?.score != null && (
-            <Text style={[styles.score, { color: tk.text.primary }]}>
-              {opponent.score}
+            <Text style={[styles.avatarText, { color: tk.text.secondary }]}>
+              {opponentInitials}
             </Text>
-          )}
-        </View>
-      </View>
-
-      <View style={styles.bottomRow}>
-        <Text style={[styles.date, { color: tk.text.muted }]}>
-          {playedAtText}
-        </Text>
-        {totalBeers > 0 && (
-          <Text style={[styles.beers, { color: tk.text.muted }]}>
-            🍺 {me?.beers ?? 0} · {opponent?.beers ?? 0}
+          </View>
+          <Text
+            style={[styles.playerName, { color: oppNameColor }]}
+            numberOfLines={1}
+          >
+            {opponentName}
           </Text>
-        )}
+          <Text style={[styles.playerScore, { color: oppScoreColor }]}>
+            {opponent?.score ?? '—'}
+          </Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -176,60 +161,67 @@ export const MatchCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: radius.xl,
+    flexDirection: 'row',
+    borderRadius: radius['2xl'],
     borderWidth: 1,
-    borderLeftWidth: 4,
-    paddingVertical: spacing[2],
-    paddingHorizontal: spacing[4],
-    gap: spacing[3],
+    padding: spacing[4],
   },
-  topRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+
+  // ── Left column ──────────────────────────────────────────
+  leftCol: {
+    width: spacing[24],
+    justifyContent: 'center',
     alignItems: 'center',
+    borderRightWidth: 1,
+    paddingRight: spacing[3],
+    marginRight: spacing[3],
+    gap: spacing[1],
   },
-  discipline: {
-    fontSize: typography.size.sm,
-    fontWeight: typography.weight.medium,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  metaRight: { flexDirection: 'row', alignItems: 'center', gap: spacing[1] },
-  unrated: { fontSize: typography.size.xs, marginRight: spacing[1] },
-  dot: { width: 6, height: 6, borderRadius: 3 },
-  statusLabel: {
+  timeText: {
     fontSize: typography.size.xs,
-    fontWeight: typography.weight.medium,
-    fontFamily: typography.family.bodySemibold,
-    textTransform: 'uppercase',
-  },
-  players: { flexDirection: 'row', alignItems: 'center', gap: spacing[3] },
-  playerCol: { flex: 1, gap: 2 },
-  playerColRight: { alignItems: 'flex-end' },
-  playerName: {
-    fontSize: typography.size.base,
-    fontWeight: typography.weight.semibold,
-    fontFamily: typography.family.bodySemibold,
-  },
-  score: {
-    fontSize: typography.size['2xl'],
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-  },
-  vs: {
-    fontSize: typography.size.sm,
-    fontWeight: typography.weight.medium,
-    fontFamily: typography.family.display,
-    letterSpacing: 0.8,
-    width: 24,
+    fontFamily: typography.family.body,
     textAlign: 'center',
+    lineHeight: 14,
   },
-  bottomRow: {
+
+  // ── Right column ─────────────────────────────────────────
+  rightCol: {
+    flex: 1,
+    gap: spacing[3],
+    justifyContent: 'center',
+  },
+  playerRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    gap: spacing[2],
   },
-  date: { fontSize: typography.size.xs, fontFamily: typography.family.body },
-  beers: { fontSize: typography.size.xs, fontFamily: typography.family.body },
+  avatar: {
+    width: spacing[8],
+    height: spacing[8],
+    borderRadius: radius.full,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  avatarText: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.display,
+    fontWeight: typography.weight.bold,
+  },
+  playerName: {
+    flex: 1,
+    fontSize: typography.size.lg,
+    fontFamily: typography.family.bodyMedium,
+    fontWeight: typography.weight.medium,
+  },
+  playerScore: {
+    fontSize: typography.size['2xl'],
+    fontFamily: typography.family.bodyBold,
+    fontWeight: typography.weight.bold,
+  },
+  rowDivider: {
+    height: 1,
+    marginVertical: -spacing[1],
+  },
 });

@@ -1,4 +1,10 @@
-import { ScrollView, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from 'react-native';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import type { TournamentMatch, TournamentRound } from '@/types/tournament';
 
@@ -8,6 +14,7 @@ interface BracketMatchCardProps {
   interactive?: boolean;
   recordResultLabel?: string;
   editResultLabel?: string;
+  waitingLabel?: string;
   onPress?: () => void;
 }
 
@@ -17,6 +24,7 @@ const BracketMatchCard = ({
   interactive = false,
   recordResultLabel,
   editResultLabel,
+  waitingLabel,
   onPress,
 }: BracketMatchCardProps) => {
   const tk = isDark ? theme.dark : theme.light;
@@ -26,6 +34,7 @@ const BracketMatchCard = ({
   const awayName =
     match.awayProfile?.displayName || match.awayProfile?.username || 'TBD';
 
+  const bothTBD = homeName === 'TBD' && awayName === 'TBD';
   const homeWon = match.winnerId === match.homeUserId;
   const awayWon = match.winnerId === match.awayUserId;
 
@@ -33,75 +42,89 @@ const BracketMatchCard = ({
     <View
       style={[
         styles.matchCard,
-        { backgroundColor: tk.surface.raised, borderColor: tk.border.default },
+        { backgroundColor: tk.surface.default, borderColor: tk.border.default },
         interactive && {
           borderColor: tk.primary[500],
-          borderWidth: 2,
+          borderWidth: 1,
         },
       ]}
     >
-      <View
-        style={[
-          styles.matchRow,
-          homeWon && { backgroundColor: tk.primary[900] + '44' },
-        ]}
-      >
-        <Text
-          style={[
-            styles.playerName,
-            {
-              color: homeWon
-                ? tk.primary[300]
-                : match.winnerId
-                  ? tk.text.muted
-                  : tk.text.primary,
-            },
-          ]}
-          numberOfLines={1}
-        >
-          {homeName}
-        </Text>
-        {match.homeScore !== null && (
-          <Text style={[styles.scoreText, { color: tk.text.primary }]}>
-            {match.homeScore}
+      {bothTBD ? (
+        <View style={styles.waitingContainer}>
+          <Text style={[styles.waitingText, { color: tk.text.muted }]}>
+            {waitingLabel}
           </Text>
-        )}
-        {homeWon && <Text style={[styles.trophy, { color: tk.primary[400] }]}>★</Text>}
-      </View>
-      <View style={[styles.divider, { backgroundColor: tk.border.subtle }]} />
-      <View
-        style={[
-          styles.matchRow,
-          awayWon && { backgroundColor: tk.primary[900] + '44' },
-        ]}
-      >
-        <Text
-          style={[
-            styles.playerName,
-            {
-              color: awayWon
-                ? tk.primary[300]
-                : match.winnerId
-                  ? tk.text.muted
-                  : tk.text.primary,
-            },
-          ]}
-          numberOfLines={1}
-        >
-          {awayName}
-        </Text>
-        {match.awayScore !== null && (
-          <Text style={[styles.scoreText, { color: tk.text.primary }]}>
-            {match.awayScore}
-          </Text>
-        )}
-        {awayWon && <Text style={[styles.trophy, { color: tk.primary[400] }]}>★</Text>}
-      </View>
+        </View>
+      ) : (
+        <>
+          <View style={styles.matchRow}>
+            <Text
+              style={[
+                styles.playerName,
+                {
+                  color: homeWon
+                    ? tk.primary[500]
+                    : match.winnerId
+                      ? tk.text.muted
+                      : tk.text.primary,
+                },
+              ]}
+              numberOfLines={1}
+            >
+              {homeName}
+            </Text>
+            {match.homeScore !== null && (
+              <Text
+                style={[
+                  styles.scoreText,
+                  { color: homeWon ? tk.primary[600] : tk.text.primary },
+                ]}
+              >
+                {match.homeScore}
+              </Text>
+            )}
+          </View>
+          <View
+            style={[styles.divider, { backgroundColor: tk.border.subtle }]}
+          />
+          <View style={styles.matchRow}>
+            <Text
+              style={[
+                styles.playerName,
+                {
+                  color: awayWon
+                    ? tk.primary[500]
+                    : match.winnerId
+                      ? tk.text.muted
+                      : tk.text.primary,
+                },
+              ]}
+              numberOfLines={1}
+            >
+              {awayName}
+            </Text>
+            {match.awayScore !== null && (
+              <Text
+                style={[
+                  styles.scoreText,
+                  { color: awayWon ? tk.primary[600] : tk.text.primary },
+                ]}
+              >
+                {match.awayScore}
+              </Text>
+            )}
+          </View>
+        </>
+      )}
       {interactive ? (
         <>
-          <View style={[styles.divider, { backgroundColor: tk.border.subtle }]} />
-          <Text style={[styles.interactionHint, { color: tk.primary[300] }]}>
-            {match.winnerId && editResultLabel ? editResultLabel : recordResultLabel}
+          <View
+            style={[styles.divider, { backgroundColor: tk.border.subtle }]}
+          />
+          <Text style={[styles.interactionHint, { color: tk.primary[400] }]}>
+            {match.winnerId && editResultLabel
+              ? editResultLabel
+              : recordResultLabel}
           </Text>
         </>
       ) : null}
@@ -127,6 +150,7 @@ interface BracketViewerProps {
   canInteract?: (match: TournamentMatch) => boolean;
   recordResultLabel?: string;
   editResultLabel?: string;
+  waitingLabel?: string;
 }
 
 export const BracketViewer = ({
@@ -137,6 +161,7 @@ export const BracketViewer = ({
   canInteract,
   recordResultLabel,
   editResultLabel,
+  waitingLabel,
 }: BracketViewerProps) => {
   const tk = isDark ? theme.dark : theme.light;
 
@@ -175,9 +200,12 @@ export const BracketViewer = ({
                     match={match}
                     isDark={isDark}
                     interactive={canInteract?.(match) ?? false}
-                    onPress={onMatchPress ? () => onMatchPress(match) : undefined}
+                    onPress={
+                      onMatchPress ? () => onMatchPress(match) : undefined
+                    }
                     recordResultLabel={recordResultLabel}
                     editResultLabel={editResultLabel}
+                    waitingLabel={waitingLabel}
                   />
                 ))}
               </View>
@@ -212,27 +240,36 @@ const styles = StyleSheet.create({
     gap: spacing[3],
   },
   matchCard: {
-    borderRadius: radius.lg,
+    borderRadius: radius.xl,
     borderWidth: 1,
     overflow: 'hidden',
+  },
+  waitingContainer: {
+    paddingVertical: spacing[6],
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  waitingText: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.heading,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    textAlign: 'center',
   },
   matchRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing[2],
-    paddingVertical: spacing[2],
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[3],
     gap: spacing[1],
   },
   playerName: {
     flex: 1,
-    fontSize: typography.size.xs,
+    fontSize: typography.size.sm,
     fontFamily: typography.family.bodyMedium,
   },
-  trophy: {
-    fontSize: 10,
-  },
   scoreText: {
-    fontSize: typography.size.xs,
+    fontSize: typography.size.lg,
     fontFamily: typography.family.heading,
     minWidth: 12,
     textAlign: 'right',

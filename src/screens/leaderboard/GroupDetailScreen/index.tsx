@@ -1,15 +1,22 @@
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
-import { ScreenLayout } from '@/components/common/layout';
+import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { LoadingState, EmptyState } from '@/components/common/states';
 import { useConfirmDialog } from '@/components/common/dialog';
-import { useGroupDetail, useGroupMembers, useGroupMutations } from '@/features/groups/useGroups';
+import {
+  useGroupDetail,
+  useGroupMembers,
+  useGroupMutations,
+} from '@/features/groups/useGroups';
 import { useAuth } from '@/features/auth/useAuth';
-import { typography, spacing, radius } from '@/constants/theme';
+import { DangerButton } from '@/components/common/buttons/DangerButton';
+import { PrimaryButton } from '@/components/common/buttons/PrimaryButton';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
+import { detailStyles } from '../shared/detailStyles';
+import { MemberRow } from '../shared/MemberRow';
 
 type Props = NativeStackScreenProps<LeaderboardStackParamList, 'GroupDetail'>;
 
@@ -21,10 +28,20 @@ const GroupDetailScreen = ({ route, navigation }: Props) => {
   const { confirm } = useConfirmDialog();
   const { user } = useAuth();
 
-  const { data: group, isLoading: groupLoading, refetch: refetchGroup } = useGroupDetail(groupId);
-  const { data: members = [], isLoading: membersLoading, refetch: refetchMembers } = useGroupMembers(groupId);
+  const {
+    data: group,
+    isLoading: groupLoading,
+    refetch: refetchGroup,
+  } = useGroupDetail(groupId);
+  const {
+    data: members = [],
+    isLoading: membersLoading,
+    refetch: refetchMembers,
+  } = useGroupMembers(groupId);
   const { deleteGroup, removeMember } = useGroupMutations();
-  const [pendingRemoveUserId, setPendingRemoveUserId] = useState<string | null>(null);
+  const [pendingRemoveUserId, setPendingRemoveUserId] = useState<string | null>(
+    null,
+  );
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(async () => {
@@ -40,7 +57,10 @@ const GroupDetailScreen = ({ route, navigation }: Props) => {
       </ScreenLayout>
     );
   }
-  if (!group) return <EmptyState title='Group not found' description='' isDark={isDark} />;
+  if (!group)
+    return (
+      <EmptyState title='Group not found' description='' isDark={isDark} />
+    );
 
   const isAdmin = group.myRole === 'admin';
   const isCreator = group.createdBy === user?.id;
@@ -72,7 +92,9 @@ const GroupDetailScreen = ({ route, navigation }: Props) => {
           }
         },
         onSettled: () => {
-          setPendingRemoveUserId(current => (current === memberId ? null : current));
+          setPendingRemoveUserId(current =>
+            current === memberId ? null : current,
+          );
         },
       },
     );
@@ -80,38 +102,32 @@ const GroupDetailScreen = ({ route, navigation }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <View style={styles.header}>
-        <Text
-          onPress={() => navigation.goBack()}
-          style={[styles.backButton, { color: tk.primary[400] }]}
-        >
-          ← {tCommon('back')}
-        </Text>
-        <Text style={[styles.title, { color: tk.text.primary }]} numberOfLines={2}>
-          {group.name}
-        </Text>
+      <ScreenHeader onBack={() => navigation.goBack()} title={group.name} />
+      <View style={detailStyles.header}>
         {group.description ? (
-          <Text style={[styles.description, { color: tk.text.secondary }]}>
+          <Text
+            style={[detailStyles.description, { color: tk.text.secondary }]}
+          >
             {group.description}
           </Text>
         ) : null}
-        <Text style={[styles.meta, { color: tk.text.muted }]}>
+        <Text style={[detailStyles.meta, { color: tk.text.muted }]}>
           {group.isPublic ? 'Public' : 'Private'} ·{' '}
           {t('groups.memberCount', { count: group.memberCount })}
         </Text>
-        <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: tk.text.secondary }]}>
+        <View style={detailStyles.sectionHeader}>
+          <Text
+            style={[detailStyles.sectionTitle, { color: tk.text.secondary }]}
+          >
             {t('groups.members')}
           </Text>
           {isCreator && (
-            <TouchableOpacity
+            <DangerButton
+              size='xs'
+              isDark={isDark}
+              label={t('groups.delete')}
               onPress={handleDelete}
-              style={[styles.deleteInlineButton, { borderColor: '#ef4444' }]}
-            >
-              <Text style={[styles.deleteInlineButtonText, { color: '#ef4444' }]}>
-                {t('groups.delete')}
-              </Text>
-            </TouchableOpacity>
+            />
           )}
         </View>
       </View>
@@ -119,14 +135,14 @@ const GroupDetailScreen = ({ route, navigation }: Props) => {
       <FlatList
         data={members}
         keyExtractor={item => item.userId}
-        style={styles.list}
+        style={detailStyles.list}
         contentContainerStyle={[
-          styles.listContent,
-          hasBottomAddAction ? styles.listContentWithBottomAction : null,
+          detailStyles.listContent,
+          hasBottomAddAction ? detailStyles.listContentWithBottomAction : null,
         ]}
         bounces
         alwaysBounceVertical
-        overScrollMode="always"
+        overScrollMode='always'
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -137,184 +153,41 @@ const GroupDetailScreen = ({ route, navigation }: Props) => {
           />
         }
         renderItem={({ item: member }) => (
-          <View style={[styles.memberRow, { borderBottomColor: tk.primary[900] }]}>
-            <View style={[styles.memberAvatar, { backgroundColor: tk.primary[900], borderColor: tk.primary[700] }]}>
-              <Text style={[styles.memberAvatarText, { color: tk.primary[300] }]}>
-                {member.displayName.slice(0, 2).toUpperCase()}
-              </Text>
-            </View>
-            <View style={styles.memberInfo}>
-              <Text style={[styles.memberName, { color: tk.text.primary }]}>
-                {member.displayName}
-              </Text>
-              <Text style={[styles.memberUsername, { color: tk.text.muted }]}>
-                @{member.username} · {t(`groups.roles.${member.role}`)}
-              </Text>
-            </View>
-            {(member.userId === user?.id || isAdmin) && (
-              <TouchableOpacity
-                onPress={() => handleRemoveMember(member.userId)}
-                disabled={pendingRemoveUserId === member.userId}
-                style={styles.removeButton}
-              >
-                {pendingRemoveUserId === member.userId ? (
-                  <ActivityIndicator size='small' color={tk.text.muted} />
-                ) : (
-                  <Text style={[styles.removeText, { color: tk.text.muted }]}>
-                    {member.userId === user?.id ? t('groups.leaveGroup') : t('groups.removeMember')}
-                  </Text>
-                )}
-              </TouchableOpacity>
-            )}
-          </View>
+          <MemberRow
+            displayName={member.displayName}
+            username={member.username}
+            subtitle={t(`groups.roles.${member.role}`)}
+            isPending={pendingRemoveUserId === member.userId}
+            actionLabel={
+              member.userId === user?.id
+                ? t('groups.leaveGroup')
+                : t('groups.removeMember')
+            }
+            onAction={
+              member.userId === user?.id || isAdmin
+                ? () => handleRemoveMember(member.userId)
+                : undefined
+            }
+          />
         )}
-        ListFooterComponent={
-          <View style={styles.footer} />
-        }
+        ListFooterComponent={<View style={detailStyles.footer} />}
       />
       {hasBottomAddAction && (
-        <View style={[styles.bottomActionBar, { borderTopColor: tk.primary[900] }]}>
-          <TouchableOpacity
+        <View
+          style={[
+            detailStyles.bottomActionBar,
+            { borderTopColor: tk.primary[900] },
+          ]}
+        >
+          <PrimaryButton
+            isDark={isDark}
+            label={`+ ${t('groups.addMember')}`}
             onPress={() => navigation.push('UserSearch', { groupId })}
-            style={[
-              styles.addMemberButton,
-              { borderColor: tk.primary[700], backgroundColor: tk.primary[500] },
-            ]}
-          >
-            <Text style={[styles.addMemberButtonText, { color: tk.text.onPrimary }]}>
-              + {t('groups.addMember')}
-            </Text>
-          </TouchableOpacity>
+          />
         </View>
       )}
     </ScreenLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: spacing[4],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[2],
-    gap: spacing[2],
-  },
-  list: {
-    flex: 1,
-  },
-  listContent: {
-    paddingHorizontal: spacing[4],
-    paddingBottom: spacing[8],
-  },
-  listContentWithBottomAction: {
-    paddingBottom: spacing[20],
-  },
-  backButton: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    marginBottom: spacing[2],
-  },
-  title: {
-    fontSize: typography.size['2xl'],
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  description: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.body,
-  },
-  meta: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.body,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: spacing[4],
-  },
-  sectionTitle: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  deleteInlineButton: {
-    paddingHorizontal: spacing[3],
-    paddingVertical: spacing[1],
-    borderRadius: radius.sm,
-    borderWidth: 1,
-  },
-  deleteInlineButtonText: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  memberRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: spacing[3],
-    borderBottomWidth: 1,
-    gap: spacing[3],
-  },
-  memberAvatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  memberAvatarText: {
-    fontSize: typography.size.sm,
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-  },
-  memberInfo: { flex: 1 },
-  memberName: {
-    fontSize: typography.size.base,
-    fontWeight: typography.weight.semibold,
-    fontFamily: typography.family.heading,
-  },
-  memberUsername: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.body,
-    marginTop: 2,
-  },
-  removeText: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.body,
-  },
-  removeButton: {
-    minWidth: 60,
-    alignItems: 'flex-end',
-  },
-  footer: {
-    marginTop: spacing[6],
-    gap: spacing[3],
-  },
-  bottomActionBar: {
-    paddingHorizontal: spacing[4],
-    paddingTop: spacing[3],
-    paddingBottom: spacing[5],
-    borderTopWidth: 1,
-  },
-  addMemberButton: {
-    padding: spacing[3],
-    borderRadius: radius.md,
-    borderWidth: 1,
-    alignItems: 'center',
-  },
-  addMemberButtonText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-});
 
 export default GroupDetailScreen;
