@@ -2,6 +2,20 @@
 // point (the /extend-expect path does not exist in this version of RNTL)
 import '@testing-library/react-native/matchers';
 
+jest.mock('@expo/vector-icons', () => {
+  const React = require('react');
+  const { Text } = require('react-native');
+  return new Proxy(
+    {},
+    {
+      get: (_target, name) =>
+        function MockIcon({ testID }: { testID?: string }) {
+          return React.createElement(Text, { testID }, String(name));
+        },
+    },
+  );
+});
+
 // Silence noisy console output from React Native components in tests
 jest.spyOn(console, 'warn').mockImplementation(() => {});
 jest.spyOn(console, 'error').mockImplementation((msg: string) => {

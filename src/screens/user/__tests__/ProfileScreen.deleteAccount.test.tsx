@@ -77,6 +77,7 @@ jest.mock('@/i18n', () => ({
 
 jest.mock('@/components/common/layout', () => ({
   ScreenLayout: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  ScreenHeader: () => null,
 }));
 
 jest.mock('@/components/common/states', () => ({
