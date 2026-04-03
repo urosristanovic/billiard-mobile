@@ -104,6 +104,11 @@ const lightTheme = {
     onPrimary: '#000000',
   },
   primary: palette.primary,
+  primaryTint: {
+    border: 'rgba(245,158,11,0.20)',
+    glow: 'rgba(245,158,11,0.40)',
+    labelMuted: 'rgba(251,191,36,0.70)',
+  },
   success: palette.success,
   error: palette.error,
   warning: palette.warning,
@@ -137,6 +142,11 @@ const darkTheme = {
     onPrimary: '#000000',
   },
   primary: palette.primary,
+  primaryTint: {
+    border: 'rgba(245,158,11,0.20)',
+    glow: 'rgba(245,158,11,0.40)',
+    labelMuted: 'rgba(251,191,36,0.70)',
+  },
   success: palette.success,
   error: palette.error,
   warning: palette.warning,

@@ -4,7 +4,7 @@ import { typography, spacing, radius } from '@/constants/theme';
 export const styles = StyleSheet.create({
   metaSection: {
     paddingHorizontal: spacing[4],
-    paddingBottom: spacing[3],
+    paddingVertical: spacing[2],
     gap: spacing[3],
   },
   metaRow: {
@@ -14,10 +14,10 @@ export const styles = StyleSheet.create({
     gap: spacing[2],
   },
   statusBadge: {
-    borderRadius: radius.sm,
+    borderRadius: radius.lg,
     borderWidth: 1,
-    paddingHorizontal: spacing[2],
-    paddingVertical: 2,
+    paddingHorizontal: spacing[3],
+    paddingVertical: spacing[1],
   },
   statusText: {
     fontSize: typography.size.xs,

@@ -1,6 +1,7 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing } from '@/constants/theme';
+import { Loading } from './Loading';
 
 interface LoadingStateProps {
   message?: string;
@@ -20,7 +21,7 @@ export const LoadingState = ({
       accessibilityRole='progressbar'
       accessibilityLiveRegion='polite'
     >
-      <ActivityIndicator size='large' color={tk.primary[400]} />
+      <Loading size='large' />
       <Text style={[styles.message, { color: tk.text.muted }]}>
         {message ?? t('loading')}
       </Text>

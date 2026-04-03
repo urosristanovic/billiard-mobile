@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { type ReactNode, useRef } from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -22,6 +22,7 @@ interface PrimaryButtonProps {
   loading?: boolean;
   compact?: boolean;
   size?: 'xs';
+  icon?: ReactNode;
   isDark?: boolean;
   disabled?: boolean;
   onPress?: () => void;
@@ -34,6 +35,7 @@ export const PrimaryButton = ({
   loading,
   compact,
   size,
+  icon,
   isDark = false,
   disabled,
   onPress,
@@ -87,25 +89,30 @@ export const PrimaryButton = ({
         accessibilityRole='button'
         accessibilityLabel={accessibilityLabel ?? label}
         accessibilityState={{ disabled: disabled || loading }}
-        style={isXs ? styles.innerXs : compact ? styles.innerCompact : styles.inner}
+        style={
+          isXs ? styles.innerXs : compact ? styles.innerCompact : styles.inner
+        }
       >
         {loading ? (
           <ActivityIndicator
             size='small'
-            color={t.text.onPrimary}
+            color={t.primary[400]}
             accessibilityLabel='Loading'
           />
         ) : (
-          <Text
-            style={[
-              styles.label,
-              isXs && styles.labelXs,
-              { color: t.text.onPrimary },
-            ]}
-            numberOfLines={1}
-          >
-            {label}
-          </Text>
+          <>
+            {icon}
+            <Text
+              style={[
+                styles.label,
+                isXs && styles.labelXs,
+                { color: t.text.onPrimary },
+              ]}
+              numberOfLines={1}
+            >
+              {label}
+            </Text>
+          </>
         )}
       </Pressable>
     </Animated.View>
@@ -142,6 +149,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: spacing[2],
     paddingHorizontal: spacing[6],
     paddingVertical: spacing[4],
   },
@@ -149,6 +157,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: spacing[2],
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[2],
   },
@@ -156,6 +165,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: spacing[1],
     paddingHorizontal: spacing[3],
     paddingVertical: spacing[1],
   },

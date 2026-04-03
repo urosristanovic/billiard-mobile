@@ -22,6 +22,7 @@ interface DangerButtonProps {
   size?: 'xs';
   isDark?: boolean;
   disabled?: boolean;
+  noShadow?: boolean;
   onPress?: () => void;
   style?: ViewStyle;
   accessibilityLabel?: string;
@@ -34,6 +35,7 @@ export const DangerButton = ({
   size,
   isDark = false,
   disabled,
+  noShadow,
   onPress,
   style,
   accessibilityLabel,
@@ -64,8 +66,9 @@ export const DangerButton = ({
           transform: [{ scale }],
           backgroundColor: t.surface.raised,
           borderColor: t.error.border,
-          shadowColor: isXs ? 'transparent' : t.error.border,
-          elevation: isXs ? 0 : undefined,
+          shadowColor: isXs || noShadow ? 'transparent' : t.error.border,
+          elevation: isXs || noShadow ? 0 : undefined,
+          shadowOpacity: noShadow ? 0 : undefined,
           opacity: disabled || loading ? 0.5 : 1,
         },
         style,
@@ -79,13 +82,19 @@ export const DangerButton = ({
         accessibilityRole='button'
         accessibilityLabel={accessibilityLabel ?? label}
         accessibilityState={{ disabled: disabled || loading }}
-        style={isXs ? styles.innerXs : compact ? styles.innerCompact : styles.inner}
+        style={
+          isXs ? styles.innerXs : compact ? styles.innerCompact : styles.inner
+        }
       >
         {loading ? (
-          <ActivityIndicator size='small' color={t.error.text} />
+          <ActivityIndicator size='small' color={t.primary[400]} />
         ) : (
           <Text
-            style={[styles.label, isXs && styles.labelXs, { color: t.error.text }]}
+            style={[
+              styles.label,
+              isXs && styles.labelXs,
+              { color: t.error.text },
+            ]}
             numberOfLines={1}
           >
             {label}

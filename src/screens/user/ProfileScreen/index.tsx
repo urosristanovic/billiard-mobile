@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   Alert,
   ScrollView,
   StyleSheet,
@@ -11,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
-import { LoadingState } from '@/components/common/states';
+import { LoadingState, Loading } from '@/components/common/states';
 import { FormField, FormModal, FormButtons } from '@/components/common/forms';
 import { DangerButton, SecondaryButton } from '@/components/common/buttons';
 import { useAuth } from '@/features/auth/useAuth';
@@ -202,7 +201,7 @@ const ProfileScreen = ({ navigation, route }: Props) => {
                 : tGroups('location.countryPlaceholder')}
             </Text>
             {countriesLoading ? (
-              <ActivityIndicator size='small' color={tk.primary[400]} />
+              <Loading />
             ) : (
               <Text style={{ color: tk.text.muted }}>
                 {countryListOpen ? '▴' : '▾'}
@@ -291,7 +290,7 @@ const ProfileScreen = ({ navigation, route }: Props) => {
                   : tGroups('location.cityPlaceholder')}
               </Text>
               {citiesLoading ? (
-                <ActivityIndicator size='small' color={tk.primary[400]} />
+                <Loading />
               ) : (
                 <Text style={{ color: tk.text.muted }}>
                   {cityListOpen ? '▴' : '▾'}

@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -20,7 +19,7 @@ import {
 } from '@/features/leaderboard/useCustomLeaderboards';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { Input } from '@/components/common/forms';
-import { EmptyState } from '@/components/common/states';
+import { EmptyState, Loading } from '@/components/common/states';
 import { ChevronRightIcon } from '@/components/common/icons';
 import { useTheme } from '@/hooks/useTheme';
 import { typography, spacing, radius } from '@/constants/theme';
@@ -111,11 +110,7 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
       </View>
 
       {isFetching ? (
-        <ActivityIndicator
-          style={styles.loader}
-          color={tk.primary[600]}
-          size='large'
-        />
+        <Loading size='large' style={styles.loader} />
       ) : results.length === 0 && isSearchMode ? (
         <EmptyState
           title={t('userSearch.empty')}
@@ -216,7 +211,7 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
                       ]}
                     >
                       {isAdding ? (
-                        <ActivityIndicator size='small' color='#000' />
+                        <Loading />
                       ) : (
                         <Text
                           style={[styles.challengeBtnText, { color: '#000' }]}

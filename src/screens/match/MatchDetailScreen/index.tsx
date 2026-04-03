@@ -1,5 +1,9 @@
 import { useState, useCallback } from 'react';
-import { ScrollView, RefreshControl, ActivityIndicator, View } from 'react-native';
+import {
+  ScrollView,
+  RefreshControl,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMatchDetail } from '@/features/matches/useMatchDetail';
@@ -7,7 +11,7 @@ import { useMatchMutations } from '@/features/matches/useMatchMutations';
 import { useAuth } from '@/features/auth/useAuth';
 import { useConfirmDialog } from '@/components/common/dialog';
 import { ScreenLayout } from '@/components/common/layout';
-import { LoadingState, EmptyState } from '@/components/common/states';
+import { LoadingState, EmptyState, Loading } from '@/components/common/states';
 import { useTheme } from '@/hooks/useTheme';
 import {
   ScoreBoard,
@@ -43,7 +47,13 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
     string | null
   >(null);
 
-  const { data: match, isLoading, isRefetching, error, refetch } = useMatchDetail(matchId);
+  const {
+    data: match,
+    isLoading,
+    isRefetching,
+    error,
+    refetch,
+  } = useMatchDetail(matchId);
 
   const handleRefresh = useCallback(async () => {
     await refetch();
@@ -251,39 +261,19 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
       <ScrollView
         contentContainerStyle={styles.container}
         refreshControl={
-          <RefreshControl
-            refreshing={isRefetching}
-            onRefresh={handleRefresh}
-          />
+          <RefreshControl refreshing={isRefetching} onRefresh={handleRefresh} />
         }
       >
         {isRefetching && (
           <View style={styles.refreshingIndicator}>
-            <ActivityIndicator size='small' color={tk.primary[600]} />
+            <Loading />
           </View>
         )}
 
-        <ScoreBoard match={match} myUserId={user?.id ?? ''} isDark={isDark} />
-
-        {!isDisputeFormVisible && !isCancelFormVisible && isChallengeRequested && (
-          <ChallengeActions
+        {isChallenge ? (
+          <ChallengeScoreCard
             match={match}
             myUserId={user?.id ?? ''}
-            isAccepting={acceptChallenge.isPending}
-            isDeclining={declineChallenge.isPending}
-            isCancelling={cancelChallengeRequest.isPending}
-            onAccept={() => acceptChallenge.mutate(match.id)}
-            onDecline={() => {
-              setCancellationReason('');
-              setActiveForm('declineChallenge');
-            }}
-            onCancelRequest={handleCancelChallengeRequest}
-          />
-        )}
-
-        {!isDisputeFormVisible && !isCancelFormVisible && isChallenge && (
-          <ChallengeScoreCard
-            opponentName={opponent?.profile.displayName ?? t('detail.opponent')}
             raceTo={raceTo}
             isSubmitting={recordChallenge.isPending}
             onRecord={({ myScore, opponentScore, myBeers, opponentBeers }) => {
@@ -296,7 +286,27 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
               });
             }}
           />
+        ) : (
+          <ScoreBoard match={match} myUserId={user?.id ?? ''} isDark={isDark} />
         )}
+
+        {!isDisputeFormVisible &&
+          !isCancelFormVisible &&
+          isChallengeRequested && (
+            <ChallengeActions
+              match={match}
+              myUserId={user?.id ?? ''}
+              isAccepting={acceptChallenge.isPending}
+              isDeclining={declineChallenge.isPending}
+              isCancelling={cancelChallengeRequest.isPending}
+              onAccept={() => acceptChallenge.mutate(match.id)}
+              onDecline={() => {
+                setCancellationReason('');
+                setActiveForm('declineChallenge');
+              }}
+              onCancelRequest={handleCancelChallengeRequest}
+            />
+          )}
 
         {!isDisputeFormVisible && !isCancelFormVisible && (
           <MatchActions
@@ -368,22 +378,26 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
           onCancel={() => setActiveForm('none')}
         />
 
-        {isDisputed && me && opponent && openDispute && !isDisputeFormVisible && (
-          <DisputeResolution
-            reason={openDispute.reason}
-            proposedMyScore={openDisputeMyScore}
-            proposedOpponentScore={openDisputeOpponentScore}
-            currentMyScore={me.score}
-            currentOpponentScore={opponent.score}
-            opponentName={opponent.profile.displayName}
-            canResolve={canResolveDispute}
-            isAccepting={acceptDispute.isPending}
-            isCountering={counterDispute.isPending}
-            isDark={isDark}
-            onAccept={handleAcceptDispute}
-            onCounter={() => openDisputeForm('counterDispute')}
-          />
-        )}
+        {isDisputed &&
+          me &&
+          opponent &&
+          openDispute &&
+          !isDisputeFormVisible && (
+            <DisputeResolution
+              reason={openDispute.reason}
+              proposedMyScore={openDisputeMyScore}
+              proposedOpponentScore={openDisputeOpponentScore}
+              currentMyScore={me.score}
+              currentOpponentScore={opponent.score}
+              opponentName={opponent.profile.displayName}
+              canResolve={canResolveDispute}
+              isAccepting={acceptDispute.isPending}
+              isCountering={counterDispute.isPending}
+              isDark={isDark}
+              onAccept={handleAcceptDispute}
+              onCounter={() => openDisputeForm('counterDispute')}
+            />
+          )}
 
         <MatchTimeline
           match={match}

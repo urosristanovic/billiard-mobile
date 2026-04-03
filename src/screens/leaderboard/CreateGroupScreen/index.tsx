@@ -1,17 +1,10 @@
 import { useState } from 'react';
-import {
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Switch,
-  Text,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
-import { FormField, FormButtons } from '@/components/common/forms';
+import { FormField, FormButtons, ToggleSwitch } from '@/components/common/forms';
 import { useGroupMutations } from '@/features/groups/useGroups';
 import { typography, spacing } from '@/constants/theme';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
@@ -88,12 +81,11 @@ const CreateGroupScreen = ({ navigation }: Props) => {
                 {t('groups.publicDesc')}
               </Text>
             </View>
-            <Switch
+            <ToggleSwitch
               value={isPublic}
               onValueChange={setIsPublic}
               trackColor={{ false: tk.border.default, true: tk.primary[600] }}
               thumbColor={tk.text.onPrimary}
-              style={{ transform: [{ scaleX: 1 }, { scaleY: 1 }] }}
             />
           </View>
         </View>

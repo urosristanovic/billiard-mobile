@@ -1,22 +1,23 @@
-import {
-  ActivityIndicator,
-  ScrollView,
-  Text,
-  View,
-  RefreshControl,
-} from 'react-native';
+import { useState, useEffect } from 'react';
+import { ScrollView, View, RefreshControl } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout, AppHeader } from '@/components/common/layout';
 import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
+import { GhostButton } from '@/components/common/buttons';
 import { EmptyState, LoadingState } from '@/components/common/states';
+import { TabBar } from '@/components/common';
 import {
   useMyTournaments,
   useMyPendingRequests,
 } from '@/features/tournaments/useTournaments';
-import { TournamentCard, PendingRequestCard } from './components';
+import {
+  TournamentCard,
+  PendingRequestCard,
+  TournamentStatsRow,
+} from './components';
 import { styles } from './styles';
 import type { TournamentsStackParamList } from '@/navigation/AppNavigator';
 
@@ -41,6 +42,14 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
   const past = myData?.past ?? [];
   const stats = myData?.stats ?? { active: 0, won: 0 };
 
+  const [tab, setTab] = useState<'pending' | 'active' | 'past'>('active');
+
+  useEffect(() => {
+    if (pendingRequests.length > 0) {
+      setTab('pending');
+    }
+  }, [pendingRequests.length]);
+
   const handleRefresh = () => {
     refetch();
     refetchPending();
@@ -49,40 +58,29 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
   return (
     <ScreenLayout isDark={isDark}>
       {/* Fixed top block */}
-      <View
-        style={[styles.stickyHeader, { borderBottomColor: tk.border.subtle }]}
-      >
+      <View style={styles.stickyHeader}>
         <AppHeader />
-
-        <View
-          style={[
-            styles.statsContainer,
-            {
-              backgroundColor: tk.surface.raised,
-              borderColor: tk.border.default,
-            },
-          ]}
-        >
-          <View style={styles.statItem}>
-            <Text style={[styles.statValue, { color: tk.text.primary }]}>
-              {stats.active}
-            </Text>
-            <Text style={[styles.statLabel, { color: tk.text.secondary }]}>
-              {t('home.stats.active')}
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.statItem,
-              { borderLeftWidth: 1, borderLeftColor: tk.border.subtle },
+        <TournamentStatsRow stats={stats} isDark={isDark} />
+        <View style={styles.tabRow}>
+          <TabBar
+            tabs={[
+              { key: 'pending', label: t('home.pending.title') },
+              { key: 'active', label: t('home.active.title') },
+              { key: 'past', label: t('home.past.title') },
             ]}
-          >
-            <Text style={[styles.statValue, { color: tk.primary[400] }]}>
-              {stats.won}
-            </Text>
-            <Text style={[styles.statLabel, { color: tk.text.secondary }]}>
-              {t('home.stats.won')}
-            </Text>
+            activeTab={tab}
+            onTabChange={setTab}
+            style={{ flex: 1 }}
+          />
+          <View style={styles.tabCreateBtn}>
+            <GhostButton
+              label={t('home.createButton')}
+              // label={t('home.createButton')}
+              icon={<Feather name='award' size={14} color={tk.primary[500]} />}
+              isDark={isDark}
+              onPress={() => navigation.navigate('CreateTournament')}
+              size='sm'
+            />
           </View>
         </View>
       </View>
@@ -98,84 +96,55 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
           />
         }
       >
-        {/* Refetch indicator */}
-        {isRefetching &&
-          !isLoading &&
-          (active.length > 0 || past.length > 0) && (
-            <View
-              style={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                paddingVertical: 12,
-              }}
-            >
-              <ActivityIndicator size='small' color={tk.primary[600]} />
-            </View>
-          )}
-
-        {/* Pending requests */}
-        {pendingRequests.length > 0 && (
-          <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: tk.text.muted }]}>
-              {t('home.pending.title')}
-            </Text>
-            <View style={styles.cardList}>
-              {pendingRequests.map(req => (
-                <PendingRequestCard
-                  key={req.id}
-                  request={req}
-                  onPress={() =>
-                    navigation.navigate('InvitationDetail', {
-                      requestId: req.id,
-                    })
-                  }
-                  isDark={isDark}
-                />
-              ))}
-            </View>
-          </View>
-        )}
-
-        {/* Divider */}
-        <View style={[styles.divider, { backgroundColor: tk.border.subtle }]} />
-
-        {/* Active tournaments */}
+        {/* Tab content */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: tk.text.muted }]}>
-            {t('home.active.title')}
-          </Text>
-          {isLoading ? (
-            <LoadingState message={t('loading')} isDark={isDark} />
-          ) : active.length === 0 ? (
-            <EmptyState
-              title={t('home.active.empty')}
-              description={t('home.active.emptyDesc')}
-              isDark={isDark}
-            />
+          {tab === 'pending' ? (
+            pendingRequests.length === 0 ? (
+              <EmptyState title={t('home.pending.empty')} isDark={isDark} />
+            ) : (
+              <View style={styles.cardList}>
+                {pendingRequests.map(req => (
+                  <PendingRequestCard
+                    key={req.id}
+                    request={req}
+                    onPress={() =>
+                      navigation.navigate('InvitationDetail', {
+                        requestId: req.id,
+                      })
+                    }
+                    isDark={isDark}
+                  />
+                ))}
+              </View>
+            )
+          ) : tab === 'active' ? (
+            isLoading ? (
+              <LoadingState message={t('loading')} isDark={isDark} />
+            ) : active.length === 0 ? (
+              <EmptyState
+                title={t('home.active.empty')}
+                description={t('home.active.emptyDesc')}
+                isDark={isDark}
+              />
+            ) : (
+              <View style={styles.cardList}>
+                {active.map(tournament => (
+                  <TournamentCard
+                    key={tournament.id}
+                    tournament={tournament}
+                    onPress={() =>
+                      navigation.navigate('TournamentDetail', {
+                        tournamentId: tournament.id,
+                      })
+                    }
+                    isDark={isDark}
+                  />
+                ))}
+              </View>
+            )
+          ) : past.length === 0 ? (
+            <EmptyState title={t('home.past.empty')} isDark={isDark} />
           ) : (
-            <View style={styles.cardList}>
-              {active.map(tournament => (
-                <TournamentCard
-                  key={tournament.id}
-                  tournament={tournament}
-                  onPress={() =>
-                    navigation.navigate('TournamentDetail', {
-                      tournamentId: tournament.id,
-                    })
-                  }
-                  isDark={isDark}
-                />
-              ))}
-            </View>
-          )}
-        </View>
-
-        {/* Past tournaments */}
-        {past.length > 0 && (
-          <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: tk.text.muted }]}>
-              {t('home.past.title')}
-            </Text>
             <View style={styles.cardList}>
               {past.map(tournament => (
                 <TournamentCard
@@ -190,22 +159,16 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
                 />
               ))}
             </View>
-          </View>
-        )}
+          )}
+        </View>
       </ScrollView>
 
       <View style={styles.fabRow}>
+        <View style={{ flex: 1 }} />
         <FloatingActionButton
           label={t('home.joinButton')}
-          icon={<Feather name='plus' size={18} color={tk.text.primary} />}
+          icon={<Feather name='plus' size={18} color={tk.text.onPrimary} />}
           onPress={() => navigation.navigate('BrowseTournaments')}
-          variant='secondary'
-          style={{ flex: 1 }}
-        />
-        <FloatingActionButton
-          label={t('home.createButton')}
-          icon={<Feather name='award' size={18} color={tk.text.onPrimary} />}
-          onPress={() => navigation.navigate('CreateTournament')}
           style={{ flex: 1 }}
         />
       </View>

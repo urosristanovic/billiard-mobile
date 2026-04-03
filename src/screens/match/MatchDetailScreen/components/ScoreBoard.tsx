@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import type { Match } from '@/types/match';
@@ -85,9 +86,16 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
           {player.score != null ? player.score : '—'}
         </Text>
         {player.beers > 0 && (
-          <Text style={[styles.beers, { color: tk.text.muted }]}>
-            🍺 {player.beers}
-          </Text>
+          <View style={styles.beersRow}>
+            <MaterialCommunityIcons
+              name='beer-outline'
+              size={13}
+              color={tk.text.muted}
+            />
+            <Text style={[styles.beers, { color: tk.text.muted }]}>
+              {player.beers}
+            </Text>
+          </View>
         )}
       </View>
     );
@@ -161,10 +169,15 @@ const styles = StyleSheet.create({
     lineHeight: typography.size['5xl'] * 1.1,
     marginTop: spacing[5],
   },
+  beersRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 2,
+  },
   beers: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
-    marginTop: 2,
   },
   vsWrap: {
     alignSelf: 'stretch',

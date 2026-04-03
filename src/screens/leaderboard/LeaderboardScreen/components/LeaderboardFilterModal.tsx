@@ -4,13 +4,13 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
+import { ToggleSwitch } from '@/components/common/forms';
 import { useTheme } from '@/hooks/useTheme';
 import { typography, spacing, radius } from '@/constants/theme';
 import { DISCIPLINES, DISCIPLINE_LABELS, type Discipline } from '@/types/match';
@@ -334,14 +334,13 @@ export const LeaderboardFilterModal = ({
               <Text style={[styles.sectionLabel, { color: tk.text.secondary }]}>
                 {t('filters.includeProvisional')}
               </Text>
-              <Switch
+              <ToggleSwitch
                 value={draft.includeProvisional}
                 onValueChange={v =>
                   setDraft(prev => ({ ...prev, includeProvisional: v }))
                 }
                 trackColor={{ false: tk.border.default, true: tk.primary[600] }}
                 thumbColor={tk.text.onPrimary}
-                style={{ transform: [{ scaleX: 0.85 }, { scaleY: 0.85 }] }}
               />
             </View>
           </View>

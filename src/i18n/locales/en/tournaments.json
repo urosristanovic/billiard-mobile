@@ -15,12 +15,12 @@
       "empty": "No pending requests"
     },
     "active": {
-      "title": "Active Tournaments",
+      "title": "Active",
       "empty": "No active tournaments",
       "emptyDesc": "Create or join a tournament to get started"
     },
     "past": {
-      "title": "Past Tournaments",
+      "title": "Past",
       "empty": "No past tournaments",
       "winnerBadge": "Winner",
       "winnerDetail": "You won this tournament"
@@ -41,7 +41,7 @@
     "description": "Description",
     "descriptionPlaceholder": "Optional description",
     "discipline": "Discipline",
-    "format": "Format",
+    "format": "Format Elimination",
     "visibility": "Visibility",
     "maxParticipants": "Max Players",
     "maxParticipantsPlaceholder": "2–128",
@@ -88,6 +88,7 @@
     "standings": "Standings",
     "matches": "Matches",
     "noBracket": "Bracket will appear once the tournament starts",
+    "waitingPlayers": "Waiting\nPlayers",
     "requests": {
       "title": "Pending Requests",
       "empty": "No pending requests",
@@ -108,7 +109,7 @@
       "addParticipants": "Add"
     },
     "currentMatches": {
-      "title": "Current Matches",
+      "title": "Next Matches",
       "empty": "All matches have been played",
       "recordResult": "Record Result"
     },

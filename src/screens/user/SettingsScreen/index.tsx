@@ -171,6 +171,7 @@ const SettingsScreen = ({ navigation }: Props) => {
 
           <View style={[styles.footer, { borderTopColor: tk.border.default }]}>
             <DangerButton
+              noShadow
               label={tAuth('logout.button')}
               onPress={() => {
                 confirm({

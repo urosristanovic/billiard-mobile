@@ -2,8 +2,9 @@ import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import type { TournamentSummary } from '@/types/tournament';
-import { TOURNAMENT_FORMAT_LABELS, TOURNAMENT_STATUS_LABELS } from '@/types/tournament';
+import { TOURNAMENT_FORMAT_LABELS } from '@/types/tournament';
 import { DISCIPLINE_LABELS } from '@/types/match';
+import { TournamentStatusBadge } from '@/components/common';
 
 interface TournamentCardProps {
   tournament: TournamentSummary;
@@ -33,7 +34,7 @@ export const TournamentCard = ({
       style={[
         styles.card,
         {
-          backgroundColor: tk.surface.raised,
+          backgroundColor: tk.surface.default,
           borderColor: isWinnerCard ? tk.primary[600] : tk.border.default,
         },
       ]}
@@ -45,28 +46,18 @@ export const TournamentCard = ({
         >
           {tournament.name}
         </Text>
-        <Text
-          style={[
-            styles.status,
-            {
-              color: isWinnerCard
-                ? tk.primary[300]
-                : tournament.status === 'cancelled'
-                  ? tk.error.text
-                  : tk.primary[400],
-            },
-          ]}
-        >
-          {isWinnerCard
-            ? `🏆 ${t('home.past.winnerBadge')}`
-            : TOURNAMENT_STATUS_LABELS[tournament.status]}
-        </Text>
+        <TournamentStatusBadge
+          status={tournament.status}
+          isWinner={isWinnerCard}
+          variant='text'
+          isDark={isDark}
+        />
       </View>
 
       <View style={styles.meta}>
         {tournament.isRated && (
-          <View style={[styles.ratedBadge, { borderColor: tk.primary[400] }]}>
-            <Text style={[styles.ratedBadgeText, { color: tk.primary[400] }]}>
+          <View style={[styles.ratedBadge, { borderColor: tk.primary[600] }]}>
+            <Text style={[styles.ratedBadgeText, { color: tk.primary[600] }]}>
               {t('ratedBadge')}
             </Text>
           </View>
@@ -86,14 +77,14 @@ export const TournamentCard = ({
 
       {tournament.status === 'in_progress' && (
         <Text
-          style={[styles.nextMatch, { color: tk.primary[300] }]}
+          style={[styles.nextMatch, { color: tk.primary[500] }]}
           numberOfLines={1}
         >
           {nextMatch?.state === 'waiting_opponent'
             ? t('home.waitingOpponent')
             : opponentName
-            ? t('home.nextMatch', { opponent: opponentName })
-            : t('home.noNextMatch')}
+              ? t('home.nextMatch', { opponent: opponentName })
+              : t('home.noNextMatch')}
         </Text>
       )}
     </TouchableOpacity>
@@ -102,8 +93,8 @@ export const TournamentCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: radius.xl,
-    borderWidth: 1,
+    borderRadius: radius['3xl'],
+    borderWidth: 0.5,
     padding: spacing[4],
     gap: spacing[1],
   },
@@ -119,12 +110,6 @@ const styles = StyleSheet.create({
     fontFamily: typography.family.display,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
-  },
-  status: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
   },
   meta: {
     flexDirection: 'row',

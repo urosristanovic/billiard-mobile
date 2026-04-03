@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
-import { FormField, FormButtons } from '@/components/common/forms';
+import { FormField, FormButtons, ToggleSwitch } from '@/components/common/forms';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { useCustomLeaderboardMutations } from '@/features/leaderboard/useCustomLeaderboards';
 import { useMyGroups } from '@/features/groups/useGroups';
@@ -132,12 +132,11 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
                 {t('customLeaderboards.publicLabel')}
               </Text>
             </View>
-            <Switch
+            <ToggleSwitch
               value={isPublic}
               onValueChange={setIsPublic}
               trackColor={{ false: tk.border.default, true: tk.primary[600] }}
               thumbColor={tk.text.onPrimary}
-              style={{ transform: [{ scaleX: 1 }, { scaleY: 1 }] }}
             />
           </View>
         </View>

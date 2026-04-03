@@ -1,9 +1,8 @@
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
-import {
-  TOURNAMENT_FORMAT_LABELS,
-} from '@/types/tournament';
+import { TOURNAMENT_FORMAT_LABELS } from '@/types/tournament';
 import { DISCIPLINE_LABELS } from '@/types/match';
 import type { TournamentRequest } from '@/types/tournament';
 
@@ -23,7 +22,7 @@ export const PendingRequestCard = ({
 
   const isIncoming = request.direction === 'invitation';
   const tournament = request.tournament;
-  const accentColor = isIncoming ? tk.primary[500] : tk.border.default;
+  const accentColor = isIncoming ? tk.primary[600] : tk.border.default;
   const label = isIncoming
     ? t('home.pending.invitation')
     : t('home.pending.request');
@@ -45,7 +44,7 @@ export const PendingRequestCard = ({
       style={[
         styles.card,
         {
-          backgroundColor: tk.surface.raised,
+          backgroundColor: tk.surface.default,
           borderColor: tk.border.default,
         },
       ]}
@@ -61,15 +60,15 @@ export const PendingRequestCard = ({
               style={[
                 styles.badge,
                 {
-                  backgroundColor: isIncoming ? tk.primary[900] : tk.surface.overlay,
-                  borderColor: isIncoming ? tk.primary[700] : tk.border.default,
+                  backgroundColor: tk.surface.overlay,
+                  borderColor: isIncoming ? tk.primary[500] : tk.border.default,
                 },
               ]}
             >
               <Text
                 style={[
                   styles.badgeText,
-                  { color: isIncoming ? tk.primary[300] : tk.text.secondary },
+                  { color: isIncoming ? tk.primary[500] : tk.text.secondary },
                 ]}
               >
                 {label}
@@ -79,10 +78,13 @@ export const PendingRequestCard = ({
               <View
                 style={[
                   styles.badge,
-                  { backgroundColor: tk.surface.overlay, borderColor: tk.primary[400] },
+                  {
+                    backgroundColor: tk.surface.overlay,
+                    borderColor: tk.primary[500],
+                  },
                 ]}
               >
-                <Text style={[styles.badgeText, { color: tk.primary[400] }]}>
+                <Text style={[styles.badgeText, { color: tk.primary[500] }]}>
                   {t('ratedBadge')}
                 </Text>
               </View>
@@ -112,14 +114,20 @@ export const PendingRequestCard = ({
         {tournament && (
           <View style={styles.metaRow}>
             {formattedDate && (
-              <Text style={[styles.meta, { color: tk.text.muted }]}>
-                🗓 {formattedDate}
-              </Text>
+              <View style={styles.metaItem}>
+                <Feather name='calendar' size={18} color={tk.text.muted} />
+                <Text style={[styles.meta, { color: tk.text.muted }]}>
+                  {formattedDate}
+                </Text>
+              </View>
             )}
             {tournament.location && (
-              <Text style={[styles.meta, { color: tk.text.muted }]}>
-                📍 {tournament.location}
-              </Text>
+              <View style={styles.metaItem}>
+                <Feather name='map-pin' size={14} color={tk.text.muted} />
+                <Text style={[styles.meta, { color: tk.text.muted }]}>
+                  {tournament.location}
+                </Text>
+              </View>
             )}
           </View>
         )}
@@ -131,7 +139,9 @@ export const PendingRequestCard = ({
               {isIncoming
                 ? `${t('detail.organizer')}: `
                 : `${t('detail.organizer')}: `}
-              <Text style={[styles.organizerName, { color: tk.text.secondary }]}>
+              <Text
+                style={[styles.organizerName, { color: tk.text.secondary }]}
+              >
                 {tournament.organizerProfile.displayName ||
                   tournament.organizerProfile.username}
               </Text>
@@ -142,8 +152,9 @@ export const PendingRequestCard = ({
                 { backgroundColor: tk.surface.overlay },
               ]}
             >
+              <Feather name='users' size={14} color={tk.text.muted} />
               <Text style={[styles.spotsText, { color: tk.text.muted }]}>
-                👥 {tournament.participantCount}/{tournament.maxParticipants}
+                {tournament.participantCount}/{tournament.maxParticipants}
               </Text>
             </View>
           </View>
@@ -181,27 +192,27 @@ const styles = StyleSheet.create({
     gap: spacing[2],
   },
   badge: {
-    borderRadius: radius.sm,
+    borderRadius: radius.lg,
     borderWidth: 1,
-    paddingHorizontal: spacing[2],
-    paddingVertical: 2,
+    paddingHorizontal: spacing[3],
+    paddingVertical: spacing[1],
   },
   badgeText: {
     fontSize: typography.size.xs,
-    fontFamily: typography.family.heading,
+    fontWeight: typography.weight.semibold,
     textTransform: 'uppercase',
-    letterSpacing: 0.4,
   },
   chevron: {
     fontSize: 20,
     fontFamily: typography.family.display,
   },
   name: {
-    fontSize: typography.size.base,
+    fontSize: typography.size['2xl'],
     fontFamily: typography.family.display,
     textTransform: 'uppercase',
     letterSpacing: 0.6,
     lineHeight: typography.size.base * 1.3,
+    paddingVertical: spacing[2],
   },
   sub: {
     fontSize: typography.size.sm,
@@ -212,8 +223,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing[3],
   },
+  metaItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[1],
+  },
   meta: {
-    fontSize: typography.size.xs,
+    fontSize: typography.size.lg,
     fontFamily: typography.family.body,
   },
   footer: {
@@ -231,6 +247,9 @@ const styles = StyleSheet.create({
     fontFamily: typography.family.bodyMedium,
   },
   spotsBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[1],
     borderRadius: radius.sm,
     paddingHorizontal: spacing[2],
     paddingVertical: 2,

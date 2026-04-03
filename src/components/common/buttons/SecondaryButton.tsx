@@ -86,7 +86,7 @@ export const SecondaryButton = ({
         }
       >
         {loading ? (
-          <ActivityIndicator size='small' color={t.primary[500]} />
+          <ActivityIndicator size='small' color={t.primary[400]} />
         ) : (
           <>
             {icon}

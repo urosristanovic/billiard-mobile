@@ -1,4 +1,5 @@
-import { ActivityIndicator, View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { Loading } from '@/components/common';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import { typography, spacing, radius } from '@/constants/theme';
@@ -95,7 +96,7 @@ export const RatingsSection = ({ ratings, isDark, isLoading }: RatingsSectionPro
       </Text>
       {isLoading ? (
         <View style={styles.loadingWrapper}>
-          <ActivityIndicator size='large' color={tk.primary[400]} />
+          <Loading size='large' />
         </View>
       ) : ratings.length === 0 ? (
         <View

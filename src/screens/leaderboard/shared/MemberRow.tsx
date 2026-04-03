@@ -1,6 +1,7 @@
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import { GhostButton } from '@/components/common/buttons/GhostButton';
+import { Loading } from '@/components/common/states';
 import { detailStyles } from './detailStyles';
 
 type MemberRowProps = {
@@ -51,7 +52,7 @@ export const MemberRow = ({
         </Text>
       </View>
       {isPending ? (
-        <ActivityIndicator size='small' color={tk.text.muted} style={{ minWidth: 60 }} />
+        <Loading style={{ minWidth: 60 }} />
       ) : actionLabel && onAction ? (
         <GhostButton isDark={isDark} label={actionLabel} onPress={onAction} />
       ) : null}

@@ -9,7 +9,7 @@ export const AppLogo = () => {
   return (
     <View style={styles.row}>
       {/* 8-ball mark */}
-      <View style={styles.ballShadowWrap}>
+      {/* <View style={styles.ballShadowWrap}>
         <LinearGradient
           colors={[tk.primary[400], tk.primary[600]]}
           start={{ x: 0, y: 0 }}
@@ -27,7 +27,7 @@ export const AppLogo = () => {
             </Text>
           </View>
         </LinearGradient>
-      </View>
+      </View> */}
 
       {/* Wordmark */}
       <Text style={styles.wordmark}>

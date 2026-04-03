@@ -1,6 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   RefreshControl,
   View,
@@ -9,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout } from '@/components/common/layout';
-import { EmptyState, LoadingState } from '@/components/common/states';
+import { EmptyState, LoadingState, Loading } from '@/components/common/states';
 import { useLeaderboard } from '@/features/leaderboard/useLeaderboard';
 import { useMyGroups } from '@/features/groups/useGroups';
 import { useMyCustomLeaderboards } from '@/features/leaderboard/useCustomLeaderboards';
@@ -221,7 +220,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
         ListFooterComponent={
           isFetchingNextPage ? (
             <View style={styles.footerLoader}>
-              <ActivityIndicator size='small' color={tk.primary[400]} />
+              <Loading />
             </View>
           ) : null
         }

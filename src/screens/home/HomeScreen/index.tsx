@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -22,7 +21,7 @@ import { useMatches } from '@/features/matches/useMatches';
 import { useMatchStats } from '@/features/matches/useMatchStats';
 import { useAuth } from '@/features/auth/useAuth';
 import { ScreenLayout, AppHeader } from '@/components/common/layout';
-import { LoadingState, EmptyState } from '@/components/common/states';
+import { LoadingState, EmptyState, Loading } from '@/components/common/states';
 import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
 import { GhostButton } from '@/components/common/buttons';
 import { CueIcon } from '@/components/common/icons';
@@ -122,7 +121,7 @@ const HomeScreen = ({ navigation }: Props) => {
                   paddingVertical: 20,
                 }}
               >
-                <ActivityIndicator size='small' color={tk.primary[600]} />
+                <Loading />
               </View>
             )}
             <View
@@ -307,7 +306,7 @@ const HomeScreen = ({ navigation }: Props) => {
         ListFooterComponent={
           isFetchingNextPage ? (
             <View style={{ paddingVertical: 12 }}>
-              <ActivityIndicator size='small' color={tk.primary[600]} />
+              <Loading />
             </View>
           ) : null
         }

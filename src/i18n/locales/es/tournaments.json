@@ -15,12 +15,12 @@
       "empty": "Sin solicitudes pendientes"
     },
     "active": {
-      "title": "Torneos activos",
+      "title": "Activos",
       "empty": "Sin torneos activos",
       "emptyDesc": "Crea o únete a un torneo para empezar"
     },
     "past": {
-      "title": "Torneos pasados",
+      "title": "Pasados",
       "empty": "Sin torneos pasados",
       "winnerBadge": "Ganador",
       "winnerDetail": "Ganaste este torneo"
@@ -41,7 +41,7 @@
     "description": "Descripción",
     "descriptionPlaceholder": "Descripción opcional",
     "discipline": "Disciplina",
-    "format": "Formato",
+    "format": "Formato eliminación",
     "visibility": "Visibilidad",
     "maxParticipants": "Máx. jugadores",
     "maxParticipantsPlaceholder": "2–128",
@@ -88,6 +88,7 @@
     "standings": "Clasificación",
     "matches": "Partidos",
     "noBracket": "El cuadro aparecerá cuando comience el torneo",
+    "waitingPlayers": "Esperando\nJugadores",
     "requests": {
       "title": "Solicitudes pendientes",
       "empty": "Sin solicitudes pendientes",
@@ -108,7 +109,7 @@
       "addParticipants": "Agregar"
     },
     "currentMatches": {
-      "title": "Partidos actuales",
+      "title": "Próximos partidos",
       "empty": "Todos los partidos han sido jugados",
       "recordResult": "Registrar resultado"
     },

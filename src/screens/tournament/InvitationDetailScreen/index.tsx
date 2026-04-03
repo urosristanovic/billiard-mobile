@@ -15,7 +15,10 @@ import { TournamentSummaryCard } from './components/TournamentSummaryCard';
 import { InvitationActions } from './components/InvitationActions';
 import { styles } from './styles';
 
-type Props = NativeStackScreenProps<TournamentsStackParamList, 'InvitationDetail'>;
+type Props = NativeStackScreenProps<
+  TournamentsStackParamList,
+  'InvitationDetail'
+>;
 
 const InvitationDetailScreen = ({ navigation, route }: Props) => {
   const { requestId } = route.params;
@@ -94,21 +97,38 @@ const InvitationDetailScreen = ({ navigation, route }: Props) => {
   return (
     <ScreenLayout isDark={isDark}>
       <ScreenHeader
-        title={isIncoming ? t('invitation.title') : t('invitation.requestTitle')}
+        title={
+          isIncoming ? t('invitation.title') : t('invitation.requestTitle')
+        }
         onBack={() => navigation.goBack()}
       />
 
       <ScrollView
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          isPending && { paddingBottom: 0 },
+        ]}
         showsVerticalScrollIndicator={false}
       >
         <Text style={[styles.intro, { color: tk.text.secondary }]}>
-          {isIncoming ? t('invitation.invitedTo') : t('invitation.requestedFor')}
+          {isIncoming
+            ? t('invitation.invitedTo')
+            : t('invitation.requestedFor')}
         </Text>
 
         {tournament && <TournamentSummaryCard tournament={tournament} />}
+      </ScrollView>
 
-        {isPending && (
+      {isPending && (
+        <View
+          style={[
+            styles.bottomBar,
+            {
+              borderTopColor: tk.border.default,
+              backgroundColor: tk.background.primary,
+            },
+          ]}
+        >
           <InvitationActions
             isIncoming={isIncoming}
             isSubmitting={respondToRequest.isPending}
@@ -116,8 +136,8 @@ const InvitationDetailScreen = ({ navigation, route }: Props) => {
             onDecline={reason => handleRespond('rejected', reason)}
             onCancel={handleCancelRequestPress}
           />
-        )}
-      </ScrollView>
+        </View>
+      )}
     </ScreenLayout>
   );
 };

@@ -181,8 +181,8 @@ export interface ReportResultInput {
 }
 
 export const TOURNAMENT_FORMAT_LABELS: Record<TournamentFormat, string> = {
-  single_elimination: 'Single Elimination',
-  double_elimination: 'Double Elimination',
+  single_elimination: 'Single',
+  double_elimination: 'Double',
   round_robin: 'Round Robin',
 };
 

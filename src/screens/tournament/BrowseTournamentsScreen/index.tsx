@@ -3,7 +3,6 @@ import {
   FlatList,
   View,
   StyleSheet,
-  ActivityIndicator,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -11,7 +10,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useAuth } from '@/features/auth/useAuth';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { Input } from '@/components/common/forms';
-import { EmptyState } from '@/components/common/states';
+import { EmptyState, Loading } from '@/components/common/states';
 import { useBrowseTournaments } from '@/features/tournaments/useBrowseTournaments';
 import { useTournamentMutations } from '@/features/tournaments/useTournamentMutations';
 import { TournamentSearchCard } from './components';
@@ -22,7 +21,7 @@ type Props = NativeStackScreenProps<TournamentsStackParamList, 'BrowseTournament
 
 const BrowseTournamentsScreen = ({ navigation }: Props) => {
   const { t } = useTranslation('tournaments');
-  const { isDark, tk } = useTheme();
+  const { isDark } = useTheme();
   const { user } = useAuth();
   const [searchText, setSearchText] = useState('');
   const [requestedIds, setRequestedIds] = useState<Set<string>>(new Set());
@@ -75,7 +74,7 @@ const BrowseTournamentsScreen = ({ navigation }: Props) => {
         ListEmptyComponent={
           isLoading ? (
             <View style={styles.loadingRow}>
-              <ActivityIndicator color={tk.primary[400]} />
+              <Loading />
             </View>
           ) : query.length < 2 ? (
             <EmptyState

@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import {
@@ -21,7 +22,7 @@ export const TournamentSummaryCard = ({ tournament }: Props) => {
     <View
       style={[
         styles.tournamentCard,
-        { backgroundColor: tk.surface.raised, borderColor: tk.border.default },
+        { backgroundColor: tk.surface.default, borderColor: tk.border.default },
       ]}
     >
       <View style={styles.nameRow}>
@@ -50,18 +51,22 @@ export const TournamentSummaryCard = ({ tournament }: Props) => {
           📍 {tournament.location}
         </Text>
       )}
-      <Text style={[styles.tournamentMeta, { color: tk.text.muted }]}>
-        🗓{' '}
-        {new Date(tournament.scheduledAt).toLocaleString(undefined, {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit',
-        })}
-      </Text>
+      <View style={styles.nameRow}>
+        <Feather name='calendar' size={14} color={tk.text.muted} />
+        <Text style={[styles.tournamentMeta, { color: tk.text.muted }]}>
+          {new Date(tournament.scheduledAt).toLocaleString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        </Text>
+      </View>
       {tournament.description ? (
-        <Text style={[styles.tournamentDescription, { color: tk.text.secondary }]}>
+        <Text
+          style={[styles.tournamentDescription, { color: tk.text.secondary }]}
+        >
           {tournament.description}
         </Text>
       ) : null}

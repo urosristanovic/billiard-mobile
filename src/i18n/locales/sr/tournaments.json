@@ -15,12 +15,12 @@
       "empty": "Nema zahteva na čekanju"
     },
     "active": {
-      "title": "Aktivni turniri",
+      "title": "Aktivni",
       "empty": "Nema aktivnih turnira",
       "emptyDesc": "Kreiraj ili se pridruži turniru da počneš"
     },
     "past": {
-      "title": "Prošli turniri",
+      "title": "Prošli",
       "empty": "Nema prošlih turnira",
       "winnerBadge": "Pobednik",
       "winnerDetail": "Pobedio si na ovom turniru"
@@ -41,7 +41,7 @@
     "description": "Opis",
     "descriptionPlaceholder": "Opcioni opis",
     "discipline": "Disciplina",
-    "format": "Format",
+    "format": "Format eliminacije",
     "visibility": "Vidljivost",
     "maxParticipants": "Maks. igrača",
     "maxParticipantsPlaceholder": "2–128",
@@ -88,6 +88,7 @@
     "standings": "Tabela",
     "matches": "Mečevi",
     "noBracket": "Raspored će se prikazati kada turnir počne",
+    "waitingPlayers": "Čekamo\nIgrače",
     "requests": {
       "title": "Zahtevi na čekanju",
       "empty": "Nema zahteva",
@@ -108,7 +109,7 @@
       "addParticipants": "Dodaj"
     },
     "currentMatches": {
-      "title": "Trenutni mečevi",
+      "title": "Sledeći mečevi",
       "empty": "Svi mečevi su odigrani",
       "recordResult": "Upiši rezultat"
     },
