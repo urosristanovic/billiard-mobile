@@ -123,7 +123,7 @@
       "editSuccess": "Rezultat je izmenjen",
       "tieError": "Rezultati ne mogu biti isti"
     },
-    "invitedBadge": "Pozvano",
+    "invitedBadge": "Pozvan",
     "confirmPublish": "Objavi ovaj turnir?",
     "confirmPublishMessage": "Biće vidljiv i otvoren za prijavu.",
     "confirmStart": "Pokreni turnir?",
@@ -182,7 +182,7 @@
     "searchHint": "Unesite tekst za pretragu igrača",
     "empty": "Nema pronađenih igrača",
     "invite": "Pozovi",
-    "invited": "Pozvano",
+    "invited": "Pozvan",
     "joined": "Učestvuje"
   },
   "ratedBadge": "Rangirani",

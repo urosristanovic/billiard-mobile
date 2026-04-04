@@ -39,9 +39,10 @@ export const ChallengeActions = ({
           onPress={onCancelRequest}
           loading={isCancelling}
           isDark={isDark}
+          style={{ flex: 1 }}
         />
       ) : (
-        <View style={{ flexDirection: 'row', gap: 12 }}>
+        <>
           <SecondaryButton
             style={{ flex: 1 }}
             label={t('detail.declineChallengeButton')}
@@ -56,7 +57,7 @@ export const ChallengeActions = ({
             loading={isAccepting}
             isDark={isDark}
           />
-        </View>
+        </>
       )}
     </View>
   );

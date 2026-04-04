@@ -33,8 +33,8 @@
     "rank": "#{{rank}}"
   },
   "blocked": {
-    "noCountry": "Configura tu país en el perfil para ver el ranking por país",
-    "noCity": "Configura tu ciudad en el perfil para ver el ranking por ciudad",
+    "noCountry": "Configura tu país en la configuración de la cuenta para ver el ranking por país",
+    "noCity": "Configura tu ciudad en la configuración de la cuenta para ver el ranking por ciudad",
     "noGroups": "Crea o únete a un grupo para ver el ranking grupal",
     "noCustomLeaderboards": "Crea una clasificación personalizada para verla aquí"
   },

@@ -33,8 +33,8 @@
     "rank": "#{{rank}}"
   },
   "blocked": {
-    "noCountry": "Postavite zemlju u podešavanjima profila za rang listu po zemlji",
-    "noCity": "Postavite grad u podešavanjima profila za rang listu po gradu",
+    "noCountry": "Postavite zemlju u podešavanjima naloga za rang listu po zemlji",
+    "noCity": "Postavite grad u podešavanjima naloga za rang listu po gradu",
     "noGroups": "Kreirajte ili pridružite se grupi za grupnu rang listu",
     "noCustomLeaderboards": "Kreirajte prilagođenu rang listu"
   },
@@ -46,7 +46,7 @@
   "playerProfile": {
     "title": "Profil korisnika",
     "ratingsSection": "Rejtinzi",
-    "statsSection": "Statistike",
+    "statsSection": "Statistika",
     "totalMatches": "Ukupno mečeva",
     "winRate": "Procenat pobeda",
     "challengeButton": "Izazovi",

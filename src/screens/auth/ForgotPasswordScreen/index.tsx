@@ -70,7 +70,9 @@ const ForgotPasswordScreen = ({
         <ScrollView
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps='handled'
-          keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
+          keyboardDismissMode={
+            Platform.OS === 'ios' ? 'interactive' : 'on-drag'
+          }
           automaticallyAdjustKeyboardInsets
           showsVerticalScrollIndicator={false}
         >
@@ -114,7 +116,9 @@ const ForgotPasswordScreen = ({
                   },
                 ]}
               >
-                <Text style={[styles.successTitle, { color: tk.success.default }]}>
+                <Text
+                  style={[styles.successTitle, { color: tk.success.default }]}
+                >
                   {tAuth('forgotPassword.successTitle')}
                 </Text>
                 <Text style={[styles.successText, { color: tk.text.primary }]}>
@@ -123,7 +127,6 @@ const ForgotPasswordScreen = ({
               </View>
             ) : null}
           </View>
-
           <FormButtons
             submitLabel={tAuth('forgotPassword.submitButton')}
             cancelLabel={tAuth('forgotPassword.backToLogin')}

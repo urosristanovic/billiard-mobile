@@ -30,12 +30,12 @@
   },
   "bestOfOptions": {
     "1": "1 meč",
-    "3": "Na 2 pobede",
-    "5": "Na 3 pobede",
-    "7": "Na 4 pobede",
-    "9": "Na 5 pobeda",
+    "3": "Najviše 3 partije",
+    "5": "Najviše 5 partija",
+    "7": "Najviše 7 partija",
+    "9": "Najviše 9 partija",
     "other": "Drugo",
-    "otherValue": "Na {{value}}"
+    "otherValue": "Najviše {{value}} partija"
   },
   "expiresIn": "Ističe za {{hours}}h",
   "from": "Od {{name}}",

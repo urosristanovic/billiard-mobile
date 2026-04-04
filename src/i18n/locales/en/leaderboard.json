@@ -33,8 +33,8 @@
     "rank": "#{{rank}}"
   },
   "blocked": {
-    "noCountry": "Set your country in profile settings to view country rankings",
-    "noCity": "Set your city in profile settings to view city rankings",
+    "noCountry": "Set your country in account settings to view country rankings",
+    "noCity": "Set your city in account settings to view city rankings",
     "noGroups": "Create or join a group to view group rankings",
     "noCustomLeaderboards": "Create a custom leaderboard to view custom rankings"
   },

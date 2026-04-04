@@ -55,14 +55,7 @@ const InvitationDetailScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const handleAcceptPress = () =>
-    confirm({
-      title: t('invitation.confirmAcceptTitle'),
-      message: t('invitation.confirmAcceptMessage'),
-      confirmLabel: t('invitation.acceptButton'),
-      cancelLabel: tCommon('cancel'),
-      onConfirm: () => handleRespond('accepted'),
-    });
+  const handleAcceptPress = () => handleRespond('accepted');
 
   const handleCancelRequestPress = () =>
     confirm({

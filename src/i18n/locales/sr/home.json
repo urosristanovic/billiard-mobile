@@ -6,13 +6,13 @@
     "played": "Odigrano",
     "winRate": "Pobede",
     "winStreak": "Niz pobeda",
-    "winRecord": "Statistik mečeva"
+    "winRecord": "Statistika mečeva"
   },
   "recentMatches": "Nedavni mečevi",
   "noMatches": "Još nema mečeva",
   "noMatchesDesc": "Izazovi nekoga da počneš",
   "fab": {
-    "challenge": "Izazov",
+    "challenge": "Izazovi",
     "tournament": "Turnir"
   },
   "filters": {

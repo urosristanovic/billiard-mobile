@@ -49,9 +49,7 @@ export const MatchStatusBadge = ({ status }: MatchStatusBadgeProps) => {
 
   const badge = (
     <View style={[styles.badge, { backgroundColor: bg }]}>
-      <Text style={[styles.badgeText, { color }]}>
-        {t(`status.${status}`)}
-      </Text>
+      <Text style={[styles.badgeText, { color }]}>{t(`status.${status}`)}</Text>
     </View>
   );
 
@@ -68,6 +66,7 @@ const styles = StyleSheet.create({
   badge: {
     paddingHorizontal: spacing[2],
     paddingVertical: spacing[1],
+    marginHorizontal: spacing[1],
     borderRadius: radius.sm,
   },
   badgeText: {
