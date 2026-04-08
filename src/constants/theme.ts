@@ -4,7 +4,13 @@
  * All components consume tokens from this file -- never inline hex.
  *
  * Palette aligned with the web prototype (Tailwind amber + custom darks).
+ *
+ * Spacing, typography sizes, and icon sizes are screen-aware via moderateScale/scale.
+ * Reference device: iPhone 17 at 393dp width. Values only shrink on narrower screens;
+ * larger screens keep the reference size (scale capped at 1.0).
  */
+
+import { moderateScale, scale } from '@/utils/scale';
 
 const palette = {
   // Tailwind amber — primary accent
@@ -108,6 +114,7 @@ const lightTheme = {
     border: 'rgba(245,158,11,0.20)',
     glow: 'rgba(245,158,11,0.40)',
     labelMuted: 'rgba(251,191,36,0.70)',
+    activeIcon: 'rgba(245,158,11,0.10)',
   },
   success: palette.success,
   error: palette.error,
@@ -146,6 +153,7 @@ const darkTheme = {
     border: 'rgba(245,158,11,0.20)',
     glow: 'rgba(245,158,11,0.40)',
     labelMuted: 'rgba(251,191,36,0.70)',
+    activeIcon: 'rgba(245,158,11,0.10)',
   },
   success: palette.success,
   error: palette.error,
@@ -180,20 +188,21 @@ export const gradients = {
 } as const;
 
 export const spacing = {
-  1: 4,
-  2: 8,
-  3: 12,
-  4: 16,
-  5: 20,
-  6: 24,
-  8: 32,
-  10: 40,
-  12: 48,
-  16: 64,
-  20: 80,
-  24: 96,
-  32: 128,
-} as const;
+  1: moderateScale(4, 0.5),
+  2: moderateScale(8, 0.5),
+  3: moderateScale(12, 0.5),
+  4: moderateScale(16, 0.5),
+  5: moderateScale(20, 0.5),
+  6: moderateScale(24, 0.5),
+  8: moderateScale(32, 0.5),
+  10: moderateScale(40, 0.5),
+  12: moderateScale(48, 0.5),
+  16: moderateScale(64, 0.5),
+  20: moderateScale(80, 0.5),
+  24: moderateScale(96, 0.5),
+  28: moderateScale(112, 0.5),
+  32: moderateScale(128, 0.5),
+};
 
 export const radius = {
   sm: 4,
@@ -216,15 +225,15 @@ export const typography = {
     bodyBold: 'Barlow_700Bold',
   },
   size: {
-    xs: 14,
-    sm: 16,
-    base: 18,
-    lg: 20,
-    xl: 22,
-    '2xl': 26,
-    '3xl': 32,
-    '4xl': 38,
-    '5xl': 44,
+    xs: moderateScale(14, 0.5),
+    sm: moderateScale(16, 0.5),
+    base: moderateScale(18, 0.5),
+    lg: moderateScale(20, 0.5),
+    xl: moderateScale(22, 0.5),
+    '2xl': moderateScale(26, 0.5),
+    '3xl': moderateScale(32, 0.5),
+    '4xl': moderateScale(38, 0.5),
+    '5xl': moderateScale(44, 0.5),
   },
   weight: {
     normal: '400' as const,
@@ -271,4 +280,22 @@ export const shadows = {
   },
 } as const;
 
+export const iconSize = {
+  xs: scale(12),
+  sm: scale(14),
+  md: scale(18),
+  lg: scale(24),
+  xl: scale(28),
+  '2xl': scale(36),
+};
+
 export const minTouchTarget = 44;
+
+export const breakpoints = {
+  xs: 360,
+  sm: 390,
+  md: 414,
+  lg: 428,
+} as const;
+
+export type Breakpoint = keyof typeof breakpoints;

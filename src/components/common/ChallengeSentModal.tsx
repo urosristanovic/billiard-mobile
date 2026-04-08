@@ -5,7 +5,8 @@ import type { NavigationProp } from '@react-navigation/native';
 import { SecondaryButton } from './buttons';
 import { CueIcon } from './icons';
 import { useTheme } from '@/hooks/useTheme';
-import { typography, spacing } from '@/constants/theme';
+import { typography, spacing, iconSize } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type { AppTabParamList } from '@/navigation/AppNavigator';
 
 interface ChallengeSentModalProps {
@@ -49,7 +50,7 @@ export const ChallengeSentModal = ({
               },
             ]}
           >
-            <CueIcon size={36} color={tk.success.default} />
+            <CueIcon size={iconSize['2xl']} color={tk.success.default} />
           </View>
 
           <Text style={[styles.title, { color: tk.text.primary }]}>
@@ -91,9 +92,9 @@ const styles = StyleSheet.create({
     gap: spacing[4],
   },
   iconCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: scale(80),
+    height: scale(80),
+    borderRadius: scale(40),
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',

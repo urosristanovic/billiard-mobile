@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native';
+import { scale } from '@/utils/scale';
 import { useTheme } from '@/hooks/useTheme';
 import { GhostButton } from '@/components/common/buttons/GhostButton';
 import { Loading } from '@/components/common/states';
@@ -52,7 +53,7 @@ export const MemberRow = ({
         </Text>
       </View>
       {isPending ? (
-        <Loading style={{ minWidth: 60 }} />
+        <Loading style={{ minWidth: scale(60) }} />
       ) : actionLabel && onAction ? (
         <GhostButton isDark={isDark} label={actionLabel} onPress={onAction} />
       ) : null}

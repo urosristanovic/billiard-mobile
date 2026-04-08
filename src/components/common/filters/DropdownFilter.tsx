@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useMemo, useRef, useState } from 'react';
 import { theme, typography, radius, spacing } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 export interface FilterOption {
   value: string;
@@ -50,7 +51,7 @@ export function DropdownFilter({
 
   const open = () => {
     triggerRef.current?.measureInWindow((x, y, width, height) => {
-      const dropdownHeight = 320;
+      const dropdownHeight = scale(320);
       const verticalGap = spacing[1];
       const screenPadding = spacing[4];
       const opensAbove =
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing[1],
   },
   trigger: {
-    minHeight: 42,
+    minHeight: scale(42),
     borderRadius: radius.md,
     borderWidth: 1,
     paddingHorizontal: spacing[3],
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: radius.lg,
     borderWidth: 1,
-    maxHeight: 320,
+    maxHeight: scale(320),
     paddingVertical: spacing[1],
   },
   optionRow: {

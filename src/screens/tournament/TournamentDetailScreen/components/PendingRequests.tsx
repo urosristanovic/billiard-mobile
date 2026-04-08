@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import type { TournamentRequest } from '@/types/tournament';
+import { PrimaryButton, DangerButton } from '@/components/common/buttons';
 import { Loading } from '@/components/common/states';
 import { styles } from '../styles';
 
@@ -23,14 +24,17 @@ export const PendingRequests = ({
   onRespond,
 }: PendingRequestsProps) => {
   const { t } = useTranslation('tournaments');
-  const { tk } = useTheme();
+  const { isDark, tk } = useTheme();
   const [respondingTo, setRespondingTo] = useState<
     Record<string, 'accepted' | 'rejected'>
   >({});
 
   const joinRequests = requests.filter(r => r.direction === 'request');
 
-  const handleRespond = (requestId: string, status: 'accepted' | 'rejected') => {
+  const handleRespond = (
+    requestId: string,
+    status: 'accepted' | 'rejected',
+  ) => {
     setRespondingTo(prev => ({ ...prev, [requestId]: status }));
     onRespond(requestId, status, () => {
       setRespondingTo(prev => {
@@ -44,17 +48,13 @@ export const PendingRequests = ({
   if (!isLoading && joinRequests.length === 0) return null;
 
   return (
-    <View
-      style={[
-        styles.requestsSection,
-        { borderColor: tk.border.default },
-      ]}
-    >
+    <View style={[styles.requestsSection, { borderColor: tk.border.default }]}>
       <Text style={[styles.requestsHeader, { color: tk.text.muted }]}>
         {t('detail.requests.title')}
         {joinRequests.length > 0 && (
           <Text style={{ color: tk.primary[400] }}>
-            {' '}({joinRequests.length})
+            {' '}
+            ({joinRequests.length})
           </Text>
         )}
       </Text>
@@ -69,10 +69,7 @@ export const PendingRequests = ({
         joinRequests.map(req => (
           <View
             key={req.id}
-            style={[
-              styles.requestRow,
-              { borderBottomColor: tk.border.subtle },
-            ]}
+            style={[styles.requestRow, { borderBottomColor: tk.border.subtle }]}
           >
             <View
               style={[
@@ -81,7 +78,8 @@ export const PendingRequests = ({
               ]}
             >
               <Text style={[styles.reqAvatarText, { color: tk.primary[400] }]}>
-                {(req.profile.displayName || req.profile.username)[0]?.toUpperCase()}
+                {(req.profile.displayName ||
+                  req.profile.username)[0]?.toUpperCase()}
               </Text>
             </View>
             <View style={styles.reqInfo}>
@@ -97,38 +95,19 @@ export const PendingRequests = ({
                 <Loading style={styles.reqLoadingIndicator} />
               ) : (
                 <>
-                  <TouchableOpacity
-                    onPress={() => handleRespond(req.id, 'accepted')}
-                    style={[
-                      styles.reqAccept,
-                      { backgroundColor: tk.primary[500] },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.reqActionText,
-                        { color: tk.surface.default },
-                      ]}
-                    >
-                      {t('detail.requests.accept')}
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
+                  <DangerButton
+                    label={t('detail.requests.reject')}
+                    size='xs'
+                    isDark={isDark}
+                    noShadow
                     onPress={() => handleRespond(req.id, 'rejected')}
-                    style={[
-                      styles.reqReject,
-                      { borderColor: tk.error.border },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.reqActionText,
-                        { color: tk.error.text },
-                      ]}
-                    >
-                      {t('detail.requests.reject')}
-                    </Text>
-                  </TouchableOpacity>
+                  />
+                  <PrimaryButton
+                    label={t('detail.requests.accept')}
+                    size='xs'
+                    isDark={isDark}
+                    onPress={() => handleRespond(req.id, 'accepted')}
+                  />
                 </>
               )}
             </View>

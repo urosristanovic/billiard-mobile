@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale, verticalScale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   header: {
@@ -25,7 +26,7 @@ export const styles = StyleSheet.create({
   card: {
     marginBottom: spacing[5],
     padding: spacing[5],
-    borderRadius: 32,
+    borderRadius: scale(32),
     borderWidth: 1,
     overflow: 'hidden',
     shadowColor: '#000',
@@ -39,8 +40,8 @@ export const styles = StyleSheet.create({
     top: spacing[4],
     right: spacing[4],
     zIndex: 20,
-    width: 48,
-    height: 48,
+    width: scale(48),
+    height: scale(48),
     borderRadius: radius.full,
     borderWidth: 1,
     alignItems: 'center',
@@ -53,8 +54,8 @@ export const styles = StyleSheet.create({
     marginBottom: spacing[5],
   },
   avatar: {
-    width: 56,
-    height: 56,
+    width: scale(56),
+    height: scale(56),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',
@@ -70,16 +71,16 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -2,
     right: -2,
-    width: 16,
-    height: 16,
+    width: scale(16),
+    height: scale(16),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 2,
   },
   dot: {
-    width: 10,
-    height: 10,
+    width: scale(10),
+    height: scale(10),
     borderRadius: radius.full,
     backgroundColor: '#22C55E',
   },
@@ -156,7 +157,7 @@ export const styles = StyleSheet.create({
   list: {
     padding: spacing[4],
     gap: spacing[3],
-    paddingBottom: 140,
+    paddingBottom: verticalScale(140),
   },
   fabRow: {
     position: 'absolute',

@@ -1,11 +1,5 @@
 import { useState } from 'react';
-import {
-  FlatList,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from 'react-native';
+import { FlatList, Text, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -13,6 +7,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { Input } from '@/components/common/forms';
 import { EmptyState, Loading } from '@/components/common/states';
+import { SecondaryButton } from '@/components/common/buttons/SecondaryButton';
 import { useTournamentMutations } from '@/features/tournaments/useTournamentMutations';
 import {
   useTournamentDetail,
@@ -24,6 +19,7 @@ import type { UserSearchResult } from '@/services/user';
 import { getAccessToken } from '@/features/auth/getAccessToken';
 import { QUERY_KEYS } from '@/config/queryKeys';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type { TournamentsStackParamList } from '@/navigation/AppNavigator';
 
 type Props = NativeStackScreenProps<
@@ -195,22 +191,14 @@ const InviteParticipantsScreen = ({ navigation, route }: Props) => {
                     </Text>
                   </View>
                 ) : (
-                  <TouchableOpacity
-                    onPress={() => handleInvite(item)}
+                  <SecondaryButton
+                    label={t('inviteParticipants.invite')}
+                    size='xs'
+                    loading={isInviting}
                     disabled={isInviting}
-                    style={[
-                      styles.inviteButton,
-                      { backgroundColor: tk.primary[500] },
-                    ]}
-                  >
-                    {isInviting ? (
-                      <Loading />
-                    ) : (
-                      <Text style={[styles.inviteText, { color: '#000' }]}>
-                        {t('inviteParticipants.invite')}
-                      </Text>
-                    )}
-                  </TouchableOpacity>
+                    isDark={isDark}
+                    onPress={() => handleInvite(item)}
+                  />
                 )}
               </View>
             );
@@ -245,9 +233,9 @@ const styles = StyleSheet.create({
     gap: spacing[3],
   },
   avatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: scale(44),
+    height: scale(44),
+    borderRadius: scale(22),
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -274,7 +262,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing[3],
     paddingVertical: spacing[1],
     borderRadius: radius.sm,
-    minWidth: 64,
+    minWidth: scale(64),
     alignItems: 'center',
   },
   badgeText: {
@@ -282,21 +270,6 @@ const styles = StyleSheet.create({
     fontFamily: typography.family.heading,
     textTransform: 'uppercase',
     letterSpacing: 0.4,
-  },
-  inviteButton: {
-    paddingHorizontal: spacing[6],
-    paddingVertical: spacing[3],
-    borderRadius: radius['2xl'],
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  inviteText: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.heading,
-    fontWeight: typography.weight.bold,
-    textTransform: 'uppercase',
-    letterSpacing: typography.letterSpacing.extraRelaxed,
   },
 });
 

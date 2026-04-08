@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { spacing, radius, shadows, theme, typography } from '@/constants/theme';
+import { spacing, radius, shadows, theme, typography, minTouchTarget } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 export type ToastType = 'error' | 'success' | 'warning' | 'info';
 
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: spacing[4],
     right: spacing[4],
-    minHeight: 64,
+    minHeight: scale(64),
     borderRadius: radius.lg,
     borderWidth: 1,
     flexDirection: 'row',
@@ -122,8 +123,8 @@ const styles = StyleSheet.create({
     fontFamily: typography.family.body,
   },
   closeButton: {
-    minWidth: 44,
-    minHeight: 44,
+    minWidth: minTouchTarget,
+    minHeight: minTouchTarget,
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingTop: spacing[3],

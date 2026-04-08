@@ -1,6 +1,7 @@
 import { Text, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type {
   TournamentParticipant,
   TournamentRequest,
@@ -112,14 +113,14 @@ const styles = StyleSheet.create({
     gap: spacing[2],
   },
   seed: {
-    width: 28,
+    width: scale(28),
     fontSize: typography.size.sm,
     fontFamily: typography.family.heading,
     textAlign: 'right',
   },
   avatar: {
-    width: 32,
-    height: 32,
+    width: scale(32),
+    height: scale(32),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',

@@ -8,6 +8,7 @@ import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useCountries, useCities } from '@/features/locations/useLocations';
 import { useTheme } from '@/hooks/useTheme';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import { styles } from './styles';
 import type { Country, City } from '@/types/location';
 
@@ -267,7 +268,7 @@ const pickerStyles = StyleSheet.create({
     borderRadius: radius.md,
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[3],
-    minHeight: 48,
+    minHeight: scale(48),
   },
   pickerButtonText: {
     fontSize: typography.size.base,
@@ -309,7 +310,7 @@ const pickerStyles = StyleSheet.create({
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[4],
     borderBottomWidth: 1,
-    minHeight: 56,
+    minHeight: scale(56),
   },
   modalOptionText: {
     fontSize: typography.size.base,

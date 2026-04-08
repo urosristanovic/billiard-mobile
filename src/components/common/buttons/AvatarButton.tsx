@@ -1,6 +1,7 @@
 import { TouchableOpacity, StyleSheet, View, ViewStyle } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import { radius, spacing } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 interface AvatarButtonProps {
   onPress?: () => void;
@@ -34,8 +35,8 @@ export const AvatarButton = ({ onPress, style }: AvatarButtonProps) => {
 
 const styles = StyleSheet.create({
   button: {
-    width: 36,
-    height: 36,
+    width: scale(36),
+    height: scale(36),
     borderRadius: radius.md,
     borderWidth: 1,
     alignItems: 'center',
@@ -43,12 +44,12 @@ const styles = StyleSheet.create({
     gap: spacing[1],
   },
   bar: {
-    width: 16,
+    width: scale(16),
     height: 2,
     borderRadius: 1,
   },
   barMid: {
-    width: 12,
+    width: scale(12),
     alignSelf: 'flex-start',
     marginLeft: 2,
   },

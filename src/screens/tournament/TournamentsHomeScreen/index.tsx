@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ScrollView, View, RefreshControl } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { iconSize } from '@/constants/theme';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
@@ -76,7 +77,13 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
             <GhostButton
               label={t('home.createButton')}
               // label={t('home.createButton')}
-              icon={<Feather name='award' size={14} color={tk.primary[500]} />}
+              icon={
+                <Feather
+                  name='award'
+                  size={iconSize.sm}
+                  color={tk.primary[500]}
+                />
+              }
               isDark={isDark}
               onPress={() => navigation.navigate('CreateTournament')}
               size='sm'
@@ -100,7 +107,11 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
         <View style={styles.section}>
           {tab === 'pending' ? (
             pendingRequests.length === 0 ? (
-              <EmptyState title={t('home.pending.empty')} isDark={isDark} />
+              <EmptyState
+                title={t('home.pending.empty')}
+                description={t('home.pending.emptyDesc')}
+                isDark={isDark}
+              />
             ) : (
               <View style={styles.cardList}>
                 {pendingRequests.map(req => (
@@ -143,7 +154,11 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
               </View>
             )
           ) : past.length === 0 ? (
-            <EmptyState title={t('home.past.empty')} isDark={isDark} />
+            <EmptyState
+              title={t('home.past.empty')}
+              description={t('home.past.emptyDesc')}
+              isDark={isDark}
+            />
           ) : (
             <View style={styles.cardList}>
               {past.map(tournament => (
@@ -167,7 +182,9 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
         <View style={{ flex: 1 }} />
         <FloatingActionButton
           label={t('home.joinButton')}
-          icon={<Feather name='plus' size={18} color={tk.text.onPrimary} />}
+          icon={
+            <Feather name='plus' size={iconSize.md} color={tk.text.onPrimary} />
+          }
           onPress={() => navigation.navigate('BrowseTournaments')}
           style={{ flex: 1 }}
         />

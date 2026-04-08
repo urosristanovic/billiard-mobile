@@ -15,12 +15,13 @@ import { useTheme } from '@/hooks/useTheme';
 import {
   DISCIPLINES,
   DISCIPLINE_LABELS,
-  MATCH_STATUS_LABELS,
+  MATCH_STATUSES,
   type Discipline,
   type MatchStatus,
 } from '@/types/match';
 import { MatchCard } from './components';
 import { styles } from './styles';
+import { moderateScale } from '@/utils/scale';
 type LocalStackParamList = {
   MatchHistory: undefined;
   MatchDetail: { matchId: string };
@@ -93,9 +94,9 @@ const MatchHistoryScreen = ({ navigation }: Props) => {
   const statusOptions = useMemo<FilterOption[]>(
     () => [
       { value: 'all', label: t('disciplines.all') },
-      ...Object.entries(MATCH_STATUS_LABELS).map(([value, label]) => ({
-        value,
-        label,
+      ...MATCH_STATUSES.map(s => ({
+        value: s,
+        label: t(`status.${s}`),
       })),
     ],
     [t],
@@ -235,7 +236,7 @@ const MatchHistoryScreen = ({ navigation }: Props) => {
               style={{
                 alignItems: 'center',
                 justifyContent: 'center',
-                paddingVertical: 12,
+                paddingVertical: moderateScale(12),
               }}
             >
               <Loading />
@@ -257,7 +258,7 @@ const MatchHistoryScreen = ({ navigation }: Props) => {
         }
         ListFooterComponent={
           isFetchingNextPage ? (
-            <View style={{ paddingVertical: 12 }}>
+            <View style={{ paddingVertical: moderateScale(12) }}>
               <Loading />
             </View>
           ) : null

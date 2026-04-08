@@ -16,6 +16,7 @@ import {
   spacing,
   minTouchTarget,
 } from '@/constants/theme';
+import { moderateScale as ms } from '@/utils/scale';
 
 interface PrimaryButtonProps {
   label: string;
@@ -138,10 +139,10 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
   compact: {
-    minHeight: 36,
+    minHeight: ms(36),
   },
   sizeXs: {
-    minHeight: 32,
+    minHeight: ms(32),
     paddingHorizontal: spacing[1],
     paddingVertical: spacing[1],
   },

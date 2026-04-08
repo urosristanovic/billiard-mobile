@@ -6,6 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { theme, typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type { TournamentMatch, TournamentRound } from '@/types/tournament';
 
 interface BracketMatchCardProps {
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
     paddingBottom: spacing[4],
   },
   roundColumn: {
-    width: 140,
+    width: scale(140),
     gap: spacing[2],
   },
   roundLabel: {
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   scoreText: {
     fontSize: typography.size.lg,
     fontFamily: typography.family.heading,
-    minWidth: 12,
+    minWidth: scale(12),
     textAlign: 'right',
   },
   divider: {

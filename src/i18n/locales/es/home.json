@@ -10,6 +10,8 @@
   "recentMatches": "Partidas recientes",
   "noMatches": "Aún no hay partidas",
   "noMatchesDesc": "Desafía a alguien para empezar",
+  "noMatchesFiltered": "No se encontraron partidas",
+  "noMatchesFilteredDesc": "Intenta ajustar o restablecer los filtros",
   "fab": {
     "challenge": "Desafío",
     "tournament": "Torneo"

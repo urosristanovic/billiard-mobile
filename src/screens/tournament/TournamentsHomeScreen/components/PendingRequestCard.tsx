@@ -1,7 +1,8 @@
 import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { theme, typography, spacing, radius } from '@/constants/theme';
+import { theme, typography, spacing, radius, iconSize } from '@/constants/theme';
+import { moderateScale } from '@/utils/scale';
 import { TOURNAMENT_FORMAT_LABELS } from '@/types/tournament';
 import { DISCIPLINE_LABELS } from '@/types/match';
 import type { TournamentRequest } from '@/types/tournament';
@@ -115,7 +116,7 @@ export const PendingRequestCard = ({
           <View style={styles.metaRow}>
             {formattedDate && (
               <View style={styles.metaItem}>
-                <Feather name='calendar' size={18} color={tk.text.muted} />
+                <Feather name='calendar' size={iconSize.md} color={tk.text.muted} />
                 <Text style={[styles.meta, { color: tk.text.muted }]}>
                   {formattedDate}
                 </Text>
@@ -123,7 +124,7 @@ export const PendingRequestCard = ({
             )}
             {tournament.location && (
               <View style={styles.metaItem}>
-                <Feather name='map-pin' size={14} color={tk.text.muted} />
+                <Feather name='map-pin' size={iconSize.sm} color={tk.text.muted} />
                 <Text style={[styles.meta, { color: tk.text.muted }]}>
                   {tournament.location}
                 </Text>
@@ -152,7 +153,7 @@ export const PendingRequestCard = ({
                 { backgroundColor: tk.surface.overlay },
               ]}
             >
-              <Feather name='users' size={14} color={tk.text.muted} />
+              <Feather name='users' size={iconSize.sm} color={tk.text.muted} />
               <Text style={[styles.spotsText, { color: tk.text.muted }]}>
                 {tournament.participantCount}/{tournament.maxParticipants}
               </Text>
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   chevron: {
-    fontSize: 20,
+    fontSize: moderateScale(20, 0.25),
     fontFamily: typography.family.display,
   },
   name: {

@@ -17,7 +17,7 @@ import { typography, spacing, radius } from '@/constants/theme';
 import {
   DISCIPLINES,
   DISCIPLINE_LABELS,
-  MATCH_STATUS_LABELS,
+  MATCH_STATUSES,
   type Discipline,
   type MatchStatus,
 } from '@/types/match';
@@ -78,9 +78,9 @@ export const MatchFilterModal = ({
   const statusOptions = useMemo(
     () => [
       { value: 'all' as StatusFilter, label: t('disciplines.all') },
-      ...Object.entries(MATCH_STATUS_LABELS).map(([value, label]) => ({
-        value: value as StatusFilter,
-        label,
+      ...MATCH_STATUSES.map(s => ({
+        value: s as StatusFilter,
+        label: t(`status.${s}`),
       })),
     ],
     [t],
@@ -231,6 +231,7 @@ export const MatchFilterModal = ({
                         key={value}
                         label={label}
                         compact
+                        size='xs'
                         isDark={isDark}
                         onPress={() =>
                           setDraft(prev => ({ ...prev, status: value }))

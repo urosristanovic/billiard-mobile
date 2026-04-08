@@ -192,14 +192,14 @@ export const TOURNAMENT_FORMATS: TournamentFormat[] = [
   'round_robin',
 ];
 
-export const TOURNAMENT_STATUS_LABELS: Record<TournamentStatus, string> = {
-  draft: 'Draft',
-  registration: 'Registration',
-  in_progress: 'In Progress',
-  pending_review: 'Pending Review',
-  completed: 'Completed',
-  cancelled: 'Cancelled',
-};
+export const TOURNAMENT_STATUSES: TournamentStatus[] = [
+  'draft',
+  'registration',
+  'in_progress',
+  'pending_review',
+  'completed',
+  'cancelled',
+];
 
 export const TOURNAMENT_VISIBILITY_LABELS: Record<
   TournamentVisibility,

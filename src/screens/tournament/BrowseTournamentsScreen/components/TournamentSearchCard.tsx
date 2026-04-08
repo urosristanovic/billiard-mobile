@@ -1,6 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type { TournamentSummary, TournamentRequestStatus } from '@/types/tournament';
 import { TOURNAMENT_FORMAT_LABELS } from '@/types/tournament';
 import { DISCIPLINE_LABELS } from '@/types/match';
@@ -85,32 +86,34 @@ export const TournamentSearchCard = ({
         style={[
           styles.button,
           {
-            backgroundColor: isDisabled ? tk.surface.overlay : tk.primary[500],
-            borderColor: isDisabled ? tk.border.default : tk.primary[700],
+            backgroundColor: tk.surface.raised,
+            borderColor: tk.primary[600],
           },
           isDisabled && styles.buttonDisabled,
         ]}
       >
-        <Text
-          style={[
-            styles.buttonText,
-            {
-              color: isDisabled ? tk.text.muted : tk.text.onPrimary,
-            },
-          ]}
-        >
-          {isOrganizer
-            ? t('browse.organizer')
-            : isParticipant || isAccepted
-              ? t('browse.joined')
-              : isPending
-                ? t('browse.requestSent')
-                : isFull
-                  ? t('browse.full')
-                  : isRejected
-                    ? t('browse.requestAgain')
-                    : t('browse.requestButton')}
-        </Text>
+        {isRequesting ? (
+          <ActivityIndicator size='small' color={tk.primary[400]} />
+        ) : (
+          <Text
+            style={[
+              styles.buttonText,
+              { color: tk.primary[500] },
+            ]}
+          >
+            {isOrganizer
+              ? t('browse.organizer')
+              : isParticipant || isAccepted
+                ? t('browse.joined')
+                : isPending
+                  ? t('browse.requestSent')
+                  : isFull
+                    ? t('browse.full')
+                    : isRejected
+                      ? t('browse.requestAgain')
+                      : t('browse.requestButton')}
+          </Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -169,7 +172,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: spacing[3],
     paddingVertical: spacing[2],
-    minWidth: 80,
+    minWidth: scale(80),
     alignItems: 'center',
   },
   buttonText: {

@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet } from 'react-native';
-import { theme, typography, spacing } from '@/constants/theme';
+import { theme, typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type { StandingsRow } from '@/types/tournament';
 
 interface StandingsTableProps {
@@ -81,7 +82,7 @@ export const StandingsTable = ({
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 8,
+    borderRadius: radius.lg,
     overflow: 'hidden',
   },
   row: {
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   rank: {
-    width: 24,
+    width: scale(24),
     fontSize: typography.size.xs,
     fontFamily: typography.family.heading,
     textAlign: 'center',
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.family.bodyMedium,
   },
   cell: {
-    width: 32,
+    width: scale(32),
     fontSize: typography.size.sm,
     fontFamily: typography.family.display,
     textAlign: 'center',

@@ -36,6 +36,8 @@ import {
 } from './components/MatchFilterModal';
 import { styles } from './styles';
 import type { HomeStackParamList } from '@/navigation/AppNavigator';
+import { moderateScale, scale } from '@/utils/scale';
+import { iconSize } from '@/constants/theme';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'HomeFeed'>;
 
@@ -164,7 +166,11 @@ const HomeScreen = ({ navigation }: Props) => {
                 onPress={() => navigation.navigate('Settings')}
                 activeOpacity={0.7}
               >
-                <Feather name='settings' size={24} color={tk.text.muted} />
+                <Feather
+                  name='settings'
+                  size={iconSize.lg}
+                  color={tk.text.muted}
+                />
               </TouchableOpacity>
 
               {/* Avatar + name row */}
@@ -278,7 +284,11 @@ const HomeScreen = ({ navigation }: Props) => {
                 size='sm'
                 icon={
                   activeFilterCount > 0 ? undefined : (
-                    <Feather name='sliders' size={14} color={tk.primary[600]} />
+                    <Feather
+                      name='sliders'
+                      size={iconSize.sm}
+                      color={tk.primary[600]}
+                    />
                   )
                 }
                 active={activeFilterCount > 0}
@@ -295,6 +305,12 @@ const HomeScreen = ({ navigation }: Props) => {
             <LoadingState isDark={isDark} />
           ) : error ? (
             <EmptyState title={t('noMatches')} isDark={isDark} />
+          ) : activeFilterCount > 0 ? (
+            <EmptyState
+              title={t('noMatchesFiltered')}
+              description={t('noMatchesFilteredDesc')}
+              isDark={isDark}
+            />
           ) : (
             <EmptyState
               title={t('noMatches')}
@@ -305,7 +321,7 @@ const HomeScreen = ({ navigation }: Props) => {
         }
         ListFooterComponent={
           isFetchingNextPage ? (
-            <View style={{ paddingVertical: 12 }}>
+            <View style={{ paddingVertical: moderateScale(12) }}>
               <Loading />
             </View>
           ) : null
@@ -327,7 +343,7 @@ const HomeScreen = ({ navigation }: Props) => {
         <View style={{ flex: 1 }} />
         <FloatingActionButton
           label={t('fab.challenge')}
-          icon={<CueIcon size={18} color={tk.text.onPrimary} />}
+          icon={<CueIcon size={iconSize.md} color={tk.text.onPrimary} />}
           onPress={() => navigation.navigate('UserSearch')}
           style={{ flex: 1 }}
         />

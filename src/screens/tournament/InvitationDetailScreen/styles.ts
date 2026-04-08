@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { radius, spacing, typography } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   content: {
@@ -112,7 +113,7 @@ export const styles = StyleSheet.create({
     paddingVertical: spacing[2],
     fontSize: typography.size.base,
     fontFamily: typography.family.body,
-    minHeight: 80,
+    minHeight: scale(80),
     textAlignVertical: 'top',
   },
   modalActions: {

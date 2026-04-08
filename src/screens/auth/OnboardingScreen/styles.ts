@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale, moderateScale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   container: {
@@ -16,8 +17,8 @@ export const styles = StyleSheet.create({
     gap: spacing[5],
   },
   iconContainer: {
-    width: 112,
-    height: 112,
+    width: scale(112),
+    height: scale(112),
     borderRadius: radius.full,
     borderWidth: 2,
     alignItems: 'center',
@@ -25,8 +26,8 @@ export const styles = StyleSheet.create({
     marginBottom: spacing[3],
   },
   icon: {
-    fontSize: 44,
-    lineHeight: 52,
+    fontSize: moderateScale(44, 0.25),
+    lineHeight: moderateScale(52, 0.25),
     textAlign: 'center',
   },
   slideTitle: {
@@ -38,7 +39,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   divider: {
-    width: 56,
+    width: scale(56),
     height: 2,
   },
   slideDescription: {
@@ -59,7 +60,7 @@ export const styles = StyleSheet.create({
     gap: spacing[2],
   },
   dot: {
-    height: 8,
+    height: scale(8),
     borderRadius: radius.full,
   },
   controls: {

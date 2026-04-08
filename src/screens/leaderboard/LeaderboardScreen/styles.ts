@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale, moderateScale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   header: {
@@ -49,14 +50,14 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   filterBadge: {
-    width: 16,
-    height: 16,
+    width: scale(16),
+    height: scale(16),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',
   },
   filterBadgeText: {
-    fontSize: 9,
+    fontSize: moderateScale(9, 0.25),
     fontFamily: typography.family.display,
     fontWeight: typography.weight.bold,
   },
@@ -96,8 +97,8 @@ export const styles = StyleSheet.create({
     gap: spacing[3],
   },
   rankBadge: {
-    width: 36,
-    height: 36,
+    width: scale(36),
+    height: scale(36),
     borderRadius: radius.sm,
     alignItems: 'center',
     justifyContent: 'center',
@@ -147,7 +148,7 @@ export const styles = StyleSheet.create({
     borderRadius: radius.sm,
   },
   provisionalText: {
-    fontSize: 9,
+    fontSize: moderateScale(9, 0.25),
     fontFamily: typography.family.display,
     textTransform: 'uppercase',
     letterSpacing: 0.5,

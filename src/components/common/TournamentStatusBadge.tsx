@@ -2,7 +2,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
-import { type TournamentStatus, TOURNAMENT_STATUS_LABELS } from '@/types/tournament';
+import { type TournamentStatus } from '@/types/tournament';
 import {
   getTournamentStatusColor,
   getTournamentStatusBg,
@@ -46,7 +46,7 @@ export const TournamentStatusBadge = ({
           { color: status === 'cancelled' ? tk.error.text : tk.primary[500] },
         ]}
       >
-        {TOURNAMENT_STATUS_LABELS[status]}
+        {t(`status.${status}`)}
       </Text>
     );
   }
@@ -64,7 +64,7 @@ export const TournamentStatusBadge = ({
       <Text
         style={[styles.badgeText, { color: getTournamentStatusColor(status, tk) }]}
       >
-        {TOURNAMENT_STATUS_LABELS[status]}
+        {t(`status.${status}`)}
       </Text>
     </View>
   );

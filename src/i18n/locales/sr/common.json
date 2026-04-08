@@ -26,8 +26,8 @@
   },
   "matchStatus": {
     "pendingConfirmation": "Čeka potvrdu",
-    "confirmed": "Potvrđeno",
-    "disputed": "Sporno",
+    "confirmed": "Potvrđen",
+    "disputed": "Sporan",
     "cancelled": "Otkazano"
   },
   "rating": {

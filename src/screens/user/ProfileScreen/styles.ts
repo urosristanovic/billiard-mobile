@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   container: {
@@ -16,8 +17,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
   },
   avatarCircle: {
-    width: 92,
-    height: 92,
+    width: scale(92),
+    height: scale(92),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',

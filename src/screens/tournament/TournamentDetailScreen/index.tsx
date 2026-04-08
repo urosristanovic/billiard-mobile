@@ -31,6 +31,7 @@ import type { Tab } from './components';
 import { styles } from './styles';
 import type { TournamentsStackParamList } from '@/navigation/AppNavigator';
 import { Feather } from '@expo/vector-icons';
+import { scale } from '@/utils/scale';
 
 type Props = NativeStackScreenProps<
   TournamentsStackParamList,
@@ -298,7 +299,7 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
         tournament.participants.some(p => p.userId === user?.id) && (
           <FloatingActionButton
             label={t('detail.actions.addParticipants')}
-            icon={<Feather name='plus' size={20} />}
+            icon={<Feather name='plus' size={scale(20)} />}
             style={styles.fab}
             onPress={() =>
               navigation.navigate('InviteParticipants', {

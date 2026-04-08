@@ -20,9 +20,11 @@ import {
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { Input } from '@/components/common/forms';
 import { EmptyState, Loading } from '@/components/common/states';
+import { SecondaryButton } from '@/components/common/buttons/SecondaryButton';
 import { ChevronRightIcon } from '@/components/common/icons';
 import { useTheme } from '@/hooks/useTheme';
-import { typography, spacing, radius } from '@/constants/theme';
+import { typography, spacing, radius, iconSize } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
 import type { UserSearchResult } from '@/services/user';
 
@@ -202,27 +204,17 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
                       </Text>
                     </View>
                   ) : (
-                    <TouchableOpacity
-                      onPress={() => handleAddMember(item)}
+                    <SecondaryButton
+                      label={t('userSearch.add')}
+                      size='xs'
+                      loading={isAdding}
                       disabled={isAdding}
-                      style={[
-                        styles.challengeBtn,
-                        { backgroundColor: tk.primary[500] },
-                      ]}
-                    >
-                      {isAdding ? (
-                        <Loading />
-                      ) : (
-                        <Text
-                          style={[styles.challengeBtnText, { color: '#000' }]}
-                        >
-                          {t('userSearch.add')}
-                        </Text>
-                      )}
-                    </TouchableOpacity>
+                      isDark={isDark}
+                      onPress={() => handleAddMember(item)}
+                    />
                   )
                 ) : (
-                  <ChevronRightIcon size={16} color={tk.primary[600]} />
+                  <ChevronRightIcon size={scale(16)} color={tk.primary[600]} />
                 )}
               </TouchableOpacity>
             );
@@ -259,9 +251,9 @@ const styles = StyleSheet.create({
     gap: spacing[3],
   },
   avatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: scale(44),
+    height: scale(44),
+    borderRadius: scale(22),
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -286,26 +278,11 @@ const styles = StyleSheet.create({
   },
 
   // ── Action buttons ─────────────────────────────────────────
-  challengeBtn: {
-    paddingHorizontal: spacing[6],
-    paddingVertical: spacing[3],
-    borderRadius: radius['2xl'],
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  challengeBtnText: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.heading,
-    fontWeight: typography.weight.bold,
-    textTransform: 'uppercase',
-    letterSpacing: typography.letterSpacing.extraRelaxed,
-  },
   statusBadge: {
     paddingHorizontal: spacing[3],
     paddingVertical: spacing[1],
     borderRadius: radius.sm,
-    minWidth: 64,
+    minWidth: scale(64),
     alignItems: 'center',
   },
   statusBadgeText: {

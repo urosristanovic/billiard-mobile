@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   metaSection: {
@@ -42,7 +43,7 @@ export const styles = StyleSheet.create({
   },
   metaDetailIcon: {
     fontSize: typography.size.base,
-    width: 22,
+    width: scale(22),
   },
   metaDetailText: {
     fontSize: typography.size.base,
@@ -87,7 +88,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: spacing[2],
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 52,
+    minHeight: scale(52),
   },
   actionBtnPrimary: {},
   actionBtnText: {
@@ -154,8 +155,8 @@ export const styles = StyleSheet.create({
     gap: spacing[2],
   },
   reqAvatar: {
-    width: 32,
-    height: 32,
+    width: scale(32),
+    height: scale(32),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',
@@ -179,23 +180,6 @@ export const styles = StyleSheet.create({
   reqActions: {
     flexDirection: 'row',
     gap: spacing[2],
-  },
-  reqAccept: {
-    paddingVertical: spacing[2],
-    paddingHorizontal: spacing[4],
-    borderRadius: radius.md,
-  },
-  reqReject: {
-    paddingVertical: spacing[2],
-    paddingHorizontal: spacing[4],
-    borderRadius: radius.md,
-    borderWidth: 1,
-  },
-  reqActionText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.heading,
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
   },
   reqLoadingIndicator: {
     paddingHorizontal: spacing[4],

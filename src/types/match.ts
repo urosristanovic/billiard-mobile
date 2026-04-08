@@ -128,11 +128,11 @@ export const DISCIPLINES: Discipline[] = [
   'straight_pool',
 ];
 
-export const MATCH_STATUS_LABELS: Record<MatchStatus, string> = {
-  challenge_requested: 'Challenge Requested',
-  challenge: 'Challenge',
-  pending_confirmation: 'Pending',
-  confirmed: 'Confirmed',
-  disputed: 'Disputed',
-  cancelled: 'Cancelled',
-};
+export const MATCH_STATUSES: MatchStatus[] = [
+  'challenge_requested',
+  'challenge',
+  'pending_confirmation',
+  'confirmed',
+  'disputed',
+  'cancelled',
+];

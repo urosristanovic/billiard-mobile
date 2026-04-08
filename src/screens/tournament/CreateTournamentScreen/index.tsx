@@ -15,7 +15,11 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
-import { FormField, FormButtons, ToggleSwitch } from '@/components/common/forms';
+import {
+  FormField,
+  FormButtons,
+  ToggleSwitch,
+} from '@/components/common/forms';
 import { DropdownFilter } from '@/components/common/filters';
 import { useCreateTournamentForm } from '@/features/tournaments/useCreateTournamentForm';
 import { useTournamentMutations } from '@/features/tournaments/useTournamentMutations';
@@ -23,6 +27,7 @@ import type { UpdateTournamentInput } from '@/types/tournament';
 import { FormatPicker, VisibilityPicker } from './components';
 import { DISCIPLINES, DISCIPLINE_LABELS, type Discipline } from '@/types/match';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type { TournamentsStackParamList } from '@/navigation/AppNavigator';
 
 type Props = NativeStackScreenProps<
@@ -182,7 +187,7 @@ const CreateTournamentScreen = ({ navigation, route }: Props) => {
             isDark={isDark}
             multiline
             numberOfLines={3}
-            style={{ minHeight: 80, textAlignVertical: 'top' }}
+            style={{ minHeight: scale(80), textAlignVertical: 'top' }}
           />
 
           {/* Discipline */}
@@ -263,7 +268,7 @@ const CreateTournamentScreen = ({ navigation, route }: Props) => {
                   ? formatDateTime(pickerDate)
                   : t('create.scheduledAtPlaceholder')}
               </Text>
-              <Feather name='calendar' size={16} color={tk.text.muted} />
+              <Feather name='calendar' size={scale(16)} color={tk.text.muted} />
             </TouchableOpacity>
             {errors.scheduledAt && (
               <Text style={[styles.errorText, { color: tk.error.default }]}>
@@ -371,7 +376,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    minHeight: 44,
+    minHeight: scale(44),
     borderRadius: radius.md,
     borderWidth: 1,
     paddingHorizontal: spacing[3],

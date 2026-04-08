@@ -11,6 +11,8 @@
   "recentMatches": "Nedavni mečevi",
   "noMatches": "Još nema mečeva",
   "noMatchesDesc": "Izazovi nekoga da počneš",
+  "noMatchesFiltered": "Nema pronađenih mečeva",
+  "noMatchesFilteredDesc": "Pokušaj da promeniš ili resetuješ filtere",
   "fab": {
     "challenge": "Izazovi",
     "tournament": "Turnir"

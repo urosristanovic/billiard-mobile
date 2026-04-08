@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type { Match } from '@/types/match';
 
 interface ScoreBoardProps {
@@ -89,7 +90,7 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
           <View style={styles.beersRow}>
             <MaterialCommunityIcons
               name='beer-outline'
-              size={13}
+              size={scale(13)}
               color={tk.text.muted}
             />
             <Text style={[styles.beers, { color: tk.text.muted }]}>
@@ -140,8 +141,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   avatar: {
-    width: 52,
-    height: 52,
+    width: scale(52),
+    height: scale(52),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',

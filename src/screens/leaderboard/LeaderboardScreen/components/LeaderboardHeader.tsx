@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import { AppLogo } from '@/components/common/AppLogo';
+import { iconSize } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import { PlusIcon } from '@/components/common/icons';
 import { SecondaryButton, GhostButton } from '@/components/common/buttons';
 import { styles } from '../styles';
@@ -33,7 +35,7 @@ export const LeaderboardHeader = ({
           <SecondaryButton
             label={t('title')}
             size='xs'
-            icon={<PlusIcon size={12} color={tk.primary[500]} />}
+            icon={<PlusIcon size={iconSize.xs} color={tk.primary[500]} />}
             accessibilityLabel={t('createFab')}
             onPress={onCreateLeaderboard}
           />
@@ -41,7 +43,7 @@ export const LeaderboardHeader = ({
           <SecondaryButton
             label={t('filters.group')}
             size='xs'
-            icon={<PlusIcon size={12} color={tk.primary[500]} />}
+            icon={<PlusIcon size={iconSize.xs} color={tk.primary[500]} />}
             accessibilityLabel={t('createGroup')}
             onPress={onCreateGroup}
           />
@@ -52,7 +54,7 @@ export const LeaderboardHeader = ({
           size='sm'
           icon={
             activeFilterCount > 0 ? undefined : (
-              <Feather name='sliders' size={14} color={tk.primary[600]} />
+              <Feather name='sliders' size={iconSize.sm} color={tk.primary[600]} />
             )
           }
           active={activeFilterCount > 0}

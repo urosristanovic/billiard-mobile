@@ -10,6 +10,8 @@
   "recentMatches": "Recent Matches",
   "noMatches": "No matches yet",
   "noMatchesDesc": "Challenge someone to get started",
+  "noMatchesFiltered": "No matches found",
+  "noMatchesFilteredDesc": "Try adjusting or resetting your filters",
   "fab": {
     "challenge": "Challenge",
     "tournament": "Tournament"

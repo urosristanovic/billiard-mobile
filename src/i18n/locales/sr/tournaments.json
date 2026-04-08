@@ -10,9 +10,10 @@
     },
     "pending": {
       "title": "Na čekanju",
-      "invitation": "Pozivnica",
+      "invitation": "Pozivi",
       "request": "Zahtev za učešće",
-      "empty": "Nema zahteva na čekanju"
+      "empty": "Nema turnira na čekanju",
+      "emptyDesc": "Budući pozivi za turnire biće prikazani ovde"
     },
     "active": {
       "title": "Aktivni",
@@ -21,7 +22,8 @@
     },
     "past": {
       "title": "Prošli",
-      "empty": "Nema prošlih turnira",
+      "empty": "Još nema završenih turnira",
+      "emptyDesc": "Završeni turniri će biti prikazani ovde",
       "winnerBadge": "Pobednik",
       "winnerDetail": "Pobedio si na ovom turniru"
     },
@@ -70,7 +72,7 @@
     "requestButton": "Zatraži mesto",
     "requestSent": "Zahtev poslat",
     "requestAgain": "Zatraži ponovo",
-    "joined": "Pridružen",
+    "joined": "Učestvuješ",
     "organizer": "Vaš turnir",
     "full": "Popunjeno"
   },

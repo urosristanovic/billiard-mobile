@@ -90,7 +90,10 @@ const ChangePasswordScreen = ({
 
   return (
     <ScreenLayout isDark={isDark}>
-      <ScreenHeader onBack={() => navigation.goBack()} />
+      <ScreenHeader
+        title={tAuth('changePassword.title')}
+        onBack={() => navigation.goBack()}
+      />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -105,11 +108,8 @@ const ChangePasswordScreen = ({
           automaticallyAdjustKeyboardInsets
           showsVerticalScrollIndicator={false}
         >
-          <View style={styles.header}>
-            <Text style={[styles.title, { color: tk.text.primary }]}>
-              {tAuth('changePassword.title')}
-            </Text>
-            <Text style={[styles.subtitle, { color: tk.text.muted }]}>
+          <View style={styles.subtitle}>
+            <Text style={[styles.subtitleText, { color: tk.text.muted }]}>
               {tAuth('changePassword.subtitle')}
             </Text>
             <View

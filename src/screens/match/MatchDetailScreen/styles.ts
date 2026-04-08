@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   container: {
@@ -105,7 +106,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   challengeVsWrap: {
-    width: 28,
+    width: scale(28),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -148,8 +149,8 @@ export const styles = StyleSheet.create({
     gap: spacing[2],
   },
   challengeBeerAdjustButton: {
-    width: 28,
-    height: 28,
+    width: scale(28),
+    height: scale(28),
     borderRadius: radius.md,
     borderWidth: 1,
     alignItems: 'center',
@@ -163,7 +164,7 @@ export const styles = StyleSheet.create({
   challengeBeerValue: {
     fontFamily: typography.family.display,
     fontSize: typography.size.xl,
-    minWidth: 28,
+    minWidth: scale(28),
     textAlign: 'center',
   },
   confirmationTimeline: {

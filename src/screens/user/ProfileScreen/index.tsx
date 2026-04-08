@@ -26,6 +26,7 @@ import { useCountries, useCities } from '@/features/locations/useLocations';
 import { useTheme } from '@/hooks/useTheme';
 import { setStoredLanguage, type SupportedLanguage } from '@/i18n';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type { HomeStackParamList } from '@/navigation/AppNavigator';
 import { ProfileHero } from './components';
 import { styles } from './styles';
@@ -442,7 +443,7 @@ const pickerStyles = StyleSheet.create({
     borderRadius: radius.md,
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[3],
-    minHeight: 48,
+    minHeight: scale(48),
   },
   selectButtonText: {
     fontSize: typography.size.base,
@@ -454,7 +455,7 @@ const pickerStyles = StyleSheet.create({
     borderTopWidth: 0,
     borderBottomLeftRadius: radius.md,
     borderBottomRightRadius: radius.md,
-    maxHeight: 200,
+    maxHeight: scale(200),
   },
   inlineOption: {
     flexDirection: 'row',
@@ -463,7 +464,7 @@ const pickerStyles = StyleSheet.create({
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[3],
     borderBottomWidth: 1,
-    minHeight: 44,
+    minHeight: scale(44),
   },
   inlineOptionText: {
     fontSize: typography.size.sm,

@@ -1,6 +1,8 @@
 import { Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Feather } from '@expo/vector-icons';
+import { iconSize } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import { useTheme } from '@/hooks/useTheme';
 import { useConfirmDialog } from '@/components/common/dialog';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
@@ -113,16 +115,21 @@ export const OrganizerActions = ({
           />
         )}
 
-        {['draft', 'registration'].includes(tournament.status) &&
+        {['registration'].includes(tournament.status) &&
           !canStartTournament && (
             <PrimaryButton
               label={t('detail.actions.addParticipants')}
-              disabled={tournament.status === 'draft'}
               compact
               isDark={isDark}
               style={btnStyle}
               onPress={onInvite}
-              icon={<Feather name='plus' size={16} color={tk.text.onPrimary} />}
+              icon={
+                <Feather
+                  name='plus'
+                  size={scale(16)}
+                  color={tk.text.onPrimary}
+                />
+              }
             />
           )}
       </View>

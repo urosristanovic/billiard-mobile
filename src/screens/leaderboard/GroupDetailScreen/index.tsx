@@ -23,7 +23,7 @@ import { FloatingActionButton } from '@/components/common/buttons/FloatingAction
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
 import { detailStyles } from '../shared/detailStyles';
 import { MemberRow } from '../shared/MemberRow';
-import { spacing } from '@/constants/theme';
+import { spacing, iconSize } from '@/constants/theme';
 import { Feather } from '@expo/vector-icons';
 
 type Props = NativeStackScreenProps<LeaderboardStackParamList, 'GroupDetail'>;
@@ -185,7 +185,7 @@ const GroupDetailScreen = ({ route, navigation }: Props) => {
           <View style={{ flex: 1 }} />
           <FloatingActionButton
             label={t('groups.addMember')}
-            icon={<Feather name='plus' size={18} />}
+            icon={<Feather name='plus' size={iconSize.md} />}
             onPress={() => navigation.push('UserSearch', { groupId })}
           />
         </View>

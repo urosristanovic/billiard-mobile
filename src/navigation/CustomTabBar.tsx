@@ -75,7 +75,7 @@ const TabItem = ({
             styles.iconWrap,
             {
               backgroundColor: isFocused
-                ? `${tk.primary[500]}1A`
+                ? tk.primaryTint.activeIcon
                 : 'transparent',
             },
           ]}
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
   iconWrap: {
     padding: spacing[3],
     borderRadius: radius['full'],
+    overflow: 'hidden',
   },
   label: {
     fontSize: typography.size.xs,

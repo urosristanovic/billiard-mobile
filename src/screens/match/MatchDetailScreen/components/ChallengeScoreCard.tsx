@@ -3,7 +3,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@/components/common/buttons';
-import { theme, typography, spacing, radius } from '@/constants/theme';
+import { theme, typography, spacing, radius, iconSize } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import { useTheme } from '@/hooks/useTheme';
 import type { Match } from '@/types/match';
 import { styles as sharedStyles } from '../styles';
@@ -50,7 +51,7 @@ const ScoreAdjuster = ({
         accessibilityRole='button'
         accessibilityLabel={`${playerName} minus`}
       >
-        <Feather name='minus' size={18} color={tk.text.secondary} />
+        <Feather name='minus' size={iconSize.md} color={tk.text.secondary} />
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -66,7 +67,7 @@ const ScoreAdjuster = ({
         accessibilityRole='button'
         accessibilityLabel={`${playerName} plus`}
       >
-        <Feather name='plus' size={18} color={tk.text.secondary} />
+        <Feather name='plus' size={iconSize.md} color={tk.text.secondary} />
       </TouchableOpacity>
     </View>
   </View>
@@ -233,7 +234,7 @@ export const ChallengeScoreCard = ({
               <View style={styles.beerLabelContent}>
                 <MaterialCommunityIcons
                   name='beer-outline'
-                  size={14}
+                  size={iconSize.sm}
                   color={tk.text.secondary}
                 />
                 <Text
@@ -257,7 +258,7 @@ export const ChallengeScoreCard = ({
                     },
                   ]}
                 >
-                  <Feather name='minus' size={14} color={tk.text.secondary} />
+                  <Feather name='minus' size={iconSize.sm} color={tk.text.secondary} />
                 </TouchableOpacity>
                 <Text
                   style={[
@@ -278,7 +279,7 @@ export const ChallengeScoreCard = ({
                     },
                   ]}
                 >
-                  <Feather name='plus' size={14} color={tk.text.secondary} />
+                  <Feather name='plus' size={iconSize.sm} color={tk.text.secondary} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -320,8 +321,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   avatar: {
-    width: 52,
-    height: 52,
+    width: scale(52),
+    height: scale(52),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',

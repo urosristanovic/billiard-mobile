@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   content: {
-    minHeight: 460,
+    minHeight: scale(460),
     gap: spacing[4],
   },
   sectionLabel: {
@@ -29,8 +30,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   otherStepButton: {
-    width: 48,
-    height: 48,
+    width: scale(48),
+    height: scale(48),
     borderRadius: radius.full,
     borderWidth: 1,
     alignItems: 'center',
@@ -43,7 +44,7 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.6,
   },
   messageInput: {
-    minHeight: 80,
+    minHeight: scale(80),
     textAlignVertical: 'top',
   },
   errorText: {

@@ -3,7 +3,8 @@ import { Image } from 'expo-image';
 import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { LeaderboardEntry } from '@/types/rating';
-import { spacing, radius, typography } from '@/constants/theme';
+import { spacing, radius, typography, iconSize } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 interface Props {
   entry: LeaderboardEntry;
@@ -25,7 +26,7 @@ const TrendIndicator = ({ change }: { change: number | null }) => {
     <View style={styles.trendRow}>
       <Feather
         name={isUp ? 'arrow-up-right' : 'arrow-down-right'}
-        size={12}
+        size={iconSize.xs}
         color={color}
       />
       <Text style={[styles.trendText, { color }]}>
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
     gap: spacing[3],
   },
   rankWrap: {
-    width: 20,
+    width: scale(20),
     alignItems: 'center',
   },
   rank: {
@@ -154,8 +155,8 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   avatar: {
-    width: 40,
-    height: 40,
+    width: scale(40),
+    height: scale(40),
     borderRadius: radius.full,
     borderWidth: 1,
   },

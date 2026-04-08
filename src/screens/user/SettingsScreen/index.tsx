@@ -11,7 +11,8 @@ import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { DangerButton } from '@/components/common/buttons';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
-import { typography, spacing, radius } from '@/constants/theme';
+import { typography, spacing, radius, iconSize } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useTheme } from '@/hooks/useTheme';
 import { API_CONFIG } from '@/config/api';
@@ -133,7 +134,7 @@ const SettingsScreen = ({ navigation }: Props) => {
       ]}
     >
       <View style={[styles.iconCircle, { backgroundColor: item.iconBg }]}>
-        <Feather name={item.icon} size={20} color={item.iconColor} />
+        <Feather name={item.icon} size={scale(20)} color={item.iconColor} />
       </View>
 
       <View style={styles.cardBody}>
@@ -150,7 +151,7 @@ const SettingsScreen = ({ navigation }: Props) => {
         ) : null}
       </View>
 
-      <Feather name='chevron-right' size={18} color={tk.text.muted} />
+      <Feather name='chevron-right' size={iconSize.md} color={tk.text.muted} />
     </TouchableOpacity>
   );
 
@@ -206,8 +207,8 @@ const styles = StyleSheet.create({
     paddingVertical: spacing[2],
   },
   iconCircle: {
-    width: 44,
-    height: 44,
+    width: scale(44),
+    height: scale(44),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',

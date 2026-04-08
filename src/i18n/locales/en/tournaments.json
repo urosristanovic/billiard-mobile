@@ -12,7 +12,8 @@
       "title": "Pending",
       "invitation": "Invitation",
       "request": "Join Request",
-      "empty": "No pending requests"
+      "empty": "No pending invitations",
+      "emptyDesc": "Tournament invitations and join requests will appear here"
     },
     "active": {
       "title": "Active",
@@ -21,7 +22,8 @@
     },
     "past": {
       "title": "Past",
-      "empty": "No past tournaments",
+      "empty": "No past tournaments yet",
+      "emptyDesc": "Completed tournaments will be shown here",
       "winnerBadge": "Winner",
       "winnerDetail": "You won this tournament"
     },

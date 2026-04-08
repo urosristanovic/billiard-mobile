@@ -12,7 +12,8 @@
       "title": "Pendientes",
       "invitation": "Invitación",
       "request": "Solicitud de unión",
-      "empty": "Sin solicitudes pendientes"
+      "empty": "Sin invitaciones pendientes",
+      "emptyDesc": "Las invitaciones y solicitudes de unión aparecerán aquí"
     },
     "active": {
       "title": "Activos",
@@ -21,7 +22,8 @@
     },
     "past": {
       "title": "Pasados",
-      "empty": "Sin torneos pasados",
+      "empty": "Aún no hay torneos pasados",
+      "emptyDesc": "Los torneos completados se mostrarán aquí",
       "winnerBadge": "Ganador",
       "winnerDetail": "Ganaste este torneo"
     },

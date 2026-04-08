@@ -15,6 +15,7 @@ if (Platform.OS === 'android') {
 }
 import { useTranslation } from 'react-i18next';
 import { Feather } from '@expo/vector-icons';
+import { iconSize } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 import { DangerButton, TournamentStatusBadge } from '@/components/common';
 import {
@@ -136,7 +137,7 @@ export const TournamentMeta = ({
           <View style={styles.metaDetails}>
             {location ? (
               <View style={styles.metaDetailRow}>
-                <Feather name='map-pin' size={14} color={tk.text.muted} />
+                <Feather name='map-pin' size={iconSize.sm} color={tk.text.muted} />
                 <Text
                   style={[styles.metaDetailText, { color: tk.text.primary }]}
                 >
@@ -145,7 +146,7 @@ export const TournamentMeta = ({
               </View>
             ) : null}
             <View style={styles.metaDetailRow}>
-              <Feather name='calendar' size={14} color={tk.text.muted} />
+              <Feather name='calendar' size={iconSize.sm} color={tk.text.muted} />
               <Text style={[styles.metaDetailText, { color: tk.text.primary }]}>
                 {new Date(scheduledAt).toLocaleString(undefined, {
                   year: 'numeric',
@@ -157,7 +158,7 @@ export const TournamentMeta = ({
               </Text>
             </View>
             <View style={styles.metaDetailRow}>
-              <Feather name='user' size={14} color={tk.text.muted} />
+              <Feather name='user' size={iconSize.sm} color={tk.text.muted} />
               <Text style={[styles.metaDetailText, { color: tk.text.primary }]}>
                 {organizerProfile.displayName || organizerProfile.username}
               </Text>
@@ -183,7 +184,7 @@ export const TournamentMeta = ({
 
       <Pressable onPress={toggle} style={styles.metaCollapseBtn} hitSlop={8}>
         <Animated.View style={{ transform: [{ rotate: chevronRotate }] }}>
-          <Feather name='chevron-up' size={24} color={tk.primary[600]} />
+          <Feather name='chevron-up' size={iconSize.lg} color={tk.primary[600]} />
         </Animated.View>
       </Pressable>
     </View>

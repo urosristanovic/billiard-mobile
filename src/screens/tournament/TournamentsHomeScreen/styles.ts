@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { typography, spacing } from '@/constants/theme';
+import { scale, verticalScale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   stickyHeader: {},
@@ -36,7 +37,7 @@ export const styles = StyleSheet.create({
   list: {
     padding: spacing[4],
     gap: spacing[3],
-    paddingBottom: 160,
+    paddingBottom: verticalScale(160),
   },
   cardList: {
     gap: spacing[2],

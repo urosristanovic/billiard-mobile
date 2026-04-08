@@ -14,6 +14,7 @@ import {
   spacing,
   minTouchTarget,
 } from '@/constants/theme';
+import { moderateScale as ms, scale as scaleSize } from '@/utils/scale';
 
 interface GhostButtonProps {
   label: string;
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing[1],
   },
   sizeSm: {
-    minHeight: 32,
+    minHeight: ms(32),
   },
   sizeLg: {
     minHeight: minTouchTarget,
@@ -148,8 +149,8 @@ const styles = StyleSheet.create({
     fontSize: typography.size.base,
   },
   badge: {
-    width: 16,
-    height: 16,
+    width: scaleSize(16),
+    height: scaleSize(16),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',

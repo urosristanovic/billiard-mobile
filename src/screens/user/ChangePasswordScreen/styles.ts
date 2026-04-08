@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { spacing, typography } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,22 +9,15 @@ export const styles = StyleSheet.create({
     gap: spacing[8],
     justifyContent: 'center',
   },
-  header: {
+  subtitle: {
     gap: spacing[3],
   },
-  title: {
-    fontSize: typography.size['3xl'],
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-    letterSpacing: 1.1,
-    textTransform: 'uppercase',
-  },
-  subtitle: {
+  subtitleText: {
     fontSize: typography.size.base,
     fontFamily: typography.family.body,
   },
   divider: {
-    width: 72,
+    width: scale(72),
     height: 2,
   },
   form: {

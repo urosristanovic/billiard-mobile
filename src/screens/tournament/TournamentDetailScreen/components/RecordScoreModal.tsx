@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
-import { theme, typography, spacing, radius, shadows } from '@/constants/theme';
+import { theme, typography, spacing, radius, shadows, iconSize } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import type { TournamentMatch } from '@/types/tournament';
 
 interface ScoreAdjusterProps {
@@ -45,7 +46,7 @@ const ScoreAdjuster = ({
         accessibilityRole='button'
         accessibilityLabel={`${playerName} minus`}
       >
-        <Feather name='minus' size={18} color={tk.text.secondary} />
+        <Feather name='minus' size={iconSize.md} color={tk.text.secondary} />
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -61,7 +62,7 @@ const ScoreAdjuster = ({
         accessibilityRole='button'
         accessibilityLabel={`${playerName} plus`}
       >
-        <Feather name='plus' size={18} color={tk.text.secondary} />
+        <Feather name='plus' size={iconSize.md} color={tk.text.secondary} />
       </TouchableOpacity>
     </View>
   </View>
@@ -297,7 +298,7 @@ const styles = StyleSheet.create({
     paddingTop: spacing[1],
   },
   vsWrap: {
-    width: 28,
+    width: scale(28),
     justifyContent: 'center',
     alignItems: 'center',
   },

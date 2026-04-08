@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { spacing, typography } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,7 +24,7 @@ export const styles = StyleSheet.create({
     fontFamily: typography.family.body,
   },
   divider: {
-    width: 72,
+    width: scale(72),
     height: 2,
   },
   form: {

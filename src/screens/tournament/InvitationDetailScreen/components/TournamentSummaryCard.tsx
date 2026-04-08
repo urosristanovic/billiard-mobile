@@ -1,10 +1,10 @@
 import { Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { iconSize } from '@/constants/theme';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import {
   TOURNAMENT_FORMAT_LABELS,
-  TOURNAMENT_STATUS_LABELS,
   type TournamentSummary,
 } from '@/types/tournament';
 import { DISCIPLINE_LABELS } from '@/types/match';
@@ -42,7 +42,7 @@ export const TournamentSummaryCard = ({ tournament }: Props) => {
         {TOURNAMENT_FORMAT_LABELS[tournament.format]}
       </Text>
       <Text style={[styles.tournamentMeta, { color: tk.text.secondary }]}>
-        {TOURNAMENT_STATUS_LABELS[tournament.status]} ·{' '}
+        {t(`status.${tournament.status}`)} ·{' '}
         {tournament.participantCount}/{tournament.maxParticipants}{' '}
         {t('detail.participants')}
       </Text>
@@ -52,7 +52,7 @@ export const TournamentSummaryCard = ({ tournament }: Props) => {
         </Text>
       )}
       <View style={styles.nameRow}>
-        <Feather name='calendar' size={14} color={tk.text.muted} />
+        <Feather name='calendar' size={iconSize.sm} color={tk.text.muted} />
         <Text style={[styles.tournamentMeta, { color: tk.text.muted }]}>
           {new Date(tournament.scheduledAt).toLocaleString(undefined, {
             year: 'numeric',

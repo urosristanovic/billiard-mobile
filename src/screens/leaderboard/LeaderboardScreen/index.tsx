@@ -1,9 +1,5 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
-import {
-  FlatList,
-  RefreshControl,
-  View,
-} from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
@@ -26,7 +22,8 @@ import {
 import { LeaderboardEntryRow } from './components/LeaderboardEntryRow';
 import { LeaderboardHeader } from './components/LeaderboardHeader';
 import { ScopeManageRow } from './components/ScopeManageRow';
-import { spacing } from '@/constants/theme';
+import { spacing, iconSize } from '@/constants/theme';
+import { verticalScale, moderateScale } from '@/utils/scale';
 import { styles } from './styles';
 
 type Props = NativeStackScreenProps<
@@ -185,7 +182,10 @@ const LeaderboardScreen = ({ navigation }: Props) => {
         renderItem={renderEntry}
         onEndReached={handleLoadMore}
         onEndReachedThreshold={0.3}
-        contentContainerStyle={{ paddingBottom: 140, paddingTop: 8 }}
+        contentContainerStyle={{
+          paddingBottom: verticalScale(140),
+          paddingTop: moderateScale(8),
+        }}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching && !isLoading}
@@ -239,7 +239,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
         <View style={{ flex: 1 }} />
         <FloatingActionButton
           label={tHome('fab.challenge')}
-          icon={<CueIcon size={18} color={tk.text.onPrimary} />}
+          icon={<CueIcon size={iconSize.md} color={tk.text.onPrimary} />}
           onPress={() => navigation.push('UserSearch')}
           style={{ flex: 1 }}
         />

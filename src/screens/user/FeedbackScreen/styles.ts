@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { radius, spacing, typography } from '@/constants/theme';
+import { scale, moderateScale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   container: {
@@ -23,7 +24,7 @@ export const styles = StyleSheet.create({
     fontFamily: typography.family.body,
   },
   divider: {
-    width: 72,
+    width: scale(72),
     height: 2,
   },
   form: {
@@ -50,24 +51,24 @@ export const styles = StyleSheet.create({
     gap: spacing[3],
   },
   typeRadio: {
-    width: 18,
-    height: 18,
-    borderRadius: 9,
+    width: scale(18),
+    height: scale(18),
+    borderRadius: scale(9),
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
   typeRadioInner: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    width: scale(8),
+    height: scale(8),
+    borderRadius: scale(4),
   },
   typeOptionText: {
     fontSize: typography.size.base,
     fontFamily: typography.family.body,
   },
   messageInput: {
-    minHeight: 120,
+    minHeight: scale(120),
     textAlignVertical: 'top',
     paddingTop: spacing[3],
   },

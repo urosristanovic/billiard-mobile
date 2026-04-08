@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '@/hooks/useTheme';
 import { typography, radius } from '@/constants/theme';
+import { moderateScale, scale } from '@/utils/scale';
 
 export const AppLogo = () => {
   const { tk } = useTheme();
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: moderateScale(10),
   },
   ballShadowWrap: {
     shadowColor: '#F59E0B',
@@ -53,8 +54,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.full,
   },
   ballOuter: {
-    width: 32,
-    height: 32,
+    width: scale(32),
+    height: scale(32),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',
@@ -62,16 +63,16 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(253, 211, 77, 0.3)',
   },
   ballInner: {
-    width: 16,
-    height: 16,
+    width: scale(16),
+    height: scale(16),
     borderRadius: radius.full,
     alignItems: 'center',
     justifyContent: 'center',
   },
   ballNumber: {
-    fontSize: 10,
+    fontSize: moderateScale(10, 0.25),
     fontFamily: typography.family.display,
-    lineHeight: 14,
+    lineHeight: moderateScale(14, 0.25),
   },
   wordmark: {
     fontSize: typography.size.xl,

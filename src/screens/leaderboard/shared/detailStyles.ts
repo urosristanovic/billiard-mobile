@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 
 export const detailStyles = StyleSheet.create({
   header: {
@@ -53,8 +54,8 @@ export const detailStyles = StyleSheet.create({
     gap: spacing[3],
   },
   memberAvatar: {
-    width: 44,
-    height: 44,
+    width: scale(44),
+    height: scale(44),
     borderRadius: radius.full,
     borderWidth: 1,
     alignItems: 'center',
