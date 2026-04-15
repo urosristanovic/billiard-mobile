@@ -29,7 +29,6 @@ import { styles } from '../styles';
 
 interface TournamentMetaProps {
   status: TournamentStatus;
-  isRated: boolean;
   discipline: Discipline;
   format: TournamentFormat;
   location: string | null;
@@ -41,7 +40,6 @@ interface TournamentMetaProps {
 
 export const TournamentMeta = ({
   status,
-  isRated,
   discipline,
   format,
   location,
@@ -99,21 +97,6 @@ export const TournamentMeta = ({
     <View style={styles.metaSection}>
       <View style={styles.metaRow}>
         <TournamentStatusBadge status={status} isDark={isDark} />
-        {isRated && (
-          <View
-            style={[
-              styles.statusBadge,
-              {
-                backgroundColor: tk.surface.overlay,
-                borderColor: tk.primary[500],
-              },
-            ]}
-          >
-            <Text style={[styles.statusText, { color: tk.primary[500] }]}>
-              {t('ratedBadge')}
-            </Text>
-          </View>
-        )}
         <Text style={[styles.metaItem, { color: tk.text.secondary }]}>
           {DISCIPLINE_LABELS[discipline]}
         </Text>

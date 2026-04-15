@@ -177,7 +177,6 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
 
         <TournamentMeta
           status={tournament.status}
-          isRated={tournament.isRated}
           discipline={tournament.discipline}
           format={tournament.format}
           location={tournament.location}

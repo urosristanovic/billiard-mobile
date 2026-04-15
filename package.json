@@ -4,13 +4,18 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
     "web": "expo start --web",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "type-check": "tsc --noEmit",
-    "lint": "eslint . --ext .ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx",
+    "ios": "expo run:ios --device \"iPhone 17 Pro\"",
+    "ios:small": "expo run:ios --device \"iPhone SE (3rd generation)\"",
+    "ios:base": "expo run:ios --device \"iPhone 15\"",
+    "ios:large": "expo run:ios --device \"iPhone 15 Pro Max\"",
+    "ios:ipad": "expo run:ios --device \"iPad Pro 11-inch (M4)\"",
+    "ios:ipad:large": "expo run:ios --device \"iPad Pro 13-inch (M4)\""
   },
   "dependencies": {
     "@expo-google-fonts/barlow": "^0.4.1",

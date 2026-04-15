@@ -49,7 +49,19 @@ export const MatchStatusBadge = ({ status }: MatchStatusBadgeProps) => {
 
   const badge = (
     <View style={[styles.badge, { backgroundColor: bg }]}>
-      <Text style={[styles.badgeText, { color }]}>{t(`status.${status}`)}</Text>
+      {t(`status.${status}`)
+        .split(' ')
+        .map((word, i) => (
+          <Text
+            key={i}
+            numberOfLines={1}
+            adjustsFontSizeToFit
+            minimumFontScale={0.7}
+            style={[styles.badgeText, { color }]}
+          >
+            {word}
+          </Text>
+        ))}
     </View>
   );
 

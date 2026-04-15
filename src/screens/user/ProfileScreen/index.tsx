@@ -115,7 +115,10 @@ const ProfileScreen = ({ navigation, route }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <ScreenHeader onBack={() => navigation.goBack()} title={tAuth('settings.accountSettings')} />
+      <ScreenHeader
+        onBack={() => navigation.goBack()}
+        title={tAuth('settings.accountSettings')}
+      />
       <ScrollView contentContainerStyle={styles.container}>
         <ProfileHero user={user} isDark={isDark} />
       </ScrollView>
@@ -138,6 +141,7 @@ const ProfileScreen = ({ navigation, route }: Props) => {
           label={tAuth('profile.editButton')}
           onPress={handleOpenEdit}
           isDark={isDark}
+          labelStyle={{ fontSize: typography.size.sm }}
           style={styles.bottomBarButton}
         />
       </View>

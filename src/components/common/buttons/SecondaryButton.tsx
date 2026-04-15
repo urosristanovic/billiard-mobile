@@ -5,6 +5,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  type TextStyle,
   type ViewStyle,
 } from 'react-native';
 import {
@@ -26,6 +27,7 @@ interface SecondaryButtonProps {
   disabled?: boolean;
   onPress?: () => void;
   style?: ViewStyle;
+  labelStyle?: TextStyle;
   accessibilityLabel?: string;
 }
 
@@ -39,6 +41,7 @@ export const SecondaryButton = ({
   disabled,
   onPress,
   style,
+  labelStyle,
   accessibilityLabel,
 }: SecondaryButtonProps) => {
   const t = isDark ? theme.dark : theme.light;
@@ -96,6 +99,7 @@ export const SecondaryButton = ({
                 styles.label,
                 isXs && styles.labelXs,
                 { color: t.primary[500] },
+                labelStyle,
               ]}
               numberOfLines={1}
             >
