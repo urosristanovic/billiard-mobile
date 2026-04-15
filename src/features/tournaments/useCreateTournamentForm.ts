@@ -48,7 +48,7 @@ const DEFAULT_STATE: CreateTournamentFormState = {
   maxParticipants: '8',
   scheduledAt: '',
   location: '',
-  isRated: false,
+  isRated: true,
 };
 
 function buildInitialState(

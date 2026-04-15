@@ -1,5 +1,31 @@
 {
   "title": "Leaderboard",
+  "myLeaderboards": "My Leaderboards",
+  "noLeaderboardsTitle": "No leaderboards yet",
+  "noLeaderboardsDesc": "You haven't joined or created any leaderboards yet. Get started below.",
+  "createLeaderboard": "Create Leaderboard",
+  "joinLeaderboard": "Join Leaderboard",
+  "filterVisibility": "Visibility",
+  "filterIncludeProvisional": "Include Provisional",
+  "filterAll": "All",
+  "filterPublic": "Public",
+  "filterPrivate": "Private",
+  "filterLeaderboard": "Leaderboard",
+  "noPublicLeaderboards": "No public leaderboards",
+  "noPrivateLeaderboards": "No private leaderboards",
+  "pendingBadge": "{{count}} pending",
+  "leaveConfirmTitle": "Leave leaderboard?",
+  "leaveConfirmMessage": "You will be removed from this leaderboard.",
+  "contextMenu": {
+    "open": "Open",
+    "createNew": "Create New Leaderboard",
+    "seeDetails": "See Details",
+    "edit": "Edit",
+    "setDefault": "Set as Default",
+    "setDefaultSuccess": "Default leaderboard updated",
+    "setDefaultError": "Failed to set default leaderboard",
+    "leave": "Leave"
+  },
   "scopes": {
     "global": "Global",
     "country": "Country",
@@ -10,20 +36,8 @@
   "disciplines": {
     "label": "Discipline"
   },
-  "filters": {
-    "title": "Filter",
-    "reset": "Reset",
-    "close": "Close",
-    "apply": "Apply",
-    "scope": "Scope",
-    "discipline": "Discipline",
-    "group": "Group",
-    "includeProvisional": "Include provisional",
-    "selectGroup": "Select group",
-    "selectLeaderboard": "Select leaderboard"
-  },
   "createFab": "Create Leaderboard",
-  "createGroup": "Create Group",
+  "joinFab": "Join",
   "entry": {
     "provisional": "P",
     "provisionalLabel": "Provisional",
@@ -32,17 +46,14 @@
     "rating": "Rating",
     "rank": "#{{rank}}"
   },
-  "blocked": {
-    "noCountry": "Set your country in account settings to view country rankings",
-    "noCity": "Set your city in account settings to view city rankings",
-    "noGroups": "Create or join a group to view group rankings",
-    "noCustomLeaderboards": "Create a custom leaderboard to view custom rankings"
-  },
   "empty": "No players yet",
-  "emptyDesc": "Be the first to complete a rated match in this scope",
+  "emptyDesc": "Be the first to complete a rated match",
+  "emptyRatedOnly": "All players are still provisional",
+  "emptyRatedOnlyDesc": "Everyone here is still building their rating. More matches needed to earn a confirmed ranking.",
   "loadMore": "Load more",
   "loading": "Loading leaderboard...",
   "loadFailed": "Failed to load leaderboard",
+  "manage": "Manage",
   "playerProfile": {
     "title": "User Profile",
     "ratingsSection": "Ratings",
@@ -60,7 +71,6 @@
     "losses": "Losses",
     "ratingRecord": "{{wins}}W {{losses}}L · {{games}} games"
   },
-  "manage": "Manage",
   "userSearch": {
     "title": "Find Player",
     "placeholder": "Search by name or username...",
@@ -70,5 +80,27 @@
     "added": "Added",
     "alreadyMember": "Member",
     "challenge": "Challenge"
+  },
+  "browse": {
+    "title": "Join Leaderboard",
+    "searchPlaceholder": "Search leaderboards...",
+    "suggested": "Suggested",
+    "join": "Join",
+    "requestToJoin": "Request",
+    "pending": "Pending",
+    "joined": "Joined",
+    "setAsDefault": "Set as default",
+    "empty": "No leaderboards found",
+    "emptyDesc": "Try a different name or create your own",
+    "emptyInitial": "No suggested leaderboards",
+    "emptyInitialDesc": "Search for a leaderboard by name to get started",
+    "public": "Public",
+    "private": "Private",
+    "members": "{{count}} members"
+  },
+  "pending": {
+    "sectionTitle": "Pending Requests",
+    "accept": "Accept",
+    "decline": "Decline"
   }
 }
