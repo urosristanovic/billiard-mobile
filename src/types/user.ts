@@ -15,6 +15,7 @@ export interface User extends BaseEntity {
   countryName: string | null;
   cityName: string | null;
   locationChangedAt: string | null;
+  defaultLeaderboardId: string | null;
 }
 
 export interface SignupInput {
@@ -36,4 +37,5 @@ export interface UpdateProfileInput {
   bio?: string | null;
   countryId?: string | null;
   cityId?: string | null;
+  defaultLeaderboardId?: string | null;
 }

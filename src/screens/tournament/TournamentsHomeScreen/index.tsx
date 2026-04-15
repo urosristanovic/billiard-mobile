@@ -183,7 +183,7 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
         <FloatingActionButton
           label={t('home.joinButton')}
           icon={
-            <Feather name='plus' size={iconSize.md} color={tk.text.onPrimary} />
+            <Feather name='award' size={iconSize.md} color={tk.text.onPrimary} />
           }
           onPress={() => navigation.navigate('BrowseTournaments')}
           style={{ flex: 1 }}

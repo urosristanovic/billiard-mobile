@@ -28,9 +28,14 @@ export const QUERY_KEYS = {
   GROUP_MEMBERS: (id: string) => ['groups', id, 'members'] as const,
 
   CUSTOM_LEADERBOARDS: ['custom-leaderboards'] as const,
+  CUSTOM_LEADERBOARDS_LIST: (visibility?: 'public' | 'private') =>
+    ['custom-leaderboards', 'list', visibility ?? 'all'] as const,
+  LEADERBOARDS_BROWSE: (q: string) => ['custom-leaderboards', 'browse', q] as const,
   CUSTOM_LEADERBOARD_DETAIL: (id: string) => ['custom-leaderboards', id] as const,
   CUSTOM_LEADERBOARD_MEMBERS: (id: string) =>
     ['custom-leaderboards', id, 'members'] as const,
+  CUSTOM_LEADERBOARD_PENDING: (id: string) =>
+    ['custom-leaderboards', id, 'pending'] as const,
 
   CHALLENGES: ['challenges'] as const,
   CHALLENGE_DETAIL: (id: string) => ['challenges', id] as const,

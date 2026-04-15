@@ -1,5 +1,31 @@
 {
   "title": "Rang lista",
+  "myLeaderboards": "Moje Rang Liste",
+  "noLeaderboardsTitle": "Još nema rang listi",
+  "noLeaderboardsDesc": "Još niste kreirali ni se pridružili nijednoj rang listi. Počnite ispod.",
+  "createLeaderboard": "Kreiraj Rang Listu",
+  "joinLeaderboard": "Pridruži se Rang Listi",
+  "filterVisibility": "Vidljivost",
+  "filterIncludeProvisional": "Uključi Privremene",
+  "filterAll": "Sve",
+  "filterPublic": "Javno",
+  "filterPrivate": "Privatno",
+  "filterLeaderboard": "Rang Lista",
+  "noPublicLeaderboards": "Nema javnih rang listi",
+  "noPrivateLeaderboards": "Nema privatnih rang listi",
+  "pendingBadge": "{{count}} na čekanju",
+  "leaveConfirmTitle": "Napustiti rang listu?",
+  "leaveConfirmMessage": "Bićete uklonjen sa ove rang liste.",
+  "contextMenu": {
+    "open": "Otvori",
+    "createNew": "Kreiraj Novu Rang Listu",
+    "seeDetails": "Vidi Detalje",
+    "edit": "Uredi",
+    "setDefault": "Postavi kao Podrazumevano",
+    "setDefaultSuccess": "Podrazumevana rang lista ažurirana",
+    "setDefaultError": "Greška pri postavljanju podrazumevane rang liste",
+    "leave": "Napusti"
+  },
   "scopes": {
     "global": "Globalno",
     "country": "Zemlja",
@@ -23,6 +49,7 @@
     "selectLeaderboard": "Izaberi listu"
   },
   "createFab": "Kreiraj listu",
+  "joinFab": "Pridruži se",
   "createGroup": "Kreiraj grupu",
   "entry": {
     "provisional": "P",
@@ -40,6 +67,8 @@
   },
   "empty": "Još nema igrača",
   "emptyDesc": "Budite prvi koji završi rangirani meč u ovom opsegu",
+  "emptyRatedOnly": "Svi igrači su još uvek privremeni",
+  "emptyRatedOnlyDesc": "Svi ovde još uvek grade svoj rejting. Potrebno je više mečeva za potvrđeni plasman.",
   "loadMore": "Učitaj više",
   "loading": "Učitavanje rang liste...",
   "loadFailed": "Greška pri učitavanju rang liste",
@@ -61,6 +90,28 @@
     "ratingRecord": "{{wins}}P {{losses}}G · {{games}} mečeva"
   },
   "manage": "Upravljaj",
+  "browse": {
+    "title": "Pridruži se Rang Listi",
+    "searchPlaceholder": "Pretraži rang liste...",
+    "suggested": "Predloženo",
+    "join": "Pridruži se",
+    "requestToJoin": "Zahtev",
+    "pending": "Na čekanju",
+    "joined": "Pridružen",
+    "setAsDefault": "Postavi kao podrazumevano",
+    "empty": "Nisu pronađene rang liste",
+    "emptyDesc": "Pokušajte sa drugim imenom ili kreirajte svoju",
+    "emptyInitial": "Nema predloženih rang listi",
+    "emptyInitialDesc": "Pretražite rang listu po imenu za početak",
+    "public": "Javno",
+    "private": "Privatno",
+    "members": "{{count}} članova"
+  },
+  "pending": {
+    "sectionTitle": "Zahtevi na Čekanju",
+    "accept": "Prihvati",
+    "decline": "Odbij"
+  },
   "userSearch": {
     "title": "Pronađi igrača",
     "placeholder": "Pretraži po imenu ili korisničkom imenu...",

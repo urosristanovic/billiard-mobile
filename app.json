@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.billiardtracker.mobile",
-      "buildNumber": "9",
+      "buildNumber": "10",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -28,7 +28,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "package": "com.billiardtracker.mobile",
-      "versionCode": 6,
+      "versionCode": 7,
       "predictiveBackGestureEnabled": false
     },
     "web": {

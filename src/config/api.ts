@@ -82,12 +82,19 @@ export const API_ENDPOINTS = {
   customLeaderboards: {
     list: api('/api/custom-leaderboards'),
     create: api('/api/custom-leaderboards'),
+    search: api('/api/custom-leaderboards/search'),
     detail: (id: string) => api(`/api/custom-leaderboards/${id}`),
     update: (id: string) => api(`/api/custom-leaderboards/${id}`),
     delete: (id: string) => api(`/api/custom-leaderboards/${id}`),
+    join: (id: string) => api(`/api/custom-leaderboards/${id}/join`),
+    leave: (id: string) => api(`/api/custom-leaderboards/${id}/leave`),
     members: (id: string) => api(`/api/custom-leaderboards/${id}/members`),
     addMember: (id: string) => api(`/api/custom-leaderboards/${id}/members`),
-    removeMember: (id: string, userId: string) => api(`/api/custom-leaderboards/${id}/members/${userId}`),
+    removeMember: (id: string, userId: string) =>
+      api(`/api/custom-leaderboards/${id}/members/${userId}`),
+    pending: (id: string) => api(`/api/custom-leaderboards/${id}/pending`),
+    respondToPending: (id: string, userId: string) =>
+      api(`/api/custom-leaderboards/${id}/pending/${userId}`),
   },
 
   // Challenges

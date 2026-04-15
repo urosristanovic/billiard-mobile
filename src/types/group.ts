@@ -43,12 +43,22 @@ export interface CustomLeaderboard {
   isPublic: boolean;
   memberCount: number;
   createdAt: string;
+  /** Present in list responses */
+  isCreator?: boolean;
+  /** Present in list responses for leaderboards the user created */
+  pendingCount?: number;
 }
+
+export interface BrowseLeaderboardResult extends CustomLeaderboard {
+  isMember: boolean;
+  isPending: boolean;
+}
+
+export type MembershipStatus = 'active' | 'pending';
 
 export interface CreateCustomLeaderboardInput {
   name: string;
   description?: string;
-  groupId?: string;
   provisionalThreshold?: number;
   isPublic?: boolean;
 }

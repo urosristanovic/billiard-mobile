@@ -24,10 +24,9 @@ import {
 } from '@/screens/tournament';
 
 import LeaderboardMainScreen from '@/screens/leaderboard/LeaderboardScreen';
-import CreateGroupScreen from '@/screens/leaderboard/CreateGroupScreen';
-import GroupDetailScreen from '@/screens/leaderboard/GroupDetailScreen';
 import CreateCustomLeaderboardScreen from '@/screens/leaderboard/CreateCustomLeaderboardScreen';
 import CustomLeaderboardDetailScreen from '@/screens/leaderboard/CustomLeaderboardDetailScreen';
+import JoinLeaderboardScreen from '@/screens/leaderboard/JoinLeaderboardScreen';
 
 // ─── Stack param lists ────────────────────────────────────────────────────────
 
@@ -46,11 +45,10 @@ export type HomeStackParamList = {
 export type LeaderboardStackParamList = {
   LeaderboardMain: undefined;
   PlayerProfile: { userId: string };
-  UserSearch: { groupId?: string; leaderboardId?: string } | undefined;
-  GroupDetail: { groupId: string };
-  CreateGroup: undefined;
+  UserSearch: { leaderboardId?: string } | undefined;
   CustomLeaderboardDetail: { leaderboardId: string };
   CreateCustomLeaderboard: undefined;
+  JoinLeaderboard: undefined;
 };
 
 export type TournamentsStackParamList = {
@@ -115,10 +113,9 @@ const LeaderboardNavigator = () => (
     <LeaderboardStack.Screen name='LeaderboardMain' component={LeaderboardMainScreen} />
     <LeaderboardStack.Screen name='PlayerProfile' component={PlayerProfileScreen} />
     <LeaderboardStack.Screen name='UserSearch' component={UserSearchScreen} />
-    <LeaderboardStack.Screen name='GroupDetail' component={GroupDetailScreen} />
-    <LeaderboardStack.Screen name='CreateGroup' component={CreateGroupScreen} />
     <LeaderboardStack.Screen name='CustomLeaderboardDetail' component={CustomLeaderboardDetailScreen} />
     <LeaderboardStack.Screen name='CreateCustomLeaderboard' component={CreateCustomLeaderboardScreen} />
+    <LeaderboardStack.Screen name='JoinLeaderboard' component={JoinLeaderboardScreen} />
   </LeaderboardStack.Navigator>
 );
 

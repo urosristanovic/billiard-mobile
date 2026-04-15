@@ -1,14 +1,16 @@
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { scale } from '@/utils/scale';
 import { useTheme } from '@/hooks/useTheme';
 import { GhostButton } from '@/components/common/buttons/GhostButton';
 import { Loading } from '@/components/common/states';
+import { typography, spacing, radius } from '@/constants/theme';
 import { detailStyles } from './detailStyles';
 
 type MemberRowProps = {
   displayName: string;
   username: string;
   subtitle?: string;
+  isAdmin?: boolean;
   actionLabel?: string;
   onAction?: () => void;
   isPending?: boolean;
@@ -18,6 +20,7 @@ export const MemberRow = ({
   displayName,
   username,
   subtitle,
+  isAdmin = false,
   actionLabel,
   onAction,
   isPending = false,
@@ -44,9 +47,31 @@ export const MemberRow = ({
         </Text>
       </View>
       <View style={detailStyles.memberInfo}>
-        <Text style={[detailStyles.memberName, { color: tk.text.primary }]}>
-          {displayName}
-        </Text>
+        <View style={styles.nameRow}>
+          <Text
+            style={[detailStyles.memberName, { color: tk.text.primary }]}
+            numberOfLines={1}
+          >
+            {displayName}
+          </Text>
+          {isAdmin && (
+            <View
+              style={[
+                styles.adminBadge,
+                { borderColor: tk.border.default },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.adminBadgeText,
+                  { color: tk.text.muted },
+                ]}
+              >
+                ADMIN
+              </Text>
+            </View>
+          )}
+        </View>
         <Text style={[detailStyles.memberUsername, { color: tk.text.muted }]}>
           @{username}
           {subtitle ? ` · ${subtitle}` : null}
@@ -60,3 +85,24 @@ export const MemberRow = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[2],
+    flexWrap: 'nowrap',
+  },
+  adminBadge: {
+    borderWidth: 1,
+    borderRadius: radius.full,
+    paddingHorizontal: spacing[2],
+    paddingVertical: 2,
+  },
+  adminBadgeText: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.heading,
+    fontWeight: typography.weight.bold,
+    letterSpacing: 0.8,
+  },
+});

@@ -2,6 +2,7 @@ import { API_ENDPOINTS } from '@/config/api';
 import { fetchWithTimeout } from '@/lib/fetchWithTimeout';
 import type { ApiResponse } from '@/types/api';
 import type {
+  BrowseLeaderboardResult,
   CustomLeaderboard,
   CreateCustomLeaderboardInput,
   UpdateCustomLeaderboardInput,
@@ -26,11 +27,20 @@ async function parseResponse<T>(res: Response): Promise<T> {
 }
 
 export const customLeaderboardService = {
-  async list(token: string): Promise<CustomLeaderboard[]> {
-    const res = await fetchWithTimeout(API_ENDPOINTS.customLeaderboards.list, {
-      headers: buildHeaders(token),
-    });
+  async list(token: string, visibility?: 'public' | 'private'): Promise<CustomLeaderboard[]> {
+    const url = visibility
+      ? `${API_ENDPOINTS.customLeaderboards.list}?visibility=${visibility}`
+      : API_ENDPOINTS.customLeaderboards.list;
+    const res = await fetchWithTimeout(url, { headers: buildHeaders(token) });
     return parseResponse<CustomLeaderboard[]>(res);
+  },
+
+  async search(token: string, query?: string): Promise<BrowseLeaderboardResult[]> {
+    const url = query
+      ? `${API_ENDPOINTS.customLeaderboards.search}?q=${encodeURIComponent(query)}`
+      : API_ENDPOINTS.customLeaderboards.search;
+    const res = await fetchWithTimeout(url, { headers: buildHeaders(token) });
+    return parseResponse<BrowseLeaderboardResult[]>(res);
   },
 
   async create(token: string, input: CreateCustomLeaderboardInput): Promise<CustomLeaderboard> {
@@ -49,7 +59,11 @@ export const customLeaderboardService = {
     return parseResponse<CustomLeaderboard>(res);
   },
 
-  async update(token: string, id: string, input: UpdateCustomLeaderboardInput): Promise<CustomLeaderboard> {
+  async update(
+    token: string,
+    id: string,
+    input: UpdateCustomLeaderboardInput,
+  ): Promise<CustomLeaderboard> {
     const res = await fetchWithTimeout(API_ENDPOINTS.customLeaderboards.update(id), {
       method: 'PUT',
       headers: jsonHeaders(token),
@@ -61,6 +75,22 @@ export const customLeaderboardService = {
   async delete(token: string, id: string): Promise<void> {
     const res = await fetchWithTimeout(API_ENDPOINTS.customLeaderboards.delete(id), {
       method: 'DELETE',
+      headers: buildHeaders(token),
+    });
+    await parseResponse<null>(res);
+  },
+
+  async join(token: string, id: string): Promise<{ status: string }> {
+    const res = await fetchWithTimeout(API_ENDPOINTS.customLeaderboards.join(id), {
+      method: 'POST',
+      headers: buildHeaders(token),
+    });
+    return parseResponse<{ status: string }>(res);
+  },
+
+  async leave(token: string, id: string): Promise<void> {
+    const res = await fetchWithTimeout(API_ENDPOINTS.customLeaderboards.leave(id), {
+      method: 'POST',
       headers: buildHeaders(token),
     });
     await parseResponse<null>(res);
@@ -83,10 +113,34 @@ export const customLeaderboardService = {
   },
 
   async removeMember(token: string, id: string, userId: string): Promise<void> {
-    const res = await fetchWithTimeout(API_ENDPOINTS.customLeaderboards.removeMember(id, userId), {
-      method: 'DELETE',
+    const res = await fetchWithTimeout(
+      API_ENDPOINTS.customLeaderboards.removeMember(id, userId),
+      { method: 'DELETE', headers: buildHeaders(token) },
+    );
+    await parseResponse<null>(res);
+  },
+
+  async getPendingMembers(token: string, id: string): Promise<GroupMember[]> {
+    const res = await fetchWithTimeout(API_ENDPOINTS.customLeaderboards.pending(id), {
       headers: buildHeaders(token),
     });
+    return parseResponse<GroupMember[]>(res);
+  },
+
+  async respondToPending(
+    token: string,
+    leaderboardId: string,
+    userId: string,
+    action: 'accept' | 'decline',
+  ): Promise<void> {
+    const res = await fetchWithTimeout(
+      API_ENDPOINTS.customLeaderboards.respondToPending(leaderboardId, userId),
+      {
+        method: 'PATCH',
+        headers: jsonHeaders(token),
+        body: JSON.stringify({ action }),
+      },
+    );
     await parseResponse<null>(res);
   },
 };

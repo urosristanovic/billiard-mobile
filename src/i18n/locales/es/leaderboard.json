@@ -1,5 +1,31 @@
 {
   "title": "Clasificación",
+  "myLeaderboards": "Mis Rankings",
+  "noLeaderboardsTitle": "Sin rankings aún",
+  "noLeaderboardsDesc": "Aún no te has unido ni creado ningún ranking. Empieza abajo.",
+  "createLeaderboard": "Crear Ranking",
+  "joinLeaderboard": "Unirse al Ranking",
+  "filterVisibility": "Visibilidad",
+  "filterIncludeProvisional": "Incluir Provisionales",
+  "filterAll": "Todos",
+  "filterPublic": "Público",
+  "filterPrivate": "Privado",
+  "filterLeaderboard": "Ranking",
+  "noPublicLeaderboards": "Sin rankings públicos",
+  "noPrivateLeaderboards": "Sin rankings privados",
+  "pendingBadge": "{{count}} pendiente(s)",
+  "leaveConfirmTitle": "¿Abandonar el ranking?",
+  "leaveConfirmMessage": "Serás eliminado de este ranking.",
+  "contextMenu": {
+    "open": "Abrir",
+    "createNew": "Crear Nuevo Ranking",
+    "seeDetails": "Ver Detalles",
+    "edit": "Editar",
+    "setDefault": "Establecer como Predeterminado",
+    "setDefaultSuccess": "Ranking predeterminado actualizado",
+    "setDefaultError": "Error al establecer el ranking predeterminado",
+    "leave": "Abandonar"
+  },
   "scopes": {
     "global": "Global",
     "country": "País",
@@ -23,6 +49,7 @@
     "selectLeaderboard": "Seleccionar tabla"
   },
   "createFab": "Crear ranking",
+  "joinFab": "Unirse",
   "createGroup": "Crear grupo",
   "entry": {
     "provisional": "P",
@@ -40,6 +67,8 @@
   },
   "empty": "Sin jugadores aún",
   "emptyDesc": "Sé el primero en completar una partida puntuada en este ámbito",
+  "emptyRatedOnly": "Todos los jugadores son provisionales",
+  "emptyRatedOnlyDesc": "Todos aquí siguen construyendo su puntuación. Se necesitan más partidas para obtener un ranking confirmado.",
   "loadMore": "Cargar más",
   "loading": "Cargando clasificación...",
   "loadFailed": "Error al cargar la clasificación",
@@ -61,6 +90,28 @@
     "ratingRecord": "{{wins}}V {{losses}}D · {{games}} partidas"
   },
   "manage": "Gestionar",
+  "browse": {
+    "title": "Unirse al Ranking",
+    "searchPlaceholder": "Buscar rankings...",
+    "suggested": "Sugeridos",
+    "join": "Unirse",
+    "requestToJoin": "Solicitar",
+    "pending": "Pendiente",
+    "joined": "Unido",
+    "setAsDefault": "Establecer como predeterminado",
+    "empty": "No se encontraron rankings",
+    "emptyDesc": "Prueba con otro nombre o crea el tuyo",
+    "emptyInitial": "No hay rankings sugeridos",
+    "emptyInitialDesc": "Busca un ranking por nombre para empezar",
+    "public": "Público",
+    "private": "Privado",
+    "members": "{{count}} miembros"
+  },
+  "pending": {
+    "sectionTitle": "Solicitudes Pendientes",
+    "accept": "Aceptar",
+    "decline": "Rechazar"
+  },
   "userSearch": {
     "title": "Buscar jugador",
     "placeholder": "Buscar por nombre o usuario...",
