@@ -54,6 +54,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: spacing[4],
     marginTop: spacing[4],
     gap: spacing[2],
+    paddingBottom: spacing[4],
   },
   sectionHeader: {
     gap: 2,

@@ -10,7 +10,7 @@
     "test:watch": "jest --watch",
     "type-check": "tsc --noEmit",
     "lint": "eslint . --ext .ts,.tsx",
-    "ios": "expo run:ios --device \"iPhone 17 Pro\"",
+    "ios": "expo run:ios --device \"iPhone 17 Pro Max\"",
     "ios:small": "expo run:ios --device \"iPhone SE (3rd generation)\"",
     "ios:base": "expo run:ios --device \"iPhone 15\"",
     "ios:large": "expo run:ios --device \"iPhone 15 Pro Max\"",
@@ -20,6 +20,7 @@
   "dependencies": {
     "@expo-google-fonts/barlow": "^0.4.1",
     "@expo-google-fonts/oswald": "^0.4.2",
+    "@gorhom/bottom-sheet": "^5.2.14",
     "@react-native-community/datetimepicker": "8.6.0",
     "@react-native-picker/picker": "2.11.4",
     "@react-navigation/bottom-tabs": "^7.15.5",

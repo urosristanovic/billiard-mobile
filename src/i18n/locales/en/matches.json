@@ -88,6 +88,8 @@
     "disputeButton": "Dispute",
     "confirmTitle": "Confirm match result?",
     "confirmMessage": "This will confirm the result and update ratings.",
+    "confirmSuccessTitle": "Match accepted",
+    "confirmSuccessMessage": "Result confirmed. Ratings will be updated shortly.",
     "disputeTitle": "Dispute this match?",
     "disputeMessage": "The match will be flagged for review. Ratings won't be affected until resolved.",
     "disputeFormTitle": "Dispute With Corrected Score",

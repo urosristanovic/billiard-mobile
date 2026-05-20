@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import { scale } from '@/utils/scale';
@@ -14,9 +15,28 @@ export const StandingsTable = ({
 }: StandingsTableProps) => {
   const tk = isDark ? theme.dark : theme.light;
 
+  const ranks = useMemo(() => {
+    const result: number[] = new Array(rows.length);
+    for (let i = 0; i < rows.length; i++) {
+      const prev = rows[i - 1];
+      const isTied =
+        prev !== undefined &&
+        rows[i].points === prev.points &&
+        rows[i].scored - rows[i].conceded === prev.scored - prev.conceded;
+      result[i] = isTied ? result[i - 1] : i + 1;
+    }
+    return result;
+  }, [rows]);
+
   return (
     <View style={styles.container}>
-      <View style={[styles.row, styles.headerRow, { borderBottomColor: tk.border.default }]}>
+      <View
+        style={[
+          styles.row,
+          styles.headerRow,
+          { borderBottomColor: tk.border.default },
+        ]}
+      >
         <Text style={[styles.rank, { color: tk.text.muted }]}>#</Text>
         <Text style={[styles.name, { color: tk.text.muted }]}>Player</Text>
         <Text style={[styles.cell, { color: tk.text.muted }]}>W</Text>
@@ -26,19 +46,7 @@ export const StandingsTable = ({
       </View>
 
       {rows.map((row, idx) => {
-        const prev = rows[idx - 1];
-        const isTiedWithPrev =
-          prev !== undefined &&
-          row.points === prev.points &&
-          row.scored - row.conceded === prev.scored - prev.conceded;
-        const rank = isTiedWithPrev
-          ? rows.findIndex(
-              r =>
-                r.points === row.points &&
-                r.scored - r.conceded === row.scored - row.conceded,
-            ) + 1
-          : idx + 1;
-
+        const rank = ranks[idx];
         const diff = row.scored - row.conceded;
         const diffColor =
           diff > 0 ? tk.primary[400] : diff < 0 ? tk.error.text : tk.text.muted;
@@ -52,9 +60,7 @@ export const StandingsTable = ({
               rank === 1 && { backgroundColor: tk.primary[900] + '33' },
             ]}
           >
-            <Text style={[styles.rank, { color: tk.text.muted }]}>
-              {rank}
-            </Text>
+            <Text style={[styles.rank, { color: tk.text.muted }]}>{rank}</Text>
             <Text
               style={[styles.name, { color: tk.text.primary }]}
               numberOfLines={1}

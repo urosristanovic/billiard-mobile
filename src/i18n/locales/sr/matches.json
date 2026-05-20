@@ -88,6 +88,8 @@
     "disputeButton": "Ospori",
     "confirmTitle": "Potvrdi rezultat meča?",
     "confirmMessage": "Ovo će potvrditi rezultat i ažurirati rejtinge.",
+    "confirmSuccessTitle": "Meč prihvaćen",
+    "confirmSuccessMessage": "Rezultat potvrđen. Rejtinzi će uskoro biti ažurirani.",
     "disputeTitle": "Osporavate ovaj meč?",
     "disputeMessage": "Meč će biti označen za pregled. Rejtinzi neće biti pogođeni dok se ne reši.",
     "disputeFormTitle": "Spor sa ispravljenim rezultatom",

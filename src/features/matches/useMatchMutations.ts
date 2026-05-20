@@ -20,6 +20,11 @@ export const useMatchMutations = () => {
   const getErrorMessage = (error: unknown) =>
     error instanceof Error ? error.message : t('error');
 
+  const invalidateRatingViews = () => {
+    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.LEADERBOARD_ALL });
+    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.RATINGS_ALL });
+  };
+
   const updateMatchInCachedLists = (updatedMatch: Match) => {
     queryClient.setQueriesData(
       { queryKey: QUERY_KEYS.MATCHES_LIST_BASE },
@@ -48,7 +53,10 @@ export const useMatchMutations = () => {
           pages: oldData.pages.map(page => ({
             ...page,
             data: page.data.filter(match => match.id !== matchId),
-            total: Math.max(0, page.total - (page.data.some(m => m.id === matchId) ? 1 : 0)),
+            total: Math.max(
+              0,
+              page.total - (page.data.some(m => m.id === matchId) ? 1 : 0),
+            ),
           })),
         };
       },
@@ -104,6 +112,7 @@ export const useMatchMutations = () => {
       queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
       updateMatchInCachedLists(match);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
+      invalidateRatingViews();
     },
     onError: error =>
       showToast({
@@ -173,6 +182,7 @@ export const useMatchMutations = () => {
       queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
       updateMatchInCachedLists(match);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
+      invalidateRatingViews();
     },
     onError: error =>
       showToast({
@@ -227,7 +237,13 @@ export const useMatchMutations = () => {
   });
 
   const declineChallenge = useMutation({
-    mutationFn: async ({ matchId, reason }: { matchId: string; reason?: string }) => {
+    mutationFn: async ({
+      matchId,
+      reason,
+    }: {
+      matchId: string;
+      reason?: string;
+    }) => {
       if (!user) throw new Error('Not authenticated');
       const token = await getAccessToken();
       return matchService.declineChallenge(token, matchId, reason);
@@ -281,7 +297,12 @@ export const useMatchMutations = () => {
     }) => {
       if (!user) throw new Error('Not authenticated');
       const token = await getAccessToken();
-      return matchService.record(token, matchId, { myScore, opponentScore, myBeers, opponentBeers });
+      return matchService.record(token, matchId, {
+        myScore,
+        opponentScore,
+        myBeers,
+        opponentBeers,
+      });
     },
     onSuccess: match => {
       queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);

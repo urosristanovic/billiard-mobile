@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ScreenLayout } from '@/components/common/layout';
 import { FormField, FormButtons } from '@/components/common/forms';
+import { useToast } from '@/components/common/toast';
+import { LocationPickerSheet } from '@/components/common/pickers';
 import { useProfileForm } from '@/features/auth/useProfileForm';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useCountries, useCities } from '@/features/locations/useLocations';
+import { useFeedbackMutation } from '@/features/feedback/useFeedbackMutation';
 import { useTheme } from '@/hooks/useTheme';
-import { typography, spacing, radius } from '@/constants/theme';
-import { scale } from '@/utils/scale';
 import { styles } from './styles';
-import type { Country, City } from '@/types/location';
+import type { Country } from '@/types/location';
 
 interface ProfileSetupScreenProps {
   isDark?: boolean;
@@ -24,17 +25,83 @@ const ProfileSetupScreen = ({
   const { t: tGroups } = useTranslation('groups');
   const { isDark: systemDark, tk } = useTheme();
   const isDark = isDarkProp ?? systemDark;
+  const { showToast } = useToast();
   const { form, errors, updateField, validate } = useProfileForm();
   const { updateProfile } = useAuthMutations();
+  const { submitFeedback } = useFeedbackMutation();
 
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const [selectedCity, setSelectedCity] = useState<City | null>(null);
-  const [countryModalVisible, setCountryModalVisible] = useState(false);
-  const [cityModalVisible, setCityModalVisible] = useState(false);
+  const [selectedCityId, setSelectedCityId] = useState<string>('');
   const [countryError, setCountryError] = useState('');
 
-  const { data: countries = [] } = useCountries();
-  const { data: cities = [] } = useCities(selectedCountry?.id);
+  const { data: countries = [], isLoading: countriesLoading } = useCountries();
+  const { data: cities = [], isLoading: citiesLoading } = useCities(
+    selectedCountry?.id,
+  );
+
+  const handleCountryOther = () => {
+    Alert.prompt(
+      tGroups('location.countryLabel'),
+      tGroups('location.requestCountryPrefix'),
+      [
+        { text: t('cancel'), style: 'cancel' },
+        {
+          text: t('submit'),
+          onPress: (text: string | undefined) => {
+            if (!text?.trim()) return;
+            submitFeedback.mutate(
+              {
+                type: 'suggestion',
+                message: `${tGroups('location.requestCountryPrefix')}${text.trim()}`,
+              },
+              {
+                onSuccess: () =>
+                  showToast({
+                    type: 'success',
+                    title: t('successTitle'),
+                    message: tGroups('location.requestSent'),
+                  }),
+              },
+            );
+          },
+        },
+      ],
+      'plain-text',
+    );
+  };
+
+  const handleCityOther = () => {
+    Alert.prompt(
+      tGroups('location.cityLabel'),
+      tGroups('location.requestCityPrefix', {
+        country: selectedCountry?.name ?? '',
+      }),
+      [
+        { text: t('cancel'), style: 'cancel' },
+        {
+          text: t('submit'),
+          onPress: (text: string | undefined) => {
+            if (!text?.trim()) return;
+            submitFeedback.mutate(
+              {
+                type: 'suggestion',
+                message: `${tGroups('location.requestCityPrefix', { country: selectedCountry?.name ?? '' })}${text.trim()}`,
+              },
+              {
+                onSuccess: () =>
+                  showToast({
+                    type: 'success',
+                    title: t('successTitle'),
+                    message: tGroups('location.requestSent'),
+                  }),
+              },
+            );
+          },
+        },
+      ],
+      'plain-text',
+    );
+  };
 
   const handleSubmit = () => {
     if (!validate()) return;
@@ -47,7 +114,7 @@ const ProfileSetupScreen = ({
       displayName: form.displayName,
       bio: form.bio || null,
       countryId: selectedCountry.id,
-      cityId: selectedCity?.id ?? null,
+      cityId: selectedCityId || null,
     });
   };
 
@@ -80,62 +147,35 @@ const ProfileSetupScreen = ({
             required
           />
 
-          {/* Country picker */}
-          <View>
-            <Text style={[pickerStyles.label, { color: tk.text.secondary }]}>
-              {tGroups('location.countryLabel')} *
-            </Text>
-            <TouchableOpacity
-              onPress={() => setCountryModalVisible(true)}
-              style={[
-                pickerStyles.pickerButton,
-                {
-                  backgroundColor: tk.surface.raised,
-                  borderColor: countryError ? '#ef4444' : tk.primary[700],
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  pickerStyles.pickerButtonText,
-                  { color: selectedCountry ? tk.text.primary : tk.text.muted },
-                ]}
-              >
-                {selectedCountry?.name ?? tGroups('location.countryPlaceholder')}
-              </Text>
-              <Text style={{ color: tk.text.muted }}>▾</Text>
-            </TouchableOpacity>
-            {countryError ? (
-              <Text style={[pickerStyles.errorText, { color: '#ef4444' }]}>
-                {countryError}
-              </Text>
-            ) : null}
-          </View>
+          <LocationPickerSheet
+            label={tGroups('location.countryLabel')}
+            placeholder={tGroups('location.countryPlaceholder')}
+            items={countries}
+            selectedId={selectedCountry?.id ?? null}
+            onSelect={id => {
+              const found = countries.find(c => c.id === id) ?? null;
+              setSelectedCountry(found);
+              setSelectedCityId('');
+              setCountryError('');
+            }}
+            onSelectOther={handleCountryOther}
+            loading={countriesLoading}
+            error={countryError}
+            required
+            isDark={isDark}
+          />
 
-          {/* City picker */}
           {selectedCountry && (
-            <View>
-              <Text style={[pickerStyles.label, { color: tk.text.secondary }]}>
-                {tGroups('location.cityLabel')}
-              </Text>
-              <TouchableOpacity
-                onPress={() => setCityModalVisible(true)}
-                style={[
-                  pickerStyles.pickerButton,
-                  { backgroundColor: tk.surface.raised, borderColor: tk.primary[700] },
-                ]}
-              >
-                <Text
-                  style={[
-                    pickerStyles.pickerButtonText,
-                    { color: selectedCity ? tk.text.primary : tk.text.muted },
-                  ]}
-                >
-                  {selectedCity?.name ?? tGroups('location.cityPlaceholder')}
-                </Text>
-                <Text style={{ color: tk.text.muted }}>▾</Text>
-              </TouchableOpacity>
-            </View>
+            <LocationPickerSheet
+              label={tGroups('location.cityLabel')}
+              placeholder={tGroups('location.cityPlaceholder')}
+              items={cities}
+              selectedId={selectedCityId || null}
+              onSelect={setSelectedCityId}
+              onSelectOther={handleCityOther}
+              loading={citiesLoading}
+              isDark={isDark}
+            />
           )}
 
           <FormField
@@ -157,169 +197,8 @@ const ProfileSetupScreen = ({
           isDark={isDark}
         />
       </ScrollView>
-
-      {/* Country picker modal */}
-      <Modal
-        visible={countryModalVisible}
-        animationType='slide'
-        onRequestClose={() => setCountryModalVisible(false)}
-      >
-        <View style={[pickerStyles.modal, { backgroundColor: tk.background.primary }]}>
-          <View style={[pickerStyles.modalHeader, { borderBottomColor: tk.primary[800] }]}>
-            <Text style={[pickerStyles.modalTitle, { color: tk.text.primary }]}>
-              {tGroups('location.countryLabel')}
-            </Text>
-            <TouchableOpacity onPress={() => setCountryModalVisible(false)}>
-              <Text style={[pickerStyles.modalClose, { color: tk.primary[400] }]}>✕</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView>
-            {countries.map(country => (
-              <TouchableOpacity
-                key={country.id}
-                onPress={() => {
-                  setSelectedCountry(country);
-                  setSelectedCity(null);
-                  setCountryModalVisible(false);
-                }}
-                style={[
-                  pickerStyles.modalOption,
-                  { borderBottomColor: tk.primary[900] },
-                  selectedCountry?.id === country.id && { backgroundColor: tk.primary[900] },
-                ]}
-              >
-                <Text style={[pickerStyles.modalOptionText, { color: tk.text.primary }]}>
-                  {country.name}
-                </Text>
-                <Text style={[pickerStyles.modalOptionCode, { color: tk.text.muted }]}>
-                  {country.code}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </Modal>
-
-      {/* City picker modal */}
-      <Modal
-        visible={cityModalVisible}
-        animationType='slide'
-        onRequestClose={() => setCityModalVisible(false)}
-      >
-        <View style={[pickerStyles.modal, { backgroundColor: tk.background.primary }]}>
-          <View style={[pickerStyles.modalHeader, { borderBottomColor: tk.primary[800] }]}>
-            <Text style={[pickerStyles.modalTitle, { color: tk.text.primary }]}>
-              {tGroups('location.cityLabel')}
-            </Text>
-            <TouchableOpacity onPress={() => setCityModalVisible(false)}>
-              <Text style={[pickerStyles.modalClose, { color: tk.primary[400] }]}>✕</Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView>
-            {/* Clear city option */}
-            <TouchableOpacity
-              onPress={() => {
-                setSelectedCity(null);
-                setCityModalVisible(false);
-              }}
-              style={[pickerStyles.modalOption, { borderBottomColor: tk.primary[900] }]}
-            >
-              <Text style={[pickerStyles.modalOptionText, { color: tk.text.muted }]}>
-                {tGroups('location.cityPlaceholder')}
-              </Text>
-            </TouchableOpacity>
-            {cities.map(city => (
-              <TouchableOpacity
-                key={city.id}
-                onPress={() => {
-                  setSelectedCity(city);
-                  setCityModalVisible(false);
-                }}
-                style={[
-                  pickerStyles.modalOption,
-                  { borderBottomColor: tk.primary[900] },
-                  selectedCity?.id === city.id && { backgroundColor: tk.primary[900] },
-                ]}
-              >
-                <Text style={[pickerStyles.modalOptionText, { color: tk.text.primary }]}>
-                  {city.name}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </Modal>
     </ScreenLayout>
   );
 };
-
-const pickerStyles = StyleSheet.create({
-  label: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.heading,
-    fontWeight: typography.weight.semibold,
-    marginBottom: spacing[2],
-  },
-  pickerButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing[4],
-    paddingVertical: spacing[3],
-    minHeight: scale(48),
-  },
-  pickerButtonText: {
-    fontSize: typography.size.base,
-    fontFamily: typography.family.body,
-    flex: 1,
-  },
-  errorText: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.body,
-    marginTop: spacing[1],
-  },
-  modal: {
-    flex: 1,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing[4],
-    paddingTop: spacing[12],
-    paddingBottom: spacing[4],
-    borderBottomWidth: 1,
-  },
-  modalTitle: {
-    fontSize: typography.size.xl,
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  modalClose: {
-    fontSize: typography.size.xl,
-    fontFamily: typography.family.display,
-  },
-  modalOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing[4],
-    paddingVertical: spacing[4],
-    borderBottomWidth: 1,
-    minHeight: scale(56),
-  },
-  modalOptionText: {
-    fontSize: typography.size.base,
-    fontFamily: typography.family.body,
-  },
-  modalOptionCode: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.body,
-  },
-});
 
 export default ProfileSetupScreen;

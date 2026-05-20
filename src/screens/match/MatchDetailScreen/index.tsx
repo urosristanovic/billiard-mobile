@@ -10,6 +10,7 @@ import { useMatchDetail } from '@/features/matches/useMatchDetail';
 import { useMatchMutations } from '@/features/matches/useMatchMutations';
 import { useAuth } from '@/features/auth/useAuth';
 import { useConfirmDialog } from '@/components/common/dialog';
+import { useToast } from '@/components/common/toast';
 import { ScreenLayout } from '@/components/common/layout';
 import { LoadingState, EmptyState, Loading } from '@/components/common/states';
 import { useTheme } from '@/hooks/useTheme';
@@ -35,6 +36,7 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
   const { t: tCommon } = useTranslation('common');
   const { isDark, tk } = useTheme();
   const { confirm } = useConfirmDialog();
+  const { showToast } = useToast();
   const { user } = useAuth();
   const [activeForm, setActiveForm] = useState<
     'none' | 'dispute' | 'counterDispute' | 'cancel' | 'declineChallenge'
@@ -107,15 +109,14 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
       : null;
 
   const handleConfirm = () =>
-    confirm({
-      title: t('detail.confirmTitle'),
-      message: t('detail.confirmMessage'),
-      cancelLabel: tCommon('cancel'),
-      confirmLabel: t('detail.confirmShortButton'),
-      onConfirm: () =>
-        confirmMatch.mutate(match.id, {
-          onSuccess: () => navigation.goBack(),
-        }),
+    confirmMatch.mutate(match.id, {
+      onSuccess: () => {
+        showToast({
+          type: 'success',
+          title: t('detail.confirmSuccessTitle'),
+          message: t('detail.confirmSuccessMessage'),
+        });
+      },
     });
 
   const openDisputeForm = (mode: 'dispute' | 'counterDispute') => {

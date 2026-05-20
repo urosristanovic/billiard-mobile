@@ -13,10 +13,15 @@ export const QUERY_KEYS = {
   MATCH_OPPONENTS: (params: object) =>
     ['matches', 'opponents', params] as const,
 
+  RATINGS_ALL: ['ratings'] as const,
   RATINGS: (userId: string) => ['ratings', userId] as const,
-  RATINGS_HISTORY: (userId: string, discipline?: string, leaderboardId?: string) =>
-    ['ratings', userId, 'history', discipline, leaderboardId] as const,
+  RATINGS_HISTORY: (
+    userId: string,
+    discipline?: string,
+    leaderboardId?: string,
+  ) => ['ratings', userId, 'history', discipline, leaderboardId] as const,
 
+  LEADERBOARD_ALL: ['leaderboard'] as const,
   LEADERBOARD: (params: Record<string, unknown>) =>
     ['leaderboard', params] as const,
 
@@ -30,8 +35,10 @@ export const QUERY_KEYS = {
   CUSTOM_LEADERBOARDS: ['custom-leaderboards'] as const,
   CUSTOM_LEADERBOARDS_LIST: (visibility?: 'public' | 'private') =>
     ['custom-leaderboards', 'list', visibility ?? 'all'] as const,
-  LEADERBOARDS_BROWSE: (q: string) => ['custom-leaderboards', 'browse', q] as const,
-  CUSTOM_LEADERBOARD_DETAIL: (id: string) => ['custom-leaderboards', id] as const,
+  LEADERBOARDS_BROWSE: (q: string) =>
+    ['custom-leaderboards', 'browse', q] as const,
+  CUSTOM_LEADERBOARD_DETAIL: (id: string) =>
+    ['custom-leaderboards', id] as const,
   CUSTOM_LEADERBOARD_MEMBERS: (id: string) =>
     ['custom-leaderboards', id, 'members'] as const,
   CUSTOM_LEADERBOARD_PENDING: (id: string) =>
@@ -48,11 +55,9 @@ export const QUERY_KEYS = {
     ['tournaments', 'list', params] as const,
   TOURNAMENTS_MY: ['tournaments', 'my'] as const,
   TOURNAMENTS_MY_PENDING: ['tournaments', 'my', 'pending'] as const,
-  TOURNAMENTS_SEARCH: (q: string) =>
-    ['tournaments', 'search', q] as const,
+  TOURNAMENTS_SEARCH: (q: string) => ['tournaments', 'search', q] as const,
   TOURNAMENT_DETAIL: (id: string) => ['tournaments', id] as const,
-  TOURNAMENT_REQUESTS: (id: string) =>
-    ['tournaments', id, 'requests'] as const,
+  TOURNAMENT_REQUESTS: (id: string) => ['tournaments', id, 'requests'] as const,
   TOURNAMENT_STANDINGS: (id: string) =>
     ['tournaments', id, 'standings'] as const,
 } as const;

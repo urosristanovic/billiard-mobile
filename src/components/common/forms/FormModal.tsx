@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { theme, typography, radius, spacing, shadows } from '@/constants/theme';
 
 interface FormModalProps {
@@ -42,64 +43,69 @@ export const FormModal = ({
       onRequestClose={onClose}
       statusBarTranslucent
     >
-      <View
-        style={[styles.backdrop, { backgroundColor: tk.background.overlay }]}
-      >
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.keyboardView}
+      <BottomSheetModalProvider>
+        <View
+          style={[styles.backdrop, { backgroundColor: tk.background.overlay }]}
         >
-          <View
-            style={[
-              styles.panel,
-              {
-                backgroundColor: tk.surface.default,
-                borderTopColor: tk.primary[700],
-                paddingBottom: footer ? 0 : safeBottom,
-              },
-              shadows.lg,
-            ]}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.keyboardView}
           >
             <View
-              style={[styles.header, { borderBottomColor: tk.border.default }]}
+              style={[
+                styles.panel,
+                {
+                  backgroundColor: tk.surface.default,
+                  borderTopColor: tk.primary[700],
+                  paddingBottom: footer ? 0 : safeBottom,
+                },
+                shadows.lg,
+              ]}
             >
-              <Text style={[styles.title, { color: tk.text.primary }]}>
-                {title}
-              </Text>
-              <TouchableOpacity
-                onPress={onClose}
-                accessibilityRole='button'
-                accessibilityLabel={t('closeA11y')}
-                hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
-              >
-                <Text style={[styles.closeText, { color: tk.text.muted }]}>
-                  ✕
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <ScrollView
-              style={styles.body}
-              contentContainerStyle={styles.bodyContent}
-              keyboardShouldPersistTaps='handled'
-            >
-              {children}
-            </ScrollView>
-            {footer && (
               <View
                 style={[
-                  styles.footer,
-                  {
-                    borderTopColor: tk.border.default,
-                    paddingBottom: safeBottom,
-                  },
+                  styles.header,
+                  { borderBottomColor: tk.border.default },
                 ]}
               >
-                {footer}
+                <Text style={[styles.title, { color: tk.text.primary }]}>
+                  {title}
+                </Text>
+                <TouchableOpacity
+                  onPress={onClose}
+                  accessibilityRole='button'
+                  accessibilityLabel={t('closeA11y')}
+                  hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+                >
+                  <Text style={[styles.closeText, { color: tk.text.muted }]}>
+                    ✕
+                  </Text>
+                </TouchableOpacity>
               </View>
-            )}
-          </View>
-        </KeyboardAvoidingView>
-      </View>
+              <ScrollView
+                style={styles.body}
+                contentContainerStyle={styles.bodyContent}
+                keyboardShouldPersistTaps='handled'
+              >
+                {children}
+              </ScrollView>
+              {footer && (
+                <View
+                  style={[
+                    styles.footer,
+                    {
+                      borderTopColor: tk.border.default,
+                      paddingBottom: safeBottom,
+                    },
+                  ]}
+                >
+                  {footer}
+                </View>
+              )}
+            </View>
+          </KeyboardAvoidingView>
+        </View>
+      </BottomSheetModalProvider>
     </Modal>
   );
 };

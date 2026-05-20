@@ -1,20 +1,5 @@
-import { useMemo, useState } from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {
-  Svg,
-  Path,
-  Circle,
-  Defs,
-  RadialGradient,
-  Stop,
-  Rect,
-} from 'react-native-svg';
+import { useCallback, useMemo, useState } from 'react';
+import { FlatList, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMatches } from '@/features/matches/useMatches';
@@ -23,9 +8,7 @@ import { useAuth } from '@/features/auth/useAuth';
 import { ScreenLayout, AppHeader } from '@/components/common/layout';
 import { LoadingState, EmptyState, Loading } from '@/components/common/states';
 import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
-import { GhostButton } from '@/components/common/buttons';
 import { CueIcon } from '@/components/common/icons';
-import { Feather } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import { MatchCard } from '@/screens/match/MatchHistoryScreen/components';
 import {
@@ -34,9 +17,10 @@ import {
   countActiveFilters,
   type MatchFilters,
 } from './components/MatchFilterModal';
+import { HomeHeader } from './components/HomeHeader';
 import { styles } from './styles';
 import type { HomeStackParamList } from '@/navigation/AppNavigator';
-import { moderateScale, scale } from '@/utils/scale';
+import { moderateScale } from '@/utils/scale';
 import { iconSize } from '@/constants/theme';
 
 type Props = NativeStackScreenProps<HomeStackParamList, 'HomeFeed'>;
@@ -93,6 +77,27 @@ const HomeScreen = ({ navigation }: Props) => {
 
   const activeFilterCount = countActiveFilters(appliedFilters);
 
+  const handleSettingsPress = useCallback(
+    () => navigation.navigate('Settings'),
+    [navigation],
+  );
+  const handleFilterPress = useCallback(() => setFilterModalOpen(true), []);
+
+  const isHeaderRefreshing = isRefetching && !isLoading && matches.length > 0;
+
+  const renderItem = useCallback(
+    ({ item }: { item: (typeof matches)[number] }) => (
+      <MatchCard
+        match={item}
+        userId={user?.id ?? ''}
+        userName={user?.displayName || user?.username}
+        onPress={() => navigation.navigate('MatchDetail', { matchId: item.id })}
+        isDark={isDark}
+      />
+    ),
+    [user?.id, user?.displayName, user?.username, navigation, isDark],
+  );
+
   return (
     <ScreenLayout isDark={isDark}>
       <AppHeader />
@@ -114,191 +119,18 @@ const HomeScreen = ({ navigation }: Props) => {
         }}
         onEndReachedThreshold={0.3}
         ListHeaderComponent={
-          <>
-            {isRefetching && !isLoading && matches.length > 0 && (
-              <View
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  paddingVertical: 20,
-                }}
-              >
-                <Loading />
-              </View>
-            )}
-            <View
-              style={[
-                styles.card,
-                {
-                  backgroundColor: tk.surface.default,
-                  borderColor: tk.border.strong,
-                },
-              ]}
-            >
-              {/* Amber glow blob – radial gradient to mimic web's blur-3xl effect */}
-              <Svg style={StyleSheet.absoluteFill} pointerEvents='none'>
-                <Defs>
-                  <RadialGradient id='glow' cx='100%' cy='0%' r='80%'>
-                    <Stop
-                      offset='0%'
-                      stopColor={tk.primary[500]}
-                      stopOpacity='0.1'
-                    />
-                    <Stop
-                      offset='100%'
-                      stopColor={tk.primary[500]}
-                      stopOpacity='0'
-                    />
-                  </RadialGradient>
-                </Defs>
-                <Rect width='100%' height='100%' fill='url(#glow)' />
-              </Svg>
-
-              {/* Settings button */}
-              <TouchableOpacity
-                style={[
-                  styles.settingsBtn,
-                  {
-                    backgroundColor: 'rgba(255,255,255,0.05)',
-                    borderColor: 'rgba(255,255,255,0.08)',
-                  },
-                ]}
-                onPress={() => navigation.navigate('Settings')}
-                activeOpacity={0.7}
-              >
-                <Feather
-                  name='settings'
-                  size={iconSize.lg}
-                  color={tk.text.muted}
-                />
-              </TouchableOpacity>
-
-              {/* Avatar + name row */}
-              <View style={styles.userRow}>
-                <View>
-                  <View
-                    style={[styles.avatar, { borderColor: tk.primary[500] }]}
-                  >
-                    <Text
-                      style={[styles.avatarInitial, { color: tk.primary[500] }]}
-                    >
-                      {initials}
-                    </Text>
-                  </View>
-                  {/* Online dot */}
-                  <View
-                    style={[
-                      styles.dotWrap,
-                      { backgroundColor: tk.surface.default },
-                    ]}
-                  >
-                    <View style={styles.dot} />
-                  </View>
-                </View>
-
-                <View style={styles.userInfo}>
-                  <Text
-                    style={[styles.displayName, { color: tk.text.primary }]}
-                    numberOfLines={1}
-                  >
-                    {user?.displayName ?? ''}
-                  </Text>
-                  <Text style={[styles.statusText, { color: tk.text.muted }]}>
-                    @{user?.username ?? ''}
-                  </Text>
-                </View>
-              </View>
-
-              {/* Stat sub-cards */}
-              <View style={styles.statsRow}>
-                {/* Win Record */}
-                <View
-                  style={[styles.statCard, { borderColor: tk.border.default }]}
-                >
-                  <Text
-                    style={[styles.statCardLabel, { color: tk.text.muted }]}
-                  >
-                    {t('stats.winRecord')}
-                  </Text>
-                  <View style={styles.statCardValueRow}>
-                    <Text
-                      style={[styles.statCardBig, { color: tk.text.primary }]}
-                    >
-                      {stats.played}
-                    </Text>
-                    <Text
-                      style={[styles.statCardSub, { color: tk.text.muted }]}
-                    >
-                      {t('stats.played')}
-                    </Text>
-                  </View>
-                  <Text
-                    style={[styles.statCardAccent, { color: tk.primary[500] }]}
-                  >
-                    {stats.winRate}% {t('stats.winRate')}
-                  </Text>
-                </View>
-
-                {/* Streak */}
-                <View
-                  style={[styles.statCard, { borderColor: tk.border.default }]}
-                >
-                  <Text
-                    style={[styles.statCardLabel, { color: tk.text.muted }]}
-                  >
-                    {t('stats.winStreak')}
-                  </Text>
-                  <Text
-                    style={[styles.statCardBig, { color: tk.text.primary }]}
-                  >
-                    {`W${stats.winStreak > 0 ? stats.winStreak : 0}`}
-                  </Text>
-                  {/* TODO: Add mini streak graph here */}
-                  <View style={styles.miniGraph}>
-                    <Svg
-                      viewBox='0 0 100 30'
-                      preserveAspectRatio='none'
-                      style={{ flex: 1 }}
-                    >
-                      <Path
-                        d='M0 25 L20 20 L40 28 L60 15 L80 18 L100 5'
-                        fill='none'
-                        stroke={tk.primary[500]}
-                        strokeWidth='2'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                      />
-                      <Circle cx='100' cy='5' r='3' fill={tk.primary[500]} />
-                    </Svg>
-                  </View>
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.sectionHeader}>
-              <Text style={[styles.sectionTitle, { color: tk.text.secondary }]}>
-                {t('recentMatches')}
-              </Text>
-              <GhostButton
-                label={t('filters.title')}
-                size='sm'
-                icon={
-                  activeFilterCount > 0 ? undefined : (
-                    <Feather
-                      name='sliders'
-                      size={iconSize.sm}
-                      color={tk.primary[600]}
-                    />
-                  )
-                }
-                active={activeFilterCount > 0}
-                badge={activeFilterCount}
-                isDark={isDark}
-                accessibilityLabel={t('filters.title')}
-                onPress={() => setFilterModalOpen(true)}
-              />
-            </View>
-          </>
+          <HomeHeader
+            tk={tk}
+            isDark={isDark}
+            initials={initials}
+            displayName={user?.displayName ?? ''}
+            username={user?.username ?? ''}
+            stats={stats}
+            activeFilterCount={activeFilterCount}
+            isRefreshing={isHeaderRefreshing}
+            onSettingsPress={handleSettingsPress}
+            onFilterPress={handleFilterPress}
+          />
         }
         ListEmptyComponent={
           isLoading ? (
@@ -326,17 +158,7 @@ const HomeScreen = ({ navigation }: Props) => {
             </View>
           ) : null
         }
-        renderItem={({ item }) => (
-          <MatchCard
-            match={item}
-            userId={user?.id ?? ''}
-            userName={user?.displayName || user?.username}
-            onPress={() =>
-              navigation.navigate('MatchDetail', { matchId: item.id })
-            }
-            isDark={isDark}
-          />
-        )}
+        renderItem={renderItem}
       />
 
       <View style={styles.fabRow}>

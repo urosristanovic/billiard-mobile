@@ -16,7 +16,6 @@ import { API_ENDPOINTS } from '@/config/api';
 import { fetchWithTimeout } from '@/lib/fetchWithTimeout';
 import { matchService } from '@/services/match';
 import { gradients } from '@/constants/theme';
-import { DISCIPLINE_LABELS } from '@/types/match';
 import { styles } from './styles';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
 
@@ -263,8 +262,8 @@ const PlayerProfileScreen = ({ route, navigation }: Props) => {
           </View>
         </View>
 
-        {/* Ratings */}
-        {ratings.length > 0 && (
+        {/* Ratings — hidden until global ratings are ready to expose */}
+        {/* {ratings.length > 0 && (
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, { color: tk.text.secondary }]}>
               {t('playerProfile.ratingsSection')}
@@ -322,7 +321,7 @@ const PlayerProfileScreen = ({ route, navigation }: Props) => {
               </View>
             ))}
           </View>
-        )}
+        )} */}
       </ScrollView>
 
       <FloatingActionButton

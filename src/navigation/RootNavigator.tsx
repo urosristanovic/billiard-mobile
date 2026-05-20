@@ -1,12 +1,15 @@
 import { useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, createNavigationContainerRef } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { getTokens, clearTokens } from "@/lib/tokenStorage";
 import { authService } from "@/services/auth";
+import { navigationIntegration } from "../../App";
 import { AuthNavigator } from "./AuthNavigator";
 import { AppNavigator } from "./AppNavigator";
 import { LoadingState } from "@/components/common/states";
+
+const navigationRef = createNavigationContainerRef();
 
 export const RootNavigator = () => {
   const { t } = useTranslation("common");
@@ -45,7 +48,12 @@ export const RootNavigator = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        navigationIntegration.registerNavigationContainer(navigationRef);
+      }}
+    >
       {user ? <AppNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );

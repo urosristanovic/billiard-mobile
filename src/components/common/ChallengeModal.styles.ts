@@ -4,8 +4,8 @@ import { scale } from '@/utils/scale';
 
 export const styles = StyleSheet.create({
   content: {
-    minHeight: scale(460),
     gap: spacing[4],
+    minHeight: scale(320),
   },
   sectionLabel: {
     fontSize: typography.size.base,
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
     gap: spacing[2],
   },
   otherRow: {
-    marginTop: spacing[6],
+    marginTop: spacing[5],
     borderWidth: 0.5,
     borderRadius: radius['3xl'],
     paddingHorizontal: spacing[6],

@@ -84,6 +84,10 @@
     "cityNamePlaceholder": "Introduce el nombre de la ciudad",
     "suggestSubmit": "Enviar sugerencia",
     "cooldown": "La ubicación solo se puede cambiar una vez cada 30 días",
-    "countryRequired": "El país es obligatorio"
+    "countryRequired": "El país es obligatorio",
+    "other": "Otro — solicitar agregar",
+    "requestSent": "¡Gracias! Lo agregaremos pronto.",
+    "requestCountryPrefix": "Por favor agrega mi país: ",
+    "requestCityPrefix": "Por favor agrega la ciudad en {{country}}: "
   }
 }

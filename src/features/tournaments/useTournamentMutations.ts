@@ -26,6 +26,11 @@ export const useTournamentMutations = () => {
     queryClient.invalidateQueries({ queryKey: QUERY_KEYS.TOURNAMENTS });
   };
 
+  const invalidateRatingViews = () => {
+    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.LEADERBOARD_ALL });
+    queryClient.invalidateQueries({ queryKey: QUERY_KEYS.RATINGS_ALL });
+  };
+
   const createTournament = useMutation({
     mutationFn: async (input: CreateTournamentInput) => {
       if (!user) throw new Error('Not authenticated');
@@ -256,7 +261,12 @@ export const useTournamentMutations = () => {
     }) => {
       if (!user) throw new Error('Not authenticated');
       const token = await getAccessToken();
-      return tournamentService.reportResult(token, tournamentId, matchId, input);
+      return tournamentService.reportResult(
+        token,
+        tournamentId,
+        matchId,
+        input,
+      );
     },
     onSuccess: tournament => {
       queryClient.setQueryData(
@@ -264,6 +274,7 @@ export const useTournamentMutations = () => {
         tournament,
       );
       invalidateTournaments();
+      invalidateRatingViews();
       showToast({
         type: 'success',
         title: t('successTitle'),
@@ -298,6 +309,7 @@ export const useTournamentMutations = () => {
         tournament,
       );
       invalidateTournaments();
+      invalidateRatingViews();
       showToast({
         type: 'success',
         title: t('successTitle'),

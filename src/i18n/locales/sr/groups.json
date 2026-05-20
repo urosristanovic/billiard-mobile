@@ -84,6 +84,10 @@
     "cityNamePlaceholder": "Unesite naziv grada",
     "suggestSubmit": "Pošalji predlog",
     "cooldown": "Lokacija se može menjati jednom svakih 30 dana",
-    "countryRequired": "Zemlja je obavezna"
+    "countryRequired": "Zemlja je obavezna",
+    "other": "Ostalo — zahtev za dodavanje",
+    "requestSent": "Hvala! Uskoro ćemo dodati.",
+    "requestCountryPrefix": "Molim vas dodajte moju zemlju: ",
+    "requestCityPrefix": "Molim vas dodajte grad u {{country}}: "
   }
 }

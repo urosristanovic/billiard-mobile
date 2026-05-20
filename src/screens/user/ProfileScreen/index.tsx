@@ -1,16 +1,9 @@
-import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
-import { LoadingState, Loading } from '@/components/common/states';
+import { LoadingState } from '@/components/common/states';
 import { FormField, FormModal, FormButtons } from '@/components/common/forms';
 import { useToast } from '@/components/common/toast';
 import {
@@ -19,14 +12,15 @@ import {
   PrimaryButton,
   SecondaryButton,
 } from '@/components/common/buttons';
+import { LocationPickerSheet } from '@/components/common/pickers';
 import { useAuth } from '@/features/auth/useAuth';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useProfileForm } from '@/features/auth/useProfileForm';
 import { useCountries, useCities } from '@/features/locations/useLocations';
+import { useFeedbackMutation } from '@/features/feedback/useFeedbackMutation';
 import { useTheme } from '@/hooks/useTheme';
 import { setStoredLanguage, type SupportedLanguage } from '@/i18n';
-import { typography, spacing, radius } from '@/constants/theme';
-import { scale } from '@/utils/scale';
+import { typography, spacing } from '@/constants/theme';
 import type { HomeStackParamList } from '@/navigation/AppNavigator';
 import { ProfileHero } from './components';
 import { styles } from './styles';
@@ -53,12 +47,11 @@ const ProfileScreen = ({ navigation, route }: Props) => {
   const { showToast } = useToast();
   const { user } = useAuth();
   const { updateProfile, deleteAccount } = useAuthMutations();
+  const { submitFeedback } = useFeedbackMutation();
   const { form, errors, updateField, loadForEdit, validate } = useProfileForm();
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedCountryId, setSelectedCountryId] = useState<string>('');
   const [selectedCityId, setSelectedCityId] = useState<string>('');
-  const [countryListOpen, setCountryListOpen] = useState(false);
-  const [cityListOpen, setCityListOpen] = useState(false);
   const currentLanguage = (i18n.resolvedLanguage ?? i18n.language).split(
     '-',
   )[0] as SupportedLanguage;
@@ -70,6 +63,71 @@ const ProfileScreen = ({ navigation, route }: Props) => {
   const { data: cities = [], isLoading: citiesLoading } = useCities(
     editModalVisible ? selectedCountryId || undefined : undefined,
   );
+
+  const selectedCountryName =
+    countries.find(c => c.id === selectedCountryId)?.name ?? '';
+
+  const handleCountryOther = () => {
+    Alert.prompt(
+      tGroups('location.countryLabel'),
+      tGroups('location.requestCountryPrefix'),
+      [
+        { text: t('cancel'), style: 'cancel' },
+        {
+          text: t('submit'),
+          onPress: (text: string | undefined) => {
+            if (!text?.trim()) return;
+            submitFeedback.mutate(
+              {
+                type: 'suggestion',
+                message: `${tGroups('location.requestCountryPrefix')}${text.trim()}`,
+              },
+              {
+                onSuccess: () =>
+                  showToast({
+                    type: 'success',
+                    title: t('successTitle'),
+                    message: tGroups('location.requestSent'),
+                  }),
+              },
+            );
+          },
+        },
+      ],
+      'plain-text',
+    );
+  };
+
+  const handleCityOther = () => {
+    Alert.prompt(
+      tGroups('location.cityLabel'),
+      tGroups('location.requestCityPrefix', { country: selectedCountryName }),
+      [
+        { text: t('cancel'), style: 'cancel' },
+        {
+          text: t('submit'),
+          onPress: (text: string | undefined) => {
+            if (!text?.trim()) return;
+            submitFeedback.mutate(
+              {
+                type: 'suggestion',
+                message: `${tGroups('location.requestCityPrefix', { country: selectedCountryName })}${text.trim()}`,
+              },
+              {
+                onSuccess: () =>
+                  showToast({
+                    type: 'success',
+                    title: t('successTitle'),
+                    message: tGroups('location.requestSent'),
+                  }),
+              },
+            );
+          },
+        },
+      ],
+      'plain-text',
+    );
+  };
 
   if (!user) return <LoadingState isDark={isDark} />;
 
@@ -187,192 +245,31 @@ const ProfileScreen = ({ navigation, route }: Props) => {
           isDark={isDark}
         />
 
-        {/* Country picker */}
-        <View>
-          <Text style={[pickerStyles.label, { color: tk.text.secondary }]}>
-            {tGroups('location.countryLabel')}
-          </Text>
-          <TouchableOpacity
-            onPress={() => {
-              setCountryListOpen(v => !v);
-              setCityListOpen(false);
-            }}
-            style={[
-              pickerStyles.selectButton,
-              {
-                backgroundColor: tk.surface.raised,
-                borderColor: countryListOpen
-                  ? tk.primary[500]
-                  : tk.primary[700],
-              },
-            ]}
-          >
-            <Text
-              style={[
-                pickerStyles.selectButtonText,
-                { color: selectedCountryId ? tk.text.primary : tk.text.muted },
-              ]}
-            >
-              {selectedCountryId
-                ? (countries.find(c => c.id === selectedCountryId)?.name ??
-                  tGroups('location.countryPlaceholder'))
-                : tGroups('location.countryPlaceholder')}
-            </Text>
-            {countriesLoading ? (
-              <Loading />
-            ) : (
-              <Text style={{ color: tk.text.muted }}>
-                {countryListOpen ? '▴' : '▾'}
-              </Text>
-            )}
-          </TouchableOpacity>
-          {countryListOpen && !countriesLoading && (
-            <ScrollView
-              style={[
-                pickerStyles.inlineList,
-                {
-                  borderColor: tk.primary[700],
-                  backgroundColor: tk.surface.raised,
-                },
-              ]}
-              nestedScrollEnabled
-            >
-              {countries.map(c => (
-                <TouchableOpacity
-                  key={c.id}
-                  onPress={() => {
-                    setSelectedCountryId(c.id);
-                    setSelectedCityId('');
-                    setCountryListOpen(false);
-                  }}
-                  style={[
-                    pickerStyles.inlineOption,
-                    { borderBottomColor: tk.primary[900] },
-                    selectedCountryId === c.id && {
-                      backgroundColor: tk.primary[900],
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      pickerStyles.inlineOptionText,
-                      { color: tk.text.primary },
-                    ]}
-                  >
-                    {c.name}
-                  </Text>
-                  <Text
-                    style={[
-                      pickerStyles.inlineOptionCode,
-                      { color: tk.text.muted },
-                    ]}
-                  >
-                    {c.code}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          )}
-        </View>
+        <LocationPickerSheet
+          label={tGroups('location.countryLabel')}
+          placeholder={tGroups('location.countryPlaceholder')}
+          items={countries}
+          selectedId={selectedCountryId || null}
+          onSelect={id => {
+            setSelectedCountryId(id);
+            setSelectedCityId('');
+          }}
+          onSelectOther={handleCountryOther}
+          loading={countriesLoading}
+          isDark={isDark}
+        />
 
-        {/* City picker */}
         {selectedCountryId ? (
-          <View>
-            <Text style={[pickerStyles.label, { color: tk.text.secondary }]}>
-              {tGroups('location.cityLabel')}
-            </Text>
-            <TouchableOpacity
-              onPress={() => {
-                if (!citiesLoading) {
-                  setCityListOpen(v => !v);
-                  setCountryListOpen(false);
-                }
-              }}
-              style={[
-                pickerStyles.selectButton,
-                {
-                  backgroundColor: tk.surface.raised,
-                  borderColor: cityListOpen ? tk.primary[500] : tk.primary[700],
-                },
-              ]}
-            >
-              <Text
-                style={[
-                  pickerStyles.selectButtonText,
-                  { color: selectedCityId ? tk.text.primary : tk.text.muted },
-                ]}
-              >
-                {selectedCityId
-                  ? (cities.find(c => c.id === selectedCityId)?.name ??
-                    tGroups('location.cityPlaceholder'))
-                  : tGroups('location.cityPlaceholder')}
-              </Text>
-              {citiesLoading ? (
-                <Loading />
-              ) : (
-                <Text style={{ color: tk.text.muted }}>
-                  {cityListOpen ? '▴' : '▾'}
-                </Text>
-              )}
-            </TouchableOpacity>
-            {cityListOpen && !citiesLoading && (
-              <ScrollView
-                style={[
-                  pickerStyles.inlineList,
-                  {
-                    borderColor: tk.primary[700],
-                    backgroundColor: tk.surface.raised,
-                  },
-                ]}
-                nestedScrollEnabled
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    setSelectedCityId('');
-                    setCityListOpen(false);
-                  }}
-                  style={[
-                    pickerStyles.inlineOption,
-                    { borderBottomColor: tk.primary[900] },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      pickerStyles.inlineOptionText,
-                      { color: tk.text.muted },
-                    ]}
-                  >
-                    {tGroups('location.cityPlaceholder')}
-                  </Text>
-                </TouchableOpacity>
-                {cities.map(c => (
-                  <TouchableOpacity
-                    key={c.id}
-                    onPress={() => {
-                      setSelectedCityId(c.id);
-                      setCityListOpen(false);
-                    }}
-                    style={[
-                      pickerStyles.inlineOption,
-                      { borderBottomColor: tk.primary[900] },
-                      selectedCityId === c.id && {
-                        backgroundColor: tk.primary[900],
-                      },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        pickerStyles.inlineOptionText,
-                        { color: tk.text.primary },
-                      ]}
-                    >
-                      {c.name}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            )}
-          </View>
+          <LocationPickerSheet
+            label={tGroups('location.cityLabel')}
+            placeholder={tGroups('location.cityPlaceholder')}
+            items={cities}
+            selectedId={selectedCityId || null}
+            onSelect={setSelectedCityId}
+            onSelectOther={handleCityOther}
+            loading={citiesLoading}
+            isDark={isDark}
+          />
         ) : null}
 
         <View style={styles.languageSection}>
@@ -431,55 +328,6 @@ const ProfileScreen = ({ navigation, route }: Props) => {
     </ScreenLayout>
   );
 };
-
-const pickerStyles = StyleSheet.create({
-  label: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.heading,
-    fontWeight: typography.weight.semibold,
-    marginBottom: spacing[2],
-  },
-  selectButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderRadius: radius.md,
-    paddingHorizontal: spacing[4],
-    paddingVertical: spacing[3],
-    minHeight: scale(48),
-  },
-  selectButtonText: {
-    fontSize: typography.size.base,
-    fontFamily: typography.family.body,
-    flex: 1,
-  },
-  inlineList: {
-    borderWidth: 1,
-    borderTopWidth: 0,
-    borderBottomLeftRadius: radius.md,
-    borderBottomRightRadius: radius.md,
-    maxHeight: scale(200),
-  },
-  inlineOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing[4],
-    paddingVertical: spacing[3],
-    borderBottomWidth: 1,
-    minHeight: scale(44),
-  },
-  inlineOptionText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.body,
-    flex: 1,
-  },
-  inlineOptionCode: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.body,
-  },
-});
 
 const deleteAccountStyles = StyleSheet.create({
   container: {

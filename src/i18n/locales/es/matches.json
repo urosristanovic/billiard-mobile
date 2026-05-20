@@ -88,6 +88,8 @@
     "disputeButton": "Disputar",
     "confirmTitle": "¿Confirmar resultado?",
     "confirmMessage": "Esto confirmará el resultado y actualizará los ratings.",
+    "confirmSuccessTitle": "Partido aceptado",
+    "confirmSuccessMessage": "Resultado confirmado. Las clasificaciones se actualizarán en breve.",
     "disputeTitle": "¿Disputar esta partida?",
     "disputeMessage": "La partida será marcada para revisión. Los ratings no se verán afectados hasta que se resuelva.",
     "disputeFormTitle": "Disputa Con Puntuacion Corregida",

@@ -1,3 +1,4 @@
+import React, { memo, useMemo } from 'react';
 import {
   ScrollView,
   Text,
@@ -19,129 +20,134 @@ interface BracketMatchCardProps {
   onPress?: () => void;
 }
 
-const BracketMatchCard = ({
-  match,
-  isDark,
-  interactive = false,
-  recordResultLabel,
-  editResultLabel,
-  waitingLabel,
-  onPress,
-}: BracketMatchCardProps) => {
-  const tk = isDark ? theme.dark : theme.light;
+const BracketMatchCard = memo(
+  ({
+    match,
+    isDark,
+    interactive = false,
+    recordResultLabel,
+    editResultLabel,
+    waitingLabel,
+    onPress,
+  }: BracketMatchCardProps) => {
+    const tk = isDark ? theme.dark : theme.light;
 
-  const homeName =
-    match.homeProfile?.displayName || match.homeProfile?.username || 'TBD';
-  const awayName =
-    match.awayProfile?.displayName || match.awayProfile?.username || 'TBD';
+    const homeName =
+      match.homeProfile?.displayName || match.homeProfile?.username || 'TBD';
+    const awayName =
+      match.awayProfile?.displayName || match.awayProfile?.username || 'TBD';
 
-  const bothTBD = homeName === 'TBD' && awayName === 'TBD';
-  const homeWon = match.winnerId === match.homeUserId;
-  const awayWon = match.winnerId === match.awayUserId;
+    const bothTBD = homeName === 'TBD' && awayName === 'TBD';
+    const homeWon = match.winnerId === match.homeUserId;
+    const awayWon = match.winnerId === match.awayUserId;
 
-  const card = (
-    <View
-      style={[
-        styles.matchCard,
-        { backgroundColor: tk.surface.default, borderColor: tk.border.default },
-        interactive && {
-          borderColor: tk.primary[500],
-          borderWidth: 1,
-        },
-      ]}
-    >
-      {bothTBD ? (
-        <View style={styles.waitingContainer}>
-          <Text style={[styles.waitingText, { color: tk.text.muted }]}>
-            {waitingLabel}
-          </Text>
-        </View>
-      ) : (
-        <>
-          <View style={styles.matchRow}>
-            <Text
-              style={[
-                styles.playerName,
-                {
-                  color: homeWon
-                    ? tk.primary[500]
-                    : match.winnerId
-                      ? tk.text.muted
-                      : tk.text.primary,
-                },
-              ]}
-              numberOfLines={1}
-            >
-              {homeName}
+    const card = (
+      <View
+        style={[
+          styles.matchCard,
+          {
+            backgroundColor: tk.surface.default,
+            borderColor: tk.border.default,
+          },
+          interactive && {
+            borderColor: tk.primary[500],
+            borderWidth: 1,
+          },
+        ]}
+      >
+        {bothTBD ? (
+          <View style={styles.waitingContainer}>
+            <Text style={[styles.waitingText, { color: tk.text.muted }]}>
+              {waitingLabel}
             </Text>
-            {match.homeScore !== null && (
+          </View>
+        ) : (
+          <>
+            <View style={styles.matchRow}>
               <Text
                 style={[
-                  styles.scoreText,
-                  { color: homeWon ? tk.primary[600] : tk.text.primary },
+                  styles.playerName,
+                  {
+                    color: homeWon
+                      ? tk.primary[500]
+                      : match.winnerId
+                        ? tk.text.muted
+                        : tk.text.primary,
+                  },
                 ]}
+                numberOfLines={1}
               >
-                {match.homeScore}
+                {homeName}
               </Text>
-            )}
-          </View>
-          <View
-            style={[styles.divider, { backgroundColor: tk.border.subtle }]}
-          />
-          <View style={styles.matchRow}>
-            <Text
-              style={[
-                styles.playerName,
-                {
-                  color: awayWon
-                    ? tk.primary[500]
-                    : match.winnerId
-                      ? tk.text.muted
-                      : tk.text.primary,
-                },
-              ]}
-              numberOfLines={1}
-            >
-              {awayName}
-            </Text>
-            {match.awayScore !== null && (
+              {match.homeScore !== null && (
+                <Text
+                  style={[
+                    styles.scoreText,
+                    { color: homeWon ? tk.primary[600] : tk.text.primary },
+                  ]}
+                >
+                  {match.homeScore}
+                </Text>
+              )}
+            </View>
+            <View
+              style={[styles.divider, { backgroundColor: tk.border.subtle }]}
+            />
+            <View style={styles.matchRow}>
               <Text
                 style={[
-                  styles.scoreText,
-                  { color: awayWon ? tk.primary[600] : tk.text.primary },
+                  styles.playerName,
+                  {
+                    color: awayWon
+                      ? tk.primary[500]
+                      : match.winnerId
+                        ? tk.text.muted
+                        : tk.text.primary,
+                  },
                 ]}
+                numberOfLines={1}
               >
-                {match.awayScore}
+                {awayName}
               </Text>
-            )}
-          </View>
-        </>
-      )}
-      {interactive ? (
-        <>
-          <View
-            style={[styles.divider, { backgroundColor: tk.border.subtle }]}
-          />
-          <Text style={[styles.interactionHint, { color: tk.primary[400] }]}>
-            {match.winnerId && editResultLabel
-              ? editResultLabel
-              : recordResultLabel}
-          </Text>
-        </>
-      ) : null}
-    </View>
-  );
-
-  if (interactive && onPress) {
-    return (
-      <TouchableOpacity onPress={onPress} activeOpacity={0.85}>
-        {card}
-      </TouchableOpacity>
+              {match.awayScore !== null && (
+                <Text
+                  style={[
+                    styles.scoreText,
+                    { color: awayWon ? tk.primary[600] : tk.text.primary },
+                  ]}
+                >
+                  {match.awayScore}
+                </Text>
+              )}
+            </View>
+          </>
+        )}
+        {interactive ? (
+          <>
+            <View
+              style={[styles.divider, { backgroundColor: tk.border.subtle }]}
+            />
+            <Text style={[styles.interactionHint, { color: tk.primary[400] }]}>
+              {match.winnerId && editResultLabel
+                ? editResultLabel
+                : recordResultLabel}
+            </Text>
+          </>
+        ) : null}
+      </View>
     );
-  }
 
-  return card;
-};
+    if (interactive && onPress) {
+      return (
+        <TouchableOpacity onPress={onPress} activeOpacity={0.85}>
+          {card}
+        </TouchableOpacity>
+      );
+    }
+
+    return card;
+  },
+);
 
 interface BracketViewerProps {
   rounds: TournamentRound[];
@@ -166,21 +172,36 @@ export const BracketViewer = ({
 }: BracketViewerProps) => {
   const tk = isDark ? theme.dark : theme.light;
 
-  const sortedRounds = [...rounds].sort((a, b) => {
-    // winners first, then losers, then grand final
-    const order = { winners: 0, main: 0, losers: 1, grand_final: 2 };
-    const typeDiff = (order[a.bracketType] ?? 0) - (order[b.bracketType] ?? 0);
-    if (typeDiff !== 0) return typeDiff;
-    return a.roundNumber - b.roundNumber;
-  });
+  const sortedRounds = useMemo(
+    () =>
+      [...rounds].sort((a, b) => {
+        const order = { winners: 0, main: 0, losers: 1, grand_final: 2 };
+        const typeDiff =
+          (order[a.bracketType] ?? 0) - (order[b.bracketType] ?? 0);
+        if (typeDiff !== 0) return typeDiff;
+        return a.roundNumber - b.roundNumber;
+      }),
+    [rounds],
+  );
+
+  const matchesByRound = useMemo(() => {
+    const map = new Map<string, TournamentMatch[]>();
+    for (const m of matches) {
+      const arr = map.get(m.roundId);
+      if (arr) arr.push(m);
+      else map.set(m.roundId, [m]);
+    }
+    for (const arr of map.values()) {
+      arr.sort((a, b) => a.position - b.position);
+    }
+    return map;
+  }, [matches]);
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <View style={styles.bracket}>
         {sortedRounds.map(round => {
-          const roundMatches = matches
-            .filter(m => m.roundId === round.id)
-            .sort((a, b) => a.position - b.position);
+          const roundMatches = matchesByRound.get(round.id) ?? [];
 
           const label =
             round.bracketType === 'grand_final'
