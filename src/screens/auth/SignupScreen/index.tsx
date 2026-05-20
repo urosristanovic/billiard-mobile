@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import {
   KeyboardAvoidingView,
+  Linking,
   Platform,
+  Pressable,
   ScrollView,
   Text,
   View,
@@ -14,6 +16,9 @@ import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useTheme } from '@/hooks/useTheme';
 import { ConfirmView } from './components';
 import { styles } from './styles';
+
+const TERMS_URL = 'https://billiard-tracker.com/terms';
+const PRIVACY_URL = 'https://billiard-tracker.com/privacy';
 
 interface SignupScreenProps {
   onNavigateLogin: () => void;
@@ -30,6 +35,8 @@ const SignupScreen = ({
   const { form, errors, updateField, validate } = useSignupForm();
   const { signup } = useAuthMutations();
   const [awaitingConfirmation, setAwaitingConfirmation] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [termsError, setTermsError] = useState<string | null>(null);
 
   if (awaitingConfirmation) {
     return (
@@ -42,7 +49,11 @@ const SignupScreen = ({
   }
 
   const handleSubmit = () => {
-    if (!validate()) return;
+    const formValid = validate();
+    if (!termsAccepted) {
+      setTermsError(tAuth('signup.termsRequired'));
+    }
+    if (!formValid || !termsAccepted) return;
     signup.mutate(
       {
         email: form.email,
@@ -134,6 +145,69 @@ const SignupScreen = ({
               placeholder={tAuth('fields.confirmPasswordPlaceholder')}
               isDark={isDark}
             />
+          </View>
+
+          <View>
+            <Pressable
+              style={styles.termsRow}
+              onPress={() => {
+                setTermsAccepted(prev => !prev);
+                setTermsError(null);
+              }}
+              accessibilityRole='checkbox'
+              accessibilityState={{ checked: termsAccepted }}
+            >
+              <View
+                style={[
+                  styles.checkbox,
+                  {
+                    borderColor: termsError
+                      ? tk.error.default
+                      : termsAccepted
+                        ? tk.primary[500]
+                        : tk.border.strong,
+                    backgroundColor: termsAccepted
+                      ? tk.primary[500]
+                      : 'transparent',
+                  },
+                ]}
+              >
+                {termsAccepted && (
+                  <Text
+                    style={[styles.checkmark, { color: tk.text.onPrimary }]}
+                  >
+                    ✓
+                  </Text>
+                )}
+              </View>
+              <View style={styles.termsTextWrap}>
+                <Text style={[styles.termsText, { color: tk.text.muted }]}>
+                  {tAuth('signup.termsAccept')}{' '}
+                </Text>
+                <Text
+                  style={[styles.termsLink, { color: tk.primary[500] }]}
+                  onPress={() => Linking.openURL(TERMS_URL)}
+                  accessibilityRole='link'
+                >
+                  {tAuth('signup.termsLink')}
+                </Text>
+                <Text style={[styles.termsText, { color: tk.text.muted }]}>
+                  {' '}{tAuth('signup.termsAnd')}{' '}
+                </Text>
+                <Text
+                  style={[styles.termsLink, { color: tk.primary[500] }]}
+                  onPress={() => Linking.openURL(PRIVACY_URL)}
+                  accessibilityRole='link'
+                >
+                  {tAuth('signup.privacyLink')}
+                </Text>
+              </View>
+            </Pressable>
+            {termsError && (
+              <Text style={[styles.termsError, { color: tk.error.text }]}>
+                {termsError}
+              </Text>
+            )}
           </View>
 
           <FormButtons

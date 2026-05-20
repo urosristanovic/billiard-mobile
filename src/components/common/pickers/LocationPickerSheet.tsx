@@ -15,7 +15,8 @@ import {
   type BottomSheetBackdropProps,
 } from '@gorhom/bottom-sheet';
 import { useTheme } from '@/hooks/useTheme';
-import { typography } from '@/constants/theme';
+import { typography, spacing, radius } from '@/constants/theme';
+import { scale } from '@/utils/scale';
 import { styles } from './LocationPickerSheet.styles';
 
 export type PickerItem = { id: string; name: string; code?: string };
@@ -50,8 +51,7 @@ export function LocationPickerSheet({
   const { isDark: systemDark, tk } = useTheme();
   const isDark = isDarkProp ?? systemDark;
   const sheetRef = useRef<BottomSheetModal>(null);
-  const searchRef =
-    useRef<React.ComponentRef<typeof BottomSheetTextInput>>(null);
+  const searchRef = useRef<React.ComponentRef<typeof BottomSheetTextInput>>(null);
   const [query, setQuery] = useState('');
 
   const selectedName = useMemo(
@@ -133,9 +133,7 @@ export function LocationPickerSheet({
             </Text>
           ) : null}
           {isSelected && !isOther ? (
-            <Text style={[styles.checkmark, { color: tk.primary[400] }]}>
-              ✓
-            </Text>
+            <Text style={[styles.checkmark, { color: tk.primary[400] }]}>✓</Text>
           ) : null}
         </TouchableOpacity>
       );
@@ -184,13 +182,13 @@ export function LocationPickerSheet({
         {loading ? (
           <ActivityIndicator size='small' color={tk.text.muted} />
         ) : (
-          <Text style={[styles.triggerChevron, { color: tk.text.muted }]}>
-            ▾
-          </Text>
+          <Text style={[styles.triggerChevron, { color: tk.text.muted }]}>▾</Text>
         )}
       </TouchableOpacity>
 
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
+      {error ? (
+        <Text style={styles.errorText}>{error}</Text>
+      ) : null}
 
       <BottomSheetModal
         ref={sheetRef}

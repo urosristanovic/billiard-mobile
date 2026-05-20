@@ -44,67 +44,64 @@ export const FormModal = ({
       statusBarTranslucent
     >
       <BottomSheetModalProvider>
-        <View
-          style={[styles.backdrop, { backgroundColor: tk.background.overlay }]}
+      <View
+        style={[styles.backdrop, { backgroundColor: tk.background.overlay }]}
+      >
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardView}
         >
-          <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.keyboardView}
+          <View
+            style={[
+              styles.panel,
+              {
+                backgroundColor: tk.surface.default,
+                borderTopColor: tk.primary[700],
+                paddingBottom: footer ? 0 : safeBottom,
+              },
+              shadows.lg,
+            ]}
           >
             <View
-              style={[
-                styles.panel,
-                {
-                  backgroundColor: tk.surface.default,
-                  borderTopColor: tk.primary[700],
-                  paddingBottom: footer ? 0 : safeBottom,
-                },
-                shadows.lg,
-              ]}
+              style={[styles.header, { borderBottomColor: tk.border.default }]}
             >
+              <Text style={[styles.title, { color: tk.text.primary }]}>
+                {title}
+              </Text>
+              <TouchableOpacity
+                onPress={onClose}
+                accessibilityRole='button'
+                accessibilityLabel={t('closeA11y')}
+                hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+              >
+                <Text style={[styles.closeText, { color: tk.text.muted }]}>
+                  ✕
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView
+              style={styles.body}
+              contentContainerStyle={styles.bodyContent}
+              keyboardShouldPersistTaps='handled'
+            >
+              {children}
+            </ScrollView>
+            {footer && (
               <View
                 style={[
-                  styles.header,
-                  { borderBottomColor: tk.border.default },
+                  styles.footer,
+                  {
+                    borderTopColor: tk.border.default,
+                    paddingBottom: safeBottom,
+                  },
                 ]}
               >
-                <Text style={[styles.title, { color: tk.text.primary }]}>
-                  {title}
-                </Text>
-                <TouchableOpacity
-                  onPress={onClose}
-                  accessibilityRole='button'
-                  accessibilityLabel={t('closeA11y')}
-                  hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
-                >
-                  <Text style={[styles.closeText, { color: tk.text.muted }]}>
-                    ✕
-                  </Text>
-                </TouchableOpacity>
+                {footer}
               </View>
-              <ScrollView
-                style={styles.body}
-                contentContainerStyle={styles.bodyContent}
-                keyboardShouldPersistTaps='handled'
-              >
-                {children}
-              </ScrollView>
-              {footer && (
-                <View
-                  style={[
-                    styles.footer,
-                    {
-                      borderTopColor: tk.border.default,
-                      paddingBottom: safeBottom,
-                    },
-                  ]}
-                >
-                  {footer}
-                </View>
-              )}
-            </View>
-          </KeyboardAvoidingView>
-        </View>
+            )}
+          </View>
+        </KeyboardAvoidingView>
+      </View>
       </BottomSheetModalProvider>
     </Modal>
   );

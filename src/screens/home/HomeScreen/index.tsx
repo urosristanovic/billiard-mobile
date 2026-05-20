@@ -91,7 +91,9 @@ const HomeScreen = ({ navigation }: Props) => {
         match={item}
         userId={user?.id ?? ''}
         userName={user?.displayName || user?.username}
-        onPress={() => navigation.navigate('MatchDetail', { matchId: item.id })}
+        onPress={() =>
+          navigation.navigate('MatchDetail', { matchId: item.id })
+        }
         isDark={isDark}
       />
     ),

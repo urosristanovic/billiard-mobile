@@ -30,13 +30,7 @@ export const StandingsTable = ({
 
   return (
     <View style={styles.container}>
-      <View
-        style={[
-          styles.row,
-          styles.headerRow,
-          { borderBottomColor: tk.border.default },
-        ]}
-      >
+      <View style={[styles.row, styles.headerRow, { borderBottomColor: tk.border.default }]}>
         <Text style={[styles.rank, { color: tk.text.muted }]}>#</Text>
         <Text style={[styles.name, { color: tk.text.muted }]}>Player</Text>
         <Text style={[styles.cell, { color: tk.text.muted }]}>W</Text>
@@ -60,7 +54,9 @@ export const StandingsTable = ({
               rank === 1 && { backgroundColor: tk.primary[900] + '33' },
             ]}
           >
-            <Text style={[styles.rank, { color: tk.text.muted }]}>{rank}</Text>
+            <Text style={[styles.rank, { color: tk.text.muted }]}>
+              {rank}
+            </Text>
             <Text
               style={[styles.name, { color: tk.text.primary }]}
               numberOfLines={1}
