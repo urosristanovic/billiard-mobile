@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   ScrollView,
   Text,
@@ -20,134 +20,129 @@ interface BracketMatchCardProps {
   onPress?: () => void;
 }
 
-const BracketMatchCard = memo(
-  ({
-    match,
-    isDark,
-    interactive = false,
-    recordResultLabel,
-    editResultLabel,
-    waitingLabel,
-    onPress,
-  }: BracketMatchCardProps) => {
-    const tk = isDark ? theme.dark : theme.light;
+const BracketMatchCard = React.memo(({
+  match,
+  isDark,
+  interactive = false,
+  recordResultLabel,
+  editResultLabel,
+  waitingLabel,
+  onPress,
+}: BracketMatchCardProps) => {
+  const tk = isDark ? theme.dark : theme.light;
 
-    const homeName =
-      match.homeProfile?.displayName || match.homeProfile?.username || 'TBD';
-    const awayName =
-      match.awayProfile?.displayName || match.awayProfile?.username || 'TBD';
+  const homeName =
+    match.homeProfile?.displayName || match.homeProfile?.username || 'TBD';
+  const awayName =
+    match.awayProfile?.displayName || match.awayProfile?.username || 'TBD';
 
-    const bothTBD = homeName === 'TBD' && awayName === 'TBD';
-    const homeWon = match.winnerId === match.homeUserId;
-    const awayWon = match.winnerId === match.awayUserId;
+  const bothTBD = homeName === 'TBD' && awayName === 'TBD';
+  const homeWon = match.winnerId === match.homeUserId;
+  const awayWon = match.winnerId === match.awayUserId;
 
-    const card = (
-      <View
-        style={[
-          styles.matchCard,
-          {
-            backgroundColor: tk.surface.default,
-            borderColor: tk.border.default,
-          },
-          interactive && {
-            borderColor: tk.primary[500],
-            borderWidth: 1,
-          },
-        ]}
-      >
-        {bothTBD ? (
-          <View style={styles.waitingContainer}>
-            <Text style={[styles.waitingText, { color: tk.text.muted }]}>
-              {waitingLabel}
+  const card = (
+    <View
+      style={[
+        styles.matchCard,
+        { backgroundColor: tk.surface.default, borderColor: tk.border.default },
+        interactive && {
+          borderColor: tk.primary[500],
+          borderWidth: 1,
+        },
+      ]}
+    >
+      {bothTBD ? (
+        <View style={styles.waitingContainer}>
+          <Text style={[styles.waitingText, { color: tk.text.muted }]}>
+            {waitingLabel}
+          </Text>
+        </View>
+      ) : (
+        <>
+          <View style={styles.matchRow}>
+            <Text
+              style={[
+                styles.playerName,
+                {
+                  color: homeWon
+                    ? tk.primary[500]
+                    : match.winnerId
+                      ? tk.text.muted
+                      : tk.text.primary,
+                },
+              ]}
+              numberOfLines={1}
+            >
+              {homeName}
             </Text>
+            {match.homeScore !== null && (
+              <Text
+                style={[
+                  styles.scoreText,
+                  { color: homeWon ? tk.primary[600] : tk.text.primary },
+                ]}
+              >
+                {match.homeScore}
+              </Text>
+            )}
           </View>
-        ) : (
-          <>
-            <View style={styles.matchRow}>
-              <Text
-                style={[
-                  styles.playerName,
-                  {
-                    color: homeWon
-                      ? tk.primary[500]
-                      : match.winnerId
-                        ? tk.text.muted
-                        : tk.text.primary,
-                  },
-                ]}
-                numberOfLines={1}
-              >
-                {homeName}
-              </Text>
-              {match.homeScore !== null && (
-                <Text
-                  style={[
-                    styles.scoreText,
-                    { color: homeWon ? tk.primary[600] : tk.text.primary },
-                  ]}
-                >
-                  {match.homeScore}
-                </Text>
-              )}
-            </View>
-            <View
-              style={[styles.divider, { backgroundColor: tk.border.subtle }]}
-            />
-            <View style={styles.matchRow}>
-              <Text
-                style={[
-                  styles.playerName,
-                  {
-                    color: awayWon
-                      ? tk.primary[500]
-                      : match.winnerId
-                        ? tk.text.muted
-                        : tk.text.primary,
-                  },
-                ]}
-                numberOfLines={1}
-              >
-                {awayName}
-              </Text>
-              {match.awayScore !== null && (
-                <Text
-                  style={[
-                    styles.scoreText,
-                    { color: awayWon ? tk.primary[600] : tk.text.primary },
-                  ]}
-                >
-                  {match.awayScore}
-                </Text>
-              )}
-            </View>
-          </>
-        )}
-        {interactive ? (
-          <>
-            <View
-              style={[styles.divider, { backgroundColor: tk.border.subtle }]}
-            />
-            <Text style={[styles.interactionHint, { color: tk.primary[400] }]}>
-              {match.winnerId && editResultLabel
-                ? editResultLabel
-                : recordResultLabel}
+          <View
+            style={[styles.divider, { backgroundColor: tk.border.subtle }]}
+          />
+          <View style={styles.matchRow}>
+            <Text
+              style={[
+                styles.playerName,
+                {
+                  color: awayWon
+                    ? tk.primary[500]
+                    : match.winnerId
+                      ? tk.text.muted
+                      : tk.text.primary,
+                },
+              ]}
+              numberOfLines={1}
+            >
+              {awayName}
             </Text>
-          </>
-        ) : null}
-      </View>
+            {match.awayScore !== null && (
+              <Text
+                style={[
+                  styles.scoreText,
+                  { color: awayWon ? tk.primary[600] : tk.text.primary },
+                ]}
+              >
+                {match.awayScore}
+              </Text>
+            )}
+          </View>
+        </>
+      )}
+      {interactive ? (
+        <>
+          <View
+            style={[styles.divider, { backgroundColor: tk.border.subtle }]}
+          />
+          <Text style={[styles.interactionHint, { color: tk.primary[400] }]}>
+            {match.winnerId && editResultLabel
+              ? editResultLabel
+              : recordResultLabel}
+          </Text>
+        </>
+      ) : null}
+    </View>
+  );
+
+  if (interactive && onPress) {
+    return (
+      <TouchableOpacity onPress={onPress} activeOpacity={0.85}>
+        {card}
+      </TouchableOpacity>
     );
+  }
 
-    if (interactive && onPress) {
-      return (
-        <TouchableOpacity onPress={onPress} activeOpacity={0.85}>
-          {card}
-        </TouchableOpacity>
-      );
-    }
-
-    return card;
-  },
-);
+  return card;
+});
 
 interface BracketViewerProps {
   rounds: TournamentRound[];

@@ -8,6 +8,8 @@ interface ScreenLayoutProps {
   isDark?: boolean;
   withGradientHeader?: boolean;
   header?: React.ReactNode;
+  /** Enable for screens without a tab bar (auth, modals). Tab screens keep this off. */
+  includeBottomInset?: boolean;
 }
 
 export const ScreenLayout = ({
@@ -15,14 +17,18 @@ export const ScreenLayout = ({
   isDark = false,
   withGradientHeader = false,
   header,
+  includeBottomInset = false,
 }: ScreenLayoutProps) => {
   const t = isDark ? theme.dark : theme.light;
   const g = isDark ? gradients.dark : gradients.light;
+  const edges = includeBottomInset
+    ? (['top', 'left', 'right', 'bottom'] as const)
+    : (['top', 'left', 'right'] as const);
 
   return (
     <SafeAreaView
       style={[styles.safe, { backgroundColor: t.background.primary }]}
-      edges={['top', 'left', 'right']}
+      edges={edges}
     >
       {header &&
         (withGradientHeader ? (

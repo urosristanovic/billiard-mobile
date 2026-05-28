@@ -306,7 +306,6 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
             match={match}
             me={me ?? null}
             opponent={opponent ?? null}
-            myUserId={user?.id ?? ''}
             isDark={isDark}
             isConfirming={confirmMatch.isPending}
             isDisputing={disputeMatch.isPending}

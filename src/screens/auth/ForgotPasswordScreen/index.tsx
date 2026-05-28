@@ -61,7 +61,7 @@ const ForgotPasswordScreen = ({
   };
 
   return (
-    <ScreenLayout isDark={isDark}>
+    <ScreenLayout isDark={isDark} includeBottomInset>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

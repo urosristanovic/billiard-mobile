@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeBottom } from '@/hooks/useSafeBottom';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { theme, typography, radius, spacing, shadows } from '@/constants/theme';
 
@@ -31,9 +31,8 @@ export const FormModal = ({
   isDark = false,
 }: FormModalProps) => {
   const { t } = useTranslation('common');
-  const insets = useSafeAreaInsets();
+  const safeBottom = useSafeBottom();
   const tk = isDark ? theme.dark : theme.light;
-  const safeBottom = Math.max(insets.bottom, spacing[4]);
 
   return (
     <Modal

@@ -19,7 +19,7 @@ export const ConfirmView = ({
   const { tk } = useTheme();
 
   return (
-    <ScreenLayout isDark={isDark}>
+    <ScreenLayout isDark={isDark} includeBottomInset>
       <View style={styles.confirmContainer}>
         <Text style={[styles.title, { color: tk.text.primary }]}>
           {tAuth('confirmEmail.title')}

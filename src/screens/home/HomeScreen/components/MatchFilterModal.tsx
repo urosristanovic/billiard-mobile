@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSafeBottom } from '@/hooks/useSafeBottom';
 import { useOpponents } from '@/features/matches/useOpponents';
 import { getOpponentLabel } from '@/features/matches/opponentLabel';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
@@ -59,6 +60,7 @@ export const MatchFilterModal = ({
   const { t } = useTranslation('matches');
   const { t: tHome } = useTranslation('home');
   const { isDark, tk } = useTheme();
+  const safeBottom = useSafeBottom();
 
   const [draft, setDraft] = useState<MatchFilters>(applied);
 
@@ -108,6 +110,7 @@ export const MatchFilterModal = ({
       visible={visible}
       transparent
       animationType='slide'
+      statusBarTranslucent
       onRequestClose={onClose}
       onShow={handleOpen}
     >
@@ -122,6 +125,7 @@ export const MatchFilterModal = ({
             {
               backgroundColor: tk.background.primary,
               borderColor: tk.primary[800],
+              paddingBottom: safeBottom,
             },
           ]}
         >
@@ -285,7 +289,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    paddingBottom: spacing[8],
   },
   sheetHeader: {
     flexDirection: 'row',

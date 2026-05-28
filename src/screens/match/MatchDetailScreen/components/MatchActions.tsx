@@ -12,7 +12,6 @@ interface MatchActionsProps {
   match: Match;
   me: MatchPlayer | null;
   opponent: MatchPlayer | null;
-  myUserId: string;
   isDark: boolean;
   isConfirming: boolean;
   isDisputing: boolean;
@@ -27,7 +26,6 @@ export const MatchActions = ({
   match,
   me,
   opponent,
-  myUserId,
   isDark,
   isConfirming,
   isDisputing,
@@ -43,14 +41,10 @@ export const MatchActions = ({
 
   const opponentRequestedCancel = !!opponent?.cancelRequested;
   const iNeedToConfirm = !me.confirmed;
-  const isCreator = match.createdBy
-    ? match.createdBy === myUserId
-    : me.confirmed;
 
   const canOpenDispute = match.isTournament
     ? iNeedToConfirm
-    : !me.cancelRequested &&
-      (!isCreator || opponentRequestedCancel || iNeedToConfirm);
+    : !me.cancelRequested && (!me.confirmed || opponentRequestedCancel);
   const canOpenCancel =
     !match.isTournament && !me.cancelRequested && !opponentRequestedCancel;
   const canAcceptCancel =

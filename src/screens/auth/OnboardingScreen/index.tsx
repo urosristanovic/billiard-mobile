@@ -85,7 +85,7 @@ const OnboardingScreen = ({
   );
 
   return (
-    <ScreenLayout isDark={isDark}>
+    <ScreenLayout isDark={isDark} includeBottomInset>
       <View style={styles.container}>
         <FlatList
           ref={flatListRef}

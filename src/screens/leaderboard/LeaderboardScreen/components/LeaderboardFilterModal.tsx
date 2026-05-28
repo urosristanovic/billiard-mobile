@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { useSafeBottom } from '@/hooks/useSafeBottom';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { ToggleSwitch } from '@/components/common/forms';
 import { useTheme } from '@/hooks/useTheme';
@@ -59,6 +60,7 @@ export const LeaderboardFilterModal = ({
   const { t } = useTranslation('leaderboard');
   const { t: tHome } = useTranslation('home');
   const { isDark, tk } = useTheme();
+  const safeBottom = useSafeBottom();
 
   const [draft, setDraft] = useState<LeaderboardFilters>(applied);
 
@@ -96,6 +98,7 @@ export const LeaderboardFilterModal = ({
       visible={visible}
       transparent
       animationType='slide'
+      statusBarTranslucent
       onRequestClose={onClose}
       onShow={handleOpen}
     >
@@ -111,6 +114,7 @@ export const LeaderboardFilterModal = ({
             {
               backgroundColor: tk.background.primary,
               borderColor: tk.primary[800],
+              paddingBottom: safeBottom,
             },
           ]}
         >
@@ -260,7 +264,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    paddingBottom: spacing[8],
     maxHeight: '80%',
   },
   sheetHeader: {
