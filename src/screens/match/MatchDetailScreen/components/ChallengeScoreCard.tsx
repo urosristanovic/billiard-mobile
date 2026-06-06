@@ -3,9 +3,16 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { PrimaryButton } from '@/components/common/buttons';
-import { theme, typography, spacing, radius, iconSize } from '@/constants/theme';
+import {
+  theme,
+  typography,
+  spacing,
+  radius,
+  iconSize,
+} from '@/constants/theme';
 import { scale } from '@/utils/scale';
 import { useTheme } from '@/hooks/useTheme';
+import { AUTO_CONFIRM_HOURS } from '@/utils/autoConfirmWindow';
 import type { Match } from '@/types/match';
 import { styles as sharedStyles } from '../styles';
 
@@ -33,7 +40,9 @@ const ScoreAdjuster = ({
       },
     ]}
   >
-    <Text style={[sharedStyles.challengeScoreValue, { color: tk.primary[600] }]}>
+    <Text
+      style={[sharedStyles.challengeScoreValue, { color: tk.primary[600] }]}
+    >
       {score}
     </Text>
 
@@ -153,10 +162,7 @@ export const ChallengeScoreCard = ({
           {isMe ? t('you') : player.profile.displayName}
         </Text>
         <Text
-          style={[
-            styles.username,
-            { color: tk.text.muted, textAlign: align },
-          ]}
+          style={[styles.username, { color: tk.text.muted, textAlign: align }]}
         >
           @{player.profile.username}
         </Text>
@@ -258,7 +264,11 @@ export const ChallengeScoreCard = ({
                     },
                   ]}
                 >
-                  <Feather name='minus' size={iconSize.sm} color={tk.text.secondary} />
+                  <Feather
+                    name='minus'
+                    size={iconSize.sm}
+                    color={tk.text.secondary}
+                  />
                 </TouchableOpacity>
                 <Text
                   style={[
@@ -279,13 +289,21 @@ export const ChallengeScoreCard = ({
                     },
                   ]}
                 >
-                  <Feather name='plus' size={iconSize.sm} color={tk.text.secondary} />
+                  <Feather
+                    name='plus'
+                    size={iconSize.sm}
+                    color={tk.text.secondary}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         ))}
       </View>
+
+      <Text style={[styles.hint, { color: tk.text.muted }]}>
+        {t('detail.autoConfirmHint', { hours: AUTO_CONFIRM_HOURS })}
+      </Text>
 
       <PrimaryButton
         label={t('detail.recordMatchButton')}
@@ -359,5 +377,10 @@ const styles = StyleSheet.create({
     fontSize: typography.size.lg,
     fontFamily: typography.family.display,
     letterSpacing: 1,
+  },
+  hint: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.body,
+    textAlign: 'center',
   },
 });

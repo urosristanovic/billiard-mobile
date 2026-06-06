@@ -30,6 +30,10 @@ function eventLabel(
       return t('timeline.matchCreated', { name: event.actorName });
     case 'resultAccepted':
       return t('timeline.resultAccepted', { name: event.actorName });
+    case 'autoConfirmed':
+      return t('timeline.autoConfirmed');
+    case 'autoResolved':
+      return t('timeline.autoResolved');
     case 'cancellationRequested':
       return t('timeline.cancellationRequested', { name: event.actorName });
     case 'cancellationAccepted':

@@ -105,7 +105,7 @@ const LoginScreen = ({
               onChangeText={v => updateField('password', v)}
               error={errors.password}
               secureTextEntry
-              placeholder={tAuth('fields.passwordPlaceholder')}
+              placeholder={tAuth('fields.loginPasswordPlaceholder')}
               isDark={isDark}
             />
             <Text

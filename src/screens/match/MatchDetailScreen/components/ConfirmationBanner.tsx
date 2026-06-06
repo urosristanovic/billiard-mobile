@@ -3,18 +3,42 @@ import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 
 interface ConfirmationBannerProps {
+  status: 'pending_confirmation' | 'disputed';
   iConfirmed: boolean;
+  iAmDisputer: boolean;
   autoConfirmAt: string | null;
   isDark: boolean;
 }
 
 export const ConfirmationBanner = ({
+  status,
   iConfirmed,
+  iAmDisputer,
   autoConfirmAt,
   isDark,
 }: ConfirmationBannerProps) => {
   const { t } = useTranslation('matches');
   const tk = isDark ? theme.dark : theme.light;
+
+  const dateString = autoConfirmAt
+    ? new Date(autoConfirmAt).toLocaleString()
+    : null;
+
+  let mainText: string;
+  let subText: string | null = null;
+
+  if (status === 'disputed') {
+    if (iAmDisputer) {
+      mainText = t('disputeYouDisputed');
+      subText = dateString ? t('autoResolvesOn', { date: dateString }) : null;
+    } else {
+      mainText = t('disputeOpponentDisputed');
+      subText = dateString ? t('autoResolvesOn', { date: dateString }) : null;
+    }
+  } else {
+    mainText = iConfirmed ? t('youSubmittedScores') : t('opponentSubmittedScores');
+    subText = dateString ? t('autoConfirmsOn', { date: dateString }) : null;
+  }
 
   return (
     <View
@@ -24,13 +48,11 @@ export const ConfirmationBanner = ({
       ]}
     >
       <Text style={[styles.text, { color: tk.warning.text }]}>
-        {iConfirmed ? t('youConfirmedResult') : t('waitingForOpponent')}
+        {mainText}
       </Text>
-      {autoConfirmAt && (
+      {subText && (
         <Text style={[styles.sub, { color: tk.text.muted }]}>
-          {t('autoConfirmsOn', {
-            date: new Date(autoConfirmAt).toLocaleString(),
-          })}
+          {subText}
         </Text>
       )}
     </View>
@@ -40,7 +62,7 @@ export const ConfirmationBanner = ({
 const styles = StyleSheet.create({
   banner: {
     padding: spacing[4],
-    borderRadius: radius.lg,
+    borderRadius: radius['2xl'],
     borderWidth: 1,
     gap: spacing[1],
   },

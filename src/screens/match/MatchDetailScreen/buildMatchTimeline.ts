@@ -3,11 +3,13 @@ import type { Match, MatchDispute, MatchPlayer } from '@/types/match';
 export type TimelineEventType =
   | 'matchCreated'
   | 'resultAccepted'
+  | 'autoConfirmed'
   | 'cancellationRequested'
   | 'cancellationAccepted'
   | 'disputeOpened'
   | 'counterDispute'
   | 'disputeAccepted'
+  | 'autoResolved'
   | 'matchCancelled';
 
 export interface TimelineEvent {
@@ -64,6 +66,7 @@ function addDisputeEvents(
   players: MatchPlayer[],
   myUserId: string,
   unknownPlayerLabel: string,
+  autoConfirmAt: string | null,
 ) {
   const disputesAsc = [...disputes].sort(
     (a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt),
@@ -99,12 +102,25 @@ function addDisputeEvents(
     });
 
     if (dispute.status === 'accepted' && isValidTimestamp(dispute.resolvedAt)) {
-      events.push({
-        id: `dispute-accepted-${dispute.id}`,
-        type: 'disputeAccepted',
-        at: dispute.resolvedAt,
-        actorName: getDisplayName(nonDisputer, myUserId, unknownPlayerLabel),
-      });
+      const wasAutoResolved =
+        isValidTimestamp(autoConfirmAt) &&
+        Date.parse(dispute.resolvedAt) >= Date.parse(autoConfirmAt!);
+
+      events.push(
+        wasAutoResolved
+          ? {
+              id: `dispute-accepted-${dispute.id}`,
+              type: 'autoResolved',
+              at: dispute.resolvedAt,
+              actorName: '',
+            }
+          : {
+              id: `dispute-accepted-${dispute.id}`,
+              type: 'disputeAccepted',
+              at: dispute.resolvedAt,
+              actorName: getDisplayName(nonDisputer, myUserId, unknownPlayerLabel),
+            },
+      );
     }
   });
 }
@@ -129,21 +145,35 @@ export function buildMatchTimeline(
     });
   }
 
-  const acceptor = match.isTournament
-    ? null
-    : (match.players.find(
+  const wasAutoConfirmed =
+    match.status === 'confirmed' &&
+    isValidTimestamp(match.autoConfirmAt) &&
+    isValidTimestamp(match.confirmedAt) &&
+    Date.parse(match.confirmedAt!) >= Date.parse(match.autoConfirmAt!);
+
+  if (wasAutoConfirmed && isValidTimestamp(match.confirmedAt)) {
+    events.push({
+      id: `auto-confirmed-${match.id}`,
+      type: 'autoConfirmed',
+      at: match.confirmedAt!,
+      actorName: '',
+    });
+  } else if (!match.isTournament) {
+    const acceptor =
+      match.players.find(
         player =>
           player.userId !== creator?.userId &&
           isValidTimestamp(player.confirmedAt) &&
           player.confirmed,
-      ) ?? null);
-  if (acceptor?.confirmedAt) {
-    events.push({
-      id: `accepted-${acceptor.userId}`,
-      type: 'resultAccepted',
-      at: acceptor.confirmedAt,
-      actorName: getDisplayName(acceptor, myUserId, unknownPlayerLabel),
-    });
+      ) ?? null;
+    if (acceptor?.confirmedAt) {
+      events.push({
+        id: `accepted-${acceptor.userId}`,
+        type: 'resultAccepted',
+        at: acceptor.confirmedAt,
+        actorName: getDisplayName(acceptor, myUserId, unknownPlayerLabel),
+      });
+    }
   }
 
   const cancelActors = [...match.players]
@@ -180,6 +210,7 @@ export function buildMatchTimeline(
     match.players,
     myUserId,
     unknownPlayerLabel,
+    match.autoConfirmAt,
   );
 
   const cancelledByPlayer =

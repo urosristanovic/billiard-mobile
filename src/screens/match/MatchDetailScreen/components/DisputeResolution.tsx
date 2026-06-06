@@ -60,7 +60,7 @@ export const DisputeResolution = ({
           {t('detail.currentScoresLabel')}
         </Text>
         <Text style={[styles.value, { color: tk.text.primary }]}>
-          {t('you')}: {currentMyScore ?? '-'} | {opponentName}:{' '}
+          {t('you')}: {currentMyScore ?? '-'} — {opponentName}:{' '}
           {currentOpponentScore ?? '-'}
         </Text>
       </View>
@@ -70,7 +70,7 @@ export const DisputeResolution = ({
           {t('detail.proposedScoresLabel')}
         </Text>
         <Text style={[styles.value, { color: tk.text.primary }]}>
-          {t('you')}: {proposedMyScore ?? '-'} | {opponentName}:{' '}
+          {t('you')}: {proposedMyScore ?? '-'} — {opponentName}:{' '}
           {proposedOpponentScore ?? '-'}
         </Text>
       </View>
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   section: {
-    gap: spacing[1],
+    gap: spacing[3],
   },
   sectionLabel: {
     fontSize: typography.size.xs,

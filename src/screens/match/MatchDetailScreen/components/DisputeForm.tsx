@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FormField } from '@/components/common/forms/FormField';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { theme, typography, spacing, radius } from '@/constants/theme';
+import { AUTO_CONFIRM_HOURS } from '@/utils/autoConfirmWindow';
 
 interface DisputeFormProps {
   isVisible: boolean;
@@ -85,6 +86,10 @@ export const DisputeForm = ({
         </Text>
       ) : null}
 
+      <Text style={[styles.hint, { color: tk.text.muted }]}>
+        {t('detail.autoResolveHint', { hours: AUTO_CONFIRM_HOURS })}
+      </Text>
+
       <View style={styles.actions}>
         <SecondaryButton
           label={t('detail.closeDisputeFormButton')}
@@ -121,6 +126,10 @@ const styles = StyleSheet.create({
   error: {
     fontSize: typography.size.xs,
     fontFamily: typography.family.bodyMedium,
+  },
+  hint: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.body,
   },
   actions: {
     gap: spacing[2],

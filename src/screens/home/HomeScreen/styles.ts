@@ -52,6 +52,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing[4],
     marginBottom: spacing[5],
+    paddingRight: scale(48) + spacing[3],
   },
   avatar: {
     width: scale(56),

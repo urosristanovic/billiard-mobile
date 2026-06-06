@@ -9,11 +9,13 @@ import { matchService } from '@/services/match';
 import { getAccessToken } from '@/features/auth/getAccessToken';
 import { useAuth } from '@/features/auth/useAuth';
 import { QUERY_KEYS } from '@/config/queryKeys';
+import { AUTO_CONFIRM_HOURS } from '@/utils/autoConfirmWindow';
 import type { PaginatedResponse } from '@/types/api';
 import type { CreateMatchInput, DisputeMatchInput, Match } from '@/types/match';
 
 export const useMatchMutations = () => {
   const { t } = useTranslation('common');
+  const { t: tMatches } = useTranslation('matches');
   const { showToast } = useToast();
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -138,6 +140,11 @@ export const useMatchMutations = () => {
       queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
       updateMatchInCachedLists(match);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
+      showToast({
+        type: 'success',
+        title: tMatches('detail.disputeSubmittedTitle'),
+        message: tMatches('detail.disputeSubmittedAutoResolveInfo', { hours: AUTO_CONFIRM_HOURS }),
+      });
     },
     onError: error =>
       showToast({
@@ -208,6 +215,11 @@ export const useMatchMutations = () => {
       queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
       updateMatchInCachedLists(match);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
+      showToast({
+        type: 'success',
+        title: tMatches('detail.disputeSubmittedTitle'),
+        message: tMatches('detail.disputeSubmittedAutoResolveInfo', { hours: AUTO_CONFIRM_HOURS }),
+      });
     },
     onError: error =>
       showToast({
@@ -308,6 +320,11 @@ export const useMatchMutations = () => {
       queryClient.setQueryData(QUERY_KEYS.MATCH_DETAIL(match.id), match);
       updateMatchInCachedLists(match);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.MATCHES });
+      showToast({
+        type: 'success',
+        title: tMatches('detail.scoreSubmittedTitle'),
+        message: tMatches('detail.scoreSubmittedAutoConfirmInfo', { hours: AUTO_CONFIRM_HOURS }),
+      });
     },
     onError: error =>
       showToast({

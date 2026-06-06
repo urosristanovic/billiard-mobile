@@ -24,6 +24,7 @@ import {
   MatchHeader,
   ChallengeScoreCard,
   ChallengeActions,
+  ConfirmationBanner,
 } from './components';
 import { styles } from './styles';
 import type { HomeStackParamList } from '@/navigation/AppNavigator';
@@ -298,6 +299,18 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
                 setActiveForm('declineChallenge');
               }}
               onCancelRequest={handleCancelChallengeRequest}
+            />
+          )}
+
+        {(match.status === 'pending_confirmation' || match.status === 'disputed') &&
+          !isDisputeFormVisible &&
+          !isCancelFormVisible && (
+            <ConfirmationBanner
+              status={match.status}
+              iConfirmed={me?.confirmed ?? false}
+              iAmDisputer={iAmDisputer}
+              autoConfirmAt={match.autoConfirmAt}
+              isDark={isDark}
             />
           )}
 
