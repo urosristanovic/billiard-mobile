@@ -86,7 +86,7 @@ export const useMatchMutations = () => {
     mutationFn: async (input: {
       opponentId: string;
       discipline: CreateMatchInput['discipline'];
-      bestOf?: number;
+      raceTo?: number;
       message?: string;
     }) => {
       if (!user) throw new Error('Not authenticated');

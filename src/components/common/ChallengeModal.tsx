@@ -11,7 +11,7 @@ import { DISCIPLINE_LABELS, DISCIPLINES } from '@/types/match';
 import type { Discipline } from '@/types';
 import { styles } from './ChallengeModal.styles';
 
-const BEST_OF_OPTIONS = [3, 5, 9] as const;
+const RACE_TO_OPTIONS = [2, 3, 5, 7, 9] as const;
 
 interface ChallengeModalProps {
   visible: boolean;
@@ -30,9 +30,9 @@ export const ChallengeModal = ({
   const { isDark, tk } = useTheme();
 
   const [discipline, setDiscipline] = useState<Discipline>('8ball');
-  const [bestOf, setBestOf] = useState<number>(3);
-  const [isOtherBestOf, setIsOtherBestOf] = useState(false);
-  const [otherBestOf, setOtherBestOf] = useState(1);
+  const [raceTo, setRaceTo] = useState<number>(2);
+  const [isOtherRaceTo, setIsOtherRaceTo] = useState(false);
+  const [otherRaceTo, setOtherRaceTo] = useState(1);
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -41,12 +41,12 @@ export const ChallengeModal = ({
 
   const handleSend = () => {
     setApiError(null);
-    const selectedBestOf = isOtherBestOf ? otherBestOf : bestOf;
+    const selectedRaceTo = isOtherRaceTo ? otherRaceTo : raceTo;
     createChallenge.mutate(
       {
         opponentId,
         discipline,
-        bestOf: selectedBestOf,
+        raceTo: selectedRaceTo,
         message: message.trim() || undefined,
       },
       {
@@ -65,9 +65,9 @@ export const ChallengeModal = ({
     setApiError(null);
     setMessage('');
     setDiscipline('8ball');
-    setBestOf(3);
-    setIsOtherBestOf(false);
-    setOtherBestOf(1);
+    setRaceTo(3);
+    setIsOtherRaceTo(false);
+    setOtherRaceTo(1);
     onClose();
   };
 
@@ -119,29 +119,29 @@ export const ChallengeModal = ({
             </ScrollView>
           </View>
 
-          {/* Best Of */}
+          {/* Race To */}
           <View>
             <Text style={[styles.sectionLabel, { color: tk.text.secondary }]}>
-              {t('bestOfLabel')}
+              {t('raceToLabel')}
             </Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.pillRow}
             >
-              {BEST_OF_OPTIONS.map(n => (
+              {RACE_TO_OPTIONS.map(n => (
                 <SecondaryButton
                   key={n}
-                  label={t(`bestOfOptions.${n}`)}
+                  label={t(`raceToOptions.${n}`)}
                   onPress={() => {
-                    setBestOf(n);
-                    setIsOtherBestOf(false);
+                    setRaceTo(n);
+                    setIsOtherRaceTo(false);
                   }}
                   compact
                   size='xs'
                   isDark={isDark}
                   style={
-                    !isOtherBestOf && bestOf === n
+                    !isOtherRaceTo && raceTo === n
                       ? {
                           backgroundColor: tk.primary[900],
                           borderColor: tk.primary[600],
@@ -151,13 +151,13 @@ export const ChallengeModal = ({
                 />
               ))}
               <SecondaryButton
-                label={t('bestOfOptions.other')}
-                onPress={() => setIsOtherBestOf(true)}
+                label={t('raceToOptions.other')}
+                onPress={() => setIsOtherRaceTo(true)}
                 compact
                 size='xs'
                 isDark={isDark}
                 style={
-                  isOtherBestOf
+                  isOtherRaceTo
                     ? {
                         backgroundColor: tk.primary[900],
                         borderColor: tk.primary[600],
@@ -166,7 +166,7 @@ export const ChallengeModal = ({
                 }
               />
             </ScrollView>
-            {isOtherBestOf && (
+            {isOtherRaceTo && (
               <View
                 style={[
                   styles.otherRow,
@@ -177,7 +177,7 @@ export const ChallengeModal = ({
                 ]}
               >
                 <TouchableOpacity
-                  onPress={() => setOtherBestOf(prev => Math.max(1, prev - 2))}
+                  onPress={() => setOtherRaceTo(prev => Math.max(1, prev - 1))}
                   style={[
                     styles.otherStepButton,
                     { borderColor: tk.primary[600] },
@@ -186,10 +186,10 @@ export const ChallengeModal = ({
                   <MinusIcon size={18} color={tk.text.secondary} />
                 </TouchableOpacity>
                 <Text style={[styles.otherValue, { color: tk.text.primary }]}>
-                  {t('bestOfOptions.otherValue', { value: otherBestOf })}
+                  {t('raceToOptions.otherValue', { value: otherRaceTo })}
                 </Text>
                 <TouchableOpacity
-                  onPress={() => setOtherBestOf(prev => prev + 2)}
+                  onPress={() => setOtherRaceTo(prev => prev + 1)}
                   style={[
                     styles.otherStepButton,
                     { borderColor: tk.primary[700] },

@@ -48,9 +48,9 @@
     "maxParticipants": "Maks. igrača",
     "maxParticipantsPlaceholder": "2–128",
     "scheduledAt": "Datum i vreme",
-    "scheduledAtPlaceholder": "GGGG-MM-DD HH:MM",
+    "scheduledAtPlaceholder": "Izaberite datum i vreme",
     "location": "Lokacija",
-    "locationPlaceholder": "Naziv mesta ili adresa (opciono)",
+    "locationPlaceholder": "Naziv mesta ili adresa",
     "isRated": "Rangirani turnir",
     "isRatedHint": "Rezultati mečeva uticaće na rang igrača",
     "submitButton": "Kreiraj turnir",
@@ -60,7 +60,8 @@
     "formatRequired": "Izaberite format",
     "visibilityRequired": "Izaberite vidljivost",
     "maxParticipantsInvalid": "Mora biti između 2 i 128",
-    "scheduledAtRequired": "Datum zakazivanja je obavezan"
+    "scheduledAtRequired": "Datum zakazivanja je obavezan",
+    "locationRequired": "Lokacija je obavezna"
   },
   "browse": {
     "title": "Pronađi turnir",

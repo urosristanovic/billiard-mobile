@@ -48,9 +48,9 @@
     "maxParticipants": "Max Players",
     "maxParticipantsPlaceholder": "2–128",
     "scheduledAt": "Date & Time",
-    "scheduledAtPlaceholder": "YYYY-MM-DD HH:MM",
+    "scheduledAtPlaceholder": "Select date & time",
     "location": "Location",
-    "locationPlaceholder": "Venue name or address (optional)",
+    "locationPlaceholder": "Venue name or address",
     "isRated": "Rated Tournament",
     "isRatedHint": "Match results will affect players' Glicko-2 ratings",
     "submitButton": "Create Tournament",
@@ -60,7 +60,8 @@
     "formatRequired": "Select a format",
     "visibilityRequired": "Select visibility",
     "maxParticipantsInvalid": "Must be between 2 and 128",
-    "scheduledAtRequired": "Schedule date is required"
+    "scheduledAtRequired": "Schedule date is required",
+    "locationRequired": "Location is required"
   },
   "browse": {
     "title": "Find Tournament",

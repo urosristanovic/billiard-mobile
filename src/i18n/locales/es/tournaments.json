@@ -48,9 +48,9 @@
     "maxParticipants": "Máx. jugadores",
     "maxParticipantsPlaceholder": "2–128",
     "scheduledAt": "Fecha y hora",
-    "scheduledAtPlaceholder": "AAAA-MM-DD HH:MM",
+    "scheduledAtPlaceholder": "Seleccionar fecha y hora",
     "location": "Ubicación",
-    "locationPlaceholder": "Nombre del lugar o dirección (opcional)",
+    "locationPlaceholder": "Nombre del lugar o dirección",
     "isRated": "Torneo clasificatorio",
     "isRatedHint": "Los resultados afectarán las clasificaciones Glicko-2 de los jugadores",
     "submitButton": "Crear torneo",
@@ -60,7 +60,8 @@
     "formatRequired": "Selecciona un formato",
     "visibilityRequired": "Selecciona la visibilidad",
     "maxParticipantsInvalid": "Debe estar entre 2 y 128",
-    "scheduledAtRequired": "La fecha es obligatoria"
+    "scheduledAtRequired": "La fecha es obligatoria",
+    "locationRequired": "La ubicación es obligatoria"
   },
   "browse": {
     "title": "Buscar torneo",

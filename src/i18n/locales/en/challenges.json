@@ -37,6 +37,17 @@
     "other": "Other",
     "otherValue": "Best of {{value}}"
   },
+  "raceToLabel": "Race To",
+  "raceToOptions": {
+    "2": "Race to 2",
+    "3": "Race to 3",
+    "5": "Race to 5",
+    "7": "Race to 7",
+    "9": "Race to 9",
+    "other": "Other",
+    "otherValue": "Race to {{value}}"
+  },
+  "raceToBadge": "RT{{value}}",
   "expiresIn": "Expires in {{hours}}h",
   "from": "From {{name}}",
   "to": "To {{name}}",

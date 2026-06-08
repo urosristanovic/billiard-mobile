@@ -1,4 +1,5 @@
 import {
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
@@ -27,6 +28,7 @@ import type { UpdateTournamentInput } from '@/types/tournament';
 import { FormatPicker, VisibilityPicker } from './components';
 import { DISCIPLINES, DISCIPLINE_LABELS, type Discipline } from '@/types/match';
 import { typography, spacing, radius } from '@/constants/theme';
+import { featureFlags } from '@/lib/feature-flags';
 import { scale } from '@/utils/scale';
 import type { TournamentsStackParamList } from '@/navigation/AppNavigator';
 
@@ -161,202 +163,233 @@ const CreateTournamentScreen = ({ navigation, route }: Props) => {
         title={isEditMode ? t('edit.title') : t('create.title')}
       />
 
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps='handled'
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoid}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 12 : 0}
       >
-        <View style={styles.form}>
-          <FormField
-            label={t('create.name')}
-            placeholder={t('create.namePlaceholder')}
-            value={form.name}
-            onChangeText={v => setField('name', v)}
-            error={errors.name}
-            required
-            isDark={isDark}
-            maxLength={100}
-          />
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.container}
+          keyboardShouldPersistTaps='handled'
+          automaticallyAdjustKeyboardInsets
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.form}>
+            <FormField
+              label={t('create.name')}
+              placeholder={t('create.namePlaceholder')}
+              value={form.name}
+              onChangeText={v => setField('name', v)}
+              error={errors.name}
+              required
+              isDark={isDark}
+              maxLength={100}
+            />
 
-          <FormField
-            label={t('create.description')}
-            placeholder={t('create.descriptionPlaceholder')}
-            value={form.description}
-            onChangeText={v => setField('description', v)}
-            isDark={isDark}
-            multiline
-            numberOfLines={3}
-            style={{ minHeight: scale(80), textAlignVertical: 'top' }}
-          />
+            {/* Discipline */}
+            <View style={styles.fieldGroup}>
+              <Text style={[styles.fieldLabel, { color: tk.primary[500] }]}>
+                {t('create.discipline')}{' '}
+                <Text style={{ color: tk.error.default }}>*</Text>
+              </Text>
+              <DropdownFilter
+                options={disciplineOptions}
+                value={form.discipline}
+                onSelect={v => setField('discipline', v as Discipline)}
+                isDark={isDark}
+              />
+              {errors.discipline && (
+                <Text style={[styles.errorText, { color: tk.error.default }]}>
+                  {errors.discipline}
+                </Text>
+              )}
+            </View>
 
-          {/* Discipline */}
-          <View style={styles.fieldGroup}>
-            <Text style={[styles.fieldLabel, { color: tk.primary[500] }]}>
-              {t('create.discipline')}{' '}
-              <Text style={{ color: tk.error.default }}>*</Text>
-            </Text>
-            <DropdownFilter
-              options={disciplineOptions}
-              value={form.discipline}
-              onSelect={v => setField('discipline', v as Discipline)}
+            <FormatPicker
+              value={form.format}
+              onChange={v => setField('format', v)}
               isDark={isDark}
             />
-            {errors.discipline && (
+            {errors.format && (
               <Text style={[styles.errorText, { color: tk.error.default }]}>
-                {errors.discipline}
+                {errors.format}
               </Text>
             )}
-          </View>
 
-          <FormatPicker
-            value={form.format}
-            onChange={v => setField('format', v)}
-            isDark={isDark}
-          />
-          {errors.format && (
-            <Text style={[styles.errorText, { color: tk.error.default }]}>
-              {errors.format}
-            </Text>
-          )}
+            <VisibilityPicker
+              value={form.visibility}
+              onChange={v => setField('visibility', v)}
+              isDark={isDark}
+            />
 
-          <VisibilityPicker
-            value={form.visibility}
-            onChange={v => setField('visibility', v)}
-            isDark={isDark}
-          />
-
-          <FormField
-            label={t('create.maxParticipants')}
-            placeholder={t('create.maxParticipantsPlaceholder')}
-            value={form.maxParticipants}
-            onChangeText={v => setField('maxParticipants', v)}
-            error={errors.maxParticipants}
-            required
-            isDark={isDark}
-            keyboardType='number-pad'
-          />
-
-          {/* Date & Time picker */}
-          <View style={styles.fieldGroup}>
-            <Text style={[styles.fieldLabel, { color: tk.text.primary }]}>
-              {t('create.scheduledAt')}{' '}
-              <Text style={{ color: tk.error.default }}>*</Text>
-            </Text>
-            <TouchableOpacity
-              onPress={openPicker}
-              style={[
-                styles.dateButton,
-                {
-                  backgroundColor: tk.surface.raised,
-                  borderColor: errors.scheduledAt
-                    ? tk.error.default
-                    : tk.border.default,
-                },
-              ]}
-              accessibilityRole='button'
-            >
-              <Text
+            {/* Date & Time picker */}
+            <View style={styles.fieldGroup}>
+              <Text style={[styles.fieldLabel, { color: tk.text.primary }]}>
+                {t('create.scheduledAt')}{' '}
+                <Text style={{ color: tk.error.default }}>*</Text>
+              </Text>
+              <TouchableOpacity
+                onPress={openPicker}
                 style={[
-                  styles.dateButtonText,
+                  styles.dateButton,
                   {
-                    color: form.scheduledAt ? tk.text.primary : tk.text.muted,
+                    backgroundColor: tk.surface.raised,
+                    borderColor: errors.scheduledAt
+                      ? tk.error.default
+                      : tk.border.default,
                   },
                 ]}
+                accessibilityRole='button'
               >
-                {form.scheduledAt
-                  ? formatDateTime(pickerDate)
-                  : t('create.scheduledAtPlaceholder')}
-              </Text>
-              <Feather name='calendar' size={scale(16)} color={tk.text.muted} />
-            </TouchableOpacity>
-            {errors.scheduledAt && (
-              <Text style={[styles.errorText, { color: tk.error.default }]}>
-                {errors.scheduledAt}
-              </Text>
-            )}
-            {showPicker &&
-              (Platform.OS === 'ios' ? (
-                <View
+                <Text
                   style={[
-                    styles.pickerContainer,
-                    { borderColor: tk.border.subtle },
+                    styles.dateButtonText,
+                    {
+                      color: form.scheduledAt ? tk.text.primary : tk.text.muted,
+                    },
                   ]}
                 >
+                  {form.scheduledAt
+                    ? formatDateTime(pickerDate)
+                    : t('create.scheduledAtPlaceholder')}
+                </Text>
+                <Feather
+                  name='calendar'
+                  size={scale(16)}
+                  color={tk.text.muted}
+                />
+              </TouchableOpacity>
+              {errors.scheduledAt && (
+                <Text style={[styles.errorText, { color: tk.error.default }]}>
+                  {errors.scheduledAt}
+                </Text>
+              )}
+              {showPicker &&
+                (Platform.OS === 'ios' ? (
+                  <View
+                    style={[
+                      styles.pickerContainer,
+                      { borderColor: tk.border.subtle },
+                    ]}
+                  >
+                    <DateTimePicker
+                      value={pickerDate}
+                      mode='datetime'
+                      display='spinner'
+                      minimumDate={new Date()}
+                      onChange={handlePickerChange}
+                      textColor={tk.primary[700]}
+                      accentColor={tk.primary[400]}
+                      style={styles.picker}
+                    />
+                  </View>
+                ) : (
                   <DateTimePicker
                     value={pickerDate}
-                    mode='datetime'
-                    display='spinner'
+                    mode={androidStep}
+                    display='default'
                     minimumDate={new Date()}
                     onChange={handlePickerChange}
-                    textColor={tk.primary[700]}
-                    accentColor={tk.primary[400]}
-                    style={styles.picker}
                   />
-                </View>
-              ) : (
-                <DateTimePicker
-                  value={pickerDate}
-                  mode={androidStep}
-                  display='default'
-                  minimumDate={new Date()}
-                  onChange={handlePickerChange}
-                />
-              ))}
-          </View>
-
-          <FormField
-            label={t('create.location')}
-            placeholder={t('create.locationPlaceholder')}
-            value={form.location}
-            onChangeText={v => setField('location', v)}
-            isDark={isDark}
-          />
-
-          <View style={styles.toggleRow}>
-            <View style={styles.toggleText}>
-              <Text style={[styles.fieldLabel, { color: tk.text.primary }]}>
-                {t('create.isRated')}
-              </Text>
-              <Text style={[styles.toggleHint, { color: tk.text.muted }]}>
-                {t('create.isRatedHint')}
-              </Text>
+                ))}
             </View>
-            <ToggleSwitch
-              value={form.isRated}
-              onValueChange={v => setField('isRated', v)}
-              trackColor={{ false: tk.border.default, true: tk.primary[600] }}
-              thumbColor={tk.text.onPrimary}
+
+            {featureFlags.ratedTournament() && (
+              <View style={styles.toggleRow}>
+                <View style={styles.toggleText}>
+                  <Text style={[styles.fieldLabel, { color: tk.text.primary }]}>
+                    {t('create.isRated')}
+                  </Text>
+                  <Text style={[styles.toggleHint, { color: tk.text.muted }]}>
+                    {t('create.isRatedHint')}
+                  </Text>
+                </View>
+                <ToggleSwitch
+                  value={form.isRated}
+                  onValueChange={v => setField('isRated', v)}
+                  trackColor={{
+                    false: tk.border.default,
+                    true: tk.primary[600],
+                  }}
+                  thumbColor={tk.text.onPrimary}
+                />
+              </View>
+            )}
+
+            <FormField
+              label={t('create.location')}
+              placeholder={t('create.locationPlaceholder')}
+              value={form.location}
+              onChangeText={v => setField('location', v)}
+              error={errors.location}
+              required
+              isDark={isDark}
+            />
+
+            <FormField
+              label={t('create.maxParticipants')}
+              placeholder={t('create.maxParticipantsPlaceholder')}
+              value={form.maxParticipants}
+              onChangeText={v => setField('maxParticipants', v)}
+              error={errors.maxParticipants}
+              required
+              isDark={isDark}
+              keyboardType='number-pad'
+            />
+
+            <FormField
+              label={t('create.description')}
+              placeholder={t('create.descriptionPlaceholder')}
+              value={form.description}
+              onChangeText={v => setField('description', v)}
+              isDark={isDark}
+              multiline
+              numberOfLines={3}
+              style={{ minHeight: scale(80), textAlignVertical: 'top' }}
             />
           </View>
-        </View>
-      </ScrollView>
-      <FormButtons
-        submitLabel={isEditMode ? t('edit.submitButton') : tCommon('create')}
-        cancelLabel={tCommon('cancel')}
-        onSubmit={handleSubmit}
-        onCancel={() => navigation.goBack()}
-        submitLoading={
-          isEditMode ? updateTournament.isPending : createTournament.isPending
-        }
-        isDark={isDark}
-        cancelFirst
-      />
+
+          <View style={styles.formButtonsWrapper}>
+            <FormButtons
+              submitLabel={
+                isEditMode ? t('edit.submitButton') : tCommon('create')
+              }
+              cancelLabel={tCommon('cancel')}
+              onSubmit={handleSubmit}
+              onCancel={() => navigation.goBack()}
+              submitLoading={
+                isEditMode
+                  ? updateTournament.isPending
+                  : createTournament.isPending
+              }
+              isDark={isDark}
+              cancelFirst
+            />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
+  keyboardAvoid: {
+    flex: 1,
+  },
   scroll: {
     flex: 1,
   },
   container: {
-    paddingBottom: spacing[4],
+    paddingBottom: spacing[8],
     paddingTop: spacing[4],
   },
   form: {
     paddingHorizontal: spacing[4],
     gap: spacing[4],
+  },
+  formButtonsWrapper: {
+    marginTop: spacing[4],
   },
   fieldGroup: {
     gap: spacing[1] + 2,

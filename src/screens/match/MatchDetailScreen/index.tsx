@@ -242,7 +242,12 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
       onConfirm: () => acceptDispute.mutate(match.id),
     });
 
-  const raceTo = match.bestOf != null ? Math.ceil(match.bestOf / 2) : null;
+  const raceTo =
+    match.raceTo != null
+      ? match.raceTo
+      : match.bestOf != null
+        ? Math.ceil(match.bestOf / 2)
+        : null;
 
   const isDisputeFormVisible =
     activeForm === 'dispute' || activeForm === 'counterDispute';

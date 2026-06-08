@@ -22,7 +22,8 @@
         "EXPO_PUBLIC_WEB_BASE_URL": "https://billiard-tracker.com",
         "EXPO_PUBLIC_SENTRY_DSN": "https://50c23fca79aa2dbb031d7727b6b15b3a@o4511088140288000.ingest.de.sentry.io/4511088141533264",
         "SENTRY_ALLOW_FAILURE": "true",
-        "EXPO_PUBLIC_AUTO_CONFIRM_WINDOW_MINUTES": "1440"
+        "EXPO_PUBLIC_AUTO_CONFIRM_WINDOW_MINUTES": "1440",
+        "EXPO_PUBLIC_RATED_TOURNAMENT_ENABLED": "false"
       }
     }
   },

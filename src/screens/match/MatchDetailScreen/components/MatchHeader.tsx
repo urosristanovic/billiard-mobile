@@ -61,10 +61,10 @@ export const MatchHeader = ({ match, onBack }: MatchHeaderProps) => {
               {match.isRated ? t('detail.rated') : t('detail.unrated')}
             </Text>
           </View>
-          {match.bestOf != null && (isChallengeRequested || isChallenge) && (
+          {(match.raceTo != null || match.bestOf != null) && (isChallengeRequested || isChallenge) && (
             <View style={[styles.badge, { backgroundColor: tk.primary[900] }]}>
               <Text style={[styles.badgeText, { color: tk.primary[300] }]}>
-                BO{match.bestOf}
+                {match.raceTo != null ? `RT${match.raceTo}` : `BO${match.bestOf}`}
               </Text>
             </View>
           )}

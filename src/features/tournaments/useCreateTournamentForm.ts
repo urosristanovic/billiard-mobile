@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type {
   TournamentFormat,
   TournamentVisibility,
@@ -25,6 +26,7 @@ export interface CreateTournamentFormErrors {
   visibility?: string;
   maxParticipants?: string;
   scheduledAt?: string;
+  location?: string;
 }
 
 export interface CreateTournamentFormInitialValues {
@@ -45,7 +47,7 @@ const DEFAULT_STATE: CreateTournamentFormState = {
   discipline: '8ball',
   format: 'single_elimination',
   visibility: 'public',
-  maxParticipants: '8',
+  maxParticipants: '',
   scheduledAt: '',
   location: '',
   isRated: true,
@@ -74,6 +76,7 @@ function buildInitialState(
 export const useCreateTournamentForm = (
   initialValues?: CreateTournamentFormInitialValues,
 ) => {
+  const { t } = useTranslation('tournaments');
   const [form, setForm] = useState<CreateTournamentFormState>(() =>
     buildInitialState(initialValues),
   );
@@ -92,18 +95,22 @@ export const useCreateTournamentForm = (
   const validate = (): boolean => {
     const newErrors: CreateTournamentFormErrors = {};
 
-    if (!form.name.trim()) newErrors.name = 'Name is required';
-    if (!form.discipline) newErrors.discipline = 'Select a discipline';
-    if (!form.format) newErrors.format = 'Select a format';
-    if (!form.visibility) newErrors.visibility = 'Select visibility';
+    if (!form.name.trim()) newErrors.name = t('create.nameRequired');
+    if (!form.discipline) newErrors.discipline = t('create.disciplineRequired');
+    if (!form.format) newErrors.format = t('create.formatRequired');
+    if (!form.visibility) newErrors.visibility = t('create.visibilityRequired');
 
     const maxP = parseInt(form.maxParticipants, 10);
     if (isNaN(maxP) || maxP < 2 || maxP > 128) {
-      newErrors.maxParticipants = 'Must be between 2 and 128';
+      newErrors.maxParticipants = t('create.maxParticipantsInvalid');
     }
 
     if (!form.scheduledAt) {
-      newErrors.scheduledAt = 'Schedule date is required';
+      newErrors.scheduledAt = t('create.scheduledAtRequired');
+    }
+
+    if (!form.location.trim()) {
+      newErrors.location = t('create.locationRequired');
     }
 
     setErrors(newErrors);

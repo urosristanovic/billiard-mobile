@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
@@ -23,7 +30,7 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [threshold, setThreshold] = useState('10');
-  const [isPublic, setIsPublic] = useState(false);
+  const [isPublic, setIsPublic] = useState(true);
   const [decayEnabled, setDecayEnabled] = useState(true);
   const [graceWeeks, setGraceWeeks] = useState('2');
   const [nameError, setNameError] = useState('');
@@ -63,10 +70,17 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
         onBack={() => navigation.goBack()}
         title={t('customLeaderboards.createTitle')}
       />
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoid}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 12 : 0}
+      >
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps='handled'
+        automaticallyAdjustKeyboardInsets
+        showsVerticalScrollIndicator={false}
       >
         <View style={styles.form}>
           <FormField
@@ -77,14 +91,6 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
             placeholder={t('customLeaderboards.namePlaceholder')}
             isDark={isDark}
             required
-          />
-
-          <FormField
-            label={t('customLeaderboards.descriptionLabel')}
-            value={description}
-            onChangeText={setDescription}
-            placeholder={t('customLeaderboards.descriptionPlaceholder')}
-            isDark={isDark}
           />
 
           <FormField
@@ -147,32 +153,56 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
             </>
           )}
 
+          <FormField
+            label={t('customLeaderboards.descriptionLabel')}
+            value={description}
+            onChangeText={setDescription}
+            placeholder={t('customLeaderboards.descriptionPlaceholder')}
+            multiline
+            numberOfLines={4}
+            style={styles.descriptionInput}
+            isDark={isDark}
+          />
+        </View>
+
+        <View style={styles.formButtonsWrapper}>
+          <FormButtons
+            submitLabel={t('customLeaderboards.submit')}
+            cancelLabel={tCommon('cancel')}
+            onSubmit={handleSubmit}
+            onCancel={() => navigation.goBack()}
+            submitLoading={createLeaderboard.isPending}
+            isDark={isDark}
+            cancelFirst
+          />
         </View>
       </ScrollView>
-      <FormButtons
-        submitLabel={t('customLeaderboards.submit')}
-        cancelLabel={tCommon('cancel')}
-        onSubmit={handleSubmit}
-        onCancel={() => navigation.goBack()}
-        submitLoading={createLeaderboard.isPending}
-        isDark={isDark}
-        cancelFirst
-      />
+      </KeyboardAvoidingView>
     </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
+  keyboardAvoid: {
+    flex: 1,
+  },
   scroll: {
     flex: 1,
   },
   container: {
-    paddingBottom: spacing[4],
+    paddingBottom: spacing[8],
     paddingTop: spacing[4],
   },
   form: {
     paddingHorizontal: spacing[4],
     gap: spacing[4],
+  },
+  formButtonsWrapper: {
+    marginTop: spacing[4],
+  },
+  descriptionInput: {
+    minHeight: 100,
+    textAlignVertical: 'top',
   },
   fieldHint: {
     fontSize: typography.size.sm,

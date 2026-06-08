@@ -37,6 +37,17 @@
     "other": "Otro",
     "otherValue": "Al mejor de {{value}}"
   },
+  "raceToLabel": "Carrera a",
+  "raceToOptions": {
+    "2": "Carrera a 2",
+    "3": "Carrera a 3",
+    "5": "Carrera a 5",
+    "7": "Carrera a 7",
+    "9": "Carrera a 9",
+    "other": "Otro",
+    "otherValue": "Carrera a {{value}}"
+  },
+  "raceToBadge": "RT{{value}}",
   "expiresIn": "Expira en {{hours}}h",
   "from": "De {{name}}",
   "to": "Para {{name}}",

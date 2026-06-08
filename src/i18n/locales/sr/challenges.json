@@ -37,6 +37,17 @@
     "other": "Drugo",
     "otherValue": "Najviše {{value}} partija"
   },
+  "raceToLabel": "Trka do",
+  "raceToOptions": {
+    "2": "Trka do 2",
+    "3": "Trka do 3",
+    "5": "Trka do 5",
+    "7": "Trka do 7",
+    "9": "Trka do 9",
+    "other": "Drugo",
+    "otherValue": "Trka do {{value}}"
+  },
+  "raceToBadge": "RT{{value}}",
   "expiresIn": "Ističe za {{hours}}h",
   "from": "Od {{name}}",
   "to": "Za {{name}}",

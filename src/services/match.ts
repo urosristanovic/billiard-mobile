@@ -105,7 +105,7 @@ export const matchService = {
     input: {
       opponentId: string;
       discipline: CreateMatchInput['discipline'];
-      bestOf?: number;
+      raceTo?: number;
       message?: string;
     },
   ): Promise<Match> => {

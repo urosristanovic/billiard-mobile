@@ -54,7 +54,9 @@ export interface Match {
   isRated: boolean;
   isTournament: boolean;
   tournamentName: string | null;
+  /** @deprecated Use raceTo for new matches. Kept for legacy data display. */
   bestOf: number | null;
+  raceTo: number | null;
   createdBy: string | null;
   status: MatchStatus;
   winnerId: string | null;
