@@ -7,6 +7,7 @@ import type { BrowseLeaderboardResult } from '@/types/group';
 interface LeaderboardBrowseCardProps {
   leaderboard: BrowseLeaderboardResult;
   onJoin: () => void;
+  onPress: () => void;
   isJoining?: boolean;
   isDark?: boolean;
 }
@@ -14,6 +15,7 @@ interface LeaderboardBrowseCardProps {
 export const LeaderboardBrowseCard = ({
   leaderboard,
   onJoin,
+  onPress,
   isJoining = false,
   isDark = false,
 }: LeaderboardBrowseCardProps) => {
@@ -35,7 +37,9 @@ export const LeaderboardBrowseCard = ({
   const buttonBorderColor = isMember || isPending ? tk.border.default : tk.primary[600];
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.85}
       style={[
         styles.card,
         {
@@ -50,14 +54,16 @@ export const LeaderboardBrowseCard = ({
             style={[
               styles.badge,
               {
-                borderColor: isPublic ? tk.primary[400] : tk.border.default,
+                backgroundColor: isPublic
+                  ? `${tk.success.default}20`
+                  : `${tk.primary[500]}20`,
               },
             ]}
           >
             <Text
               style={[
                 styles.badgeText,
-                { color: isPublic ? tk.primary[400] : tk.text.muted },
+                { color: isPublic ? tk.success.default : tk.primary[500] },
               ]}
             >
               {isPublic ? t('browse.public') : t('browse.private')}
@@ -80,7 +86,7 @@ export const LeaderboardBrowseCard = ({
       </View>
 
       <TouchableOpacity
-        onPress={onJoin}
+        onPress={e => { e.stopPropagation(); onJoin(); }}
         disabled={isDisabled}
         activeOpacity={0.8}
         accessibilityRole='button'
@@ -96,7 +102,7 @@ export const LeaderboardBrowseCard = ({
           <Text style={[styles.buttonText, { color: buttonColor }]}>{buttonLabel}</Text>
         )}
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -127,7 +133,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   badge: {
-    borderWidth: 1,
     borderRadius: radius.sm,
     paddingHorizontal: spacing[1] + 2,
     paddingVertical: 2,

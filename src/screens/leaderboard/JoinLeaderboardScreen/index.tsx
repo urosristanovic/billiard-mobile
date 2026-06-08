@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
@@ -24,7 +24,7 @@ const JoinLeaderboardScreen = ({ navigation }: Props) => {
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { data: results = [], isLoading } = useBrowseLeaderboards(
+  const { data: results = [], isLoading, isFetching, refetch } = useBrowseLeaderboards(
     debouncedQuery || undefined,
   );
   const joinMutation = useJoinLeaderboard();
@@ -63,6 +63,15 @@ const JoinLeaderboardScreen = ({ navigation }: Props) => {
         keyExtractor={item => item.id}
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={isFetching && !isLoading}
+            onRefresh={() => refetch()}
+            tintColor={tk.primary[400]}
+            colors={[tk.primary[400]]}
+            progressBackgroundColor={tk.background?.primary}
+          />
+        }
         ListHeaderComponent={
           !isSearching && results.length > 0 ? (
             <Text style={[styles.sectionTitle, { color: tk.text.muted }]}>
@@ -95,6 +104,13 @@ const JoinLeaderboardScreen = ({ navigation }: Props) => {
             isDark={isDark}
             isJoining={joinMutation.isPending && joinMutation.variables === item.id}
             onJoin={() => joinMutation.mutate(item.id)}
+            onPress={() =>
+              navigation.push('CustomLeaderboardDetail', {
+                leaderboardId: item.id,
+                previewIsMember: item.isMember,
+                previewIsPending: item.isPending,
+              })
+            }
           />
         )}
       />

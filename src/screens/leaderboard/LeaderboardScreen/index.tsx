@@ -55,7 +55,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   const { user } = useAuth();
   const { confirm } = useConfirmDialog();
   const { showToast } = useToast();
-  const { defaultLeaderboardId, setDefault } = useDefaultLeaderboard();
+  const { defaultLeaderboardId, setDefault, clearDefault } = useDefaultLeaderboard();
 
   const [selectedLeaderboardId, setSelectedLeaderboardId] = useState<
     string | undefined
@@ -183,9 +183,23 @@ const LeaderboardScreen = ({ navigation }: Props) => {
             variant: 'destructive',
             onConfirm: async () => {
               await leaveLeaderboard.mutateAsync(lb.id);
-              // Select another leaderboard after leaving
               const remaining = leaderboards.filter(l => l.id !== lb.id);
-              setSelectedLeaderboardId(remaining[0]?.id);
+              const nextId = remaining[0]?.id;
+              setSelectedLeaderboardId(nextId);
+              // If the left leaderboard was the default, migrate the default
+              if (lb.id === defaultLeaderboardId) {
+                if (nextId) {
+                  setDefault.mutate(nextId);
+                } else {
+                  clearDefault.mutate();
+                }
+              }
+              // Clear any stale modal filter pointing at the left leaderboard
+              setModalFilters(prev =>
+                prev.selectedLeaderboardId === lb.id
+                  ? { ...prev, selectedLeaderboardId: nextId }
+                  : prev,
+              );
             },
           });
           break;
@@ -199,6 +213,8 @@ const LeaderboardScreen = ({ navigation }: Props) => {
       tCommon,
       showToast,
       setDefault,
+      clearDefault,
+      defaultLeaderboardId,
       leaveLeaderboard,
       leaderboards,
     ],

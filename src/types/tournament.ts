@@ -112,6 +112,8 @@ export interface TournamentSummary {
   createdAt: string;
   updatedAt: string;
   isRated: boolean;
+  isFeatured: boolean;
+  featuredRank: number | null;
   nextMatchInfo?: NextMatchInfo | null;
   didWin?: boolean;
 }

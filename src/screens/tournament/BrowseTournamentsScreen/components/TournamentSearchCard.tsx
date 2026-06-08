@@ -1,13 +1,23 @@
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import { scale } from '@/utils/scale';
-import type { TournamentSummary, TournamentRequestStatus } from '@/types/tournament';
+import type {
+  TournamentSummary,
+  TournamentRequestStatus,
+} from '@/types/tournament';
 import { TOURNAMENT_FORMAT_LABELS } from '@/types/tournament';
 import { DISCIPLINE_LABELS } from '@/types/match';
 
 interface TournamentSearchCardProps {
   tournament: TournamentSummary;
+  onPress: () => void;
   onRequestSpot: () => void;
   isRequesting?: boolean;
   hasRequested?: boolean;
@@ -19,6 +29,7 @@ interface TournamentSearchCardProps {
 
 export const TournamentSearchCard = ({
   tournament,
+  onPress,
   onRequestSpot,
   isRequesting,
   hasRequested,
@@ -33,14 +44,22 @@ export const TournamentSearchCard = ({
   const isFull = tournament.participantCount >= tournament.maxParticipants;
 
   const isRejected =
-    (myRequestStatus === 'rejected' || myRequestStatus === 'cancelled') && !hasRequested;
-  const isPending =
-    hasRequested || myRequestStatus === 'pending';
+    (myRequestStatus === 'rejected' || myRequestStatus === 'cancelled') &&
+    !hasRequested;
+  const isPending = hasRequested || myRequestStatus === 'pending';
   const isAccepted = myRequestStatus === 'accepted';
-  const isDisabled = isFull || isRequesting || isPending || isAccepted || isOrganizer || isParticipant;
+  const isDisabled =
+    isFull ||
+    isRequesting ||
+    isPending ||
+    isAccepted ||
+    isOrganizer ||
+    isParticipant;
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.85}
       style={[
         styles.card,
         {
@@ -52,13 +71,26 @@ export const TournamentSearchCard = ({
       <View style={styles.info}>
         <View style={styles.nameRow}>
           {tournament.isRated && (
-            <View style={[styles.ratedBadge, { borderColor: tk.primary[400] }]}>
-              <Text style={[styles.ratedBadgeText, { color: tk.primary[400] }]}>
+            <View
+              style={[
+                styles.ratedBadge,
+                { borderColor: tk.border.strong },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.ratedBadgeText,
+                  { color: tk.text.secondary },
+                ]}
+              >
                 {t('ratedBadge')}
               </Text>
             </View>
           )}
-          <Text style={[styles.name, { color: tk.text.primary }]} numberOfLines={1}>
+          <Text
+            style={[styles.name, { color: tk.text.primary }]}
+            numberOfLines={1}
+          >
             {tournament.name}
           </Text>
         </View>
@@ -67,11 +99,19 @@ export const TournamentSearchCard = ({
           {TOURNAMENT_FORMAT_LABELS[tournament.format]}
         </Text>
         {tournament.location ? (
-          <Text style={[styles.location, { color: tk.text.muted }]} numberOfLines={1}>
+          <Text
+            style={[styles.location, { color: tk.text.muted }]}
+            numberOfLines={1}
+          >
             📍 {tournament.location}
           </Text>
         ) : null}
-        <Text style={[styles.capacity, { color: isFull ? tk.error.text : tk.text.secondary }]}>
+        <Text
+          style={[
+            styles.capacity,
+            { color: isFull ? tk.error.text : tk.text.secondary },
+          ]}
+        >
           {isFull
             ? t('browse.full')
             : `${tournament.participantCount} / ${tournament.maxParticipants} ${t('detail.participants')}`}
@@ -79,7 +119,10 @@ export const TournamentSearchCard = ({
       </View>
 
       <TouchableOpacity
-        onPress={onRequestSpot}
+        onPress={e => {
+          e.stopPropagation?.();
+          onRequestSpot();
+        }}
         disabled={isDisabled}
         activeOpacity={0.8}
         accessibilityRole='button'
@@ -95,12 +138,7 @@ export const TournamentSearchCard = ({
         {isRequesting ? (
           <ActivityIndicator size='small' color={tk.primary[400]} />
         ) : (
-          <Text
-            style={[
-              styles.buttonText,
-              { color: tk.primary[500] },
-            ]}
-          >
+          <Text style={[styles.buttonText, { color: tk.primary[500] }]}>
             {isOrganizer
               ? t('browse.organizer')
               : isParticipant || isAccepted
@@ -115,7 +153,7 @@ export const TournamentSearchCard = ({
           </Text>
         )}
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -133,6 +171,8 @@ const styles = StyleSheet.create({
     gap: spacing[1],
   },
   name: {
+    flex: 1,
+    flexShrink: 1,
     fontSize: typography.size.base,
     fontFamily: typography.family.display,
     textTransform: 'uppercase',

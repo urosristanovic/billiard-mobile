@@ -29,49 +29,30 @@ export const MemberRow = ({
 
   return (
     <View
-      style={[detailStyles.memberRow, { borderBottomColor: tk.primary[900] }]}
+      style={[detailStyles.memberRow, { borderBottomColor: tk.border.subtle }]}
     >
       <View
         style={[
           detailStyles.memberAvatar,
           {
-            backgroundColor: tk.primary[900],
-            borderColor: tk.primary[700],
+            backgroundColor: tk.surface.raised,
+            borderColor: tk.border.strong,
           },
         ]}
       >
         <Text
-          style={[detailStyles.memberAvatarText, { color: tk.primary[300] }]}
+          style={[detailStyles.memberAvatarText, { color: tk.text.muted }]}
         >
           {displayName.slice(0, 2).toUpperCase()}
         </Text>
       </View>
       <View style={detailStyles.memberInfo}>
-        <View style={styles.nameRow}>
-          <Text
-            style={[detailStyles.memberName, { color: tk.text.primary }]}
-            numberOfLines={1}
-          >
-            {displayName}
-          </Text>
-          {isAdmin && (
-            <View
-              style={[
-                styles.adminBadge,
-                { borderColor: tk.border.default },
-              ]}
-            >
-              <Text
-                style={[
-                  styles.adminBadgeText,
-                  { color: tk.text.muted },
-                ]}
-              >
-                ADMIN
-              </Text>
-            </View>
-          )}
-        </View>
+        <Text
+          style={[detailStyles.memberName, { color: tk.text.primary }]}
+          numberOfLines={1}
+        >
+          {displayName}
+        </Text>
         <Text style={[detailStyles.memberUsername, { color: tk.text.muted }]}>
           @{username}
           {subtitle ? ` · ${subtitle}` : null}
@@ -79,6 +60,12 @@ export const MemberRow = ({
       </View>
       {isPending ? (
         <Loading style={{ minWidth: scale(60) }} />
+      ) : isAdmin && !actionLabel ? (
+        <View style={[styles.adminBadge, { borderColor: tk.border.default }]}>
+          <Text style={[styles.adminBadgeText, { color: tk.text.muted }]}>
+            ADMIN
+          </Text>
+        </View>
       ) : actionLabel && onAction ? (
         <GhostButton isDark={isDark} label={actionLabel} onPress={onAction} />
       ) : null}
@@ -87,12 +74,6 @@ export const MemberRow = ({
 };
 
 const styles = StyleSheet.create({
-  nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing[2],
-    flexWrap: 'nowrap',
-  },
   adminBadge: {
     borderWidth: 1,
     borderRadius: radius.full,

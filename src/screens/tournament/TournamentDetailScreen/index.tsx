@@ -13,6 +13,7 @@ import {
   useStandings,
 } from '@/features/tournaments/useTournamentDetail';
 import { useTournamentMutations } from '@/features/tournaments/useTournamentMutations';
+import { useMyPendingRequests } from '@/features/tournaments/useTournaments';
 import { useAuth } from '@/features/auth/useAuth';
 import type { TournamentMatch } from '@/types/tournament';
 import {
@@ -65,7 +66,10 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
     respondToRequest,
     reportResult,
     editResult,
+    requestSpot,
   } = useTournamentMutations();
+
+  const { data: myPendingRequests = [] } = useMyPendingRequests();
 
   const { confirm } = useConfirmDialog();
 
@@ -145,6 +149,19 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
       </ScreenLayout>
     );
   }
+
+  const isParticipant = tournament.participants.some(p => p.userId === user?.id);
+
+  const mySpotRequest = myPendingRequests.find(
+    r => r.tournamentId === tournamentId && r.direction === 'request' && r.status === 'pending',
+  );
+  const hasRequestedSpot = !!mySpotRequest || requestSpot.isSuccess;
+
+  const showRequestSpotFab =
+    !isOrganizer &&
+    !isParticipant &&
+    tournament.status === 'registration' &&
+    tournament.visibility === 'public';
 
   const showBracket = hasStarted && tournament.rounds.length > 0;
 
@@ -293,20 +310,30 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
         </View>
       </ScrollView>
 
-      {!isOrganizer &&
-        tournament.status === 'registration' &&
-        tournament.participants.some(p => p.userId === user?.id) && (
-          <FloatingActionButton
-            label={t('detail.actions.addParticipants')}
-            icon={<Feather name='plus' size={scale(20)} />}
-            style={styles.fab}
-            onPress={() =>
-              navigation.navigate('InviteParticipants', {
-                tournamentId: tournament.id,
-              })
+      {!isOrganizer && tournament.status === 'registration' && isParticipant && (
+        <FloatingActionButton
+          label={t('detail.actions.addParticipants')}
+          icon={<Feather name='plus' size={scale(20)} />}
+          style={styles.fab}
+          onPress={() =>
+            navigation.navigate('InviteParticipants', {
+              tournamentId: tournament.id,
+            })
+          }
+        />
+      )}
+
+      {showRequestSpotFab && (
+        <FloatingActionButton
+          label={hasRequestedSpot ? t('browse.requestSent') : t('browse.requestButton')}
+          style={[styles.fab, hasRequestedSpot && { opacity: 0.6 }]}
+          onPress={() => {
+            if (!hasRequestedSpot && !requestSpot.isPending) {
+              requestSpot.mutate(tournamentId);
             }
-          />
-        )}
+          }}
+        />
+      )}
 
       <RecordScoreModal
         visible={Boolean(selectedMatch)}

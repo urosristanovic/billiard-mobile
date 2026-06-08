@@ -78,17 +78,26 @@ export const useCustomLeaderboardMutations = () => {
       const token = await getAccessToken();
       return customLeaderboardService.create(token, input);
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARDS }),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARDS }),
   });
 
   const updateLeaderboard = useMutation({
-    mutationFn: async ({ id, input }: { id: string; input: UpdateCustomLeaderboardInput }) => {
+    mutationFn: async ({
+      id,
+      input,
+    }: {
+      id: string;
+      input: UpdateCustomLeaderboardInput;
+    }) => {
       const token = await getAccessToken();
       return customLeaderboardService.update(token, id, input);
     },
     onSuccess: (_, { id }) => {
       qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARDS });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_DETAIL(id) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_DETAIL(id),
+      });
     },
   });
 
@@ -97,33 +106,66 @@ export const useCustomLeaderboardMutations = () => {
       const token = await getAccessToken();
       return customLeaderboardService.delete(token, id);
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARDS }),
+    onSuccess: () =>
+      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARDS }),
   });
 
   const addMember = useMutation({
-    mutationFn: async ({ leaderboardId, userId }: { leaderboardId: string; userId: string }) => {
+    mutationFn: async ({
+      leaderboardId,
+      userId,
+    }: {
+      leaderboardId: string;
+      userId: string;
+    }) => {
       const token = await getAccessToken();
       return customLeaderboardService.addMember(token, leaderboardId, userId);
     },
     onSuccess: (_, { leaderboardId }) => {
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_MEMBERS(leaderboardId) });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_PENDING(leaderboardId) });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_DETAIL(leaderboardId) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_MEMBERS(leaderboardId),
+      });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_PENDING(leaderboardId),
+      });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_DETAIL(leaderboardId),
+      });
     },
   });
 
   const removeMember = useMutation({
-    mutationFn: async ({ leaderboardId, userId }: { leaderboardId: string; userId: string }) => {
+    mutationFn: async ({
+      leaderboardId,
+      userId,
+    }: {
+      leaderboardId: string;
+      userId: string;
+    }) => {
       const token = await getAccessToken();
-      return customLeaderboardService.removeMember(token, leaderboardId, userId);
+      return customLeaderboardService.removeMember(
+        token,
+        leaderboardId,
+        userId,
+      );
     },
     onSuccess: (_, { leaderboardId }) => {
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_MEMBERS(leaderboardId) });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_DETAIL(leaderboardId) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_MEMBERS(leaderboardId),
+      });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_DETAIL(leaderboardId),
+      });
     },
   });
 
-  return { createLeaderboard, updateLeaderboard, deleteLeaderboard, addMember, removeMember };
+  return {
+    createLeaderboard,
+    updateLeaderboard,
+    deleteLeaderboard,
+    addMember,
+    removeMember,
+  };
 };
 
 // ── Join / leave ──────────────────────────────────────────────────────────────
@@ -136,7 +178,7 @@ export const useJoinLeaderboard = () => {
       const token = await getAccessToken();
       return customLeaderboardService.join(token, id);
     },
-    onSuccess: async (result) => {
+    onSuccess: async result => {
       // Invalidate the user's leaderboard list so the new entry appears
       qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARDS });
       // Refresh browse results so isMember / isPending flags update
@@ -180,7 +222,12 @@ export const useRespondToPending = () => {
       action: 'accept' | 'decline';
     }) => {
       const token = await getAccessToken();
-      return customLeaderboardService.respondToPending(token, leaderboardId, userId, action);
+      return customLeaderboardService.respondToPending(
+        token,
+        leaderboardId,
+        userId,
+        action,
+      );
     },
     onSuccess: (_, { leaderboardId, userId, action }) => {
       // Grab the accepted member from the pending cache before removing them
@@ -201,15 +248,25 @@ export const useRespondToPending = () => {
           QUERY_KEYS.CUSTOM_LEADERBOARD_MEMBERS(leaderboardId),
           (old = []) => [
             ...old,
-            { ...resolvedMember, role: 'member' as const, joinedAt: new Date().toISOString() },
+            {
+              ...resolvedMember,
+              role: 'member' as const,
+              joinedAt: new Date().toISOString(),
+            },
           ],
         );
       }
 
       // Invalidate in the background so server data eventually reconciles
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_PENDING(leaderboardId) });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_MEMBERS(leaderboardId) });
-      qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_DETAIL(leaderboardId) });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_PENDING(leaderboardId),
+      });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_MEMBERS(leaderboardId),
+      });
+      qc.invalidateQueries({
+        queryKey: QUERY_KEYS.CUSTOM_LEADERBOARD_DETAIL(leaderboardId),
+      });
       // Refresh the list so pendingCount badge updates
       qc.invalidateQueries({ queryKey: QUERY_KEYS.CUSTOM_LEADERBOARDS });
     },

@@ -41,6 +41,8 @@ export interface CustomLeaderboard {
   createdBy: string;
   provisionalThreshold: number;
   isPublic: boolean;
+  isFeatured: boolean;
+  featuredRank: number | null;
   memberCount: number;
   createdAt: string;
   inactivityDecayEnabled: boolean;

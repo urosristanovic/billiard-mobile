@@ -18,6 +18,7 @@ import {
   useCustomLeaderboardDetail,
   useCustomLeaderboardMembers,
   useCustomLeaderboardMutations,
+  useJoinLeaderboard,
   usePendingMembers,
   useRespondToPending,
 } from '@/features/leaderboard/useCustomLeaderboards';
@@ -31,6 +32,7 @@ import { scale } from '@/utils/scale';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
 import { detailStyles } from '../shared/detailStyles';
 import { MemberRow } from '../shared/MemberRow';
+import { LeaderboardMeta } from './components/LeaderboardMeta';
 
 type Props = NativeStackScreenProps<
   LeaderboardStackParamList,
@@ -38,7 +40,7 @@ type Props = NativeStackScreenProps<
 >;
 
 const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
-  const { leaderboardId } = route.params;
+  const { leaderboardId, previewIsMember, previewIsPending } = route.params;
   const { t } = useTranslation('groups');
   const { t: tCommon } = useTranslation('common');
   const { isDark, tk } = useTheme();
@@ -73,6 +75,7 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
 
   const { deleteLeaderboard, removeMember } = useCustomLeaderboardMutations();
   const respondToPending = useRespondToPending();
+  const joinMutation = useJoinLeaderboard();
 
   const [refreshing, setRefreshing] = useState(false);
   const isGroupAttached = !!lb?.groupId;
@@ -109,6 +112,12 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
     );
 
   const isCreator = lb.createdBy === user?.id;
+  const isMemberFromList = members.some(m => m.userId === user?.id);
+  const isMember = isCreator || isMemberFromList || previewIsMember === true;
+  const isPendingJoin =
+    previewIsPending === true ||
+    (joinMutation.isSuccess && joinMutation.data?.status === 'pending');
+  const canJoin = !isMember && !isPendingJoin && !isGroupAttached;
   const hasBottomAddAction = isCreator && !isGroupAttached;
   const hasPending = isPrivateStandalone && isCreator && pendingMembers.length > 0;
 
@@ -177,10 +186,10 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
             <View
               style={[
                 detailStyles.memberAvatar,
-                { backgroundColor: tk.primary[900], borderColor: tk.primary[700] },
+                { backgroundColor: tk.surface.raised, borderColor: tk.border.strong },
               ]}
             >
-              <Text style={[detailStyles.memberAvatarText, { color: tk.primary[300] }]}>
+              <Text style={[detailStyles.memberAvatarText, { color: tk.text.muted }]}>
                 {member.displayName.slice(0, 2).toUpperCase()}
               </Text>
             </View>
@@ -223,28 +232,15 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
       <ScreenHeader onBack={() => navigation.goBack()} title={lb.name} />
 
       <View style={detailStyles.header}>
-        {lb.description ? (
-          <Text style={[detailStyles.description, { color: tk.text.secondary }]}>
-            {lb.description}
-          </Text>
-        ) : null}
-        <Text style={[detailStyles.meta, { color: tk.text.muted }]}>
-          {lb.isPublic ? 'Public' : 'Private'} ·{' '}
-          {t('customLeaderboards.thresholdLabel')}: {lb.provisionalThreshold} ·{' '}
-          {t('customLeaderboards.memberCount', { count: lb.memberCount })}
-        </Text>
+        <LeaderboardMeta
+          lb={lb}
+          isCreator={isCreator}
+          onDelete={handleDelete}
+        />
         <View style={detailStyles.sectionHeader}>
           <Text style={[detailStyles.sectionTitle, { color: tk.text.secondary }]}>
             {t('customLeaderboards.members')}
           </Text>
-          {isCreator && (
-            <DangerButton
-              size='xs'
-              isDark={isDark}
-              label={t('customLeaderboards.delete')}
-              onPress={handleDelete}
-            />
-          )}
         </View>
       </View>
 
@@ -254,7 +250,7 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
         style={detailStyles.list}
         contentContainerStyle={[
           detailStyles.listContent,
-          hasBottomAddAction ? detailStyles.listContentWithBottomAction : null,
+          (hasBottomAddAction || canJoin || isPendingJoin) ? detailStyles.listContentWithBottomAction : null,
         ]}
         bounces
         alwaysBounceVertical
@@ -304,21 +300,57 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
         }
       />
 
-      {hasBottomAddAction && (
+      {(hasBottomAddAction || canJoin || isPendingJoin) && (
         <View style={styles.fabRow} pointerEvents='box-none'>
           <View style={{ flex: 1 }} />
-          <FloatingActionButton
-            label={t('customLeaderboards.addMember')}
-            icon={
-              <Feather
-                name='user-plus'
-                size={iconSize.md}
-                color={tk.text.onPrimary}
-              />
-            }
-            onPress={() => navigation.push('UserSearch', { leaderboardId })}
-            style={{ flex: 1 }}
-          />
+          {hasBottomAddAction && (
+            <FloatingActionButton
+              label={t('customLeaderboards.addMember')}
+              icon={
+                <Feather
+                  name='user-plus'
+                  size={iconSize.md}
+                  color={tk.text.onPrimary}
+                />
+              }
+              onPress={() => navigation.push('UserSearch', { leaderboardId })}
+              style={{ flex: 1 }}
+            />
+          )}
+          {canJoin && (
+            <FloatingActionButton
+              label={t('customLeaderboards.enter')}
+              icon={
+                joinMutation.isPending ? (
+                  <ActivityIndicator size='small' color={tk.text.onPrimary} />
+                ) : (
+                  <Feather
+                    name='log-in'
+                    size={iconSize.md}
+                    color={tk.text.onPrimary}
+                  />
+                )
+              }
+              onPress={() => {
+                if (!joinMutation.isPending) joinMutation.mutate(leaderboardId);
+              }}
+              style={{ flex: 1 }}
+            />
+          )}
+          {isPendingJoin && !canJoin && (
+            <FloatingActionButton
+              label={t('customLeaderboards.pending')}
+              icon={
+                <Feather
+                  name='clock'
+                  size={iconSize.md}
+                  color={tk.text.onPrimary}
+                />
+              }
+              onPress={() => {}}
+              style={{ flex: 1, opacity: 0.6 }}
+            />
+          )}
         </View>
       )}
     </ScreenLayout>

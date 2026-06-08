@@ -17,7 +17,7 @@ export const useBrowseTournaments = () => {
       const token = await getAccessToken();
       return tournamentService.search(token, query);
     },
-    enabled: !!user && query.length >= 2,
+    enabled: !!user && (query.length === 0 || query.length >= 2),
   });
 
   const { data: pendingRequests = [] } = useMyPendingRequests();
