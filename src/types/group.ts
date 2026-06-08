@@ -43,6 +43,8 @@ export interface CustomLeaderboard {
   isPublic: boolean;
   memberCount: number;
   createdAt: string;
+  inactivityDecayEnabled: boolean;
+  inactivityGraceWeeks: number;
   /** Present in list responses */
   isCreator?: boolean;
   /** Present in list responses for leaderboards the user created */
@@ -61,6 +63,8 @@ export interface CreateCustomLeaderboardInput {
   description?: string;
   provisionalThreshold?: number;
   isPublic?: boolean;
+  inactivityDecayEnabled?: boolean;
+  inactivityGraceWeeks?: number;
 }
 
 export interface UpdateCustomLeaderboardInput {

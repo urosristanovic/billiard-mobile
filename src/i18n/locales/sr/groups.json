@@ -69,7 +69,11 @@
     "pendingRequests": "Zahtevi na čekanju",
     "accept": "Prihvati",
     "decline": "Odbij",
-    "groupAttachedNote": "Ova rang lista je povezana sa grupom. Članovi se upravljaju putem grupe — dodavanjem ili uklanjanjem korisnika tamo će se automatski primeniti i ovde."
+    "groupAttachedNote": "Ova rang lista je povezana sa grupom. Članovi se upravljaju putem grupe — dodavanjem ili uklanjanjem korisnika tamo će se automatski primeniti i ovde.",
+    "decayLabel": "Opadanje zbog neaktivnosti",
+    "decayDesc": "Neaktivni igrači gube rejting svake nedelje dok ne odigraju ponovo",
+    "graceWeeksLabel": "Nedelje pre opadanja",
+    "graceWeeksDesc": "Koliko nedelja bez meča pre nego što počne opadanje rejtinga"
   },
   "location": {
     "countryLabel": "Zemlja",

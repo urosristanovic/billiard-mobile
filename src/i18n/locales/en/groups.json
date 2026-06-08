@@ -69,7 +69,11 @@
     "pendingRequests": "Pending Requests",
     "accept": "Accept",
     "decline": "Decline",
-    "groupAttachedNote": "This leaderboard is linked to a group. Members are managed through the group — adding or removing users there will automatically apply here."
+    "groupAttachedNote": "This leaderboard is linked to a group. Members are managed through the group — adding or removing users there will automatically apply here.",
+    "decayLabel": "Inactivity decay",
+    "decayDesc": "Inactive players lose rating weekly until they play again",
+    "graceWeeksLabel": "Weeks before decay",
+    "graceWeeksDesc": "How many weeks without a match before rating decay begins"
   },
   "location": {
     "countryLabel": "Country",

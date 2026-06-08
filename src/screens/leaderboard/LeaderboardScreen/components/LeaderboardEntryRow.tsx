@@ -69,7 +69,7 @@ export const LeaderboardEntryRow = ({ entry, isMe, onPress }: Props) => {
         </Text>
       </View>
 
-      {/* Avatar + flag */}
+      {/* Avatar + flag + active dot */}
       <View style={styles.avatarWrap}>
         {entry.avatarUrl ? (
           <Image
@@ -97,6 +97,19 @@ export const LeaderboardEntryRow = ({ entry, isMe, onPress }: Props) => {
           <Text style={styles.flag}>
             {countryCodeToFlag(entry.countryCode)}
           </Text>
+        )}
+        {entry.isActive != null && (
+          <View
+            style={[
+              styles.activeDot,
+              {
+                backgroundColor: entry.isActive
+                  ? tk.success.default
+                  : tk.text.muted,
+                borderColor: tk.surface.default,
+              },
+            ]}
+          />
         )}
       </View>
 
@@ -173,6 +186,15 @@ const styles = StyleSheet.create({
     bottom: -4,
     right: -4,
     fontSize: typography.size.xs,
+  },
+  activeDot: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    width: scale(10),
+    height: scale(10),
+    borderRadius: radius.full,
+    borderWidth: 1.5,
   },
   info: {
     flex: 1,

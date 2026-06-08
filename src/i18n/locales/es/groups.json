@@ -69,7 +69,11 @@
     "pendingRequests": "Solicitudes pendientes",
     "accept": "Aceptar",
     "decline": "Rechazar",
-    "groupAttachedNote": "Esta tabla está vinculada a un grupo. Los miembros se gestionan a través del grupo — agregar o eliminar usuarios allí se aplicará automáticamente aquí."
+    "groupAttachedNote": "Esta tabla está vinculada a un grupo. Los miembros se gestionan a través del grupo — agregar o eliminar usuarios allí se aplicará automáticamente aquí.",
+    "decayLabel": "Decaimiento por inactividad",
+    "decayDesc": "Los jugadores inactivos pierden puntuación cada semana hasta que vuelvan a jugar",
+    "graceWeeksLabel": "Semanas antes del decaimiento",
+    "graceWeeksDesc": "Cuántas semanas sin una partida antes de que empiece el decaimiento"
   },
   "location": {
     "countryLabel": "País",

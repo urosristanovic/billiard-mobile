@@ -37,6 +37,9 @@ export interface LeaderboardEntry {
   losses: number;
   isProvisional: boolean;
   ratingChange: number | null;
+  lastPlayedAt: string | null;
+  /** null = feature disabled for this leaderboard (custom LB with decay off) */
+  isActive: boolean | null;
 }
 
 export interface LeaderboardParams {

@@ -24,6 +24,8 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
   const [description, setDescription] = useState('');
   const [threshold, setThreshold] = useState('10');
   const [isPublic, setIsPublic] = useState(false);
+  const [decayEnabled, setDecayEnabled] = useState(true);
+  const [graceWeeks, setGraceWeeks] = useState('2');
   const [nameError, setNameError] = useState('');
 
   const handleSubmit = () => {
@@ -34,6 +36,9 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
     const parsedThreshold = parseInt(threshold, 10);
     if (isNaN(parsedThreshold) || parsedThreshold < 1) return;
 
+    const parsedGraceWeeks = parseInt(graceWeeks, 10);
+    if (decayEnabled && (isNaN(parsedGraceWeeks) || parsedGraceWeeks < 1)) return;
+
     setNameError('');
     createLeaderboard.mutate(
       {
@@ -41,6 +46,8 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
         description: description.trim() || undefined,
         provisionalThreshold: parsedThreshold,
         isPublic,
+        inactivityDecayEnabled: decayEnabled,
+        inactivityGraceWeeks: decayEnabled ? parsedGraceWeeks : 2,
       },
       {
         onSuccess: lb => {
@@ -107,6 +114,38 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
           <Text style={[styles.fieldHint, { color: tk.text.muted }]}>
             {t('customLeaderboards.publicDesc')}
           </Text>
+
+          {/* Inactivity decay toggle */}
+          <View style={styles.switchRow}>
+            <Text style={[styles.switchLabel, { color: tk.text.primary }]}>
+              {t('customLeaderboards.decayLabel')}
+            </Text>
+            <ToggleSwitch
+              value={decayEnabled}
+              onValueChange={setDecayEnabled}
+              trackColor={{ false: tk.border.default, true: tk.primary[600] }}
+              thumbColor={tk.text.onPrimary}
+            />
+          </View>
+          <Text style={[styles.fieldHint, { color: tk.text.muted }]}>
+            {t('customLeaderboards.decayDesc')}
+          </Text>
+
+          {decayEnabled && (
+            <>
+              <FormField
+                label={t('customLeaderboards.graceWeeksLabel')}
+                value={graceWeeks}
+                onChangeText={setGraceWeeks}
+                placeholder='2'
+                keyboardType='numeric'
+                isDark={isDark}
+              />
+              <Text style={[styles.fieldHint, { color: tk.text.muted }]}>
+                {t('customLeaderboards.graceWeeksDesc')}
+              </Text>
+            </>
+          )}
 
         </View>
       </ScrollView>
