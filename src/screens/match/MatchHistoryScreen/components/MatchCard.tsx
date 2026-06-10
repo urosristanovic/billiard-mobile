@@ -4,6 +4,7 @@ import { theme } from '@/constants/theme';
 import { styles } from './styles';
 import { type Match } from '@/types/match';
 import { MatchStatusBadge } from '@/components/common/MatchStatusBadge';
+import { DisciplineIcon } from '@/components/common/icons';
 
 interface MatchCardProps {
   match: Match;
@@ -21,6 +22,7 @@ export const MatchCard = ({
   isDark,
 }: MatchCardProps) => {
   const { t } = useTranslation('matches');
+  const { t: tCommon } = useTranslation('common');
   const tk = isDark ? theme.dark : theme.light;
 
   const me = match.players.find(p => p.userId === userId);
@@ -30,10 +32,21 @@ export const MatchCard = ({
     me?.score != null && opponent?.score != null && me.score === opponent.score;
 
   const playedAt = new Date(match.playedAt);
-  const dateStr = playedAt.toLocaleDateString([], {
-    month: 'short',
-    day: 'numeric',
-  });
+
+  const getDateLabel = (date: Date) => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const isSameDay = (a: Date, b: Date) =>
+      a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate();
+    if (isSameDay(date, today)) return tCommon('today');
+    if (isSameDay(date, yesterday)) return tCommon('yesterday');
+    return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+  };
+
+  const dateStr = getDateLabel(playedAt);
   const timeStr = playedAt.toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
@@ -156,6 +169,7 @@ export const MatchCard = ({
         <Text style={[styles.timeText, { color: tk.text.muted }]}>
           {timeStr}
         </Text>
+        <DisciplineIcon discipline={match.discipline} />
       </View>
     </TouchableOpacity>
   );

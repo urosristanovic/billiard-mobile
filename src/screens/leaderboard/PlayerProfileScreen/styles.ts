@@ -142,5 +142,6 @@ export const styles = StyleSheet.create({
     bottom: spacing[6],
     left: spacing[5],
     right: spacing[5],
+    flexDirection: 'row',
   },
 });

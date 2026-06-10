@@ -75,18 +75,18 @@ export const PendingRequestCard = ({
                 {label}
               </Text>
             </View>
-            {tournament?.isRated && (
+            {!tournament?.isRated && (
               <View
                 style={[
                   styles.badge,
                   {
                     backgroundColor: tk.surface.overlay,
-                    borderColor: tk.primary[500],
+                    borderColor: tk.border.strong,
                   },
                 ]}
               >
-                <Text style={[styles.badgeText, { color: tk.primary[500] }]}>
-                  {t('ratedBadge')}
+                <Text style={[styles.badgeText, { color: tk.text.muted }]}>
+                  {t('unratedBadge')}
                 </Text>
               </View>
             )}

@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
   container: {
     padding: spacing[4],
     gap: spacing[4],
+    paddingBottom: spacing[20],
   },
   metaBadges: {
     paddingHorizontal: spacing[6],
@@ -195,5 +196,12 @@ export const styles = StyleSheet.create({
   refreshingIndicator: {
     alignItems: 'center',
     paddingVertical: spacing[2],
+  },
+  fabRow: {
+    position: 'absolute',
+    bottom: spacing[4],
+    left: spacing[5],
+    right: spacing[5],
+    flexDirection: 'row',
   },
 });

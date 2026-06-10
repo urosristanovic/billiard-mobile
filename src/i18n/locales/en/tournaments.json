@@ -72,6 +72,7 @@
     "emptyInitial": "No open tournaments",
     "emptyInitialDesc": "There are no public tournaments open for registration right now",
     "requestButton": "Request Spot",
+    "requestButtonShort": "Request",
     "requestSent": "Request Sent",
     "requestSpotSuccess": "Your request has been sent to the organizer",
     "requestAgain": "Request Again",
@@ -194,7 +195,7 @@
     "invited": "Invited",
     "joined": "Joined"
   },
-  "ratedBadge": "Rated",
+  "unratedBadge": "Unrated",
   "loading": "Loading tournaments...",
   "loadFailed": "Failed to load tournaments",
   "notFound": "Tournament not found"

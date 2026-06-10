@@ -8,9 +8,9 @@
     "all": "All"
   },
   "status": {
-    "challenge_requested": "Challenge Requested",
+    "challenge_requested": "Challenge",
     "challenge": "Playing",
-    "pending_confirmation": "Waiting to Confirm",
+    "pending_confirmation": "Waiting",
     "confirmed": "Confirmed",
     "disputed": "Disputed",
     "cancelled": "Cancelled"
@@ -95,6 +95,7 @@
     "confirmMessage": "This will confirm the result and update ratings.",
     "confirmSuccessTitle": "Match accepted",
     "confirmSuccessMessage": "Result confirmed. Ratings will be updated shortly.",
+    "rematchButton": "Rematch",
     "disputeTitle": "Dispute this match?",
     "disputeMessage": "The match will be flagged for review. Ratings won't be affected until resolved.",
     "disputeFormTitle": "Dispute With Corrected Score",

@@ -72,6 +72,7 @@
     "emptyInitial": "Nema otvorenih turnira",
     "emptyInitialDesc": "Trenutno nema javnih turnira otvorenih za prijavu",
     "requestButton": "Zatraži mesto",
+    "requestButtonShort": "Zatraži",
     "requestSent": "Zahtev poslat",
     "requestSpotSuccess": "Vaš zahtev je poslat organizatoru",
     "requestAgain": "Zatraži ponovo",
@@ -194,7 +195,7 @@
     "invited": "Pozvan",
     "joined": "Učestvuje"
   },
-  "ratedBadge": "Rangirani",
+  "unratedBadge": "Nerangirani",
   "loading": "Učitavanje turnira...",
   "loadFailed": "Greška pri učitavanju turnira",
   "notFound": "Turnir nije pronađen"

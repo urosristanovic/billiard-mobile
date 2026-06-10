@@ -53,14 +53,14 @@
     "publicDesc": "Svi mogu da pretražuju i pridruže se ovoj rang listi",
     "submit": "Napravi",
     "update": "Ažuriraj",
-    "delete": "Obriši rang listu",
+    "delete": "Obriši",
     "deleteConfirmTitle": "Obrisati rang listu?",
     "deleteConfirmMessage": "Ovo će trajno obrisati rang listu.",
     "members": "Članovi",
     "memberCount": "{{count}} član",
     "memberCount_other": "{{count}} članova",
     "addMember": "Dodaj člana",
-    "enter": "Pristupi",
+    "enter": "Pridruži se",
     "setAsDefault": "Postavi kao moju podrazumevanu rang listu",
     "removeMember": "Ukloni",
     "removeMemberConfirmTitle": "Ukloniti člana?",
@@ -76,7 +76,10 @@
     "decayLabel": "Opadanje zbog neaktivnosti",
     "decayDesc": "Neaktivni igrači gube rejting svake nedelje dok ne odigraju ponovo",
     "graceWeeksLabel": "Nedelje pre opadanja",
-    "graceWeeksDesc": "Koliko nedelja bez meča pre nego što počne opadanje rejtinga"
+    "graceWeeksDesc": "Koliko nedelja bez meča pre nego što počne opadanje rejtinga",
+    "decayNoteEnabled": "Rejting opada nakon {{weeks}} nedelje neaktivnosti",
+    "decayNoteEnabled_other": "Rejting opada nakon {{weeks}} nedelja neaktivnosti",
+    "decayNoteDisabled": "Opadanje rejtinga je onemogućeno"
   },
   "location": {
     "countryLabel": "Zemlja",

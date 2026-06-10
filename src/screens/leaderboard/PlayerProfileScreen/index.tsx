@@ -324,11 +324,14 @@ const PlayerProfileScreen = ({ route, navigation }: Props) => {
         )} */}
       </ScrollView>
 
-      <FloatingActionButton
-        label={t('playerProfile.challengeButton')}
-        onPress={() => setChallengeModalVisible(true)}
-        style={styles.fab}
-      />
+      <View style={styles.fab} pointerEvents='box-none'>
+        <View style={{ flex: 1 }} />
+        <FloatingActionButton
+          label={t('playerProfile.challengeButton')}
+          onPress={() => setChallengeModalVisible(true)}
+          style={{ flex: 1 }}
+        />
+      </View>
 
       <ChallengeModal
         visible={challengeModalVisible}

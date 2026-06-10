@@ -53,14 +53,14 @@
     "publicDesc": "Anyone can search for and join this leaderboard",
     "submit": "Create",
     "update": "Update",
-    "delete": "Delete Leaderboard",
+    "delete": "Delete",
     "deleteConfirmTitle": "Delete leaderboard?",
     "deleteConfirmMessage": "This will permanently delete the leaderboard.",
     "members": "Members",
     "memberCount": "{{count}} member",
     "memberCount_other": "{{count}} members",
     "addMember": "Add Member",
-    "enter": "Enter",
+    "enter": "Join",
     "setAsDefault": "Set as my default leaderboard",
     "removeMember": "Remove",
     "removeMemberConfirmTitle": "Remove member?",
@@ -76,7 +76,10 @@
     "decayLabel": "Inactivity decay",
     "decayDesc": "Inactive players lose rating weekly until they play again",
     "graceWeeksLabel": "Weeks before decay",
-    "graceWeeksDesc": "How many weeks without a match before rating decay begins"
+    "graceWeeksDesc": "How many weeks without a match before rating decay begins",
+    "decayNoteEnabled": "Ratings decay after {{weeks}} week of inactivity",
+    "decayNoteEnabled_other": "Ratings decay after {{weeks}} weeks of inactivity",
+    "decayNoteDisabled": "Rating decay is disabled"
   },
   "location": {
     "countryLabel": "Country",

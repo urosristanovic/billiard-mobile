@@ -8,9 +8,9 @@
     "all": "Todos"
   },
   "status": {
-    "challenge_requested": "Desafío enviado",
+    "challenge_requested": "Desafío",
     "challenge": "Jugando",
-    "pending_confirmation": "Pendiente de confirmación",
+    "pending_confirmation": "Esperando",
     "confirmed": "Confirmado",
     "disputed": "Disputado",
     "cancelled": "Cancelado"
@@ -95,6 +95,7 @@
     "confirmMessage": "Esto confirmará el resultado y actualizará los ratings.",
     "confirmSuccessTitle": "Partido aceptado",
     "confirmSuccessMessage": "Resultado confirmado. Las clasificaciones se actualizarán en breve.",
+    "rematchButton": "Revancha",
     "disputeTitle": "¿Disputar esta partida?",
     "disputeMessage": "La partida será marcada para revisión. Los ratings no se verán afectados hasta que se resuelva.",
     "disputeFormTitle": "Disputa Con Puntuacion Corregida",

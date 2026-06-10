@@ -12,12 +12,15 @@ import type { Discipline } from '@/types';
 import { styles } from './ChallengeModal.styles';
 
 const RACE_TO_OPTIONS = [2, 3, 5, 7, 9] as const;
+const RACE_TO_PRESET_SET = new Set<number>(RACE_TO_OPTIONS);
 
 interface ChallengeModalProps {
   visible: boolean;
   onClose: () => void;
   opponentId: string;
   opponentName: string;
+  initialDiscipline?: Discipline;
+  initialRaceTo?: number;
 }
 
 export const ChallengeModal = ({
@@ -25,14 +28,21 @@ export const ChallengeModal = ({
   onClose,
   opponentId,
   opponentName,
+  initialDiscipline,
+  initialRaceTo,
 }: ChallengeModalProps) => {
   const { t } = useTranslation('challenges');
   const { isDark, tk } = useTheme();
 
-  const [discipline, setDiscipline] = useState<Discipline>('8ball');
-  const [raceTo, setRaceTo] = useState<number>(2);
-  const [isOtherRaceTo, setIsOtherRaceTo] = useState(false);
-  const [otherRaceTo, setOtherRaceTo] = useState(1);
+  const initIsOther = initialRaceTo != null && !RACE_TO_PRESET_SET.has(initialRaceTo);
+  const [discipline, setDiscipline] = useState<Discipline>(initialDiscipline ?? '8ball');
+  const [raceTo, setRaceTo] = useState<number>(
+    initialRaceTo != null && RACE_TO_PRESET_SET.has(initialRaceTo) ? initialRaceTo : 2,
+  );
+  const [isOtherRaceTo, setIsOtherRaceTo] = useState(initIsOther);
+  const [otherRaceTo, setOtherRaceTo] = useState(
+    initialRaceTo != null && !RACE_TO_PRESET_SET.has(initialRaceTo) ? initialRaceTo : 1,
+  );
   const [message, setMessage] = useState('');
   const [sent, setSent] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -64,10 +74,14 @@ export const ChallengeModal = ({
     setSent(false);
     setApiError(null);
     setMessage('');
-    setDiscipline('8ball');
-    setRaceTo(3);
-    setIsOtherRaceTo(false);
-    setOtherRaceTo(1);
+    setDiscipline(initialDiscipline ?? '8ball');
+    setRaceTo(
+      initialRaceTo != null && RACE_TO_PRESET_SET.has(initialRaceTo) ? initialRaceTo : 3,
+    );
+    setIsOtherRaceTo(initialRaceTo != null && !RACE_TO_PRESET_SET.has(initialRaceTo));
+    setOtherRaceTo(
+      initialRaceTo != null && !RACE_TO_PRESET_SET.has(initialRaceTo) ? initialRaceTo : 1,
+    );
     onClose();
   };
 

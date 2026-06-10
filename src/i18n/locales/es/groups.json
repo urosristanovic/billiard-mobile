@@ -53,14 +53,14 @@
     "publicDesc": "Cualquiera puede buscar y unirse a esta tabla",
     "submit": "Crear",
     "update": "Actualizar",
-    "delete": "Eliminar tabla",
+    "delete": "Eliminar",
     "deleteConfirmTitle": "¿Eliminar tabla?",
     "deleteConfirmMessage": "Esto eliminará permanentemente la tabla.",
     "members": "Miembros",
     "memberCount": "{{count}} miembro",
     "memberCount_other": "{{count}} miembros",
     "addMember": "Añadir miembro",
-    "enter": "Entrar",
+    "enter": "Unirse",
     "setAsDefault": "Establecer como mi tabla predeterminada",
     "removeMember": "Eliminar",
     "removeMemberConfirmTitle": "¿Eliminar miembro?",
@@ -76,7 +76,10 @@
     "decayLabel": "Decaimiento por inactividad",
     "decayDesc": "Los jugadores inactivos pierden puntuación cada semana hasta que vuelvan a jugar",
     "graceWeeksLabel": "Semanas antes del decaimiento",
-    "graceWeeksDesc": "Cuántas semanas sin una partida antes de que empiece el decaimiento"
+    "graceWeeksDesc": "Cuántas semanas sin una partida antes de que empiece el decaimiento",
+    "decayNoteEnabled": "La puntuación decae después de {{weeks}} semana de inactividad",
+    "decayNoteEnabled_other": "La puntuación decae después de {{weeks}} semanas de inactividad",
+    "decayNoteDisabled": "El decaimiento de puntuación está desactivado"
   },
   "location": {
     "countryLabel": "País",

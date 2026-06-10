@@ -5,8 +5,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { theme, typography, spacing, radius } from '@/constants/theme';
+import { theme, typography, spacing, radius, iconSize } from '@/constants/theme';
 import { scale } from '@/utils/scale';
 import type {
   TournamentSummary,
@@ -70,7 +71,7 @@ export const TournamentSearchCard = ({
     >
       <View style={styles.info}>
         <View style={styles.nameRow}>
-          {tournament.isRated && (
+          {!tournament.isRated && (
             <View
               style={[
                 styles.ratedBadge,
@@ -80,10 +81,10 @@ export const TournamentSearchCard = ({
               <Text
                 style={[
                   styles.ratedBadgeText,
-                  { color: tk.text.secondary },
+                  { color: tk.text.muted },
                 ]}
               >
-                {t('ratedBadge')}
+                {t('unratedBadge')}
               </Text>
             </View>
           )}
@@ -99,12 +100,15 @@ export const TournamentSearchCard = ({
           {TOURNAMENT_FORMAT_LABELS[tournament.format]}
         </Text>
         {tournament.location ? (
-          <Text
-            style={[styles.location, { color: tk.text.muted }]}
-            numberOfLines={1}
-          >
-            📍 {tournament.location}
-          </Text>
+          <View style={styles.locationRow}>
+            <Feather name='map-pin' size={iconSize.sm} color={tk.text.muted} />
+            <Text
+              style={[styles.location, { color: tk.text.muted }]}
+              numberOfLines={1}
+            >
+              {tournament.location}
+            </Text>
+          </View>
         ) : null}
         <Text
           style={[
@@ -149,7 +153,7 @@ export const TournamentSearchCard = ({
                     ? t('browse.full')
                     : isRejected
                       ? t('browse.requestAgain')
-                      : t('browse.requestButton')}
+                      : t('browse.requestButtonShort')}
           </Text>
         )}
       </TouchableOpacity>
@@ -202,6 +206,12 @@ const styles = StyleSheet.create({
   location: {
     fontSize: typography.size.sm,
     fontFamily: typography.family.body,
+    flexShrink: 1,
+  },
+  locationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing[1],
   },
   capacity: {
     fontSize: typography.size.xs,

@@ -44,6 +44,8 @@
     "rules": "Rules"
   },
   "you": "You",
+  "today": "Today",
+  "yesterday": "Yesterday",
   "unrated": "Unrated",
   "successTitle": "Success",
   "errorTitle": "Error",

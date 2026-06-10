@@ -72,6 +72,7 @@
     "emptyInitial": "Sin torneos abiertos",
     "emptyInitialDesc": "No hay torneos públicos abiertos para registro en este momento",
     "requestButton": "Solicitar lugar",
+    "requestButtonShort": "Solicitar",
     "requestSent": "Solicitud enviada",
     "requestSpotSuccess": "Tu solicitud ha sido enviada al organizador",
     "requestAgain": "Solicitar de nuevo",
@@ -194,7 +195,7 @@
     "invited": "Invitado",
     "joined": "Unido"
   },
-  "ratedBadge": "Clasificatorio",
+  "unratedBadge": "No clasificatorio",
   "loading": "Cargando torneos...",
   "loadFailed": "Error al cargar torneos",
   "notFound": "Torneo no encontrado"

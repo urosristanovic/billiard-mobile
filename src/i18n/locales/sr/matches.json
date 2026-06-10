@@ -8,9 +8,9 @@
     "all": "Sve"
   },
   "status": {
-    "challenge_requested": "Izazov poslat",
+    "challenge_requested": "Izazov",
     "challenge": "U toku",
-    "pending_confirmation": "Čeka potvrdu",
+    "pending_confirmation": "Čeka",
     "confirmed": "Potvrđen",
     "disputed": "Sporno",
     "cancelled": "Otkazano"
@@ -95,6 +95,7 @@
     "confirmMessage": "Ovo će potvrditi rezultat i ažurirati rejtinge.",
     "confirmSuccessTitle": "Meč prihvaćen",
     "confirmSuccessMessage": "Rezultat potvrđen. Rejtinzi će uskoro biti ažurirani.",
+    "rematchButton": "Revanš",
     "disputeTitle": "Osporavate ovaj meč?",
     "disputeMessage": "Meč će biti označen za pregled. Rejtinzi neće biti pogođeni dok se ne reši.",
     "disputeFormTitle": "Spor sa ispravljenim rezultatom",

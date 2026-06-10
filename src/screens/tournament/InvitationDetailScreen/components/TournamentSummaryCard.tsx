@@ -27,9 +27,9 @@ export const TournamentSummaryCard = ({ tournament }: Props) => {
     >
       <View style={styles.nameRow}>
         {!tournament.isRated && (
-          <View style={[styles.ratedBadge, { borderColor: tk.primary[400] }]}>
-            <Text style={[styles.ratedBadgeText, { color: tk.primary[400] }]}>
-              {t('ratedBadge')}
+          <View style={[styles.ratedBadge, { borderColor: tk.border.strong }]}>
+            <Text style={[styles.ratedBadgeText, { color: tk.text.muted }]}>
+              {t('unratedBadge')}
             </Text>
           </View>
         )}
@@ -47,9 +47,12 @@ export const TournamentSummaryCard = ({ tournament }: Props) => {
         {t('detail.participants')}
       </Text>
       {tournament.location && (
-        <Text style={[styles.tournamentMeta, { color: tk.text.muted }]}>
-          📍 {tournament.location}
-        </Text>
+        <View style={styles.nameRow}>
+          <Feather name='map-pin' size={iconSize.sm} color={tk.text.muted} />
+          <Text style={[styles.tournamentMeta, { color: tk.text.muted }]}>
+            {tournament.location}
+          </Text>
+        </View>
       )}
       <View style={styles.nameRow}>
         <Feather name='calendar' size={iconSize.sm} color={tk.text.muted} />

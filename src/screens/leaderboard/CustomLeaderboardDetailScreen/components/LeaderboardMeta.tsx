@@ -76,27 +76,23 @@ export const LeaderboardMeta = ({ lb, isCreator, onDelete }: LeaderboardMetaProp
   return (
     <View style={styles.container}>
       <View style={styles.summaryRow}>
-        <View
-          style={[
-            styles.badge,
-            {
-              backgroundColor: lb.isPublic
-                ? `${tk.success.default}20`
-                : `${tk.primary[500]}20`,
-            },
-          ]}
-        >
-          <Text
+        {!lb.isPublic && (
+          <View
             style={[
-              styles.badgeText,
-              { color: lb.isPublic ? tk.success.default : tk.primary[500] },
+              styles.badge,
+              { backgroundColor: `${tk.border.strong}30` },
             ]}
           >
-            {lb.isPublic
-              ? t('customLeaderboards.publicLabel')
-              : t('customLeaderboards.privateLabel', { defaultValue: 'Private' })}
-          </Text>
-        </View>
+            <Text
+              style={[
+                styles.badgeText,
+                { color: tk.text.muted },
+              ]}
+            >
+              {t('customLeaderboards.privateLabel', { defaultValue: 'Private' })}
+            </Text>
+          </View>
+        )}
         <Text style={[styles.memberCount, { color: tk.text.muted }]}>
           {t('customLeaderboards.memberCount', { count: lb.memberCount })}
         </Text>
@@ -136,6 +132,23 @@ export const LeaderboardMeta = ({ lb, isCreator, onDelete }: LeaderboardMetaProp
                 {lb.description}
               </Text>
             ) : null}
+            <View style={styles.detailRow}>
+              <Feather
+                name='trending-down'
+                size={iconSize.sm}
+                color={lb.inactivityDecayEnabled ? tk.text.muted : tk.text.disabled}
+              />
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: lb.inactivityDecayEnabled ? tk.text.secondary : tk.text.disabled },
+                ]}
+              >
+                {lb.inactivityDecayEnabled
+                  ? t('customLeaderboards.decayNoteEnabled', { count: lb.inactivityGraceWeeks, weeks: lb.inactivityGraceWeeks })
+                  : t('customLeaderboards.decayNoteDisabled')}
+              </Text>
+            </View>
           </View>
         </Animated.View>
       )}

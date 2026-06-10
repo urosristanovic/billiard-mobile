@@ -13,7 +13,11 @@ import { useConfirmDialog } from '@/components/common/dialog';
 import { useToast } from '@/components/common/toast';
 import { ScreenLayout } from '@/components/common/layout';
 import { LoadingState, EmptyState, Loading } from '@/components/common/states';
+import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
+import { ChallengeModal } from '@/components/common/ChallengeModal';
 import { useTheme } from '@/hooks/useTheme';
+import { iconSize, spacing } from '@/constants/theme';
+import { Feather } from '@expo/vector-icons';
 import {
   ScoreBoard,
   DisputeForm,
@@ -42,6 +46,7 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
   const [activeForm, setActiveForm] = useState<
     'none' | 'dispute' | 'counterDispute' | 'cancel' | 'declineChallenge'
   >('none');
+  const [rematchModalVisible, setRematchModalVisible] = useState(false);
   const [disputeReason, setDisputeReason] = useState('');
   const [proposedMyScore, setProposedMyScore] = useState('');
   const [proposedOpponentScore, setProposedOpponentScore] = useState('');
@@ -415,6 +420,29 @@ const MatchDetailScreen = ({ route, navigation }: Props) => {
           isDark={isDark}
         />
       </ScrollView>
+
+      {match.status === 'confirmed' && (
+        <View style={styles.fabRow} pointerEvents='box-none'>
+          <View style={{ flex: 1 }} />
+          <FloatingActionButton
+            label={t('detail.rematchButton')}
+            icon={<Feather name='rotate-ccw' size={iconSize.md} color={tk.text.onPrimary} />}
+            onPress={() => setRematchModalVisible(true)}
+            style={{ flex: 1 }}
+          />
+        </View>
+      )}
+
+      {opponent && (
+        <ChallengeModal
+          visible={rematchModalVisible}
+          onClose={() => setRematchModalVisible(false)}
+          opponentId={opponent.userId}
+          opponentName={opponent.profile.displayName ?? opponent.profile.username}
+          initialDiscipline={match.discipline}
+          initialRaceTo={match.raceTo ?? match.bestOf != null ? Math.ceil((match.bestOf ?? 2) / 2) : 2}
+        />
+      )}
     </ScreenLayout>
   );
 };

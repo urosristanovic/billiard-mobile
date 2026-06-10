@@ -50,25 +50,23 @@ export const LeaderboardBrowseCard = ({
     >
       <View style={styles.info}>
         <View style={styles.nameRow}>
-          <View
-            style={[
-              styles.badge,
-              {
-                backgroundColor: isPublic
-                  ? `${tk.success.default}20`
-                  : `${tk.primary[500]}20`,
-              },
-            ]}
-          >
-            <Text
+          {!isPublic && (
+            <View
               style={[
-                styles.badgeText,
-                { color: isPublic ? tk.success.default : tk.primary[500] },
+                styles.badge,
+                { backgroundColor: `${tk.border.strong}30` },
               ]}
             >
-              {isPublic ? t('browse.public') : t('browse.private')}
-            </Text>
-          </View>
+              <Text
+                style={[
+                  styles.badgeText,
+                  { color: tk.text.muted },
+                ]}
+              >
+                {t('browse.private')}
+              </Text>
+            </View>
+          )}
           <Text style={[styles.name, { color: tk.text.primary }]} numberOfLines={1}>
             {name}
           </Text>

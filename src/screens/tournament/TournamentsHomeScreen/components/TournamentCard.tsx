@@ -55,10 +55,10 @@ export const TournamentCard = ({
       </View>
 
       <View style={styles.meta}>
-        {tournament.isRated && (
-          <View style={[styles.ratedBadge, { borderColor: tk.primary[600] }]}>
-            <Text style={[styles.ratedBadgeText, { color: tk.primary[600] }]}>
-              {t('ratedBadge')}
+        {!tournament.isRated && (
+          <View style={[styles.ratedBadge, { borderColor: tk.border.strong }]}>
+            <Text style={[styles.ratedBadgeText, { color: tk.text.muted }]}>
+              {t('unratedBadge')}
             </Text>
           </View>
         )}

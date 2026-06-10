@@ -30,27 +30,20 @@ export const LeaderboardItemRow = ({ leaderboard, onMenuPress }: Props) => {
           {leaderboard.name}
         </Text>
         <View style={styles.meta}>
-          <View
-            style={[
-              styles.visibilityBadge,
-              {
-                backgroundColor: leaderboard.isPublic
-                  ? `${tk.success.default}20`
-                  : `${tk.primary[500]}20`,
-              },
-            ]}
-          >
-            <Text
+          {!leaderboard.isPublic && (
+            <View
               style={[
-                styles.visibilityText,
-                {
-                  color: leaderboard.isPublic ? tk.success.default : tk.primary[500],
-                },
+                styles.visibilityBadge,
+                { backgroundColor: `${tk.border.strong}30` },
               ]}
             >
-              {leaderboard.isPublic ? 'Public' : 'Private'}
-            </Text>
-          </View>
+              <Text
+                style={[styles.visibilityText, { color: tk.text.muted }]}
+              >
+                Private
+              </Text>
+            </View>
+          )}
 
           {hasPending && (
             <View
