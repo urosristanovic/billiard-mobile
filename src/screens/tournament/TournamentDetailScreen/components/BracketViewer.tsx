@@ -170,7 +170,7 @@ export const BracketViewer = ({
   const sortedRounds = useMemo(
     () =>
       [...rounds].sort((a, b) => {
-        const order = { winners: 0, main: 0, losers: 1, grand_final: 2 };
+        const order = { winners: 0, main: 0, losers: 1, grand_final: 2, third_place: 2 };
         const typeDiff =
           (order[a.bracketType] ?? 0) - (order[b.bracketType] ?? 0);
         if (typeDiff !== 0) return typeDiff;
@@ -201,9 +201,11 @@ export const BracketViewer = ({
           const label =
             round.bracketType === 'grand_final'
               ? 'Grand Final'
-              : round.bracketType === 'losers'
-                ? `Losers R${round.roundNumber}`
-                : `Round ${round.roundNumber}`;
+              : round.bracketType === 'third_place'
+                ? '3rd Place'
+                : round.bracketType === 'losers'
+                  ? `Losers R${round.roundNumber}`
+                  : `Round ${round.roundNumber}`;
 
           return (
             <View key={round.id} style={styles.roundColumn}>

@@ -47,6 +47,7 @@
     "groupLabel": "Attach to Group",
     "groupPlaceholder": "None (standalone)",
     "thresholdLabel": "Provisional Threshold",
+    "createdAtLabel": "Created",
     "thresholdDesc": "Players need this many games to leave provisional status",
     "publicLabel": "Public",
     "publicDesc": "Anyone can search for and join this leaderboard",

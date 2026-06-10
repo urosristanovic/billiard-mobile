@@ -75,7 +75,7 @@
   "playerProfile": {
     "title": "Perfil de usuario",
     "ratingsSection": "Puntuaciones",
-    "statsSection": "Estadísticas",
+    "statsSection": "Estadísticas del oponente",
     "totalMatches": "Partidas totales",
     "winRate": "Tasa de victorias",
     "challengeButton": "Desafiar",
@@ -101,8 +101,8 @@
     "setAsDefault": "Establecer como predeterminado",
     "empty": "No se encontraron rankings",
     "emptyDesc": "Prueba con otro nombre o crea el tuyo",
-    "emptyInitial": "No hay rankings sugeridos",
-    "emptyInitialDesc": "Busca un ranking por nombre para empezar",
+    "emptyInitial": "Sin rankings públicos",
+    "emptyInitialDesc": "No hay rankings públicos disponibles en este momento",
     "public": "Público",
     "private": "Privado",
     "members": "{{count}} miembros"
@@ -120,6 +120,9 @@
     "add": "Agregar",
     "added": "Agregado",
     "alreadyMember": "Miembro",
-    "challenge": "Retar"
+    "challenge": "Retar",
+    "recentOpponents": "Oponentes recientes",
+    "noRecentHint": "Los jugadores con los que hayas jugado aparecerán aquí.",
+    "noRecentHintSub": "Empieza a escribir para buscar a cualquiera."
   }
 }

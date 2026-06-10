@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Feather } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useUserSearch } from '@/features/matches/useUserSearch';
 import {
@@ -33,7 +34,7 @@ type Props = NativeStackScreenProps<LeaderboardStackParamList, 'UserSearch'>;
 const UserSearchScreen = ({ navigation, route }: Props) => {
   const { t } = useTranslation('leaderboard');
   const { isDark, tk } = useTheme();
-  const { query, setQuery, results, isFetching, isSearchMode } =
+  const { query, setQuery, results, isFetching, isSearchMode, suggestions } =
     useUserSearch();
   const [pendingAdds, setPendingAdds] = useState<Set<string>>(new Set());
   const [locallyAdded, setLocallyAdded] = useState<Set<string>>(new Set());
@@ -119,11 +120,28 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
           description={t('userSearch.emptyDesc')}
           isDark={isDark}
         />
+      ) : results.length === 0 && !isSearchMode ? (
+        <View style={styles.hint}>
+          <Feather name='users' size={scale(32)} color={tk.text.muted} />
+          <Text style={[styles.hintText, { color: tk.text.secondary }]}>
+            {t('userSearch.noRecentHint')}
+          </Text>
+          <Text style={[styles.hintSub, { color: tk.text.muted }]}>
+            {t('userSearch.noRecentHintSub')}
+          </Text>
+        </View>
       ) : (
         <FlatList
           data={results}
           keyExtractor={item => item.id}
           contentContainerStyle={styles.list}
+          ListHeaderComponent={
+            !isSearchMode && suggestions.length > 0 ? (
+              <Text style={[styles.sectionLabel, { color: tk.text.muted }]}>
+                {t('userSearch.recentOpponents')}
+              </Text>
+            ) : null
+          }
           renderItem={({ item }) => {
             const isMember = memberIds.has(item.id);
             const isAdded = locallyAdded.has(item.id);
@@ -235,6 +253,31 @@ const styles = StyleSheet.create({
   // ── List ───────────────────────────────────────────────────
   loader: {
     marginTop: spacing[8],
+  },
+  hint: {
+    alignItems: 'center',
+    paddingHorizontal: spacing[8],
+    paddingTop: spacing[10],
+    gap: spacing[2],
+  },
+  hintText: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.bodyMedium,
+    textAlign: 'center',
+    marginTop: spacing[2],
+  },
+  hintSub: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.body,
+    textAlign: 'center',
+  },
+  sectionLabel: {
+    fontSize: typography.size.xs,
+    fontFamily: typography.family.heading,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+    marginBottom: spacing[1],
+    paddingHorizontal: spacing[1],
   },
   list: {
     paddingHorizontal: spacing[4],

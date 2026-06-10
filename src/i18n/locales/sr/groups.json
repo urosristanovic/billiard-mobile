@@ -45,6 +45,7 @@
     "groupLabel": "Poveži sa grupom",
     "groupPlaceholder": "Ništa (samostalna)",
     "thresholdLabel": "Prag za privremeni status",
+    "createdAtLabel": "Kreirano",
     "thresholdDesc": "Igrači trebaju ovaj broj mečeva da napuste privremeni status",
     "descriptionLabel": "Opis",
     "descriptionPlaceholder": "Opcioni opis",

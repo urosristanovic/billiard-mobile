@@ -45,7 +45,7 @@ export type HomeStackParamList = {
 export type LeaderboardStackParamList = {
   LeaderboardMain: undefined;
   PlayerProfile: { userId: string };
-  UserSearch: { leaderboardId?: string } | undefined;
+  UserSearch: { leaderboardId?: string; groupId?: string } | undefined;
   CustomLeaderboardDetail: { leaderboardId: string; previewIsMember?: boolean; previewIsPending?: boolean };
   CreateCustomLeaderboard: undefined;
   JoinLeaderboard: undefined;

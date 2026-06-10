@@ -3,7 +3,7 @@
     "name": "Billiard Tracker",
     "slug": "billiard-mobile",
     "scheme": "billiardapp",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -15,7 +15,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.billiardtracker.mobile",
-      "buildNumber": "16",
+      "buildNumber": "17",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
@@ -28,7 +28,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "package": "com.billiardtracker.mobile",
-      "versionCode": 13,
+      "versionCode": 14,
       "predictiveBackGestureEnabled": false
     },
     "web": {

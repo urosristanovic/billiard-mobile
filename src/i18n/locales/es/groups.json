@@ -45,6 +45,7 @@
     "groupLabel": "Vincular a grupo",
     "groupPlaceholder": "Ninguno (independiente)",
     "thresholdLabel": "Umbral provisional",
+    "createdAtLabel": "Creado",
     "thresholdDesc": "Los jugadores necesitan esta cantidad de partidas para salir del estado provisional",
     "descriptionLabel": "Descripción",
     "descriptionPlaceholder": "Descripción opcional",

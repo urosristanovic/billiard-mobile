@@ -75,7 +75,7 @@
   "playerProfile": {
     "title": "Profil korisnika",
     "ratingsSection": "Rejtinzi",
-    "statsSection": "Statistika",
+    "statsSection": "Statistike protivnika",
     "totalMatches": "Ukupno mečeva",
     "winRate": "Procenat pobeda",
     "challengeButton": "Izazovi",
@@ -101,8 +101,8 @@
     "setAsDefault": "Postavi kao podrazumevano",
     "empty": "Nisu pronađene rang liste",
     "emptyDesc": "Pokušajte sa drugim imenom ili kreirajte svoju",
-    "emptyInitial": "Nema predloženih rang listi",
-    "emptyInitialDesc": "Pretražite rang listu po imenu za početak",
+    "emptyInitial": "Nema javnih rang listi",
+    "emptyInitialDesc": "Trenutno nema dostupnih javnih rang listi",
     "public": "Javno",
     "private": "Privatno",
     "members": "{{count}} članova"
@@ -120,6 +120,9 @@
     "add": "Dodaj",
     "added": "Dodato",
     "alreadyMember": "Član",
-    "challenge": "Izazovi"
+    "challenge": "Izazovi",
+    "recentOpponents": "Nedavni protivnici",
+    "noRecentHint": "Igrači protiv kojih si igrao će se pojaviti ovde.",
+    "noRecentHintSub": "Počni da kucaš da potražiš bilo koga."
   }
 }

@@ -120,6 +120,17 @@ export const LeaderboardMeta = ({ lb, isCreator, onDelete }: LeaderboardMetaProp
                 {t('customLeaderboards.thresholdLabel')}: {lb.provisionalThreshold}
               </Text>
             </View>
+            <View style={styles.detailRow}>
+              <Feather name='calendar' size={iconSize.sm} color={tk.text.muted} />
+              <Text style={[styles.detailText, { color: tk.text.primary }]}>
+                {t('customLeaderboards.createdAtLabel')}:{' '}
+                {new Date(lb.createdAt).toLocaleDateString([], {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                })}
+              </Text>
+            </View>
             {lb.description ? (
               <Text style={[styles.description, { color: tk.text.secondary }]}>
                 {lb.description}

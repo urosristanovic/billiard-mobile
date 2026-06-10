@@ -57,7 +57,7 @@
   "playerProfile": {
     "title": "User Profile",
     "ratingsSection": "Ratings",
-    "statsSection": "Stats",
+    "statsSection": "Opponent stats",
     "totalMatches": "Total Matches",
     "winRate": "Win Rate",
     "challengeButton": "Challenge",
@@ -79,7 +79,10 @@
     "add": "Add",
     "added": "Added",
     "alreadyMember": "Member",
-    "challenge": "Challenge"
+    "challenge": "Challenge",
+    "recentOpponents": "Recent Opponents",
+    "noRecentHint": "Players you've played against will appear here.",
+    "noRecentHintSub": "Start typing above to search for anyone."
   },
   "browse": {
     "title": "Join Leaderboard",
@@ -92,8 +95,8 @@
     "setAsDefault": "Set as default",
     "empty": "No leaderboards found",
     "emptyDesc": "Try a different name or create your own",
-    "emptyInitial": "No suggested leaderboards",
-    "emptyInitialDesc": "Search for a leaderboard by name to get started",
+    "emptyInitial": "No public leaderboards",
+    "emptyInitialDesc": "There are no public leaderboards available right now",
     "public": "Public",
     "private": "Private",
     "members": "{{count}} members"

@@ -27,7 +27,8 @@ export type TournamentRoundBracketType =
   | 'winners'
   | 'losers'
   | 'grand_final'
-  | 'main';
+  | 'main'
+  | 'third_place';
 
 export type TournamentRoundStatus = 'pending' | 'in_progress' | 'completed';
 
