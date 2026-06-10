@@ -19,12 +19,14 @@ interface LoginScreenProps {
   onNavigateSignup: () => void;
   onNavigateForgotPassword: () => void;
   isDark?: boolean;
+  isFirstLogin?: boolean;
 }
 
 const LoginScreen = ({
   onNavigateSignup,
   onNavigateForgotPassword,
   isDark: isDarkProp,
+  isFirstLogin = false,
 }: LoginScreenProps) => {
   const { t: tAuth } = useTranslation('auth');
   const { isDark: systemDark, tk } = useTheme();
@@ -77,7 +79,7 @@ const LoginScreen = ({
         >
           <View style={styles.header}>
             <Text style={[styles.title, { color: tk.text.primary }]}>
-              {tAuth('login.title')}
+              {isFirstLogin ? tAuth('login.titleFirstTime') : tAuth('login.title')}
             </Text>
             <Text style={[styles.subtitle, { color: tk.text.muted }]}>
               {tAuth('login.subtitle')}

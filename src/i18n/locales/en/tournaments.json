@@ -68,11 +68,12 @@
     "searchPlaceholder": "Search by name or location...",
     "empty": "No tournaments found",
     "emptyDesc": "Try a different search term",
-    "suggested": "Featured Tournaments",
+    "suggested": "Suggested Tournaments",
     "emptyInitial": "No open tournaments",
     "emptyInitialDesc": "There are no public tournaments open for registration right now",
     "requestButton": "Request Spot",
     "requestSent": "Request Sent",
+    "requestSpotSuccess": "Your request has been sent to the organizer",
     "requestAgain": "Request Again",
     "joined": "Joined",
     "organizer": "Your Tournament",
@@ -112,7 +113,8 @@
       "invite": "Invite Player",
       "addParticipants": "Add",
       "showDetails": "Show Details",
-      "hideDetails": "Hide Details"
+      "hideDetails": "Hide Details",
+      "leave": "Leave"
     },
     "currentMatches": {
       "title": "Next Matches",
@@ -137,7 +139,10 @@
     "confirmCancel": "Cancel this tournament?",
     "confirmCancelMessage": "All participants will be notified.",
     "startRequiresFullRoster": "{{count}} / {{max}} players — need full roster to start",
-    "publishToAddParticipants": "Publish tournament to add participants"
+    "publishToAddParticipants": "Publish tournament to add participants",
+    "confirmLeaveAsParticipant": "Leave as a player?",
+    "confirmLeaveAsParticipantMessage": "You will remain the organizer but will no longer be a participant.",
+    "leaveSuccess": "You left the tournament as a player"
   },
   "invitation": {
     "title": "Invitation",

@@ -172,6 +172,14 @@ export const tournamentService = {
     return parseResponse<TournamentRequest>(res);
   },
 
+  leave: async (token: string, id: string): Promise<Tournament> => {
+    const res = await fetchWithTimeout(API_ENDPOINTS.tournaments.leave(id), {
+      method: 'POST',
+      headers: buildHeaders(token),
+    });
+    return parseResponse<Tournament>(res);
+  },
+
   getRequests: async (
     token: string,
     id: string,

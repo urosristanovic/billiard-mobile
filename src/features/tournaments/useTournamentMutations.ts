@@ -201,6 +201,37 @@ export const useTournamentMutations = () => {
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.TOURNAMENTS_MY_PENDING,
       });
+      showToast({
+        type: 'success',
+        title: t('successTitle'),
+        message: tT('browse.requestSpotSuccess'),
+      });
+    },
+    onError: error =>
+      showToast({
+        type: 'error',
+        title: t('errorTitle'),
+        message: getErrorMessage(error),
+      }),
+  });
+
+  const leaveTournament = useMutation({
+    mutationFn: async (id: string) => {
+      if (!user) throw new Error('Not authenticated');
+      const token = await getAccessToken();
+      return tournamentService.leave(token, id);
+    },
+    onSuccess: tournament => {
+      queryClient.setQueryData(
+        QUERY_KEYS.TOURNAMENT_DETAIL(tournament.id),
+        tournament,
+      );
+      invalidateTournaments();
+      showToast({
+        type: 'success',
+        title: t('successTitle'),
+        message: tT('detail.leaveSuccess'),
+      });
     },
     onError: error =>
       showToast({
@@ -333,6 +364,7 @@ export const useTournamentMutations = () => {
     cancelTournament,
     invitePlayer,
     requestSpot,
+    leaveTournament,
     respondToRequest,
     reportResult,
     editResult,

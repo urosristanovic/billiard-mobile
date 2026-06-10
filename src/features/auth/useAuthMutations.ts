@@ -9,6 +9,7 @@ import type {
 } from '@/services/auth';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { clearTokens } from '@/lib/tokenStorage';
+import { setHasLoggedInBefore } from '@/lib/onboardingStorage';
 import { QUERY_KEYS } from '@/config/queryKeys';
 import type { SignupInput, LoginInput, UpdateProfileInput } from '@/types/user';
 
@@ -43,6 +44,7 @@ export const useAuthMutations = () => {
     onSuccess: user => {
       setUser(user);
       queryClient.setQueryData(QUERY_KEYS.ME, user);
+      setHasLoggedInBefore();
     },
     onError: error => {
       const message = getErrorMessage(error);

@@ -1,10 +1,12 @@
 import { useRef, type ReactNode } from 'react';
 import {
+  ActivityIndicator,
   Animated,
   Pressable,
   StyleSheet,
   Text,
   View,
+  type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,8 +17,9 @@ interface FloatingActionButtonProps {
   label: string;
   icon?: ReactNode;
   onPress: () => void;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   variant?: 'primary' | 'secondary';
+  loading?: boolean;
 }
 
 export const FloatingActionButton = ({
@@ -25,6 +28,7 @@ export const FloatingActionButton = ({
   onPress,
   style,
   variant = 'primary',
+  loading = false,
 }: FloatingActionButtonProps) => {
   const { tk } = useTheme();
   const scale = useRef(new Animated.Value(1)).current;
@@ -72,14 +76,21 @@ export const FloatingActionButton = ({
       )}
 
       <Pressable
-        onPress={onPress}
-        onPressIn={animateIn}
-        onPressOut={animateOut}
+        onPress={loading ? undefined : onPress}
+        onPressIn={loading ? undefined : animateIn}
+        onPressOut={loading ? undefined : animateOut}
         accessibilityRole='button'
         accessibilityLabel={label}
       >
         <View style={styles.inner}>
-          {icon}
+          {loading ? (
+            <ActivityIndicator
+              size='small'
+              color={isPrimary ? tk.text.onPrimary : tk.text.primary}
+            />
+          ) : (
+            icon
+          )}
           <Text
             style={[
               styles.label,

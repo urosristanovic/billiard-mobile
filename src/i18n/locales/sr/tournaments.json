@@ -68,11 +68,12 @@
     "searchPlaceholder": "Pretraga po nazivu ili lokaciji...",
     "empty": "Nema pronađenih turnira",
     "emptyDesc": "Pokušajte drugačiji pojam za pretragu",
-    "suggested": "Izdvojeni turniri",
+    "suggested": "Predloženi turniri",
     "emptyInitial": "Nema otvorenih turnira",
     "emptyInitialDesc": "Trenutno nema javnih turnira otvorenih za prijavu",
     "requestButton": "Zatraži mesto",
     "requestSent": "Zahtev poslat",
+    "requestSpotSuccess": "Vaš zahtev je poslat organizatoru",
     "requestAgain": "Zatraži ponovo",
     "joined": "Učestvuješ",
     "organizer": "Vaš turnir",
@@ -112,7 +113,8 @@
       "invite": "Pozovi igrača",
       "addParticipants": "Dodaj",
       "showDetails": "Prikaži detalje",
-      "hideDetails": "Sakrij detalje"
+      "hideDetails": "Sakrij detalje",
+      "leave": "Napusti"
     },
     "currentMatches": {
       "title": "Sledeći mečevi",
@@ -137,7 +139,10 @@
     "confirmCancel": "Otkaži ovaj turnir?",
     "confirmCancelMessage": "Svi učesnici će biti obavešteni.",
     "startRequiresFullRoster": "{{count}} / {{max}} igrača — potrebno je popuniti turnir da bi mogao da počne",
-    "publishToAddParticipants": "Objavi turnir da bi dodao učesnike"
+    "publishToAddParticipants": "Objavi turnir da bi dodao učesnike",
+    "confirmLeaveAsParticipant": "Napustiti kao igrač?",
+    "confirmLeaveAsParticipantMessage": "Ostaješ organizator, ali više nećeš biti učesnik.",
+    "leaveSuccess": "Napustio si turnir kao igrač"
   },
   "invitation": {
     "title": "Pozivnica",

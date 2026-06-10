@@ -68,11 +68,12 @@
     "searchPlaceholder": "Buscar por nombre o ubicación...",
     "empty": "No se encontraron torneos",
     "emptyDesc": "Prueba con otro término de búsqueda",
-    "suggested": "Torneos destacados",
+    "suggested": "Torneos sugeridos",
     "emptyInitial": "Sin torneos abiertos",
     "emptyInitialDesc": "No hay torneos públicos abiertos para registro en este momento",
     "requestButton": "Solicitar lugar",
     "requestSent": "Solicitud enviada",
+    "requestSpotSuccess": "Tu solicitud ha sido enviada al organizador",
     "requestAgain": "Solicitar de nuevo",
     "joined": "Inscrito",
     "organizer": "Tu torneo",
@@ -112,7 +113,8 @@
       "invite": "Invitar jugador",
       "addParticipants": "Agregar",
       "showDetails": "Ver detalles",
-      "hideDetails": "Ocultar detalles"
+      "hideDetails": "Ocultar detalles",
+      "leave": "Salir"
     },
     "currentMatches": {
       "title": "Próximos partidos",
@@ -137,7 +139,10 @@
     "confirmCancel": "¿Cancelar este torneo?",
     "confirmCancelMessage": "Todos los participantes serán notificados.",
     "startRequiresFullRoster": "{{count}} / {{max}} jugadores — se necesita el grupo completo para iniciar",
-    "publishToAddParticipants": "Publica el torneo para agregar participantes"
+    "publishToAddParticipants": "Publica el torneo para agregar participantes",
+    "confirmLeaveAsParticipant": "¿Salir como jugador?",
+    "confirmLeaveAsParticipantMessage": "Seguirás siendo el organizador, pero ya no serás un participante.",
+    "leaveSuccess": "Saliste del torneo como jugador"
   },
   "invitation": {
     "title": "Invitación",

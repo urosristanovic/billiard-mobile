@@ -67,6 +67,7 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
     reportResult,
     editResult,
     requestSpot,
+    leaveTournament,
   } = useTournamentMutations();
 
   const { data: myPendingRequests = [] } = useMyPendingRequests();
@@ -304,6 +305,23 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
                   r => r.direction === 'invitation' && r.status === 'pending',
                 )}
                 isDark={isDark}
+                currentUserId={user?.id}
+                canLeave={
+                  isOrganizer &&
+                  isParticipant &&
+                  ['draft', 'registration'].includes(tournament.status)
+                }
+                isLeaving={leaveTournament.isPending}
+                onLeavePress={() =>
+                  confirm({
+                    title: t('detail.confirmLeaveAsParticipant'),
+                    message: t('detail.confirmLeaveAsParticipantMessage'),
+                    confirmLabel: t('detail.actions.leave'),
+                    cancelLabel: tCommon('cancel'),
+                    variant: 'destructive',
+                    onConfirm: () => leaveTournament.mutate(tournament.id),
+                  })
+                }
               />
             </View>
           )}
@@ -327,6 +345,7 @@ const TournamentDetailScreen = ({ navigation, route }: Props) => {
         <FloatingActionButton
           label={hasRequestedSpot ? t('browse.requestSent') : t('browse.requestButton')}
           style={[styles.fab, hasRequestedSpot && { opacity: 0.6 }]}
+          loading={requestSpot.isPending}
           onPress={() => {
             if (!hasRequestedSpot && !requestSpot.isPending) {
               requestSpot.mutate(tournamentId);

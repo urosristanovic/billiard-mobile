@@ -2,6 +2,8 @@ import { Text, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import { scale } from '@/utils/scale';
+import { DangerButton } from '@/components/common/buttons';
+import { Loading } from '@/components/common/states';
 import type {
   TournamentParticipant,
   TournamentRequest,
@@ -12,6 +14,10 @@ interface ParticipantListProps {
   maxParticipants: number;
   pendingInvitations?: TournamentRequest[];
   isDark?: boolean;
+  currentUserId?: string;
+  canLeave?: boolean;
+  onLeavePress?: () => void;
+  isLeaving?: boolean;
 }
 
 export const ParticipantList = ({
@@ -19,6 +25,10 @@ export const ParticipantList = ({
   maxParticipants,
   pendingInvitations = [],
   isDark = false,
+  currentUserId,
+  canLeave = false,
+  onLeavePress,
+  isLeaving = false,
 }: ParticipantListProps) => {
   const { t } = useTranslation('tournaments');
   const tk = isDark ? theme.dark : theme.light;
@@ -56,6 +66,19 @@ export const ParticipantList = ({
           <Text style={[styles.name, { color: tk.text.primary }]}>
             {p.profile.displayName || p.profile.username}
           </Text>
+          {canLeave && p.userId === currentUserId && onLeavePress && (
+            isLeaving ? (
+              <Loading />
+            ) : (
+              <DangerButton
+                label={t('detail.actions.leave')}
+                size='xs'
+                isDark={isDark}
+                noShadow
+                onPress={onLeavePress}
+              />
+            )
+          )}
         </View>
       ))}
       {pendingInvitations.map(inv => (

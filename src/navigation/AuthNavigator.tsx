@@ -5,7 +5,7 @@ import SignupScreen from "@/screens/auth/SignupScreen";
 import ForgotPasswordScreen from "@/screens/auth/ForgotPasswordScreen";
 import OnboardingScreen from "@/screens/auth/OnboardingScreen";
 import { LoadingState } from "@/components/common/states";
-import { getHasSeenOnboarding } from "@/lib/onboardingStorage";
+import { getHasSeenOnboarding, getHasLoggedInBefore } from "@/lib/onboardingStorage";
 
 export type AuthStackParamList = {
   Onboarding: undefined;
@@ -20,11 +20,15 @@ export const AuthNavigator = () => {
   const [initialRoute, setInitialRoute] = useState<
     keyof AuthStackParamList | null
   >(null);
+  const [hasLoggedInBefore, setHasLoggedInBefore] = useState(false);
 
   useEffect(() => {
-    getHasSeenOnboarding().then(seen => {
-      setInitialRoute(seen ? "Login" : "Onboarding");
-    });
+    Promise.all([getHasSeenOnboarding(), getHasLoggedInBefore()]).then(
+      ([seen, loggedIn]) => {
+        setHasLoggedInBefore(loggedIn);
+        setInitialRoute(seen ? "Login" : "Onboarding");
+      },
+    );
   }, []);
 
   if (initialRoute === null) {
@@ -47,6 +51,7 @@ export const AuthNavigator = () => {
         {(props) => (
           <LoginScreen
             {...props}
+            isFirstLogin={!hasLoggedInBefore}
             onNavigateSignup={() => props.navigation.navigate("Signup")}
             onNavigateForgotPassword={() =>
               props.navigation.navigate("ForgotPassword")
