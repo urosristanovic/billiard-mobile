@@ -14,15 +14,24 @@ import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { ToggleSwitch } from '@/components/common/forms';
 import { useTheme } from '@/hooks/useTheme';
 import { typography, spacing, radius } from '@/constants/theme';
+import {
+  DISCIPLINES,
+  DISCIPLINE_LABELS,
+  type Discipline,
+} from '@/types/match';
 import type { CustomLeaderboard } from '@/types/group';
+
+export const DEFAULT_LB_DISCIPLINE: Discipline = '8ball';
 
 export interface LeaderboardFilters {
   includeProvisional: boolean;
+  discipline: Discipline;
   selectedLeaderboardId?: string;
 }
 
 export const DEFAULT_LB_FILTERS: LeaderboardFilters = {
   includeProvisional: true,
+  discipline: DEFAULT_LB_DISCIPLINE,
   selectedLeaderboardId: undefined,
 };
 
@@ -32,6 +41,7 @@ export const countActiveLbFilters = (
 ): number => {
   let count = 0;
   if (!f.includeProvisional) count += 1;
+  if (f.discipline !== DEFAULT_LB_DISCIPLINE) count += 1;
   if (
     f.selectedLeaderboardId &&
     f.selectedLeaderboardId !== (defaultLeaderboardId ?? undefined)
@@ -151,6 +161,41 @@ export const LeaderboardFilterModal = ({
                 trackColor={{ false: tk.border.default, true: tk.primary[600] }}
                 thumbColor={tk.text.onPrimary}
               />
+            </View>
+
+            {/* Discipline */}
+            <View style={styles.section}>
+              <Text style={[styles.sectionLabel, { color: tk.text.secondary }]}>
+                {t('disciplines.label')}
+              </Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.pillRow}>
+                  {DISCIPLINES.map(d =>
+                    draft.discipline === d ? (
+                      <PrimaryButton
+                        key={d}
+                        label={DISCIPLINE_LABELS[d]}
+                        compact
+                        size='xs'
+                        isDark={isDark}
+                        onPress={() =>
+                          setDraft(prev => ({ ...prev, discipline: d }))
+                        }
+                      />
+                    ) : (
+                      <SecondaryButton
+                        key={d}
+                        label={DISCIPLINE_LABELS[d]}
+                        size='xs'
+                        isDark={isDark}
+                        onPress={() =>
+                          setDraft(prev => ({ ...prev, discipline: d }))
+                        }
+                      />
+                    ),
+                  )}
+                </View>
+              </ScrollView>
             </View>
 
             {/* Leaderboard */}

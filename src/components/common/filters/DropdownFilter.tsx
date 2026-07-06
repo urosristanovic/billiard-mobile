@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     marginLeft: spacing[2],
   },
   backdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   dropdown: {

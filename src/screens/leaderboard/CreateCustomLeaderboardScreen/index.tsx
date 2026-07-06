@@ -21,18 +21,29 @@ type Props = NativeStackScreenProps<
   'CreateCustomLeaderboard'
 >;
 
-const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
+const CreateCustomLeaderboardScreen = ({ navigation, route }: Props) => {
+  const editLeaderboard = route.params?.leaderboard;
+  const isEditMode = Boolean(editLeaderboard);
+
   const { t } = useTranslation('groups');
   const { t: tCommon } = useTranslation('common');
   const { isDark, tk } = useTheme();
-  const { createLeaderboard } = useCustomLeaderboardMutations();
+  const { createLeaderboard, updateLeaderboard } = useCustomLeaderboardMutations();
 
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [threshold, setThreshold] = useState('10');
-  const [isPublic, setIsPublic] = useState(true);
-  const [decayEnabled, setDecayEnabled] = useState(true);
-  const [graceWeeks, setGraceWeeks] = useState('2');
+  const [name, setName] = useState(editLeaderboard?.name ?? '');
+  const [description, setDescription] = useState(
+    editLeaderboard?.description ?? '',
+  );
+  const [threshold, setThreshold] = useState(
+    editLeaderboard ? String(editLeaderboard.provisionalThreshold) : '10',
+  );
+  const [isPublic, setIsPublic] = useState(editLeaderboard?.isPublic ?? true);
+  const [decayEnabled, setDecayEnabled] = useState(
+    editLeaderboard?.inactivityDecayEnabled ?? true,
+  );
+  const [graceWeeks, setGraceWeeks] = useState(
+    editLeaderboard ? String(editLeaderboard.inactivityGraceWeeks) : '2',
+  );
   const [nameError, setNameError] = useState('');
 
   const handleSubmit = () => {
@@ -47,6 +58,27 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
     if (decayEnabled && (isNaN(parsedGraceWeeks) || parsedGraceWeeks < 1)) return;
 
     setNameError('');
+
+    if (isEditMode && editLeaderboard) {
+      updateLeaderboard.mutate(
+        {
+          id: editLeaderboard.id,
+          input: {
+            name: name.trim(),
+            description: description.trim() || null,
+            provisionalThreshold: parsedThreshold,
+            isPublic,
+            inactivityDecayEnabled: decayEnabled,
+            inactivityGraceWeeks: decayEnabled ? parsedGraceWeeks : 2,
+          },
+        },
+        {
+          onSuccess: () => navigation.goBack(),
+        },
+      );
+      return;
+    }
+
     createLeaderboard.mutate(
       {
         name: name.trim(),
@@ -68,7 +100,11 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
     <ScreenLayout isDark={isDark}>
       <ScreenHeader
         onBack={() => navigation.goBack()}
-        title={t('customLeaderboards.createTitle')}
+        title={
+          isEditMode
+            ? t('customLeaderboards.editTitle')
+            : t('customLeaderboards.createTitle')
+        }
       />
       <KeyboardAvoidingView
         style={styles.keyboardAvoid}
@@ -167,11 +203,19 @@ const CreateCustomLeaderboardScreen = ({ navigation }: Props) => {
 
         <View style={styles.formButtonsWrapper}>
           <FormButtons
-            submitLabel={t('customLeaderboards.submit')}
+            submitLabel={
+              isEditMode
+                ? t('customLeaderboards.update')
+                : t('customLeaderboards.submit')
+            }
             cancelLabel={tCommon('cancel')}
             onSubmit={handleSubmit}
             onCancel={() => navigation.goBack()}
-            submitLoading={createLeaderboard.isPending}
+            submitLoading={
+              isEditMode
+                ? updateLeaderboard.isPending
+                : createLeaderboard.isPending
+            }
             isDark={isDark}
             cancelFirst
           />

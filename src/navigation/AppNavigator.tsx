@@ -13,6 +13,7 @@ import ChangePasswordScreen from '@/screens/user/ChangePasswordScreen';
 import FeedbackScreen from '@/screens/user/FeedbackScreen';
 import SettingsScreen from '@/screens/user/SettingsScreen';
 import type { Tournament } from '@/types/tournament';
+import type { CustomLeaderboard } from '@/types/group';
 
 import {
   TournamentsHomeScreen,
@@ -47,7 +48,7 @@ export type LeaderboardStackParamList = {
   PlayerProfile: { userId: string };
   UserSearch: { leaderboardId?: string; groupId?: string } | undefined;
   CustomLeaderboardDetail: { leaderboardId: string; previewIsMember?: boolean; previewIsPending?: boolean };
-  CreateCustomLeaderboard: undefined;
+  CreateCustomLeaderboard: { leaderboard?: CustomLeaderboard } | undefined;
   JoinLeaderboard: undefined;
 };
 

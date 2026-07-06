@@ -12,13 +12,12 @@ import { useTranslation } from 'react-i18next';
 import { Feather } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
-import { ScreenLayout } from '@/components/common/layout';
+import { ScreenLayout, AppHeader } from '@/components/common/layout';
 import { EmptyState, Loading, LoadingState } from '@/components/common/states';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
 import { useConfirmDialog } from '@/components/common/dialog';
 import { useToast } from '@/components/common/toast';
-import { AppLogo } from '@/components/common/AppLogo';
 import { useLeaderboard } from '@/features/leaderboard/useLeaderboard';
 import {
   useMyCustomLeaderboards,
@@ -27,6 +26,7 @@ import {
 import { useDefaultLeaderboard } from '@/features/leaderboard/useDefaultLeaderboard';
 import { useAuth } from '@/features/auth/useAuth';
 import type { LeaderboardEntry } from '@/types/rating';
+import { DISCIPLINE_LABELS } from '@/types/match';
 import { typography, spacing, iconSize, radius } from '@/constants/theme';
 import { verticalScale } from '@/utils/scale';
 import type { LeaderboardStackParamList } from '@/navigation/AppNavigator';
@@ -121,7 +121,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   } = useLeaderboard({
     scope: 'custom',
     leaderboardId: selectedLeaderboardId,
-    discipline: '8ball',
+    discipline: modalFilters.discipline,
     includeProvisional: modalFilters.includeProvisional,
   });
 
@@ -237,9 +237,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   if (lbsLoading) {
     return (
       <ScreenLayout isDark={isDark}>
-        <View style={[styles.brandRow, { borderBottomColor: tk.primary[900] }]}>
-          <AppLogo />
-        </View>
+        <AppHeader />
         <LoadingState message={t('loading')} isDark={isDark} />
       </ScreenLayout>
     );
@@ -250,20 +248,28 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   return (
     <ScreenLayout isDark={isDark}>
       {/* ── Brand row ───────────────────────────────────────────────────── */}
-      <View style={[styles.brandRow, { borderBottomColor: tk.primary[900] }]}>
-        <AppLogo />
-      </View>
+      <AppHeader />
 
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <View style={[styles.header, { borderBottomColor: tk.border.default }]}>
-        <Text
-          style={[styles.title, { color: tk.text.primary }]}
-          numberOfLines={1}
-        >
-          {hasNoLeaderboards
-            ? t('myLeaderboards')
-            : (selectedLeaderboard?.name ?? t('myLeaderboards'))}
-        </Text>
+        <View style={styles.titleBlock}>
+          <Text
+            style={[styles.title, { color: tk.text.primary }]}
+            numberOfLines={1}
+          >
+            {hasNoLeaderboards
+              ? t('myLeaderboards')
+              : (selectedLeaderboard?.name ?? t('myLeaderboards'))}
+          </Text>
+          {!hasNoLeaderboards && (
+            <Text
+              style={[styles.subtitle, { color: tk.text.muted }]}
+              numberOfLines={1}
+            >
+              {DISCIPLINE_LABELS[modalFilters.discipline]}
+            </Text>
+          )}
+        </View>
 
         {!hasNoLeaderboards && (
           <View style={styles.headerActions}>
@@ -463,12 +469,6 @@ const LeaderboardScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  brandRow: {
-    paddingHorizontal: spacing[5],
-    paddingTop: spacing[8],
-    paddingBottom: spacing[4],
-    borderBottomWidth: 1,
-  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -479,13 +479,22 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     gap: spacing[3],
   },
-  title: {
+  titleBlock: {
     flex: 1,
+  },
+  title: {
     fontSize: typography.size['2xl'],
     fontWeight: typography.weight.bold,
     fontFamily: typography.family.display,
     textTransform: 'uppercase',
     letterSpacing: 1,
+  },
+  subtitle: {
+    marginTop: 2,
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.heading,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   headerActions: {
     flexDirection: 'row',

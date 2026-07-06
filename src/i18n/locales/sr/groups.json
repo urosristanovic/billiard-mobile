@@ -40,6 +40,7 @@
     "emptyDesc": "Napravite prilagođenu rang listu za rangiranje određenih igrača",
     "create": "Napravite rang listu",
     "createTitle": "Napravite prilagođenu rang listu",
+    "editTitle": "Izmenite rang listu",
     "nameLabel": "Naziv",
     "namePlaceholder": "Unesite naziv rang liste",
     "groupLabel": "Poveži sa grupom",

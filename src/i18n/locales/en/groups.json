@@ -40,6 +40,7 @@
     "emptyDesc": "Create a custom leaderboard to rank specific players",
     "create": "Create Leaderboard",
     "createTitle": "Create Custom Leaderboard",
+    "editTitle": "Edit Leaderboard",
     "nameLabel": "Name",
     "namePlaceholder": "Enter leaderboard name",
     "descriptionLabel": "Description",

@@ -40,6 +40,7 @@
     "emptyDesc": "Crea una tabla personalizada para clasificar jugadores específicos",
     "create": "Crear tabla",
     "createTitle": "Crear tabla personalizada",
+    "editTitle": "Editar tabla",
     "nameLabel": "Nombre",
     "namePlaceholder": "Introduce el nombre de la tabla",
     "groupLabel": "Vincular a grupo",

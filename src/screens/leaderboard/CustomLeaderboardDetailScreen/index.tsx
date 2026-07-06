@@ -235,6 +235,9 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
         <LeaderboardMeta
           lb={lb}
           isCreator={isCreator}
+          onEdit={() =>
+            navigation.navigate('CreateCustomLeaderboard', { leaderboard: lb })
+          }
           onDelete={handleDelete}
         />
         <View style={detailStyles.sectionHeader}>

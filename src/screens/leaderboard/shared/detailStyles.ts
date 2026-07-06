@@ -38,7 +38,6 @@ export const detailStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: spacing[4],
   },
   sectionTitle: {
     fontSize: typography.size.base,

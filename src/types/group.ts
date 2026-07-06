@@ -74,4 +74,6 @@ export interface UpdateCustomLeaderboardInput {
   description?: string | null;
   provisionalThreshold?: number;
   isPublic?: boolean;
+  inactivityDecayEnabled?: boolean;
+  inactivityGraceWeeks?: number;
 }
