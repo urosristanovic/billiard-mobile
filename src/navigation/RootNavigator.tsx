@@ -1,19 +1,26 @@
-import { useEffect } from "react";
-import { NavigationContainer, createNavigationContainerRef } from "@react-navigation/native";
-import { useTranslation } from "react-i18next";
-import { useAuthStore } from "@/stores/useAuthStore";
-import { getTokens, clearTokens } from "@/lib/tokenStorage";
-import { authService } from "@/services/auth";
-import { navigationIntegration } from "../../App";
-import { AuthNavigator } from "./AuthNavigator";
-import { AppNavigator } from "./AppNavigator";
-import { LoadingState } from "@/components/common/states";
+import { useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTranslation } from 'react-i18next';
+import { useAuthStore } from '@/stores/useAuthStore';
+import { getTokens, clearTokens } from '@/lib/tokenStorage';
+import { authService } from '@/services/auth';
+import { navigationIntegration } from '../../App';
+import { AuthNavigator } from './AuthNavigator';
+import { AppNavigator } from './AppNavigator';
+import { LoadingState } from '@/components/common/states';
+import { navigationRef, type RootStackParamList } from './navigationService';
+import NotificationsScreen from '@/screens/notifications/NotificationsScreen';
+import NotificationSettingsScreen from '@/screens/notifications/NotificationSettingsScreen';
 
-const navigationRef = createNavigationContainerRef();
+export type { RootStackParamList };
+
+const RootStack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigator = () => {
-  const { t } = useTranslation("common");
-  const { user, isInitialized, setUser, setInitialized, setLoading } = useAuthStore();
+  const { t } = useTranslation('common');
+  const { user, isInitialized, setUser, setInitialized, setLoading } =
+    useAuthStore();
 
   useEffect(() => {
     async function initAuth() {
@@ -26,7 +33,6 @@ export const RootNavigator = () => {
 
       try {
         setLoading(true);
-        // getAccessToken inside authService.me() will auto-refresh if needed
         const me = await authService.me();
         setUser(me);
       } catch (err) {
@@ -44,7 +50,7 @@ export const RootNavigator = () => {
   }, [setInitialized, setLoading, setUser]);
 
   if (!isInitialized) {
-    return <LoadingState message={t("loading")} />;
+    return <LoadingState message={t('loading')} />;
   }
 
   return (
@@ -54,7 +60,22 @@ export const RootNavigator = () => {
         navigationIntegration.registerNavigationContainer(navigationRef);
       }}
     >
-      {user ? <AppNavigator /> : <AuthNavigator />}
+      {user ? (
+        <RootStack.Navigator screenOptions={{ headerShown: false }}>
+          <RootStack.Screen name='Main' component={AppNavigator} />
+          <RootStack.Screen
+            name='Notifications'
+            component={NotificationsScreen}
+            options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
+          />
+          <RootStack.Screen
+            name='NotificationSettings'
+            component={NotificationSettingsScreen}
+          />
+        </RootStack.Navigator>
+      ) : (
+        <AuthNavigator />
+      )}
     </NavigationContainer>
   );
 };

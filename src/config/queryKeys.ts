@@ -60,4 +60,10 @@ export const QUERY_KEYS = {
   TOURNAMENT_REQUESTS: (id: string) => ['tournaments', id, 'requests'] as const,
   TOURNAMENT_STANDINGS: (id: string) =>
     ['tournaments', id, 'standings'] as const,
+
+  NOTIFICATIONS: ['notifications'] as const,
+  NOTIFICATIONS_LIST: (page: number) =>
+    ['notifications', 'list', page] as const,
+  NOTIFICATIONS_UNREAD_COUNT: ['notifications', 'unread-count'] as const,
+  NOTIFICATION_PREFS: ['notifications', 'prefs'] as const,
 } as const;

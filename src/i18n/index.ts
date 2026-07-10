@@ -29,15 +29,18 @@ import esChallenges from "./locales/es/challenges.json";
 import enHome from "./locales/en/home.json";
 import srHome from "./locales/sr/home.json";
 import esHome from "./locales/es/home.json";
+import enNotifications from "./locales/en/notifications.json";
+import srNotifications from "./locales/sr/notifications.json";
+import esNotifications from "./locales/es/notifications.json";
 
 export const SUPPORTED_LANGUAGES = ["en", "sr", "es"] as const;
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 const LANGUAGE_KEY = "app_language";
 
 const resources = {
-  en: { common: enCommon, auth: enAuth, matches: enMatches, tournaments: enTournaments, ratings: enRatings, leaderboard: enLeaderboard, groups: enGroups, challenges: enChallenges, home: enHome },
-  sr: { common: srCommon, auth: srAuth, matches: srMatches, tournaments: srTournaments, ratings: srRatings, leaderboard: srLeaderboard, groups: srGroups, challenges: srChallenges, home: srHome },
-  es: { common: esCommon, auth: esAuth, matches: esMatches, tournaments: esTournaments, ratings: esRatings, leaderboard: esLeaderboard, groups: esGroups, challenges: esChallenges, home: esHome },
+  en: { common: enCommon, auth: enAuth, matches: enMatches, tournaments: enTournaments, ratings: enRatings, leaderboard: enLeaderboard, groups: enGroups, challenges: enChallenges, home: enHome, notifications: enNotifications },
+  sr: { common: srCommon, auth: srAuth, matches: srMatches, tournaments: srTournaments, ratings: srRatings, leaderboard: srLeaderboard, groups: srGroups, challenges: srChallenges, home: srHome, notifications: srNotifications },
+  es: { common: esCommon, auth: esAuth, matches: esMatches, tournaments: esTournaments, ratings: esRatings, leaderboard: esLeaderboard, groups: esGroups, challenges: esChallenges, home: esHome, notifications: esNotifications },
 };
 
 i18n.use(initReactI18next).init({

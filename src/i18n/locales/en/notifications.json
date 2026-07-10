@@ -1,0 +1,26 @@
+{
+  "screen": {
+    "title": "Notifications",
+    "empty": "No notifications yet",
+    "emptyDesc": "You will see match and tournament updates here."
+  },
+  "timeAgo": {
+    "justNow": "Just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago",
+    "daysAgo": "{{count}}d ago"
+  },
+  "settings": {
+    "title": "Notification Settings",
+    "categories": {
+      "matches": {
+        "title": "Matches",
+        "description": "Challenges, score confirmations, disputes"
+      }
+    }
+  },
+  "settingsMenuItem": {
+    "title": "Notifications",
+    "description": "Push, in-app, per-category preferences"
+  }
+}

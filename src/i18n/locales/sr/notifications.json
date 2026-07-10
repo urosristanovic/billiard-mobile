@@ -1,0 +1,26 @@
+{
+  "screen": {
+    "title": "Obaveštenja",
+    "empty": "Nema obaveštenja",
+    "emptyDesc": "Ovde ćete videti ažuriranja meča i turnira."
+  },
+  "timeAgo": {
+    "justNow": "Upravo sada",
+    "minutesAgo": "Pre {{count}}min",
+    "hoursAgo": "Pre {{count}}h",
+    "daysAgo": "Pre {{count}}d"
+  },
+  "settings": {
+    "title": "Podešavanja obaveštenja",
+    "categories": {
+      "matches": {
+        "title": "Mečevi",
+        "description": "Izazovi, potvrde rezultata, sporovi"
+      }
+    }
+  },
+  "settingsMenuItem": {
+    "title": "Obaveštenja",
+    "description": "Push, in-app, podešavanja po kategoriji"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "screen": {
+    "title": "Notificaciones",
+    "empty": "Sin notificaciones aún",
+    "emptyDesc": "Aquí verás actualizaciones de partidas y torneos."
+  },
+  "timeAgo": {
+    "justNow": "Ahora mismo",
+    "minutesAgo": "Hace {{count}}min",
+    "hoursAgo": "Hace {{count}}h",
+    "daysAgo": "Hace {{count}}d"
+  },
+  "settings": {
+    "title": "Configuración de notificaciones",
+    "categories": {
+      "matches": {
+        "title": "Partidas",
+        "description": "Desafíos, confirmaciones de puntuación, disputas"
+      }
+    }
+  },
+  "settingsMenuItem": {
+    "title": "Notificaciones",
+    "description": "Push, in-app, preferencias por categoría"
+  }
+}

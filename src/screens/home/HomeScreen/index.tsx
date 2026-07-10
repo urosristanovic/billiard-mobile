@@ -5,6 +5,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMatches } from '@/features/matches/useMatches';
 import { useMatchStats } from '@/features/matches/useMatchStats';
 import { useAuth } from '@/features/auth/useAuth';
+import { useUnreadNotifications } from '@/features/notifications/useUnreadNotifications';
+import { navigationRef } from '@/navigation/navigationService';
 import { ScreenLayout, AppHeader } from '@/components/common/layout';
 import { LoadingState, EmptyState, Loading } from '@/components/common/states';
 import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
@@ -61,6 +63,7 @@ const HomeScreen = ({ navigation }: Props) => {
   } = useMatches(matchParams);
 
   const { data: statsData, refetch: refetchStats } = useMatchStats();
+  const { hasUnread } = useUnreadNotifications();
 
   const matches = useMemo(
     () => data?.pages.flatMap(page => page.data) ?? [],
@@ -102,7 +105,10 @@ const HomeScreen = ({ navigation }: Props) => {
 
   return (
     <ScreenLayout isDark={isDark}>
-      <AppHeader />
+      <AppHeader
+        hasNotifications={hasUnread}
+        onBellPress={() => navigationRef.navigate('Notifications')}
+      />
 
       <FlatList
         data={matches}

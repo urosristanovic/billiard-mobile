@@ -107,6 +107,20 @@ export const API_ENDPOINTS = {
     cancel: (id: string) => api(`/api/challenges/${id}/cancel`),
   },
 
+  // Notifications
+  notifications: {
+    list: api('/api/notifications'),
+    markRead: (id: string) => api(`/api/notifications/${id}/read`),
+    prefs: api('/api/notifications/prefs'),
+  },
+
+  // Devices
+  devices: {
+    register: api('/api/devices/register'),
+    unregister: (token: string) =>
+      api(`/api/devices/${encodeURIComponent(token)}`),
+  },
+
   // Feedback
   feedback: {
     submit: api('/api/feedback'),

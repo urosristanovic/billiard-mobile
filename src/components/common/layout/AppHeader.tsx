@@ -26,14 +26,14 @@ export const AppHeader = ({
       ]}
     >
       <AppLogo />
-      {/* <TouchableOpacity onPress={onBellPress} style={styles.bellWrap}>
+      <TouchableOpacity onPress={onBellPress} style={styles.bellWrap} activeOpacity={0.7}>
         <Feather name='bell' size={24} color={tk.text.secondary} />
         {hasNotifications && (
           <View
             style={[styles.bellDot, { borderColor: tk.background.primary }]}
           />
         )}
-      </TouchableOpacity> */}
+      </TouchableOpacity>
     </View>
   );
 };

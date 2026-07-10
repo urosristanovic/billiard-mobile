@@ -9,13 +9,14 @@ import {
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
-import { DangerButton } from '@/components/common/buttons';
+import { GhostButton } from '@/components/common/buttons';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { typography, spacing, radius, iconSize } from '@/constants/theme';
 import { scale } from '@/utils/scale';
 import { useAuthMutations } from '@/features/auth/useAuthMutations';
 import { useTheme } from '@/hooks/useTheme';
 import { API_CONFIG } from '@/config/api';
+import { navigationRef } from '@/navigation/navigationService';
 import type { HomeStackParamList } from '@/navigation/AppNavigator';
 
 const WEB_BASE_URL = (
@@ -37,6 +38,7 @@ type SettingsItem = {
 const SettingsScreen = ({ navigation }: Props) => {
   const { t } = useTranslation('common');
   const { t: tAuth } = useTranslation('auth');
+  const { t: tNotif } = useTranslation('notifications');
   const { isDark, tk } = useTheme();
   const { logout } = useAuthMutations();
 
@@ -66,6 +68,15 @@ const SettingsScreen = ({ navigation }: Props) => {
       title: tAuth('settings.accountSettings'),
       description: tAuth('settings.accountSettingsDesc'),
       onPress: () => navigation.navigate('Profile'),
+    },
+    {
+      key: 'notifications',
+      icon: 'bell',
+      iconColor: tk.primary[400],
+      iconBg: `${tk.primary[500]}1A`,
+      title: tNotif('settingsMenuItem.title'),
+      description: tNotif('settingsMenuItem.description'),
+      onPress: () => navigationRef.navigate('NotificationSettings'),
     },
     {
       key: 'sendFeedback',
@@ -165,20 +176,19 @@ const SettingsScreen = ({ navigation }: Props) => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.container}>
-          <View style={styles.list}>{menuItems.map(renderItem)}</View>
-
-          <View style={[styles.footer, { borderTopColor: tk.border.default }]}>
-            <DangerButton
-              noShadow
-              label={tAuth('logout.button')}
-              onPress={() => logout.mutate()}
-              loading={logout.isPending}
-              isDark={isDark}
-            />
-          </View>
-        </View>
+        <View style={styles.list}>{menuItems.map(renderItem)}</View>
       </ScrollView>
+
+      <View style={[styles.footer, { borderTopColor: tk.border.default }]}>
+        <GhostButton
+          size='lg'
+          isDark={isDark}
+          label={tAuth('logout.button')}
+          icon={<Feather name='log-out' size={scale(16)} color={tk.primary[600]} />}
+          onPress={() => logout.mutate()}
+          disabled={logout.isPending}
+        />
+      </View>
     </ScreenLayout>
   );
 };
@@ -187,12 +197,9 @@ export default SettingsScreen;
 
 const styles = StyleSheet.create({
   scrollContent: {
-    flexGrow: 1,
-  },
-  container: {
-    flex: 1,
     paddingHorizontal: spacing[4],
     paddingVertical: spacing[4],
+    gap: spacing[2],
   },
   list: {
     gap: spacing[2],
@@ -228,8 +235,9 @@ const styles = StyleSheet.create({
     marginTop: 1,
   },
   footer: {
-    marginTop: 'auto',
     borderTopWidth: 1,
     paddingTop: spacing[4],
+    paddingHorizontal: spacing[4],
+    paddingBottom: spacing[6],
   },
 });

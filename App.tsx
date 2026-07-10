@@ -19,6 +19,7 @@ import { clearHasSeenOnboarding } from '@/lib/onboardingStorage';
 import { RootNavigator } from '@/navigation/RootNavigator';
 import { ConfirmDialogProvider } from '@/components/common/dialog';
 import { ToastProvider } from '@/components/common/toast';
+import { NotificationProvider } from '@/providers/NotificationProvider';
 import '@/i18n';
 import { hydrateLanguage } from '@/i18n';
 
@@ -71,16 +72,18 @@ function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
-        <SafeAreaProvider>
-          <BottomSheetModalProvider>
-            <StatusBar style='light' />
-            <ToastProvider>
-              <ConfirmDialogProvider>
-                <RootNavigator />
-              </ConfirmDialogProvider>
-            </ToastProvider>
-          </BottomSheetModalProvider>
-        </SafeAreaProvider>
+        <NotificationProvider>
+          <SafeAreaProvider>
+            <BottomSheetModalProvider>
+              <StatusBar style='light' />
+              <ToastProvider>
+                <ConfirmDialogProvider>
+                  <RootNavigator />
+                </ConfirmDialogProvider>
+              </ToastProvider>
+            </BottomSheetModalProvider>
+          </SafeAreaProvider>
+        </NotificationProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
   );

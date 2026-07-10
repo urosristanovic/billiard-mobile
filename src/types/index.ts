@@ -6,3 +6,4 @@ export * from './rating';
 export * from './location';
 export * from './group';
 export * from './challenge';
+export * from './notification';

@@ -29,9 +29,18 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      [
-        "expo-splash-screen",
+      "plugins": [
+        [
+          "expo-notifications",
+          {
+            "icon": "./assets/notification-icon.png",
+            "color": "#F59E0B",
+            "sounds": [],
+            "mode": "production"
+          }
+        ],
+        [
+          "expo-splash-screen",
         {
           "backgroundColor": "#0a0a0a",
           "image": "./assets/splash-icon.png",

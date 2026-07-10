@@ -13,6 +13,8 @@ import { Feather } from '@expo/vector-icons';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout, AppHeader } from '@/components/common/layout';
+import { useUnreadNotifications } from '@/features/notifications/useUnreadNotifications';
+import { navigationRef } from '@/navigation/navigationService';
 import { EmptyState, Loading, LoadingState } from '@/components/common/states';
 import { PrimaryButton, SecondaryButton } from '@/components/common/buttons';
 import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
@@ -53,6 +55,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   const { t: tCommon } = useTranslation('common');
   const { isDark, tk } = useTheme();
   const { user } = useAuth();
+  const { hasUnread } = useUnreadNotifications();
   const { confirm } = useConfirmDialog();
   const { showToast } = useToast();
   const { defaultLeaderboardId, setDefault, clearDefault } = useDefaultLeaderboard();
@@ -234,10 +237,15 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   );
 
   // ── Loading state ──────────────────────────────────────────────────────────
+  const bellProps = {
+    hasNotifications: hasUnread,
+    onBellPress: () => navigationRef.navigate('Notifications'),
+  };
+
   if (lbsLoading) {
     return (
       <ScreenLayout isDark={isDark}>
-        <AppHeader />
+        <AppHeader {...bellProps} />
         <LoadingState message={t('loading')} isDark={isDark} />
       </ScreenLayout>
     );
@@ -248,7 +256,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   return (
     <ScreenLayout isDark={isDark}>
       {/* ── Brand row ───────────────────────────────────────────────────── */}
-      <AppHeader />
+      <AppHeader {...bellProps} />
 
       {/* ── Header ──────────────────────────────────────────────────────── */}
       <View style={[styles.header, { borderBottomColor: tk.border.default }]}>

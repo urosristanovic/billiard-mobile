@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout, AppHeader } from '@/components/common/layout';
+import { useUnreadNotifications } from '@/features/notifications/useUnreadNotifications';
+import { navigationRef } from '@/navigation/navigationService';
 import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
 import { GhostButton } from '@/components/common/buttons';
 import { EmptyState, LoadingState } from '@/components/common/states';
@@ -30,6 +32,7 @@ type Props = NativeStackScreenProps<
 const TournamentsHomeScreen = ({ navigation }: Props) => {
   const { t } = useTranslation('tournaments');
   const { isDark, tk } = useTheme();
+  const { hasUnread } = useUnreadNotifications();
 
   const { data: myData, isLoading, isRefetching, refetch } = useMyTournaments();
 
@@ -60,7 +63,10 @@ const TournamentsHomeScreen = ({ navigation }: Props) => {
     <ScreenLayout isDark={isDark}>
       {/* Fixed top block */}
       <View style={styles.stickyHeader}>
-        <AppHeader />
+        <AppHeader
+          hasNotifications={hasUnread}
+          onBellPress={() => navigationRef.navigate('Notifications')}
+        />
         <TournamentStatsRow stats={stats} isDark={isDark} />
         <View style={styles.tabRow}>
           <TabBar
