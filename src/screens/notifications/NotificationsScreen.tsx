@@ -85,13 +85,13 @@ const NotificationsScreen = ({ navigation }: Props) => {
           ]}
           numberOfLines={1}
         >
-          {item.title}
+          {t(`types.${item.type}.title`, item.title)}
         </Text>
         <Text
           style={[styles.itemBody2, { color: tk.text.secondary }]}
           numberOfLines={2}
         >
-          {item.body}
+          {t(`types.${item.type}.body`, item.body)}
         </Text>
         <Text style={[styles.itemTime, { color: tk.text.muted }]}>
           {timeAgo(item.createdAt)}

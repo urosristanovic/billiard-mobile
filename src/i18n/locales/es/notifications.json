@@ -22,5 +22,57 @@
   "settingsMenuItem": {
     "title": "Notificaciones",
     "description": "Push, in-app, preferencias por categoría"
+  },
+  "types": {
+    "match": {
+      "challenge_received": {
+        "title": "Te han desafiado",
+        "body": "Alguien te desafió a una partida."
+      },
+      "challenge_accepted": {
+        "title": "Desafío aceptado",
+        "body": "Tu desafío fue aceptado. ¡Es hora de jugar!"
+      },
+      "challenge_declined": {
+        "title": "Desafío rechazado",
+        "body": "Tu desafío fue rechazado."
+      },
+      "challenge_cancelled": {
+        "title": "Desafío cancelado",
+        "body": "Un desafío enviado a ti fue cancelado."
+      },
+      "score_recorded": {
+        "title": "Puntuación registrada",
+        "body": "Se ha enviado una puntuación para tu partida. Confirma o disputa."
+      },
+      "score_confirmed": {
+        "title": "Partida confirmada",
+        "body": "Ambos jugadores confirmaron el resultado. La partida es oficial."
+      },
+      "score_disputed": {
+        "title": "Puntuación disputada",
+        "body": "Un jugador ha disputado el resultado y propuesto nuevas puntuaciones."
+      },
+      "dispute_accepted": {
+        "title": "Disputa aceptada",
+        "body": "Tus puntuaciones propuestas fueron aceptadas. La partida es oficial."
+      },
+      "dispute_countered": {
+        "title": "Disputa respondida",
+        "body": "Tu propuesta fue rechazada. El otro jugador presentó una contrapropuesta."
+      },
+      "cancel_requested": {
+        "title": "Cancelación solicitada",
+        "body": "Tu oponente ha solicitado cancelar esta partida."
+      },
+      "cancelled": {
+        "title": "Partida cancelada",
+        "body": "Ambos jugadores acordaron cancelar la partida."
+      },
+      "auto_confirmed": {
+        "title": "Partida autoconfirmada",
+        "body": "Sin respuesta — el resultado de tu partida fue confirmado automáticamente."
+      }
+    }
   }
 }

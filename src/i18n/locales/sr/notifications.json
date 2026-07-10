@@ -22,5 +22,57 @@
   "settingsMenuItem": {
     "title": "Obaveštenja",
     "description": "Push, in-app, podešavanja po kategoriji"
+  },
+  "types": {
+    "match": {
+      "challenge_received": {
+        "title": "Dobili ste izazov",
+        "body": "Neko vas je izazvao na meč."
+      },
+      "challenge_accepted": {
+        "title": "Izazov prihvaćen",
+        "body": "Vaš izazov je prihvaćen. Vreme je za igru!"
+      },
+      "challenge_declined": {
+        "title": "Izazov odbijen",
+        "body": "Vaš izazov je odbijen."
+      },
+      "challenge_cancelled": {
+        "title": "Izazov otkazan",
+        "body": "Izazov koji vam je poslat je otkazan."
+      },
+      "score_recorded": {
+        "title": "Rezultat unet",
+        "body": "Rezultat vašeg meča je unet. Potvrdite ili prigovorite."
+      },
+      "score_confirmed": {
+        "title": "Meč potvrđen",
+        "body": "Oba igrača su potvrdila rezultat. Meč je zvaničan."
+      },
+      "score_disputed": {
+        "title": "Rezultat osporen",
+        "body": "Igrač je osporio rezultat meča i predložio nove rezultate."
+      },
+      "dispute_accepted": {
+        "title": "Prigovor prihvaćen",
+        "body": "Vaši predloženi rezultati su prihvaćeni. Meč je zvaničan."
+      },
+      "dispute_countered": {
+        "title": "Prigovor osporen",
+        "body": "Vaš predlog rezultata je odbijen. Drugi igrač je podneo kontra-prigovor."
+      },
+      "cancel_requested": {
+        "title": "Zahtev za otkazivanje",
+        "body": "Vaš protivnik je zatražio otkazivanje ovog meča."
+      },
+      "cancelled": {
+        "title": "Meč otkazan",
+        "body": "Oba igrača su se složila da otkažu meč."
+      },
+      "auto_confirmed": {
+        "title": "Meč automatski potvrđen",
+        "body": "Bez odgovora — rezultat vašeg meča je automatski potvrđen."
+      }
+    }
   }
 }
