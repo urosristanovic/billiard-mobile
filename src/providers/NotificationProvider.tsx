@@ -24,12 +24,10 @@ const Notifications: typeof NotificationsAPI | null = isPushSupported
 
 Notifications?.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldPlaySound_deprecated: true,
     shouldShowBanner: true,
     shouldShowList: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
   }),
 });
 

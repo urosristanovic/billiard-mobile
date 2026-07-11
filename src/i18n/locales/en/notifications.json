@@ -2,7 +2,8 @@
   "screen": {
     "title": "Notifications",
     "empty": "No notifications yet",
-    "emptyDesc": "You will see match and tournament updates here."
+    "emptyDesc": "You will see match and tournament updates here.",
+    "markAllRead": "Mark all as read"
   },
   "timeAgo": {
     "justNow": "Just now",

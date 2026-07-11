@@ -62,8 +62,7 @@ export const QUERY_KEYS = {
     ['tournaments', id, 'standings'] as const,
 
   NOTIFICATIONS: ['notifications'] as const,
-  NOTIFICATIONS_LIST: (page: number) =>
-    ['notifications', 'list', page] as const,
+  NOTIFICATIONS_LIST: ['notifications', 'list'] as const,
   NOTIFICATIONS_UNREAD_COUNT: ['notifications', 'unread-count'] as const,
   NOTIFICATION_PREFS: ['notifications', 'prefs'] as const,
 } as const;

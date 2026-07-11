@@ -2,7 +2,8 @@
   "screen": {
     "title": "Notificaciones",
     "empty": "Sin notificaciones",
-    "emptyDesc": "Aquí verás actualizaciones de partidas y torneos."
+    "emptyDesc": "Aquí verás actualizaciones de partidas y torneos.",
+    "markAllRead": "Marcar todo como leído"
   },
   "timeAgo": {
     "justNow": "Ahora mismo",

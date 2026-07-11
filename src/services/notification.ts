@@ -54,6 +54,14 @@ export const notificationService = {
     await parseResponse<null>(res);
   },
 
+  markAllRead: async (token: string): Promise<void> => {
+    const res = await fetchWithTimeout(API_ENDPOINTS.notifications.markAllRead, {
+      method: 'PATCH',
+      headers: buildHeaders(token),
+    });
+    await parseResponse<null>(res);
+  },
+
   getPrefs: async (token: string): Promise<NotificationPref[]> => {
     const res = await fetchWithTimeout(API_ENDPOINTS.notifications.prefs, {
       headers: buildHeaders(token),

@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   StyleSheet,
   Text,
@@ -13,7 +14,7 @@ import { LoadingState, EmptyState } from '@/components/common/states';
 import { useTheme } from '@/hooks/useTheme';
 import { typography, spacing, radius } from '@/constants/theme';
 import { scale } from '@/utils/scale';
-import { useNotifications, useMarkNotificationRead } from '@/features/notifications/useNotifications';
+import { useNotifications, useMarkNotificationRead, useMarkAllNotificationsRead } from '@/features/notifications/useNotifications';
 import { navigationRef } from '@/navigation/navigationService';
 import type { RootStackParamList } from '@/navigation/navigationService';
 import type { AppNotification } from '@/types/notification';
@@ -36,9 +37,12 @@ const NotificationsScreen = ({ navigation }: Props) => {
   const { data, isLoading, isFetchingNextPage, hasNextPage, fetchNextPage } =
     useNotifications();
   const markRead = useMarkNotificationRead();
+  const markAllRead = useMarkAllNotificationsRead();
 
   const notifications: AppNotification[] =
     data?.pages.flatMap(p => p.data) ?? [];
+
+  const hasUnread = notifications.some(n => !n.readAt);
 
   const handlePress = (item: AppNotification) => {
     if (!item.readAt) {
@@ -111,6 +115,23 @@ const NotificationsScreen = ({ navigation }: Props) => {
       <ScreenHeader
         title={t('screen.title')}
         onBack={() => navigation.goBack()}
+        right={
+          hasUnread ? (
+            <TouchableOpacity
+              onPress={() => markAllRead.mutate()}
+              disabled={markAllRead.isPending}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              {markAllRead.isPending ? (
+                <ActivityIndicator size='small' color={tk.primary[500]} />
+              ) : (
+                <Text style={[styles.markAllText, { color: tk.primary[500] }]}>
+                  {t('screen.markAllRead')}
+                </Text>
+              )}
+            </TouchableOpacity>
+          ) : undefined
+        }
       />
 
       {isLoading ? (
@@ -184,5 +205,10 @@ const styles = StyleSheet.create({
   itemTime: {
     fontSize: typography.size.xs,
     marginTop: 2,
+  },
+  markAllText: {
+    fontSize: typography.size.sm,
+    fontFamily: typography.family.display,
+    fontWeight: typography.weight.semibold,
   },
 });

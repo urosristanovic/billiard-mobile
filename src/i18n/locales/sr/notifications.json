@@ -2,7 +2,8 @@
   "screen": {
     "title": "Obaveštenja",
     "empty": "Nema obaveštenja",
-    "emptyDesc": "Ovde ćete videti ažuriranja mečeva i turnira."
+    "emptyDesc": "Ovde ćete videti ažuriranja mečeva i turnira.",
+    "markAllRead": "Označi sve kao pročitano"
   },
   "timeAgo": {
     "justNow": "Upravo sada",
