@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { getTokens, clearTokens } from '@/lib/tokenStorage';
 import { authService } from '@/services/auth';
-import { navigationIntegration } from '../../App';
+import { navigationIntegration } from '@/lib/sentryIntegration';
 import { AuthNavigator } from './AuthNavigator';
 import { AppNavigator } from './AppNavigator';
 import { LoadingState } from '@/components/common/states';

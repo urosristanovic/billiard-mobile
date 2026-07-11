@@ -23,51 +23,52 @@
     "title": "Notifications",
     "description": "Push, in-app, per-category preferences"
   },
+  "someone": "Someone",
   "types": {
     "match": {
       "challenge_received": {
         "title": "You've been challenged",
-        "body": "Someone challenged you to a match."
+        "body": "{{name}} challenged you to a match."
       },
       "challenge_accepted": {
         "title": "Challenge accepted",
-        "body": "Your challenge was accepted. Time to play!"
+        "body": "{{name}} accepted your challenge. Time to play!"
       },
       "challenge_declined": {
         "title": "Challenge declined",
-        "body": "Your challenge was declined."
+        "body": "{{name}} declined your challenge."
       },
       "challenge_cancelled": {
         "title": "Challenge cancelled",
-        "body": "A match challenge sent to you was cancelled."
+        "body": "{{name}} cancelled their match challenge."
       },
       "score_recorded": {
         "title": "Score recorded",
-        "body": "A score has been submitted for your match. Confirm or dispute."
+        "body": "{{name}} recorded the match score. Confirm or dispute."
       },
       "score_confirmed": {
         "title": "Match confirmed",
-        "body": "Both players confirmed the result. The match is official."
+        "body": "{{name}} confirmed the result. The match is official."
       },
       "score_disputed": {
         "title": "Score disputed",
-        "body": "A player has disputed the match result and proposed new scores."
+        "body": "{{name}} disputed the match result and proposed new scores."
       },
       "dispute_accepted": {
         "title": "Dispute accepted",
-        "body": "Your proposed scores were accepted. The match is official."
+        "body": "{{name}} accepted your proposed scores. The match is official."
       },
       "dispute_countered": {
         "title": "Dispute countered",
-        "body": "Your score proposal was rejected. The other player submitted a counter-proposal."
+        "body": "{{name}} rejected your proposal and submitted a counter-proposal."
       },
       "cancel_requested": {
         "title": "Cancellation requested",
-        "body": "Your opponent has requested to cancel this match."
+        "body": "{{name}} has requested to cancel this match."
       },
       "cancelled": {
         "title": "Match cancelled",
-        "body": "Both players agreed to cancel the match."
+        "body": "{{name}} agreed to cancel the match."
       },
       "auto_confirmed": {
         "title": "Match auto-confirmed",

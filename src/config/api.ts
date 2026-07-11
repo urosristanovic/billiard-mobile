@@ -110,6 +110,7 @@ export const API_ENDPOINTS = {
   // Notifications
   notifications: {
     list: api('/api/notifications'),
+    unreadCount: api('/api/notifications/unread-count'),
     markRead: (id: string) => api(`/api/notifications/${id}/read`),
     prefs: api('/api/notifications/prefs'),
   },

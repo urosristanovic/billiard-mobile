@@ -2,7 +2,7 @@
   "screen": {
     "title": "Obaveštenja",
     "empty": "Nema obaveštenja",
-    "emptyDesc": "Ovde ćete videti ažuriranja meča i turnira."
+    "emptyDesc": "Ovde ćete videti ažuriranja mečeva i turnira."
   },
   "timeAgo": {
     "justNow": "Upravo sada",
@@ -21,57 +21,58 @@
   },
   "settingsMenuItem": {
     "title": "Obaveštenja",
-    "description": "Push, in-app, podešavanja po kategoriji"
+    "description": "Push, in-app inbox, podešavanja po kategoriji"
   },
+  "someone": "Neko",
   "types": {
     "match": {
       "challenge_received": {
-        "title": "Dobili ste izazov",
-        "body": "Neko vas je izazvao na meč."
+        "title": "Primili ste izazov",
+        "body": "{{name}} vas je izazvao na meč."
       },
       "challenge_accepted": {
         "title": "Izazov prihvaćen",
-        "body": "Vaš izazov je prihvaćen. Vreme je za igru!"
+        "body": "{{name}} je prihvatio vaš izazov. Vreme je za igru!"
       },
       "challenge_declined": {
         "title": "Izazov odbijen",
-        "body": "Vaš izazov je odbijen."
+        "body": "{{name}} je odbio vaš izazov."
       },
       "challenge_cancelled": {
         "title": "Izazov otkazan",
-        "body": "Izazov koji vam je poslat je otkazan."
+        "body": "{{name}} je otkazao izazov."
       },
       "score_recorded": {
         "title": "Rezultat unet",
-        "body": "Rezultat vašeg meča je unet. Potvrdite ili prigovorite."
+        "body": "{{name}} je uneo rezultat meča. Potvrdite ili prigovorite."
       },
       "score_confirmed": {
         "title": "Meč potvrđen",
-        "body": "Oba igrača su potvrdila rezultat. Meč je zvaničan."
+        "body": "{{name}} je potvrdio rezultat. Meč je zvaničan."
       },
       "score_disputed": {
         "title": "Rezultat osporen",
-        "body": "Igrač je osporio rezultat meča i predložio nove rezultate."
+        "body": "{{name}} je osporio rezultat meča i predložio nove rezultate."
       },
       "dispute_accepted": {
         "title": "Prigovor prihvaćen",
-        "body": "Vaši predloženi rezultati su prihvaćeni. Meč je zvaničan."
+        "body": "{{name}} je prihvatio vaše predložene rezultate. Meč je zvaničan."
       },
       "dispute_countered": {
-        "title": "Prigovor osporen",
-        "body": "Vaš predlog rezultata je odbijen. Drugi igrač je podneo kontra-prigovor."
+        "title": "Kontra-prigovor",
+        "body": "{{name}} je odbio vaš predlog i podneo kontra-prigovor."
       },
       "cancel_requested": {
         "title": "Zahtev za otkazivanje",
-        "body": "Vaš protivnik je zatražio otkazivanje ovog meča."
+        "body": "{{name}} je zatražio otkazivanje ovog meča."
       },
       "cancelled": {
         "title": "Meč otkazan",
-        "body": "Oba igrača su se složila da otkažu meč."
+        "body": "{{name}} se složio da se meč otkaže."
       },
       "auto_confirmed": {
         "title": "Meč automatski potvrđen",
-        "body": "Bez odgovora — rezultat vašeg meča je automatski potvrđen."
+        "body": "Nije bilo odgovora — rezultat meča je automatski potvrđen."
       }
     }
   }

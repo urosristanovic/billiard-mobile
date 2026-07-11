@@ -1,7 +1,7 @@
 {
   "screen": {
     "title": "Notificaciones",
-    "empty": "Sin notificaciones aún",
+    "empty": "Sin notificaciones",
     "emptyDesc": "Aquí verás actualizaciones de partidas y torneos."
   },
   "timeAgo": {
@@ -21,57 +21,58 @@
   },
   "settingsMenuItem": {
     "title": "Notificaciones",
-    "description": "Push, in-app, preferencias por categoría"
+    "description": "Push, in-app inbox, preferencias por categoría"
   },
+  "someone": "Alguien",
   "types": {
     "match": {
       "challenge_received": {
-        "title": "Te han desafiado",
-        "body": "Alguien te desafió a una partida."
+        "title": "Tienes un desafío",
+        "body": "{{name}} te desafió a una partida."
       },
       "challenge_accepted": {
         "title": "Desafío aceptado",
-        "body": "Tu desafío fue aceptado. ¡Es hora de jugar!"
+        "body": "{{name}} aceptó tu desafío. ¡Es hora de jugar!"
       },
       "challenge_declined": {
         "title": "Desafío rechazado",
-        "body": "Tu desafío fue rechazado."
+        "body": "{{name}} rechazó tu desafío."
       },
       "challenge_cancelled": {
         "title": "Desafío cancelado",
-        "body": "Un desafío enviado a ti fue cancelado."
+        "body": "{{name}} canceló el desafío."
       },
       "score_recorded": {
         "title": "Puntuación registrada",
-        "body": "Se ha enviado una puntuación para tu partida. Confirma o disputa."
+        "body": "{{name}} registró la puntuación. Confirma o disputa."
       },
       "score_confirmed": {
         "title": "Partida confirmada",
-        "body": "Ambos jugadores confirmaron el resultado. La partida es oficial."
+        "body": "{{name}} confirmó el resultado. La partida es oficial."
       },
       "score_disputed": {
         "title": "Puntuación disputada",
-        "body": "Un jugador ha disputado el resultado y propuesto nuevas puntuaciones."
+        "body": "{{name}} disputó el resultado y propuso nuevas puntuaciones."
       },
       "dispute_accepted": {
         "title": "Disputa aceptada",
-        "body": "Tus puntuaciones propuestas fueron aceptadas. La partida es oficial."
+        "body": "{{name}} aceptó tus puntuaciones propuestas. La partida es oficial."
       },
       "dispute_countered": {
-        "title": "Disputa respondida",
-        "body": "Tu propuesta fue rechazada. El otro jugador presentó una contrapropuesta."
+        "title": "Contrapropuesta enviada",
+        "body": "{{name}} rechazó tu propuesta y envió una contrapropuesta."
       },
       "cancel_requested": {
-        "title": "Cancelación solicitada",
-        "body": "Tu oponente ha solicitado cancelar esta partida."
+        "title": "Solicitud de cancelación",
+        "body": "{{name}} solicitó cancelar esta partida."
       },
       "cancelled": {
         "title": "Partida cancelada",
-        "body": "Ambos jugadores acordaron cancelar la partida."
+        "body": "{{name}} acordó cancelar la partida."
       },
       "auto_confirmed": {
-        "title": "Partida autoconfirmada",
-        "body": "Sin respuesta — el resultado de tu partida fue confirmado automáticamente."
+        "title": "Partida confirmada automáticamente",
+        "body": "Sin respuesta — el resultado fue confirmado automáticamente."
       }
     }
   }

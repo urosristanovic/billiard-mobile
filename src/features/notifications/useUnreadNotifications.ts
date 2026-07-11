@@ -18,7 +18,8 @@ export const useUnreadNotifications = () => {
       return notificationService.unreadCount(token);
     },
     enabled: !!user,
-    staleTime: 60_000,
+    staleTime: 10_000,
+    refetchInterval: 15_000,
   });
 
   return {

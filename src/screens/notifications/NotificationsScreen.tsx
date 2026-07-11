@@ -44,14 +44,16 @@ const NotificationsScreen = ({ navigation }: Props) => {
     if (!item.readAt) {
       markRead.mutate(item.id);
     }
-    const { screen, params } = item.data as {
-      screen?: string;
-      params?: Record<string, unknown>;
-    };
+    const { screen, ...params } = item.data as { screen?: string; [key: string]: unknown };
     if (screen && navigationRef.isReady()) {
       navigation.goBack();
-      // @ts-ignore – dynamic screen from push payload
-      navigationRef.navigate(screen, params);
+      // Navigate through the Home tab — all current deep-link targets (MatchDetail)
+      // live in HomeStack. Other tabs don't have these screens.
+      // @ts-ignore – nested tab navigation requires complex generic typing
+      navigationRef.navigate('Main', {
+        screen: 'Home',
+        params: { screen, params: Object.keys(params).length ? params : undefined },
+      });
     }
   };
 
@@ -64,7 +66,7 @@ const NotificationsScreen = ({ navigation }: Props) => {
         {
           backgroundColor: item.readAt
             ? tk.surface.default
-            : tk.surface.elevated,
+            : tk.surface.raised,
           borderColor: tk.border.default,
         },
       ]}
@@ -79,19 +81,22 @@ const NotificationsScreen = ({ navigation }: Props) => {
             {
               color: tk.text.primary,
               fontWeight: item.readAt
-                ? typography.weight.regular
+                ? typography.weight.normal
                 : typography.weight.semibold,
             },
           ]}
           numberOfLines={1}
         >
-          {t(`types.${item.type}.title`, item.title)}
+          {t(`types.${item.type}.title`, { defaultValue: item.title })}
         </Text>
         <Text
           style={[styles.itemBody2, { color: tk.text.secondary }]}
           numberOfLines={2}
         >
-          {t(`types.${item.type}.body`, item.body)}
+          {t(`types.${item.type}.body`, {
+            defaultValue: item.body,
+            name: (item.data as Record<string, unknown>)?.actorName || t('someone'),
+          })}
         </Text>
         <Text style={[styles.itemTime, { color: tk.text.muted }]}>
           {timeAgo(item.createdAt)}

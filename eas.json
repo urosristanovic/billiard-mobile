@@ -7,13 +7,15 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://localhost:3000"
+        "EXPO_PUBLIC_API_URL": "https://dev.billiard-tracker.com",
+        "EXPO_PUBLIC_AUTO_CONFIRM_WINDOW_MINUTES": "1440",
+        "EXPO_PUBLIC_RATED_TOURNAMENT_ENABLED": "false"
       }
     },
     "preview": {
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://billiard-web-preview.vercel.app"
+        "EXPO_PUBLIC_API_URL": "https://dev.billiard-tracker.com"
       }
     },
     "production": {

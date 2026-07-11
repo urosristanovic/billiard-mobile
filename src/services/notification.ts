@@ -38,17 +38,12 @@ export const notificationService = {
   },
 
   unreadCount: async (token: string): Promise<number> => {
-    const url = new URL(API_ENDPOINTS.notifications.list);
-    url.searchParams.set('pageSize', '1');
-    const res = await fetchWithTimeout(url.toString(), {
+    const res = await fetchWithTimeout(API_ENDPOINTS.notifications.unreadCount, {
       headers: buildHeaders(token),
     });
-    const result: ApiPaginatedResponse<AppNotification> = await res.json();
+    const result: ApiResponse<{ count: number }> = await res.json();
     if (!res.ok || !result.success) return 0;
-    const all = result.data.data;
-    return all.filter(n => !n.readAt).length > 0
-      ? result.data.total
-      : 0;
+    return result.data.count;
   },
 
   markRead: async (token: string, id: string): Promise<void> => {

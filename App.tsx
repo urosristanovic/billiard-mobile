@@ -16,16 +16,13 @@ import {
 import { Oswald_600SemiBold, Oswald_700Bold } from '@expo-google-fonts/oswald';
 import { queryClient } from '@/lib/queryClient';
 import { clearHasSeenOnboarding } from '@/lib/onboardingStorage';
+import { navigationIntegration } from '@/lib/sentryIntegration';
 import { RootNavigator } from '@/navigation/RootNavigator';
 import { ConfirmDialogProvider } from '@/components/common/dialog';
 import { ToastProvider } from '@/components/common/toast';
 import { NotificationProvider } from '@/providers/NotificationProvider';
 import '@/i18n';
 import { hydrateLanguage } from '@/i18n';
-
-export const navigationIntegration = Sentry.reactNavigationIntegration({
-  enableTimeToInitialDisplay: true,
-});
 
 Sentry.init({
   dsn: process.env.EXPO_PUBLIC_SENTRY_DSN,
