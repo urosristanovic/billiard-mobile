@@ -123,6 +123,11 @@ export const API_ENDPOINTS = {
       api(`/api/devices/${encodeURIComponent(token)}`),
   },
 
+  // Uploads
+  uploads: {
+    avatarUrl: api('/api/uploads/avatar-url'),
+  },
+
   // Feedback
   feedback: {
     submit: api('/api/feedback'),

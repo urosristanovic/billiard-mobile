@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   View,
+  type ViewInstance,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Feather } from '@expo/vector-icons';
@@ -68,7 +69,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState<MenuAnchor | null>(null);
-  const menuBtnRef = useRef<View>(null);
+  const menuBtnRef = useRef<ViewInstance>(null);
 
   const {
     data: leaderboards = [],
@@ -355,7 +356,9 @@ const LeaderboardScreen = ({ navigation }: Props) => {
           refreshControl={
             <RefreshControl
               refreshing={isRefetchingLeaderboards}
-              onRefresh={refetchLeaderboards}
+              onRefresh={() => {
+                void refetchLeaderboards();
+              }}
               tintColor={tk.primary[400]}
               colors={[tk.primary[400]]}
             />
@@ -394,7 +397,9 @@ const LeaderboardScreen = ({ navigation }: Props) => {
           refreshControl={
             <RefreshControl
               refreshing={isRefetching && !rankingsLoading}
-              onRefresh={refetch}
+              onRefresh={() => {
+                void refetch();
+              }}
               tintColor={tk.primary[400]}
               colors={[tk.primary[400]]}
             />
@@ -429,7 +434,7 @@ const LeaderboardScreen = ({ navigation }: Props) => {
               <View style={styles.footerLoader}>
                 <Loading />
               </View>
-            ) : null
+            ) : undefined
           }
         />
       )}

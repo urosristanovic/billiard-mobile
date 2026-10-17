@@ -52,18 +52,6 @@ export const detailStyles = StyleSheet.create({
     borderBottomWidth: 1,
     gap: spacing[3],
   },
-  memberAvatar: {
-    width: scale(40),
-    height: scale(40),
-    borderRadius: radius.full,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  memberAvatarText: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.display,
-  },
   memberInfo: { flex: 1 },
   memberName: {
     fontSize: typography.size.lg,

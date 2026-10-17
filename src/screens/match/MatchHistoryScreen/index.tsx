@@ -241,7 +241,7 @@ const MatchHistoryScreen = ({ navigation }: Props) => {
             >
               <Loading />
             </View>
-          ) : null
+          ) : undefined
         }
         ListEmptyComponent={
           isLoading || isRefetching ? (
@@ -261,7 +261,7 @@ const MatchHistoryScreen = ({ navigation }: Props) => {
             <View style={{ paddingVertical: moderateScale(12) }}>
               <Loading />
             </View>
-          ) : null
+          ) : undefined
         }
         renderItem={({ item }) => (
           <MatchCard

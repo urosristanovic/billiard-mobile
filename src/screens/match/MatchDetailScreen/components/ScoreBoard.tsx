@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
+import { Avatar } from '@/components/common';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import { scale } from '@/utils/scale';
 import type { Match } from '@/types/match';
@@ -34,25 +35,12 @@ export const ScoreBoard = ({ match, myUserId, isDark }: ScoreBoardProps) => {
       <View
         style={[styles.fighterCol, align === 'right' && styles.fighterColRight]}
       >
-        <View
-          style={[
-            styles.avatar,
-            {
-              backgroundColor: tk.background.secondary,
-              borderColor: tk.primary[600],
-            },
-          ]}
-        >
-          <Text
-            style={[
-              styles.avatarText,
-              {
-                color: tk.primary[600],
-              },
-            ]}
-          >
-            {player.profile.displayName.charAt(0).toUpperCase()}
-          </Text>
+        <View style={styles.avatarWrap}>
+          <Avatar
+            uri={player.profile.avatarUrl}
+            name={player.profile.displayName}
+            size="lg"
+          />
         </View>
         <Text
           style={[
@@ -140,19 +128,8 @@ const styles = StyleSheet.create({
   fighterColRight: {
     alignItems: 'flex-end',
   },
-  avatar: {
-    width: scale(52),
-    height: scale(52),
-    borderRadius: radius.full,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
+  avatarWrap: {
     marginBottom: spacing[1],
-  },
-  avatarText: {
-    fontSize: typography.size.lg,
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
   },
   name: {
     fontSize: typography.size.lg,

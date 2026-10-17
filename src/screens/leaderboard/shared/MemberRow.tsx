@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { scale } from '@/utils/scale';
+import { Avatar } from '@/components/common';
 import { useTheme } from '@/hooks/useTheme';
 import { GhostButton } from '@/components/common/buttons/GhostButton';
 import { Loading } from '@/components/common/states';
@@ -9,6 +10,7 @@ import { detailStyles } from './detailStyles';
 type MemberRowProps = {
   displayName: string;
   username: string;
+  avatarUrl?: string | null;
   subtitle?: string;
   isAdmin?: boolean;
   actionLabel?: string;
@@ -19,6 +21,7 @@ type MemberRowProps = {
 export const MemberRow = ({
   displayName,
   username,
+  avatarUrl,
   subtitle,
   isAdmin = false,
   actionLabel,
@@ -31,21 +34,7 @@ export const MemberRow = ({
     <View
       style={[detailStyles.memberRow, { borderBottomColor: tk.border.subtle }]}
     >
-      <View
-        style={[
-          detailStyles.memberAvatar,
-          {
-            backgroundColor: tk.surface.raised,
-            borderColor: tk.border.strong,
-          },
-        ]}
-      >
-        <Text
-          style={[detailStyles.memberAvatarText, { color: tk.text.muted }]}
-        >
-          {displayName.slice(0, 2).toUpperCase()}
-        </Text>
-      </View>
+      <Avatar uri={avatarUrl} name={displayName} size="sm" />
       <View style={detailStyles.memberInfo}>
         <Text
           style={[detailStyles.memberName, { color: tk.text.primary }]}

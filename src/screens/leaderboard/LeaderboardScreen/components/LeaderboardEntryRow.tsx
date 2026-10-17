@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Image } from 'expo-image';
 import { Feather } from '@expo/vector-icons';
+import { Avatar } from '@/components/common';
 import { useTheme } from '@/hooks/useTheme';
 import type { LeaderboardEntry } from '@/types/rating';
 import { spacing, radius, typography, iconSize } from '@/constants/theme';
@@ -71,28 +71,7 @@ export const LeaderboardEntryRow = ({ entry, isMe, onPress }: Props) => {
 
       {/* Avatar + flag + active dot */}
       <View style={styles.avatarWrap}>
-        {entry.avatarUrl ? (
-          <Image
-            source={{ uri: entry.avatarUrl }}
-            style={[styles.avatar, { borderColor: tk.border.strong }]}
-            contentFit='cover'
-          />
-        ) : (
-          <View
-            style={[
-              styles.avatar,
-              styles.avatarFallback,
-              {
-                borderColor: tk.border.strong,
-                backgroundColor: tk.surface.raised,
-              },
-            ]}
-          >
-            <Text style={[styles.avatarInitials, { color: tk.text.muted }]}>
-              {initials}
-            </Text>
-          </View>
-        )}
+        <Avatar uri={entry.avatarUrl} name={initials} size="md" />
         {entry.countryCode && (
           <Text style={styles.flag}>
             {countryCodeToFlag(entry.countryCode)}
@@ -166,20 +145,6 @@ const styles = StyleSheet.create({
   },
   avatarWrap: {
     position: 'relative',
-  },
-  avatar: {
-    width: scale(40),
-    height: scale(40),
-    borderRadius: radius.full,
-    borderWidth: 1,
-  },
-  avatarFallback: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatarInitials: {
-    fontSize: typography.size.xs,
-    fontFamily: typography.family.display,
   },
   flag: {
     position: 'absolute',

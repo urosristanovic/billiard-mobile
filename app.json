@@ -31,6 +31,13 @@
     },
     "plugins": [
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Billiard Tracker to access your photos to set a profile picture.",
+          "cameraPermission": "Allow Billiard Tracker to use your camera to take a profile picture."
+        }
+      ],
+      [
         "expo-notifications",
         {
           "icon": "./assets/notification-icon.png",

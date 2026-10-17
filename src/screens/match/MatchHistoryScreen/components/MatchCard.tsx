@@ -1,5 +1,6 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Avatar } from '@/components/common';
 import { theme } from '@/constants/theme';
 import { styles } from './styles';
 import { type Match } from '@/types/match';
@@ -104,19 +105,7 @@ export const MatchCard = ({
       <View style={styles.rightCol}>
         {/* Me */}
         <View style={styles.playerRow}>
-          <View
-            style={[
-              styles.avatar,
-              {
-                backgroundColor: `${tk.primary[400]}20`,
-                borderColor: tk.border.strong,
-              },
-            ]}
-          >
-            <Text style={[styles.avatarText, { color: tk.primary[500] }]}>
-              {meInitials}
-            </Text>
-          </View>
+          <Avatar uri={me?.profile.avatarUrl} name={meInitials} size="sm" />
           <Text
             style={[styles.playerName, { color: meNameColor }]}
             numberOfLines={1}
@@ -134,19 +123,7 @@ export const MatchCard = ({
 
         {/* Opponent */}
         <View style={styles.playerRow}>
-          <View
-            style={[
-              styles.avatar,
-              {
-                backgroundColor: tk.background.secondary,
-                borderColor: tk.border.strong,
-              },
-            ]}
-          >
-            <Text style={[styles.avatarText, { color: tk.text.secondary }]}>
-              {opponentInitials}
-            </Text>
-          </View>
+          <Avatar uri={opponent?.profile.avatarUrl} name={opponentInitials} size="sm" />
           <Text
             style={[styles.playerName, { color: oppNameColor }]}
             numberOfLines={1}

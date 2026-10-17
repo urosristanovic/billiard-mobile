@@ -4,7 +4,7 @@ import {
   Text,
   View,
   useWindowDimensions,
-  type ViewToken,
+  type ListViewToken,
 } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { ScreenLayout } from '@/components/common/layout';
@@ -59,9 +59,10 @@ const OnboardingScreen = ({
   const viewabilityConfig = useRef({ viewAreaCoveragePercentThreshold: 50 });
 
   const onViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
-      if (viewableItems.length > 0 && viewableItems[0].index !== null) {
-        setCurrentIndex(viewableItems[0].index);
+    ({ viewableItems }: { viewableItems: ListViewToken[] }) => {
+      const index = viewableItems[0]?.index;
+      if (index != null) {
+        setCurrentIndex(index);
       }
     },
     [],

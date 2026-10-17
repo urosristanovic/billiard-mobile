@@ -164,6 +164,7 @@ const GroupDetailScreen = ({ route, navigation }: Props) => {
           <MemberRow
             displayName={member.displayName}
             username={member.username}
+            avatarUrl={member.avatarUrl}
             subtitle={t(`groups.roles.${member.role}`)}
             isPending={pendingRemoveUserId === member.userId}
             actionLabel={

@@ -1,3 +1,4 @@
+export * from './Avatar';
 export * from './buttons';
 export * from './forms';
 export * from './states';

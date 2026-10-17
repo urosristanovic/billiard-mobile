@@ -16,20 +16,6 @@ export const styles = StyleSheet.create({
     gap: spacing[2],
     overflow: 'hidden',
   },
-  avatarCircle: {
-    width: scale(72),
-    height: scale(72),
-    borderRadius: radius.full,
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: spacing[2],
-  },
-  avatarInitial: {
-    fontSize: typography.size['2xl'],
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
-  },
   displayName: {
     fontSize: typography.size.xl,
     fontWeight: typography.weight.bold,

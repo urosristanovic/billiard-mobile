@@ -3,6 +3,7 @@ import { ScrollView, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Avatar } from '@/components/common';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { LoadingState, EmptyState } from '@/components/common/states';
@@ -105,19 +106,11 @@ const PlayerProfileScreen = ({ route, navigation }: Props) => {
           end={{ x: 1, y: 1 }}
           style={[styles.hero, { borderColor: tk.primary[900] }]}
         >
-          <View
-            style={[
-              styles.avatarCircle,
-              {
-                backgroundColor: tk.background.secondary,
-                borderColor: tk.primary[600],
-              },
-            ]}
-          >
-            <Text style={[styles.avatarInitial, { color: tk.primary[500] }]}>
-              {profile.displayName?.slice(0, 2)?.toUpperCase() ?? '??'}
-            </Text>
-          </View>
+          <Avatar
+            uri={profile.avatarUrl}
+            name={profile.displayName?.slice(0, 2)?.toUpperCase() ?? '??'}
+            size="xl"
+          />
           <Text style={[styles.displayName, { color: tk.text.primary }]}>
             {profile.displayName}
           </Text>

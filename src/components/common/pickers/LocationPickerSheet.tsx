@@ -1,5 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import type React from 'react';
+import { useCallback, useMemo, useRef, useState, type ComponentRef } from 'react';
 import {
   Text,
   TouchableOpacity,
@@ -51,7 +50,7 @@ export function LocationPickerSheet({
   const { isDark: systemDark, tk } = useTheme();
   const isDark = isDarkProp ?? systemDark;
   const sheetRef = useRef<BottomSheetModal>(null);
-  const searchRef = useRef<React.ComponentRef<typeof BottomSheetTextInput>>(null);
+  const searchRef = useRef<ComponentRef<typeof BottomSheetTextInput>>(null);
   const [query, setQuery] = useState('');
 
   const selectedName = useMemo(
@@ -200,7 +199,9 @@ export function LocationPickerSheet({
         keyboardBlurBehavior='restore'
         onChange={(index: number) => {
           if (index === 0) {
-            setTimeout(() => searchRef.current?.focus(), 50);
+            setTimeout(() => {
+              (searchRef.current as { focus?: () => void } | null)?.focus?.();
+            }, 50);
           }
         }}
       >

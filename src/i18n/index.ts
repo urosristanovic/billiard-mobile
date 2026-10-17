@@ -53,8 +53,12 @@ i18n.use(initReactI18next).init({
   },
 });
 
+const SECURE_STORE_OPTIONS: SecureStore.SecureStoreOptions = {
+  keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK,
+};
+
 export async function getStoredLanguage(): Promise<SupportedLanguage | null> {
-  const value = await SecureStore.getItemAsync(LANGUAGE_KEY);
+  const value = await SecureStore.getItemAsync(LANGUAGE_KEY, SECURE_STORE_OPTIONS);
   if (value && SUPPORTED_LANGUAGES.includes(value as SupportedLanguage)) {
     return value as SupportedLanguage;
   }
@@ -62,7 +66,7 @@ export async function getStoredLanguage(): Promise<SupportedLanguage | null> {
 }
 
 export async function setStoredLanguage(language: SupportedLanguage): Promise<void> {
-  await SecureStore.setItemAsync(LANGUAGE_KEY, language);
+  await SecureStore.setItemAsync(LANGUAGE_KEY, language, SECURE_STORE_OPTIONS);
 }
 
 export async function hydrateLanguage(): Promise<void> {

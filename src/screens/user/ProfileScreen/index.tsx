@@ -20,6 +20,7 @@ import { useCountries, useCities } from '@/features/locations/useLocations';
 import { useFeedbackMutation } from '@/features/feedback/useFeedbackMutation';
 import { useTheme } from '@/hooks/useTheme';
 import { setStoredLanguage, type SupportedLanguage } from '@/i18n';
+import { pickAndUploadAvatar } from '@/services/uploads';
 import { typography, spacing } from '@/constants/theme';
 import type { HomeStackParamList } from '@/navigation/AppNavigator';
 import { ProfileHero } from './components';
@@ -52,6 +53,7 @@ const ProfileScreen = ({ navigation, route }: Props) => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [selectedCountryId, setSelectedCountryId] = useState<string>('');
   const [selectedCityId, setSelectedCityId] = useState<string>('');
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const currentLanguage = (i18n.resolvedLanguage ?? i18n.language).split(
     '-',
   )[0] as SupportedLanguage;
@@ -131,6 +133,65 @@ const ProfileScreen = ({ navigation, route }: Props) => {
 
   if (!user) return <LoadingState isDark={isDark} />;
 
+  const handlePhotoAction = () => {
+    const options = [
+      {
+        text: tAuth('profile.changePhoto'),
+        onPress: handlePickPhoto,
+      },
+      ...(user?.avatarUrl
+        ? [
+            {
+              text: tAuth('profile.removePhoto'),
+              style: 'destructive' as const,
+              onPress: handleRemovePhoto,
+            },
+          ]
+        : []),
+      { text: t('cancel'), style: 'cancel' as const },
+    ];
+    Alert.alert(tAuth('profile.photoActionTitle'), undefined, options);
+  };
+
+  const handlePickPhoto = async () => {
+    setUploadingPhoto(true);
+    try {
+      const publicUrl = await pickAndUploadAvatar();
+      if (!publicUrl) return;
+      updateProfile.mutate(
+        { avatarUrl: publicUrl },
+        {
+          onSuccess: () =>
+            showToast({
+              type: 'success',
+              title: t('successTitle'),
+              message: tAuth('profile.photoUploadSuccess'),
+            }),
+        },
+      );
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : tAuth('profile.photoUploadError');
+      showToast({ type: 'error', title: t('errorTitle'), message });
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    updateProfile.mutate(
+      { avatarUrl: null },
+      {
+        onSuccess: () =>
+          showToast({
+            type: 'success',
+            title: t('successTitle'),
+            message: tAuth('profile.photoRemovedSuccess'),
+          }),
+      },
+    );
+  };
+
   const handleOpenEdit = () => {
     loadForEdit(user);
     setPendingLanguage(currentLanguage);
@@ -178,7 +239,12 @@ const ProfileScreen = ({ navigation, route }: Props) => {
         title={tAuth('settings.accountSettings')}
       />
       <ScrollView contentContainerStyle={styles.container}>
-        <ProfileHero user={user} isDark={isDark} />
+        <ProfileHero
+          user={user}
+          isDark={isDark}
+          onChangePhoto={handlePhotoAction}
+          uploadingPhoto={uploadingPhoto}
+        />
       </ScrollView>
       <View
         style={[

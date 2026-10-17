@@ -18,7 +18,7 @@ import {
   useCustomLeaderboardMembers,
   useCustomLeaderboardMutations,
 } from '@/features/leaderboard/useCustomLeaderboards';
-import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
+import { Avatar, ScreenLayout, ScreenHeader } from '@/components/common';
 import { Input } from '@/components/common/forms';
 import { EmptyState, Loading } from '@/components/common/states';
 import { SecondaryButton } from '@/components/common/buttons/SecondaryButton';
@@ -140,7 +140,7 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
               <Text style={[styles.sectionLabel, { color: tk.text.muted }]}>
                 {t('userSearch.recentOpponents')}
               </Text>
-            ) : null
+            ) : undefined
           }
           renderItem={({ item }) => {
             const isMember = memberIds.has(item.id);
@@ -160,19 +160,7 @@ const UserSearchScreen = ({ navigation, route }: Props) => {
                 activeOpacity={0.75}
               >
                 {/* Avatar */}
-                <View
-                  style={[
-                    styles.avatar,
-                    {
-                      backgroundColor: `${tk.primary[600]}20`,
-                      borderColor: tk.border.strong,
-                    },
-                  ]}
-                >
-                  <Text style={[styles.avatarText, { color: tk.primary[600] }]}>
-                    {item.displayName.slice(0, 2).toUpperCase()}
-                  </Text>
-                </View>
+                <Avatar uri={item.avatarUrl} name={item.displayName} size="md" />
 
                 {/* Name + handle */}
                 <View style={styles.resultInfo}>
@@ -292,20 +280,6 @@ const styles = StyleSheet.create({
     borderRadius: radius['2xl'],
     borderWidth: 1,
     gap: spacing[3],
-  },
-  avatar: {
-    width: scale(44),
-    height: scale(44),
-    borderRadius: scale(22),
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  avatarText: {
-    fontSize: typography.size.sm,
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
   },
   resultInfo: { flex: 1 },
   resultName: {

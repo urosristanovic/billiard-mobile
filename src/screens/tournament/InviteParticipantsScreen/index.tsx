@@ -3,6 +3,7 @@ import { FlatList, Text, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Avatar } from '@/components/common';
 import { useTheme } from '@/hooks/useTheme';
 import { ScreenLayout, ScreenHeader } from '@/components/common/layout';
 import { Input } from '@/components/common/forms';
@@ -140,21 +141,7 @@ const InviteParticipantsScreen = ({ navigation, route }: Props) => {
                   },
                 ]}
               >
-                <View
-                  style={[
-                    styles.avatar,
-                    {
-                      backgroundColor: `${tk.primary[600]}20`,
-                      borderColor: tk.border.strong,
-                    },
-                  ]}
-                >
-                  <Text style={[styles.avatarText, { color: tk.primary[600] }]}>
-                    {(item.displayName || item.username)
-                      .slice(0, 2)
-                      .toUpperCase()}
-                  </Text>
-                </View>
+                <Avatar uri={item.avatarUrl} name={item.displayName || item.username} size="md" />
                 <View style={styles.playerInfo}>
                   <Text
                     style={[styles.displayName, { color: tk.text.primary }]}
@@ -231,20 +218,6 @@ const styles = StyleSheet.create({
     borderRadius: radius['2xl'],
     borderWidth: 1,
     gap: spacing[3],
-  },
-  avatar: {
-    width: scale(44),
-    height: scale(44),
-    borderRadius: scale(22),
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  avatarText: {
-    fontSize: typography.size.sm,
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
   },
   playerInfo: { flex: 1 },
   displayName: {

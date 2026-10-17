@@ -66,7 +66,9 @@ const JoinLeaderboardScreen = ({ navigation }: Props) => {
         refreshControl={
           <RefreshControl
             refreshing={isFetching && !isLoading}
-            onRefresh={() => refetch()}
+            onRefresh={() => {
+              void refetch();
+            }}
             tintColor={tk.primary[400]}
             colors={[tk.primary[400]]}
             progressBackgroundColor={tk.background?.primary}
@@ -77,7 +79,7 @@ const JoinLeaderboardScreen = ({ navigation }: Props) => {
             <Text style={[styles.sectionTitle, { color: tk.text.muted }]}>
               {t('browse.suggested')}
             </Text>
-          ) : null
+          ) : undefined
         }
         ListEmptyComponent={
           isLoading ? (
