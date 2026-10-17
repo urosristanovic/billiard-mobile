@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Avatar } from '@/components/common';
 import { theme, typography, spacing, radius } from '@/constants/theme';
 import { scale } from '@/utils/scale';
 import { DangerButton } from '@/components/common/buttons';
@@ -56,13 +57,7 @@ export const ParticipantList = ({
               {idx + 1}.
             </Text>
           )}
-          <View
-            style={[styles.avatar, { backgroundColor: tk.surface.overlay }]}
-          >
-            <Text style={[styles.avatarText, { color: tk.primary[400] }]}>
-              {(p.profile.displayName || p.profile.username)[0]?.toUpperCase()}
-            </Text>
-          </View>
+          <Avatar uri={p.profile.avatarUrl} name={p.profile.displayName || p.profile.username} size="xs" />
           <Text style={[styles.name, { color: tk.text.primary }]}>
             {p.profile.displayName || p.profile.username}
           </Text>
@@ -87,16 +82,8 @@ export const ParticipantList = ({
           style={[styles.row, { borderBottomColor: tk.border.subtle }]}
         >
           <Text style={[styles.seed, { color: tk.text.muted }]}>—</Text>
-          <View
-            style={[
-              styles.avatar,
-              { backgroundColor: tk.surface.overlay, opacity: 0.6 },
-            ]}
-          >
-            <Text style={[styles.avatarText, { color: tk.primary[400] }]}>
-              {(inv.profile.displayName ||
-                inv.profile.username)[0]?.toUpperCase()}
-            </Text>
+          <View style={{ opacity: 0.6 }}>
+            <Avatar uri={inv.profile.avatarUrl} name={inv.profile.displayName || inv.profile.username} size="xs" />
           </View>
           <Text style={[styles.name, { color: tk.text.muted }]}>
             {inv.profile.displayName || inv.profile.username}
@@ -140,17 +127,6 @@ const styles = StyleSheet.create({
     fontSize: typography.size.sm,
     fontFamily: typography.family.heading,
     textAlign: 'right',
-  },
-  avatar: {
-    width: scale(32),
-    height: scale(32),
-    borderRadius: radius.full,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatarText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.display,
   },
   name: {
     flex: 1,

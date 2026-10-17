@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   useWindowDimensions,
+  type ViewInstance,
 } from 'react-native';
 import { useMemo, useRef, useState } from 'react';
 import { theme, typography, radius, spacing } from '@/constants/theme';
@@ -38,7 +39,7 @@ export function DropdownFilter({
     left: number;
     width: number;
   } | null>(null);
-  const triggerRef = useRef<View | null>(null);
+  const triggerRef = useRef<ViewInstance | null>(null);
   const selectedOption = useMemo(
     () => options.find(option => option.value === value),
     [options, value],

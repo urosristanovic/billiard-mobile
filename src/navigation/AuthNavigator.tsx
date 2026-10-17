@@ -23,12 +23,15 @@ export const AuthNavigator = () => {
   const [hasLoggedInBefore, setHasLoggedInBefore] = useState(false);
 
   useEffect(() => {
-    Promise.all([getHasSeenOnboarding(), getHasLoggedInBefore()]).then(
-      ([seen, loggedIn]) => {
+    Promise.all([getHasSeenOnboarding(), getHasLoggedInBefore()])
+      .then(([seen, loggedIn]) => {
         setHasLoggedInBefore(loggedIn);
         setInitialRoute(seen ? "Login" : "Onboarding");
-      },
-    );
+      })
+      .catch(() => {
+        // Keychain unavailable (e.g. background launch while locked)
+        setInitialRoute("Login");
+      });
   }, []);
 
   if (initialRoute === null) {

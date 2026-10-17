@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { Avatar } from '@/components/common';
 import { useTheme } from '@/hooks/useTheme';
 import type { TournamentRequest } from '@/types/tournament';
 import { PrimaryButton, DangerButton } from '@/components/common/buttons';
@@ -71,17 +72,7 @@ export const PendingRequests = ({
             key={req.id}
             style={[styles.requestRow, { borderBottomColor: tk.border.subtle }]}
           >
-            <View
-              style={[
-                styles.reqAvatar,
-                { backgroundColor: tk.surface.overlay },
-              ]}
-            >
-              <Text style={[styles.reqAvatarText, { color: tk.primary[400] }]}>
-                {(req.profile.displayName ||
-                  req.profile.username)[0]?.toUpperCase()}
-              </Text>
-            </View>
+            <Avatar uri={req.profile.avatarUrl} name={req.profile.displayName || req.profile.username} size="xs" />
             <View style={styles.reqInfo}>
               <Text style={[styles.reqName, { color: tk.text.primary }]}>
                 {req.profile.displayName || req.profile.username}

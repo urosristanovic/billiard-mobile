@@ -133,6 +133,7 @@ const HomeScreen = ({ navigation }: Props) => {
             initials={initials}
             displayName={user?.displayName ?? ''}
             username={user?.username ?? ''}
+            avatarUrl={user?.avatarUrl}
             stats={stats}
             activeFilterCount={activeFilterCount}
             isRefreshing={isHeaderRefreshing}
@@ -164,7 +165,7 @@ const HomeScreen = ({ navigation }: Props) => {
             <View style={{ paddingVertical: moderateScale(12) }}>
               <Loading />
             </View>
-          ) : null
+          ) : undefined
         }
         renderItem={renderItem}
       />

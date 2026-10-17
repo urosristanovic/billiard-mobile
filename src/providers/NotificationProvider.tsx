@@ -125,7 +125,7 @@ export const NotificationProvider = ({
   useEffect(() => {
     const sub = AppState.addEventListener('change', nextState => {
       if (
-        appStateRef.current.match(/inactive|background/) &&
+        appStateRef.current?.match(/inactive|background/) &&
         nextState === 'active'
       ) {
         queryClient.invalidateQueries({

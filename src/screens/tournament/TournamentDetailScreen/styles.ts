@@ -154,17 +154,6 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     gap: spacing[2],
   },
-  reqAvatar: {
-    width: scale(32),
-    height: scale(32),
-    borderRadius: radius.full,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  reqAvatarText: {
-    fontSize: typography.size.sm,
-    fontFamily: typography.family.display,
-  },
   reqInfo: {
     flex: 1,
     gap: 2,

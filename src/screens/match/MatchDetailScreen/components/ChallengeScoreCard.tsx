@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
+import { Avatar } from '@/components/common';
 import { PrimaryButton } from '@/components/common/buttons';
 import {
   theme,
@@ -143,18 +144,12 @@ export const ChallengeScoreCard = ({
     const isMe = player.userId === myUserId;
     return (
       <>
-        <View
-          style={[
-            styles.avatar,
-            {
-              backgroundColor: tk.background.secondary,
-              borderColor: tk.primary[600],
-            },
-          ]}
-        >
-          <Text style={[styles.avatarText, { color: tk.primary[600] }]}>
-            {player.profile.displayName.charAt(0).toUpperCase()}
-          </Text>
+        <View style={styles.avatarWrap}>
+          <Avatar
+            uri={player.profile.avatarUrl}
+            name={player.profile.displayName}
+            size="lg"
+          />
         </View>
         <Text
           style={[styles.name, { color: tk.text.primary, textAlign: align }]}
@@ -338,19 +333,8 @@ const styles = StyleSheet.create({
   fighterColRight: {
     alignItems: 'flex-end',
   },
-  avatar: {
-    width: scale(52),
-    height: scale(52),
-    borderRadius: radius.full,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 2,
+  avatarWrap: {
     marginBottom: spacing[1],
-  },
-  avatarText: {
-    fontSize: typography.size.lg,
-    fontWeight: typography.weight.bold,
-    fontFamily: typography.family.display,
   },
   name: {
     fontSize: typography.size.lg,

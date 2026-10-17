@@ -3,7 +3,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/useAuthStore';
-import { getTokens, clearTokens } from '@/lib/tokenStorage';
+import { AppState } from 'react-native';
+import {
+  getTokens,
+  clearTokens,
+  isKeychainLockedError,
+  migrateTokenAccessibility,
+} from '@/lib/tokenStorage';
 import { authService } from '@/services/auth';
 import { navigationIntegration } from '@/lib/sentryIntegration';
 import { AuthNavigator } from './AuthNavigator';
@@ -23,8 +29,39 @@ export const RootNavigator = () => {
     useAuthStore();
 
   useEffect(() => {
+    let cancelled = false;
+    let started = false;
+    let appStateSub: { remove: () => void } | null = null;
+
     async function initAuth() {
-      const tokens = await getTokens();
+      if (started) return;
+      started = true;
+
+      let tokens;
+      try {
+        tokens = await getTokens();
+      } catch (err) {
+        if (cancelled) return;
+        if (isKeychainLockedError(err)) {
+          // App was launched in the background while the device is locked;
+          // the keychain is unavailable. Retry once the app becomes active.
+          started = false;
+          if (!appStateSub) {
+            appStateSub = AppState.addEventListener('change', (state) => {
+              if (state === 'active') {
+                appStateSub?.remove();
+                appStateSub = null;
+                void initAuth();
+              }
+            });
+          }
+          return;
+        }
+        setInitialized(true);
+        return;
+      }
+
+      void migrateTokenAccessibility();
 
       if (!tokens) {
         setInitialized(true);
@@ -46,7 +83,23 @@ export const RootNavigator = () => {
       }
     }
 
-    initAuth();
+    if (AppState.currentState === 'active') {
+      void initAuth();
+    } else {
+      // Background launch: wait until the app is foregrounded (device unlocked).
+      appStateSub = AppState.addEventListener('change', (state) => {
+        if (state === 'active') {
+          appStateSub?.remove();
+          appStateSub = null;
+          void initAuth();
+        }
+      });
+    }
+
+    return () => {
+      cancelled = true;
+      appStateSub?.remove();
+    };
   }, [setInitialized, setLoading, setUser]);
 
   if (!isInitialized) {

@@ -24,6 +24,7 @@ import {
 } from '@/features/leaderboard/useCustomLeaderboards';
 import { useAuth } from '@/features/auth/useAuth';
 import { Feather } from '@expo/vector-icons';
+import { Avatar } from '@/components/common';
 import { DangerButton } from '@/components/common/buttons/DangerButton';
 import { PrimaryButton } from '@/components/common/buttons/PrimaryButton';
 import { FloatingActionButton } from '@/components/common/buttons/FloatingActionButton';
@@ -183,16 +184,7 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
             key={member.userId}
             style={[styles.pendingRow, { borderBottomColor: tk.border.subtle }]}
           >
-            <View
-              style={[
-                detailStyles.memberAvatar,
-                { backgroundColor: tk.surface.raised, borderColor: tk.border.strong },
-              ]}
-            >
-              <Text style={[detailStyles.memberAvatarText, { color: tk.text.muted }]}>
-                {member.displayName.slice(0, 2).toUpperCase()}
-              </Text>
-            </View>
+            <Avatar uri={member.avatarUrl} name={member.displayName} size="sm" />
 
             <View style={detailStyles.memberInfo}>
               <Text style={[detailStyles.memberName, { color: tk.text.primary }]}>
@@ -225,7 +217,7 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
         );
       })}
     </View>
-  ) : null;
+  ) : undefined;
 
   return (
     <ScreenLayout isDark={isDark}>
@@ -277,6 +269,7 @@ const CustomLeaderboardDetailScreen = ({ route, navigation }: Props) => {
           <MemberRow
             displayName={member.displayName}
             username={member.username}
+            avatarUrl={member.avatarUrl}
             isAdmin={member.userId === lb.createdBy}
             actionLabel={
               !isGroupAttached && (isCreator || member.userId === user?.id)

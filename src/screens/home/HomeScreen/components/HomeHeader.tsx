@@ -10,6 +10,7 @@ import {
   Rect,
 } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
+import { Avatar } from '@/components/common';
 import { Loading } from '@/components/common/states';
 import { GhostButton } from '@/components/common/buttons';
 import { Feather } from '@expo/vector-icons';
@@ -22,6 +23,7 @@ interface HomeHeaderProps {
   initials: string;
   displayName: string;
   username: string;
+  avatarUrl?: string | null;
   stats: { played: number; wins: number; winRate: number; winStreak: number };
   activeFilterCount: number;
   isRefreshing: boolean;
@@ -36,6 +38,7 @@ export const HomeHeader = React.memo(
     initials,
     displayName,
     username,
+    avatarUrl,
     stats,
     activeFilterCount,
     isRefreshing,
@@ -100,13 +103,7 @@ export const HomeHeader = React.memo(
 
           <View style={styles.userRow}>
             <View>
-              <View style={[styles.avatar, { borderColor: tk.primary[500] }]}>
-                <Text
-                  style={[styles.avatarInitial, { color: tk.primary[500] }]}
-                >
-                  {initials}
-                </Text>
-              </View>
+              <Avatar uri={avatarUrl} name={initials} size="lg" />
               <View
                 style={[
                   styles.dotWrap,
